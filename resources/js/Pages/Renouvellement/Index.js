@@ -1,10 +1,30 @@
 import Authenticated from '@/Layouts/Authenticated';
-import React from 'react';
+import React, {useState} from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import { Card, Accordion } from 'react-bootstrap';
 
 const Index = (props) => {
+
+    const [formValues, setFormValues] = useState([{ document_type: "", document_title: "", language: "", version_date: "", dremarks: "", document: ""}])
+
+    let addFormFields = () => {
+        setFormValues([...formValues, { document_type: "", document_title: "", language: "", version_date: "", dremarks: "", document: ""}])
+    }
+
+    let handleChanged = (i, e) => {
+        
+        let newFormValues = [...formValues];
+        if(e.target.name === "document" ) {
+            newFormValues[i][e.target.name] = e.target.files[0];
+            
+        }else {
+            newFormValues[i][e.target.name] = e.target.value;
+            
+        }
+        
+        //setData("doc", newFormValues);
+    }
     return(
         <>
             <div className="row">
@@ -19,14 +39,13 @@ const Index = (props) => {
                             <form className="form">
                                 <Tabs defaultActiveKey="first">
                                     <Tab eventKey="first" title="Form">
-                                        <Accordion defaultActiveKey="0">
+                                        <Accordion defaultActiveKey="0" style={{ marginTop: '20px' }}>
+                                            <div className="card_title" style={{ marginBottom: '20px'  }}>
+                                                {/* <h5>First Submission</h5> */}
+                                                <h5 className="subhead">All fields markedd with * are required</h5>
+                                            </div>
                                             <Card>
-                                                <Card.Body>
-                                                    <div className="card_title">
-                                                        {/* <h5>First Submission</h5> */}
-                                                        <h5 className="subhead">All fields markedd with * are required</h5>
-                                                    </div>
-                                                </Card.Body>
+                                               
                                                 <Accordion.Toggle as={Card.Header} eventKey="0">
                                                     Registration identification
                                                 </Accordion.Toggle>
@@ -236,17 +255,25 @@ const Index = (props) => {
                                         </Accordion>
                                     </Tab>
                                     <Tab eventKey="second" title="Documents">
-                                        <div className="row" >
+                                        <div className="row">
                                             <div className="col-md-12 col-lg-12">
-                                                <div className="card">
-                                                    <div className="card-body">
-                                                        <div className="card_title">
+                                                <div style={{ marginTop: '20px' }}>
+                                                    <div className="row">
+                                                        <div className="card_title col-6">
                                                             <h5>Documents forms</h5>
-                                                            <h5 className="subhead">All fields markedd with * are required</h5>
-                                                            <div className="form_group" style={{ marginTop: '20px' }}>
-                                                                <span className="form_group_label">Document Type</span>
+                                                            <h5 className="subhead" >All fields markedd with * are required</h5>
+                                                        </div>
+                                                        <div className="col-6 d-flex justify-content-end">
+                                                            <button className="add_doc_form" type="button" onClick={() => addFormFields()}>Add Form</button>
+                                                        </div>
+                                                    </div>
+
+                                                    {formValues.map((element, index) => (
+                                                        <div style={{ marginTop: '20px' }} key={index}>
+                                                            <div className="form_group" >
+                                                                <span className="form_group_label">Document type</span>
                                                                 <div className="form_group_field">
-                                                                    <select>
+                                                                    <select name="document_type" onChange={e => handleChanged(index, e)} value={element.document_type || ""}>
                                                                         <option>Agency correspondence</option>
                                                                         <option>Approval Letter</option>
                                                                         <option>Investigational Medicinal Product Dossier (IMPD)</option>
@@ -265,40 +292,43 @@ const Index = (props) => {
                                                                 </div>
                                                             </div>
                                                             <div className="form_group">
-                                                                <span className="form_group_label">Document Title</span>
+                                                                <span className="form_group_label">Document title</span>
                                                                 <div className="form_group_field">
-                                                                    <input type="text" />
+                                                                    <input type="text" name="document_title" onChange={e => handleChanged(index, e)} value={element.document_title || ""} />
                                                                 </div>
                                                             </div>
                                                             <div className="form_group" >
                                                                 <span className="form_group_label">Language</span>
                                                                 <div className="form_group_field">
-                                                                    <select>
+                                                                    <select name="language" onChange={e => handleChanged(index, e)} value={element.language || ""} >
                                                                         <option></option>
                                                                     </select>
                                                                 </div>
                                                             </div>
                                                             <div className="form_group">
-                                                                <span className="form_group_label">Version Date</span>
+                                                                <span className="form_group_label">Version date</span>
                                                                 <div className="form_group_field">
-                                                                    <input type="text" />
+                                                                    <input type="text" name="version_date" onChange={e => handleChanged(index, e)} value={element.version_date || ""} />
                                                                 </div>
                                                             </div>
                                                             <div className="form_group">
                                                                 <span className="form_group_label">Remarks</span>
                                                                 <div className="form_group_field">
-                                                                    <input type="text" />
+                                                                    <input type="text" name="dremarks" onChange={e => handleChanged(index, e)} value={element.dremarks || ""} />
                                                                 </div>
                                                             </div>
                                                             <div className="form_group">
                                                                 <span className="form_group_label">Document</span>
                                                                 <div className="form_group_field">
-                                                                    <input type="file" />
+                                                                    <input type="file" name="document" onChange={e => handleChanged(index, e)} alue={element.document || ""} />
                                                                 </div>
                                                             </div>
+                                                            <hr />
                                                         </div>
-                                                    </div>
+                                                    ))}
+
                                                 </div>
+
                                             </div>
                                         </div>
                                     </Tab>

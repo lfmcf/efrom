@@ -71,7 +71,10 @@ export default function Login({ status, canResetPassword }) {
                     </div>
                 </div>
                 <div className="btn_form_group">
-                    <button className="btn_signin">Sign In</button>
+                    <button type="submit" className="btn_signin">Sign In</button>
+                </div>
+                <div className="btn_form_group">
+                    <button onClick={() => window.location.replace('http://localhost:8000/saml2/test/login')} className="btn_signin">SSO</button>
                 </div>
             </form>
             
