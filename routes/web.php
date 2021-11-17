@@ -21,17 +21,22 @@ use App\Http\Controllers\CompanyController;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+// Route::get('/', function () {
+//     return Inertia::render('Welcome', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
+// });
 
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    Route::get('/', function() {
+        return redirect()->route('dashboard');
+    });
+
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
@@ -42,6 +47,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/variation', [VariationController::class, 'index'])->name('variation');
     Route::get('/renouvellement', [RenouvellementController::class, 'index'])->name('renouvellement');
     Route::post('/addcompany', [CompanyController::class, 'store'])->name('addcompany');
+    Route::post('/storefinishproduct', [RcController::class, 'store'])->name('storefinishproduct');
+    Route::post('/storeclinical', [RcController::class, 'storeclinical'])->name('storeclinical');
+    Route::get('/company', [CompanyController::class, 'index'])->name('company');
 });
 
 // Route::get('/dashboard', function () {

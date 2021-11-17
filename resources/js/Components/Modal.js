@@ -64,19 +64,6 @@ const ModalS = ({ show, handleClose}) => {
                             <input type="text" name="countryname" onChange={onHandleChange} />
                         </div>
                     </div>
-                    <div className="form_group">
-                        <span className="form_group_label">Organization Role</span>
-                        <div className="form_group_field">
-                            {/* <input type="checkbox" /> */}
-                           <select>
-                               <option>PV System Master File Localization</option>
-                               <option>Registration Holder</option>
-                               <option>Sponsor</option>
-                               <option>Device Identifier Issuing Agency</option>
-                           </select>
-                        </div>
-                    </div>
-                
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>

@@ -20,7 +20,7 @@ class CreateCompaniesTable extends Migration
             $table->string('city');
             $table->string('postalcode');
             $table->string('countryname');
-            $table->string('organizationrole');
+            // $table->string('organizationrole');
             $table->integer('status');
             $table->timestamps();
         });

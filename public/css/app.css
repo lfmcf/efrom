@@ -11787,7 +11787,7 @@ h5.subhead {
   align-items: center;
   width: 60%;
   justify-content: center;
-  margin: auto;
+  margin: 10px auto;
 }
 
 .btn_signin {
@@ -12015,4 +12015,17 @@ h5.subhead {
 
 .sidebar_link_active::before {
   opacity: 1;
+}
+
+.add_doc_form {
+  background: #4ce1b6;
+  color: white;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.errors_wrap {
+  color: red;
+  padding-left: 140px;
+  font-size: 12px;
 }
