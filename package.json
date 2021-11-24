@@ -31,7 +31,6 @@
         "prop-types": "^15.7.2",
         "react-bootstrap": "^1.6.4",
         "react-select": "^5.1.0",
-        "react-smooth-scrollbar": "^8.0.6",
-        "smooth-scrollbar": "^8.6.3"
+        "smooth-scrollbar": "^8.7.0"
     }
 }

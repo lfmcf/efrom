@@ -11505,7 +11505,7 @@ button {
   display: flex;
   box-shadow: 0 2px 15px 0 rgb(0 0 0 / 5%);
   z-index: 101;
-  background: #FFF;
+  background: #70bbfd;
 }
 
 .tleft {
@@ -11550,7 +11550,7 @@ button {
 }
 
 .topbar_avatar p {
-  color: #646777;
+  color: #fff;
   margin-left: 10px;
   font-size: 13px;
   line-height: 18px;
@@ -11562,14 +11562,14 @@ button {
   margin-left: 8px;
   height: 18px;
   margin-top: auto;
-  fill: #bbbbc2;
+  fill: #fff;
 }
 
 .sidebar {
   position: fixed;
   bottom: 0;
   z-index: 99;
-  height: 100vh;
+  /* height: 100vh; */
   width: 240px;
   box-shadow: 0 1px 30px 1px rgb(0 0 0 / 11%);
   padding-top: 60px;
@@ -11579,12 +11579,14 @@ button {
 
 .sidebar_content {
   padding-top: 15px;
-  height: 100%;
+  height: calc(100vh - 60px);
   overflow: auto;
 }
 
 .sidebar_block {
   padding: 15px 0;
+  /* height: 100vh; */
+  /* overflow: hidden; */
 }
 
 .sidebar_link {
@@ -11595,7 +11597,7 @@ button {
   cursor: pointer;
   display: flex;
   padding: 11px 20px;
-  overflow: hidden;
+  /* overflow: hidden; */
   background: transparent;
   border: none;
   color: #646777;
@@ -12028,4 +12030,22 @@ h5.subhead {
   color: red;
   padding-left: 140px;
   font-size: 12px;
+}
+
+.h_1 {
+  left: 53px;
+}
+
+.h_2 {
+  left: 60px;
+}
+
+.h_3 {
+  left: 70px;
+}
+
+@media (min-width: 1400px) {
+  .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+    max-width: 1630px !important;
+  }
 }

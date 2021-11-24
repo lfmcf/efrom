@@ -22,7 +22,7 @@ class RcController extends Controller
         $substanceActive = substanceActive::all();
         $packagingItemTypes = packagingItemType::all();
         $countries = Countries::orderBy('country_name')->get('country_name');
-        return Inertia::render('Rc/Index', [
+        return Inertia::render('Clinical/Index', [
             'companies' => $compnies,
             'substanceActive' => $substanceActive,
             'packagingItemTypes' => $packagingItemTypes,
@@ -34,7 +34,7 @@ class RcController extends Controller
     {
         $compnies = Company::orderBy('name')->get();
         $countries = Countries::orderBy('country_name')->get('country_name');
-        return Inertia::render('Rc/Clinical', [
+        return Inertia::render('Clinical/Clinical', [
             'companies' => $compnies,
             'countries' => $countries
         ]);
