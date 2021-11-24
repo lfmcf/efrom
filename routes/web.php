@@ -9,7 +9,11 @@ use App\Http\Controllers\RcController;
 use App\Http\Controllers\VariationController;
 use App\Http\Controllers\RenouvellementController;
 use App\Http\Controllers\CompanyController;
-
+use App\Http\Controllers\TransferController;
+use App\Http\Controllers\BaselineController;
+use App\Http\Controllers\RegistrationTerminationController;
+use App\Http\Controllers\cRegistrationTerminationController;
+use App\Http\Controllers\AmendmentsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -50,6 +54,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/storefinishproduct', [RcController::class, 'store'])->name('storefinishproduct');
     Route::post('/storeclinical', [RcController::class, 'storeclinical'])->name('storeclinical');
     Route::get('/company', [CompanyController::class, 'index'])->name('company');
+    Route::get('/transfer', [TransferController::class, 'index'])->name('transfer');
+    Route::get('/baseline', [BaselineController::class, 'index'])->name('baseline');
+    Route::get('/registrationtermination', [RegistrationTerminationController::class, 'index'])->name('registrationtermination');
+    Route::get('/cregistrationtermination', [CregistrationTerminationController::class, 'index'])->name('cregistrationtermination');
+    Route::get('/amendments', [AmendmentsController::class, 'index'])->name('amendments');
 });
 
 // Route::get('/dashboard', function () {

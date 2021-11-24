@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/inertia-react';
-import Scrollbar from 'react-smooth-scrollbar';
+import  Scrollbar from "smooth-scrollbar";
+// import 'smooth-scrollbar/dist/smooth-scrollbar.css';
 
 export default function Authenticated({ auth, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
@@ -30,18 +31,16 @@ export default function Authenticated({ auth, header, children }) {
         
     };
 
-    console.log(typeof(settings))
-    console.log(settings)
+    const options = {
+        damping: 0.1,
+        thumbMinSize: 5,
+        renderByPixels: true
+    }
 
+    useEffect(() => {
+        Scrollbar.init(document.querySelector('.sidebar_content'), options)
+    }, [])
     
-
-    // state => ({
-            
-    //     // ...state,
-    //     // settings: state.settings.map(item =>
-    //     //     item.id === id ? { ...item, open: !item.open } : item
-    //     // )
-    // })
     
     return (
         <div>
@@ -49,11 +48,11 @@ export default function Authenticated({ auth, header, children }) {
                 <div className="tleft">
                     <div>
                         <button style={{width:'60px', height:'60px', display:'flex', border:'none',justifyContent:'center',alignItems:'center',background:'transparent'}}>
-                            <span className="lnr lnr-menu" style={{fontSize:'16px'}}></span>
+                            <span className="lnr lnr-menu" style={{fontSize:'16px', color:"#fff"}}></span>
                         </button>
                         
                     </div>
-                    <Link href={route('dashboard')} style={{margin:'auto 0'}}>Logo</Link>
+                    <Link href={route('dashboard')} style={{margin:'auto 0', color:"white"}}>Logo</Link>
                 </div>
                 <div className="tright">
                     <div className="topbar_right">
@@ -80,8 +79,8 @@ export default function Authenticated({ auth, header, children }) {
                 </div>
             </div>
             <div className="sidebar">
-                <Scrollbar damping={0.1} onScroll={console.log('scrolling')}>
-                    <div>
+                {/* <Scrollbar style={{ height: 'calc(100vh - 60px)' }}> */}
+                    {/* <div> */}
                         <div className="sidebar_content">
                             <ul className="sidebar_block">
                                 <Link className={`topbar_link ${route().current('dashboard') ? `sidebar_link_active` : ''}`} href={route('dashboard')}>
@@ -108,89 +107,89 @@ export default function Authenticated({ auth, header, children }) {
                                                 <ul className="sidebar_submenu">
                                                     <button className="sidebar_link topbar_link" onClick={() => handleClick(3)}>
                                                         {/* <span className="sidebar_link_icon lnr lnr-file-add"></span> */}
-                                                        <p className="sidebar_link_title">Registration Creation</p>
+                                                        <p className="sidebar_link_title h_1">Registration Creation</p>
                                                         <span style={{ transform: settings.find(item => item.id === 3).open ? 'rotate(90deg)' : 'rotate(0deg)' }} className="sidebar_category_icon lnr lnr-chevron-right"></span>
                                                     </button>
                                                     <div style={{ display: settings.find(item => item.id === 3).open ? 'block' : 'none' }}>
                                                         <ul className="sidebar_submenu">
                                                             <Link className={`topbar_link ${route().current('finished') ? `sidebar_link_active` : ''}`} href={route('finished')}>
                                                                 <li className="sidebar_link">
-                                                                    <p className="sidebar_link_title">Medicinal Product</p>
+                                                                    <p className="sidebar_link_title h_2">Medicinal Product</p>
                                                                 </li>
                                                             </Link>
                                                             <Link className={`topbar_link ${route().current('comapny') ? `sidebar_link_active` : ''}`} href={route('company')}>
                                                                 <li className="sidebar_link">
-                                                                    <p className="sidebar_link_title">Company Registration</p>
+                                                                    <p className="sidebar_link_title h_2">Company Registration</p>
                                                                 </li>
                                                             </Link>
                                                         </ul>
                                                     </div>
                                                     <button className="sidebar_link topbar_link" onClick={() => handleClick(4)}>
                                                         {/* <span className="sidebar_link_icon lnr lnr-file-add"></span> */}
-                                                        <p className="sidebar_link_title">Lifecycle Management</p>
+                                                        <p className="sidebar_link_title h_1">Lifecycle Management</p>
                                                         <span style={{ transform: settings.find(item => item.id === 4).open ? 'rotate(90deg)' : 'rotate(0deg)' }} className="sidebar_category_icon lnr lnr-chevron-right"></span>
                                                     </button>
                                                     <div style={{ display: settings.find(item => item.id === 4).open ? 'block' : 'none' }}>
                                                         <ul className="sidebar_submenu">
                                                             <Link className={`topbar_link ${route().current('variation') ? `sidebar_link_active` : ''}`} href={route('variation')}>
                                                                 <li className="sidebar_link ">
-                                                                    <p className="sidebar_link_title">Variation</p>
+                                                                    <p className="sidebar_link_title h_2">Variation</p>
                                                                 </li>
                                                             </Link>
                                                             <Link className={`topbar_link ${route().current('renouvellement') ? `sidebar_link_active` : ''}`} href={route('renouvellement')}>
                                                                 <li className="sidebar_link ">
-                                                                    <p className="sidebar_link_title">Renewal</p>
+                                                                    <p className="sidebar_link_title h_2">Renewal</p>
                                                                 </li>
                                                             </Link>
-                                                            <Link href="#">
+                                                            <Link className={`topbar_link ${route().current('transfer') ? `sidebar_link_active` : ''}`} href={route('transfer')}>
                                                                 <li className="sidebar_link topbar_link">
-                                                                    <p className="sidebar_link_title">Transfer</p>
+                                                                    <p className="sidebar_link_title h_2">Transfer</p>
                                                                 </li>
                                                             </Link>
                                                             <button className="sidebar_link topbar_link" onClick={() => handleClick(8)}>
                                                                 {/* <span className="sidebar_link_icon lnr lnr-file-add"></span> */}
-                                                                <p className="sidebar_link_title">Others</p>
+                                                                <p className="sidebar_link_title h_2">Others</p>
                                                                 <span style={{ transform: settings.find(item => item.id === 8).open ? 'rotate(90deg)' : 'rotate(0deg)' }} className="sidebar_category_icon lnr lnr-chevron-right"></span>
                                                             </button>
                                                             <div style={{ display: settings.find(item => item.id === 8).open ? 'block' : 'none' }}>
                                                                 <ul className="sidebar_submenu">
-                                                                    <Link href="#">
+                                                                    <Link className={`topbar_link ${route().current('baseline') ? `sidebar_link_active` : ''}`} href={route('baseline')}>
                                                                         <li className="sidebar_link topbar_link">
-                                                                            <p className="sidebar_link_title">Baseline</p>
+                                                                            <p className="sidebar_link_title h_3">Baseline</p>
                                                                         </li>
                                                                     </Link>
                                                                     <Link href="#">
                                                                         <li className="sidebar_link topbar_link">
-                                                                            <p className="sidebar_link_title">Safety Reports</p>
+                                                                            <p className="sidebar_link_title h_3">Safety Reports</p>
                                                                         </li>
                                                                     </Link>
                                                                     <Link href="#">
                                                                         <li className="sidebar_link topbar_link">
-                                                                            <p className="sidebar_link_title">RMP</p>
+                                                                            <p className="sidebar_link_title h_3">RMP</p>
                                                                         </li>
                                                                     </Link>
                                                                     <Link href="#">
                                                                         <li className="sidebar_link topbar_link">
-                                                                            <p className="sidebar_link_title">PAMs</p>
+                                                                            <p className="sidebar_link_title h_3">PAMs</p>
                                                                         </li>
                                                                     </Link>
                                                                     <Link href="#">
                                                                         <li className="sidebar_link topbar_link">
-                                                                            <p className="sidebar_link_title">Commitment</p>
+                                                                            <p className="sidebar_link_title h_3">Commitment</p>
                                                                         </li>
                                                                     </Link>
                                                                     <Link href="#">
                                                                         <li className="sidebar_link topbar_link">
-                                                                            <p className="sidebar_link_title">Interaction</p>
+                                                                            <p className="sidebar_link_title h_3">Interaction</p>
                                                                         </li>
                                                                     </Link>
                                                                 </ul>
                                                             </div>
                                                         </ul>
                                                     </div>
-                                                    <Link href="#">
+                                                    <Link className={`topbar_link ${route().current('registrationtermination') ? `sidebar_link_active` : ''}`} href={route('registrationtermination')}>
                                                         <li className="sidebar_link topbar_link">
-                                                            <p className="sidebar_link_title">Registration Termination</p>
+                                                            <p className="sidebar_link_title h_1">Registration Termination</p>
                                                         </li>
                                                     </Link>
                                                 </ul>
@@ -206,26 +205,26 @@ export default function Authenticated({ auth, header, children }) {
                                                 <ul className="sidebar_submenu">
                                                     <Link className={`topbar_link ${route().current('clinical') ? `sidebar_link_active` : ''}`} href={route('clinical')}>
                                                         <li className="sidebar_link topbar_link">
-                                                            <p className="sidebar_link_title">Registration Creation</p>
+                                                            <p className="sidebar_link_title h_1">Registration Creation</p>
                                                         </li>
                                                     </Link>
                                                     <button className="sidebar_link topbar_link" onClick={() => handleClick(11)}>
                                                         {/* <span className="sidebar_link_icon lnr lnr-file-add"></span> */}
-                                                        <p className="sidebar_link_title">Lifecycle Management</p>
+                                                        <p className="sidebar_link_title h_1">Lifecycle Management</p>
                                                         <span style={{ transform: settings.find(item => item.id === 11).open ? 'rotate(90deg)' : 'rotate(0deg)' }} className="sidebar_category_icon lnr lnr-chevron-right"></span>
                                                     </button>
                                                     <div style={{ display: settings.find(item => item.id === 11).open ? 'block' : 'none' }}>
                                                         <ul className="sidebar_submenu">
-                                                            <Link href="#">
+                                                            <Link className={`topbar_link ${route().current('amendments') ? `sidebar_link_active` : ''}`} href={route('amendments')}>
                                                                 <li className="sidebar_link topbar_link">
-                                                                    <p className="sidebar_link_title">Amendments</p>
+                                                                    <p className="sidebar_link_title h_2">Amendments</p>
                                                                 </li>
                                                             </Link>
                                                         </ul>
                                                     </div>
-                                                    <Link href="#">
+                                                    <Link className={`topbar_link ${route().current('cregistrationtermination') ? `sidebar_link_active` : ''}`} href={route('cregistrationtermination')}>
                                                         <li className="sidebar_link topbar_link">
-                                                            <p className="sidebar_link_title">Registration Termination</p>
+                                                            <p className="sidebar_link_title h_1">Registration Termination</p>
                                                         </li>
                                                     </Link>
                                                 </ul>
@@ -240,17 +239,17 @@ export default function Authenticated({ auth, header, children }) {
                                                 <ul className="sidebar_submenu">
                                                     <Link href="#">
                                                         <li className="sidebar_link topbar_link">
-                                                            <p className="sidebar_link_title">Registration Creation</p>
+                                                            <p className="sidebar_link_title h_1">Registration Creation</p>
                                                         </li>
                                                     </Link>
                                                     <Link href="#">
                                                         <li className="sidebar_link topbar_link">
-                                                            <p className="sidebar_link_title">Lifecycle Management</p>
+                                                            <p className="sidebar_link_title h_1">Lifecycle Management</p>
                                                         </li>
                                                     </Link>
                                                     <Link href="#">
                                                         <li className="sidebar_link topbar_link">
-                                                            <p className="sidebar_link_title">Registration Termination</p>
+                                                            <p className="sidebar_link_title h_1">Registration Termination</p>
                                                         </li>
                                                     </Link>
                                                 </ul>
@@ -278,7 +277,7 @@ export default function Authenticated({ auth, header, children }) {
                                             </Link> */}
                                             <Link href="#">
                                                 <li className="sidebar_link topbar_link">
-                                                    <p className="sidebar_link_title">User Creation Request</p>
+                                                    <p className="sidebar_link_title h_1">User Creation Request</p>
                                                 </li>
                                             </Link>
                                            
@@ -287,9 +286,9 @@ export default function Authenticated({ auth, header, children }) {
                                 </div>
                             </ul>
                         </div>
-                    </div>
+                    {/* </div> */}
                     
-                </Scrollbar>
+                {/* </Scrollbar> */}
             </div>
             <main>
                 <div className="container_main">

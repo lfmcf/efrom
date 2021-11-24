@@ -3,7 +3,6 @@ import Authenticated from '@/Layouts/Authenticated';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import { Card, Accordion } from 'react-bootstrap';
-import ModalS from '@/Components/Modal';
 import Select from 'react-select';
 import { useForm } from '@inertiajs/inertia-react';
 
@@ -1009,7 +1008,7 @@ const Index = (props) => {
                     </div>
                 </div>
             </div>
-            <ModalS show={show} handleClose={handleClose} />
+            
         </>
     )
 }

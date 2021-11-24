@@ -1,35 +1,33 @@
-import Authenticated from '@/Layouts/Authenticated';
+import Authenticated from "@/Layouts/Authenticated";
 import React, {useState} from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import { Card, Accordion } from 'react-bootstrap';
+import { useForm } from '@inertiajs/inertia-react';
 
-const Index = (props) => {
 
-    const [formValues, setFormValues] = useState([{ document_type: "", document_title: "", language: "", version_date: "", dremarks: "", document: ""}])
+const Amendments = (props) => {
+
+    const { data, setData, post, processing, errors, clearErrors,  reset } = useForm({
+
+    });
+
+    const [formValues, setFormValues] = useState([{ document_type: "", document_title: "", language: "", version_date: "", dremarks: "", document: ""}]);
 
     let addFormFields = () => {
         setFormValues([...formValues, { document_type: "", document_title: "", language: "", version_date: "", dremarks: "", document: ""}])
     }
 
-    let handleChanged = (i, e) => {
-        
-        let newFormValues = [...formValues];
-        if(e.target.name === "document" ) {
-            newFormValues[i][e.target.name] = e.target.files[0];
-            
-        }else {
-            newFormValues[i][e.target.name] = e.target.value;
-            
-        }
-        
-        //setData("doc", newFormValues);
+    const handleChange = (e) => {
+        setData(e.target.name, e.target.value);
+        clearErrors(e.target.name);
     }
-    return(
+
+    return (
         <>
             <div className="row">
                 <div className="col-md-12">
-                    <h3 className="page-title">Renouvellement</h3>
+                    <h3 className="page-title">Amendments</h3>
                 </div>
             </div>
             <div className="row">
@@ -39,13 +37,12 @@ const Index = (props) => {
                             <form className="form">
                                 <Tabs defaultActiveKey="first">
                                     <Tab eventKey="first" title="Form">
-                                        <Accordion defaultActiveKey="0" style={{ marginTop: '20px' }}>
+                                        <Accordion defaultActiveKey="0" style={{ marginTop: '20px'  }}>
                                             <div className="card_title" style={{ marginBottom: '20px'  }}>
                                                 {/* <h5>First Submission</h5> */}
                                                 <h5 className="subhead">All fields markedd with * are required</h5>
                                             </div>
                                             <Card>
-                                               
                                                 <Accordion.Toggle as={Card.Header} eventKey="0">
                                                     Registration identification
                                                 </Accordion.Toggle>
@@ -101,20 +98,19 @@ const Index = (props) => {
                                                         <div className="form_group">
                                                             <span className="form_group_label">Procedure Number</span>
                                                             <div className="form_group_field">
-                                                                <input type="text" /> 
+                                                                <input type="text" />
                                                             </div>
                                                         </div>
                                                         <div className="form_group">
                                                             <span className="form_group_label">Local Tradename</span>
                                                             <div className="form_group_field">
-                                                                <input type="text" /> 
+                                                                <input type="text" />
                                                             </div>
                                                         </div>
                                                         <div className="form_group">
                                                             <span className="form_group_label">Product Type</span>
                                                             <div className="form_group_field">
                                                                 <select>
-                                                                    <option>Clinical</option>
                                                                     <option>Finished</option>
                                                                     <option>Reference</option>
                                                                 </select>
@@ -124,45 +120,21 @@ const Index = (props) => {
                                                 </Accordion.Collapse>
                                             </Card>
                                         </Accordion>
-                                        <Accordion >
+                                        <Accordion>
                                             <Card>
                                                 <Accordion.Toggle as={Card.Header} eventKey="0">
-                                                    Renewal Details
+                                                    Amendments Details
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
                                                     <Card.Body>
                                                         <div className="form_group">
-                                                            <span className="form_group_label">Variation Category (*)</span>
+                                                            <span className="form_group_label">Description of the event</span>
                                                             <div className="form_group_field">
-                                                                <input type="text" />
+                                                                <input type="text" name="desc_of_event" placeholder="Description of the event" />
                                                             </div>
                                                         </div>
                                                         <div className="form_group">
-                                                            <span className="form_group_label">Event Description</span>
-                                                            <div className="form_group_field">
-                                                                <input type="text" />
-                                                            </div>
-                                                        </div>
-                                                        <div className="form_group">
-                                                            <span className="form_group_label">Application N°</span>
-                                                            <div className="form_group_field">
-                                                                <input type="text" />
-                                                            </div>
-                                                        </div>
-                                                        <div className="form_group">
-                                                            <span className="form_group_label">Dossier Submission Format</span>
-                                                            <div className="form_group_field">
-                                                                <select>
-                                                                    <option>CTD</option>
-                                                                    <option>NeeS</option>
-                                                                    <option>eCTD</option>
-                                                                    <option>Briefing Book</option>
-                                                                    <option>Drug Master File</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div className="form_group">
-                                                            <span className="form_group_label">Reason For Variation</span>
+                                                            <span className="form_group_label">Reason for variation</span>
                                                             <div className="form_group_field">
                                                                 <select>
                                                                     <option>Indication</option>
@@ -174,11 +146,17 @@ const Index = (props) => {
                                                                 </select>
                                                             </div>
                                                         </div>
+                                                        <div className="form_group">
+                                                            <span className="form_group_label">Remarks</span>
+                                                            <div className="form_group_field">
+                                                                <input type="text" name="remarks" placeholder="remarks" />
+                                                            </div>
+                                                        </div>
                                                     </Card.Body>
                                                 </Accordion.Collapse>
                                             </Card>
                                         </Accordion>
-                                        <Accordion >
+                                        <Accordion>
                                             <Card>
                                                 <Accordion.Toggle as={Card.Header} eventKey="0">
                                                     Events Status
@@ -188,7 +166,9 @@ const Index = (props) => {
                                                         <div className="form_group">
                                                             <span className="form_group_label">Status (*)</span>
                                                             <div className="form_group_field">
-                                                                <select></select>
+                                                                <select>
+
+                                                                </select>
                                                             </div>
                                                         </div>
                                                         <div className="form_group">
@@ -222,31 +202,24 @@ const Index = (props) => {
                                                             </div>
                                                         </div>
                                                         <div className="form_group">
-                                                            <span className="form_group_label">Implementation Deadline</span>
+                                                            <span className="form_group_label">Effective internal implementation date</span>
                                                             <div className="form_group_field">
                                                                 <input type="text" />
                                                             </div>
                                                         </div>
                                                         <div className="form_group">
-                                                            <span className="form_group_label">Next Renewals</span>
+                                                            <span className="form_group_label">Implementation Deadline of deadline for answer</span>
+                                                            <div className="form_group_field">
+                                                                <input type="text" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="form_group">
+                                                            <span className="form_group_label">Impacted of changes approved</span>
                                                             <div className="form_group_field">
                                                                 <select>
-                                                                    <option>Required</option>
-                                                                    <option>Not Applicable</option>
-                                                                    <option>Not Required</option>
+                                                                    <option>Yes</option>
+                                                                    <option>No</option>
                                                                 </select>
-                                                            </div>
-                                                        </div>
-                                                        <div className="form_group">
-                                                            <span className="form_group_label">Next Renewals Submission Deadline</span>
-                                                            <div className="form_group_field">
-                                                                <input type="text" />
-                                                            </div>
-                                                        </div>
-                                                        <div className="form_group">
-                                                            <span className="form_group_label">Next Renewal Date</span>
-                                                            <div className="form_group_field">
-                                                                <input type="text" />
                                                             </div>
                                                         </div>
                                                     </Card.Body>
@@ -326,15 +299,13 @@ const Index = (props) => {
                                                             <hr />
                                                         </div>
                                                     ))}
-
                                                 </div>
-
                                             </div>
                                         </div>
                                     </Tab>
                                 </Tabs>
                                 <div className="form-button">
-                                    <button className="btn btn-primary">Submit</button>
+                                    <button type="submit" className="btn btn-primary" disabled={processing}>Submit</button>
                                 </div>
                             </form>
                         </div>
@@ -343,8 +314,9 @@ const Index = (props) => {
             </div>
         </>
     )
+
 }
 
-export default Index;
+export default Amendments;
 
-Index.layout = page => <Authenticated children={page} auth={page.props.auth} />
+Amendments.layout = page => <Authenticated children={page} auth={page.props.auth} />

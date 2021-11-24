@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Variation;
+use App\Models\Transfer;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class VariationController extends Controller
+class TransferController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class VariationController extends Controller
      */
     public function index()
     {
-        return Inertia::render('MarketingAuth/Variation');
+        return Inertia::render('MarketingAuth/Transfer');
     }
 
     /**
@@ -42,10 +42,10 @@ class VariationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Variation  $variation
+     * @param  \App\Models\Transfer  $transfer
      * @return \Illuminate\Http\Response
      */
-    public function show(Variation $variation)
+    public function show(Transfer $transfer)
     {
         //
     }
@@ -53,10 +53,10 @@ class VariationController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Variation  $variation
+     * @param  \App\Models\Transfer  $transfer
      * @return \Illuminate\Http\Response
      */
-    public function edit(Variation $variation)
+    public function edit(Transfer $transfer)
     {
         //
     }
@@ -65,10 +65,10 @@ class VariationController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Variation  $variation
+     * @param  \App\Models\Transfer  $transfer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Variation $variation)
+    public function update(Request $request, Transfer $transfer)
     {
         //
     }
@@ -76,10 +76,10 @@ class VariationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Variation  $variation
+     * @param  \App\Models\Transfer  $transfer
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Variation $variation)
+    public function destroy(Transfer $transfer)
     {
         //
     }

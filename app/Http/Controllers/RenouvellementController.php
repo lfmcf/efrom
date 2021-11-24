@@ -15,7 +15,7 @@ class RenouvellementController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Renouvellement/Index');
+        return Inertia::render('MarketingAuth/Renewal');
     }
 
     /**
