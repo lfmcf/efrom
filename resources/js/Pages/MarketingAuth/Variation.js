@@ -10,13 +10,15 @@ import Select from 'react-select';
 const Variation = (props) => {
 
     const { data, setData, post, processing, errors, clearErrors,  reset } = useForm({
+        identification: [],
         status: []
     });
 
     const [isHq, setHq] = useState(false)
+    const [statuscountries, setStatusContries] = useState([])
     const [formValues, setFormValues] = useState([{ document_type: "", document_title: "", language: "", version_date: "", dremarks: "", document: ""}])
     const [statusValues, setStatusValues] = useState([{ status: "", status_date: "", ectd: "", control: "", cdds: "", remarks: "", local_implementation: "",  implimentation_deadline: "", actual_implementation: ""}])
-    const [prductValues, setProductValues] = useState([{country: "", application_stage:"",product:"",product_type:"",rms:"",procedure_num:"",local_tradename:"",product_type:""}])
+    const [prductValues, setProductValues] = useState([{product:"",procedure_type:"",country: [], application_stage:"",rms:"",procedure_num:"",local_tradename:"",product_type:""}])
     const [variationValues, setVariationValues] = useState([{category:"",variation_type:"",submission_type:"",application_number:"",submission_number:"",submission_format:"",variation_reason:""}])
     
     let addFormFields = () => {
@@ -29,7 +31,7 @@ const Variation = (props) => {
     }
 
     let addProductFields = () => {
-        setProductValues([...prductValues, {country: "", application_stage:"",product:"",product_type:"",rms:"",procedure_num:"",local_tradename:"",product_type:""}])
+        setProductValues([...prductValues, {product:"",procedure_type:"",country: [], application_stage:"",rms:"",procedure_num:"",local_tradename:"",product_type:""}])
     }
 
     let addVariationFields = () => {
@@ -41,17 +43,25 @@ const Variation = (props) => {
     })
 
     let handleChanged = (i, e) => {
+       
+        let newFormValues = [...prductValues];
         
-        let newFormValues = [...formValues];
-        if(e.target.name === "document" ) {
-            newFormValues[i][e.target.name] = e.target.files[0];
+        newFormValues[i][e.target.name] = e.target.value;
             
+        setData("identification", newFormValues);
+    }
+
+    const handleSelectChange = (i, name, index) => {
+    
+        let newFormValues = [...prductValues];
+        if(name.length > 0) {
+            newFormValues[i]["country"] = name;
         }else {
-            newFormValues[i][e.target.name] = e.target.value;
-            
+            newFormValues[i]["country"] = name.value;
         }
         
-        setData("doc", newFormValues);
+        setData("identification", newFormValues);
+       
     }
 
     let handleStatusChanged = (i, e) => {
@@ -65,10 +75,22 @@ const Variation = (props) => {
         setHq(e.target.checked)
     }
 
+    
+    const StatusProductChange = (e) => {
+        
+        data.identification.map(ele => {
+            if (ele.product === e.target.value) {
+                console.log(ele.country)
+                setStatusContries(ele.country)
+            }
+        })
+
+    }
+
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(data)
+        console.log(prductValues)
     }
 
     return(
@@ -122,58 +144,37 @@ const Variation = (props) => {
                                                         {prductValues.map((element, index) => (
                                                             
                                                             <div key={index}>
-                                                                    <div style={{background:"#70bbfd",height:'24px',width:'24px',borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',color:'white',margin:'10px'}}>
-                                                                        {index+1}
-                                                                    </div>
-                                                                <div className="form_group">
-                                                                    <span className="form_group_label">Country</span>
-                                                                    <div className="form_group_field">
-                                                                        <Select options={contries}
-                                                                            name="registration_holder"
-                                                                            // onChange={handleSelectChange}
-                                                                            className="basic"
-                                                                            classNamePrefix="basic"
-                                                                        // styles={selectStyles(errors.registration_holder)}
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="form_group">
-                                                                    <span className="form_group_label">Application Stage</span>
-                                                                    <div className="form_group_field">
-                                                                        <select>
-                                                                            <option>Marketing Authorisation</option>
-                                                                            <option>APSI / NPP</option>
-                                                                            <option>PIP*</option>
-                                                                            <option>CTA*</option>
-                                                                            <option>IND*</option>
-                                                                        </select>
-                                                                    </div>
+                                                                <div style={{background:"#70bbfd",height:'24px',width:'24px',borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',color:'white',margin:'10px'}}>
+                                                                    {index+1}
                                                                 </div>
                                                                 <div className="form_group">
                                                                     <span className="form_group_label">Product</span>
                                                                     <div className="form_group_field">
-                                                                        <select>
-                                                
-                                                                        </select>
+                                                                        <input type="text" name="product" placeholder="Product" onChange={e => handleChanged(index, e)} />
                                                                     </div>
                                                                 </div>
                                                                 <div className="form_group">
                                                                     <span className="form_group_label">Procedure Type</span>
                                                                     <div className="form_group_field">
-                                                                        <select>
-                                                                            <option>National</option>
-                                                                            <option>Centralized</option>
-                                                                            <option>Decentralized</option>
-                                                                            <option>Mutual Recognition</option>
+                                                                        <select name="procedure_type" onChange={e => handleChanged(index, e)}>
+                                                                            <option value="na">National</option>
+                                                                            <option value="cp">Centralized</option>
+                                                                            <option value="dcp">Decentralized</option>
+                                                                            <option value="mrp">Mutual Recognition</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
                                                                 <div className="form_group">
-                                                                    <span className="form_group_label">RMS</span>
+                                                                    <span className="form_group_label">Country</span>
                                                                     <div className="form_group_field">
-                                                                        <select>
-                                                
-                                                                        </select>
+                                                                        <Select options={contries}
+                                                                            name="country"
+                                                                            onChange={e => handleSelectChange(index, e)}
+                                                                            className="basic"
+                                                                            isMulti={prductValues[index].procedure_type === "dcp" || prductValues[index].procedure_type === "mrp" ? true : false }
+                                                                            classNamePrefix="basic"
+                                                                        // styles={selectStyles(errors.registration_holder)}
+                                                                        />
                                                                     </div>
                                                                 </div>
                                                                 <div className="form_group">
@@ -189,10 +190,33 @@ const Variation = (props) => {
                                                                     </div>
                                                                 </div>
                                                                 <div className="form_group">
+                                                                    <span className="form_group_label">Application Stage</span>
+                                                                    <div className="form_group_field">
+                                                                        <select>
+                                                                            <option>Marketing Authorisation</option>
+                                                                            <option>APSI / NPP</option>
+                                                                            <option>PIP*</option>
+                                                                            <option>CTA*</option>
+                                                                            <option>IND*</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                               
+                                                                
+                                                                <div className="form_group">
+                                                                    <span className="form_group_label">RMS</span>
+                                                                    <div className="form_group_field">
+                                                                        <select>
+                                                
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                
+                                                                <div className="form_group">
                                                                     <span className="form_group_label">Product Type</span>
                                                                     <div className="form_group_field">
                                                                         <select>
-                                                                            <option>Clinical</option>
                                                                             <option>Finished</option>
                                                                             <option>Reference</option>
                                                                         </select>
@@ -203,31 +227,7 @@ const Variation = (props) => {
                                                     </Card.Body>
                                                     ) : 
                                                     <Card.Body>
-                                                        <div className="form_group">
-                                                            <span className="form_group_label">Country</span>
-                                                            <div className="form_group_field">
-                                                                    <Select options={contries}
-                                                                        name="registration_holder"
-                                                                        // onChange={handleSelectChange}
-                                                                        className="basic"
-                                                                        classNamePrefix="basic"
-                                                                        // styles={selectStyles(errors.registration_holder)}
-                                                                    />
-                                                            </div>
-                                                        </div>
-                                                        <div className="form_group">
-                                                            <span className="form_group_label">Application Stage</span>
-                                                            <div className="form_group_field">
-                                                                <select>
-                                                                    <option>Marketing Authorisation</option>
-                                                                    <option>APSI / NPP</option>
-                                                                    <option>PIP*</option>
-                                                                    <option>CTA*</option>
-                                                                    <option>IND*</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div className="form_group">
+                                                         <div className="form_group">
                                                             <span className="form_group_label">Product</span>
                                                             <div className="form_group_field">
                                                                 <select>
@@ -247,11 +247,16 @@ const Variation = (props) => {
                                                             </div>
                                                         </div>
                                                         <div className="form_group">
-                                                            <span className="form_group_label">RMS</span>
+                                                            <span className="form_group_label">Country</span>
                                                             <div className="form_group_field">
-                                                                <select>
-
-                                                                </select>
+                                                                    <Select options={contries}
+                                                                        name="registration_holder"
+                                                                    
+                                                                        // onChange={handleSelectChange}
+                                                                        className="basic"
+                                                                        classNamePrefix="basic"
+                                                                        // styles={selectStyles(errors.registration_holder)}
+                                                                    />
                                                             </div>
                                                         </div>
                                                         <div className="form_group">
@@ -267,10 +272,34 @@ const Variation = (props) => {
                                                             </div>
                                                         </div>
                                                         <div className="form_group">
+                                                            <span className="form_group_label">Application Stage</span>
+                                                            <div className="form_group_field">
+                                                                <select>
+                                                                    <option>Marketing Authorisation</option>
+                                                                    <option>APSI / NPP</option>
+                                                                    <option>PIP*</option>
+                                                                    <option>CTA*</option>
+                                                                    <option>IND*</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                       
+                                                        
+                                                        <div className="form_group">
+                                                            <span className="form_group_label">RMS</span>
+                                                            <div className="form_group_field">
+                                                                <select>
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        
+                                                        <div className="form_group">
                                                             <span className="form_group_label">Product Type</span>
                                                             <div className="form_group_field">
                                                                 <select>
-                                                                    <option>Clinical</option>
+                                                                   
                                                                     <option>Finished</option>
                                                                     <option>Reference</option>
                                                                 </select>
@@ -462,6 +491,28 @@ const Variation = (props) => {
                                                         <button type="button" onClick={addStatusFields}>add</button>
                                                         {statusValues.map((element, index) => (
                                                             <div key={index}>
+                                                                <div className="form_group">
+                                                                    <span className="form_group_label">Product</span>
+                                                                    <div className="form_group_field">
+                                                                        <select onChange={StatusProductChange}>
+                                                                            {data.identification.map((ele,i) => (
+                                                                                <option value={ele.product} key={i}>{ele.product}</option>
+                                                                            ))}
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="form_group">
+                                                                    <span className="form_group_label">Country</span>
+                                                                    <div className="form_group_field">
+                                                                        <Select options={statuscountries}
+                                                                            name="registration_holder"
+                                                                            // onChange={handleSelectChange}
+                                                                            className="basic"
+                                                                            classNamePrefix="basic"
+                                                                        // styles={selectStyles(errors.registration_holder)}
+                                                                        />
+                                                                    </div>
+                                                                </div>
                                                                 <div className="form_group">
                                                                     <span className="form_group_label">Status (*)</span>
                                                                     <div className="form_group_field">
