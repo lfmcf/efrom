@@ -74,8 +74,8 @@ const RegistrationTermination = (props) => {
                                                                 <Select options={contries}
                                                                     name="registration_holder"
                                                                     // onChange={handleSelectChange}
-                                                                    className="basic-single"
-                                                                    classNamePrefix="basic-single"
+                                                                    className="basic"
+                                                                    classNamePrefix="basic"
                                                                 // styles={selectStyles(errors.registration_holder)}
                                                                 />
                                                             </div>
