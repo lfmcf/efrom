@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Baseline;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Countries;
 
 class BaselineController extends Controller
 {
@@ -15,7 +16,10 @@ class BaselineController extends Controller
      */
     public function index()
     {
-        return Inertia::render('MarketingAuth/Baseline');
+        $countries = Countries::orderBy('country_name')->get('country_name');
+        return Inertia::render('MarketingAuth/Baseline', [
+            'countries' => $countries
+        ]);
     }
 
     /**

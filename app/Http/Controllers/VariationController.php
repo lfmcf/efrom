@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Variation;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Countries;
 
 class VariationController extends Controller
 {
@@ -15,7 +16,10 @@ class VariationController extends Controller
      */
     public function index()
     {
-        return Inertia::render('MarketingAuth/Variation');
+        $countries = Countries::orderBy('country_name')->get('country_name');
+        return Inertia::render('MarketingAuth/Variation', [
+            'countries' => $countries
+        ]);
     }
 
     /**

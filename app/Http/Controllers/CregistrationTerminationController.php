@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CregistrationTermination;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Countries;
 
 class CregistrationTerminationController extends Controller
 {
@@ -15,7 +16,10 @@ class CregistrationTerminationController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Clinical/RegistrationTermination');
+        $countries = Countries::orderBy('country_name')->get('country_name');
+        return Inertia::render('Clinical/RegistrationTermination', [
+            'countries' => $countries
+        ]);
     }
 
     /**

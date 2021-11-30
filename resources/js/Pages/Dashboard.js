@@ -19,7 +19,13 @@ const Dashboard = (props) => {
             </div>
             
             <div className="row">
-                <div className="col-12 col-md-12 col-lg-6 col-xl-3"></div>
+                <div className="col-12" style={{height:"300px"}}>
+                    <div className="card main-card">
+                        <div className="card-body">
+                            <h5>Variations Table</h5>
+                        </div>
+                    </div>
+                </div>
                 <div className="col-12 col-md-12 col-lg-6 col-xl-3"></div>
                 <div className="col-12 col-md-12 col-lg-6 col-xl-3"></div>
                 <div className="col-12 col-md-12 col-lg-6 col-xl-3"></div>

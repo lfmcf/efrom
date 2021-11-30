@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\RegistrationTermination;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Countries;
 
 class RegistrationTerminationController extends Controller
 {
@@ -15,7 +16,10 @@ class RegistrationTerminationController extends Controller
      */
     public function index()
     {
-        return Inertia::render('MarketingAuth/RegistrationTermination');
+        $countries = Countries::orderBy('country_name')->get('country_name');
+        return Inertia::render('MarketingAuth/RegistrationTermination', [
+            'countries' => $countries
+        ]);
     }
 
     /**
