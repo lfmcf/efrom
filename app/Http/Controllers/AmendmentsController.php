@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Amendments;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Countries;
 
 class AmendmentsController extends Controller
 {
@@ -15,7 +16,10 @@ class AmendmentsController extends Controller
      */
     public function index()
     {
-        return Inertia::render('MarketingAuth/Amendments');
+        $countries = Countries::orderBy('country_name')->get('country_name');
+        return Inertia::render('MarketingAuth/Amendments', [
+            'countries' => $countries
+        ]);
     }
 
     /**

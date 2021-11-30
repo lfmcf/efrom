@@ -378,7 +378,7 @@ h5.subhead {
 .card-body {
     background-color: #fff;
     height: 100%;
-    border-radius: 0 5px 5px;
+    border-radius: 5px;
 }
 
 .form_group {
@@ -469,11 +469,6 @@ h5.subhead {
     text-transform: uppercase;
 }
 
-.basic-single {
-    width: 100%;
-    text-transform: uppercase;
-}
-
 .select__control {
     border: 1px solid #f2f4f7 !important;
 }
@@ -554,6 +549,7 @@ h5.subhead {
     color: white;
     border-radius: 5px;
     font-size: 12px;
+    padding: 5px 10px;
 }
 
 .errors_wrap {
@@ -572,6 +568,17 @@ h5.subhead {
 
 .h_3 {
     left: 70px;
+}
+
+.basic {
+    width: 100%;
+}
+
+.basic__input-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    
+    text-transform: uppercase;
 }
 
 

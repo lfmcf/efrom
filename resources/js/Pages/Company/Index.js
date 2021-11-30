@@ -41,31 +41,31 @@ const Index = (props) => {
                                 <div className="form_group">
                                     <span className="form_group_label">Company Name</span>
                                     <div className="form_group_field">
-                                        <input type="text" name="name" onChange={onHandleChange} />
+                                        <input type="text" name="name" onChange={onHandleChange} placeholder="Company Name" />
                                     </div>
                                 </div>
                                 <div className="form_group">
                                     <span className="form_group_label">Adresse</span>
                                     <div className="form_group_field">
-                                        <input type="text" name="adress" onChange={onHandleChange} />
+                                        <input type="text" name="adress" onChange={onHandleChange} placeholder="Adresse" />
                                     </div>
                                 </div>
                                 <div className="form_group">
                                     <span className="form_group_label">City</span>
                                     <div className="form_group_field">
-                                        <input type="text" name="city" onChange={onHandleChange} />
+                                        <input type="text" name="city" onChange={onHandleChange} placeholder="City" />
                                     </div>
                                 </div>
                                 <div className="form_group">
                                     <span className="form_group_label">Postal Code</span>
                                     <div className="form_group_field">
-                                        <input type="text" name="postalcode" onChange={onHandleChange} />
+                                        <input type="text" name="postalcode" onChange={onHandleChange} placeholder="Postal Code" />
                                     </div>
                                 </div>
                                 <div className="form_group">
                                     <span className="form_group_label">Country Name</span>
                                     <div className="form_group_field">
-                                        <input type="text" name="countryname" onChange={onHandleChange} />
+                                        <input type="text" name="countryname" onChange={onHandleChange} placeholder="Country Name" />
                                     </div>
                                 </div>
                                 <div className="form-button">

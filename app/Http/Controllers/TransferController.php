@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Transfer;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Countries;
 
 class TransferController extends Controller
 {
@@ -15,7 +16,10 @@ class TransferController extends Controller
      */
     public function index()
     {
-        return Inertia::render('MarketingAuth/Transfer');
+        $countries = Countries::orderBy('country_name')->get('country_name');
+        return Inertia::render('MarketingAuth/Transfer', [
+            'countries' => $countries
+        ]);
     }
 
     /**

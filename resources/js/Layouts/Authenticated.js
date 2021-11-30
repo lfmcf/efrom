@@ -117,7 +117,7 @@ export default function Authenticated({ auth, header, children }) {
                                                                     <p className="sidebar_link_title h_2">Medicinal Product</p>
                                                                 </li>
                                                             </Link>
-                                                            <Link className={`topbar_link ${route().current('comapny') ? `sidebar_link_active` : ''}`} href={route('company')}>
+                                                            <Link className={`topbar_link ${route().current('company') ? `sidebar_link_active` : ''}`} href={route('company')}>
                                                                 <li className="sidebar_link">
                                                                     <p className="sidebar_link_title h_2">Company Registration</p>
                                                                 </li>

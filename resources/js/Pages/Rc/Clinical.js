@@ -5,6 +5,7 @@ import Tab from 'react-bootstrap/Tab';
 import { Card, Accordion } from 'react-bootstrap';
 import Select from 'react-select';
 import { useForm } from '@inertiajs/inertia-react';
+import Documents from '@/Layouts/Documents';
 
 const Clinical = (props) => {
 
@@ -144,8 +145,8 @@ const Clinical = (props) => {
                                                                 <Select options={options_4}
                                                                     name="country_global"
                                                                     onChange={handleSelectChange}
-                                                                    className="basic-single"
-                                                                    classNamePrefix="select"
+                                                                    className="basic"
+                                                                    classNamePrefix="basic"
                                                                 />
                                                             </div>
                                                         </div>
@@ -368,8 +369,8 @@ const Clinical = (props) => {
                                                                 <Select options={options}
                                                                     name="control_site"
                                                                     onChange={handleSelectChange}
-                                                                    className="basic-single"
-                                                                    classNamePrefix="basic-single"
+                                                                    className="basic"
+                                                                    classNamePrefix="basic"
                                                                     styles={selectStyles(errors.control_site)}
                                                                 />
                                                             </div>
@@ -381,8 +382,8 @@ const Clinical = (props) => {
                                                                 <Select options={options}
                                                                     name="distributor"
                                                                     onChange={handleSelectChange}
-                                                                    className="basic-single"
-                                                                    classNamePrefix="basic-singlet"
+                                                                    className="basic"
+                                                                    classNamePrefix="basic"
                                                                     styles={selectStyles(errors.distributor)}
                                                                 />
                                                             </div>
@@ -394,8 +395,8 @@ const Clinical = (props) => {
                                                                 <Select options={options}
                                                                     name="exploitant"
                                                                     onChange={handleSelectChange}
-                                                                    className="basic-single"
-                                                                    classNamePrefix="basic-single"
+                                                                    className="basic"
+                                                                    classNamePrefix="basic"
                                                                     styles={selectStyles(errors.exploitant)}
                                                                 />
                                                             </div>
@@ -407,8 +408,8 @@ const Clinical = (props) => {
                                                                 <Select options={options}
                                                                     name="manufacturer_of_the_active_substance"
                                                                     onChange={handleSelectChange}
-                                                                    className="basic-single"
-                                                                    classNamePrefix="basic-single"
+                                                                    className="basic"
+                                                                    classNamePrefix="basic"
                                                                     styles={selectStyles(errors.manufacturer_of_the_active_substance)}
                                                                 />
                                                             </div>
@@ -420,8 +421,8 @@ const Clinical = (props) => {
                                                                 <Select options={options}
                                                                     name="manufacturer_of_the_finished_product"
                                                                     onChange={handleSelectChange}
-                                                                    className="basic-single"
-                                                                    classNamePrefix="basic-single"
+                                                                    className="basic"
+                                                                    classNamePrefix="basic"
                                                                     styles={selectStyles(errors.manufacturer_of_the_finished_product)}
                                                                 />
                                                             </div>
@@ -433,8 +434,8 @@ const Clinical = (props) => {
                                                                 <Select options={options}
                                                                     name="inner_packaging_site"
                                                                     onChange={handleSelectChange}
-                                                                    className="basic-single"
-                                                                    classNamePrefix="basic-single"
+                                                                    className="basic"
+                                                                    classNamePrefix="basic"
                                                                     styles={selectStyles(errors.inner_packaging_site)}
                                                                 />
                                                             </div>
@@ -446,8 +447,8 @@ const Clinical = (props) => {
                                                                 <Select options={options}
                                                                     name="outer_packaging_site"
                                                                     onChange={handleSelectChange}
-                                                                    className="basic-single"
-                                                                    classNamePrefix="basic-single"
+                                                                    className="basic"
+                                                                    classNamePrefix="basic"
                                                                     styles={selectStyles(errors.outer_packaging_site)}
                                                                 />
                                                             </div>
@@ -459,8 +460,8 @@ const Clinical = (props) => {
                                                                 <Select options={options}
                                                                     name="release_site"
                                                                     onChange={handleSelectChange}
-                                                                    className="basic-single"
-                                                                    classNamePrefix="basic-single"
+                                                                    className="basic"
+                                                                    classNamePrefix="basic"
                                                                     styles={selectStyles(errors.release_site)}
                                                                 />
                                                             </div>
@@ -473,8 +474,8 @@ const Clinical = (props) => {
                                                                 <Select options={options}
                                                                     name="supplier_of_active_ingredient"
                                                                     onChange={handleSelectChange}
-                                                                    className="basic-single"
-                                                                    classNamePrefix="basic-single"
+                                                                    className="basic"
+                                                                    classNamePrefix="basic"
                                                                     styles={selectStyles(errors.supplier_of_active_ingredient)}
                                                                 />
                                                             </div>
@@ -486,8 +487,8 @@ const Clinical = (props) => {
                                                                 <Select options={options}
                                                                     name="bulk_manufacturing_site"
                                                                     onChange={handleSelectChange}
-                                                                    className="basic-single"
-                                                                    classNamePrefix="basic-single"
+                                                                    className="basic"
+                                                                    classNamePrefix="basic"
                                                                     styles={selectStyles(errors.bulk_manufacturing_site)}
                                                                 />
                                                             </div>
@@ -564,83 +565,7 @@ const Clinical = (props) => {
                                         </Accordion>
                                     </Tab>
                                     <Tab eventKey="second" title="Documents">
-                                        <div className="row">
-                                            <div className="col-md-12 col-lg-12">
-                                                <div style={{ marginTop: '20px' }}>
-                                                    <div className="row">
-                                                        <div className="card_title col-6">
-                                                            <h5>Documents forms</h5>
-                                                            <h5 className="subhead" >All fields markedd with * are required</h5>
-                                                        </div>
-                                                        <div className="col-6 d-flex justify-content-end">
-                                                            <button className="add_doc_form" type="button" onClick={() => addFormFields()}>Add Form</button>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    
-                                                    {formValues.map((element, index) => (
-                                                        <div style={{ marginTop: '20px' }} key={index}>
-                                                            <div className="form_group" >
-                                                                <span className="form_group_label">Document type</span>
-                                                                <div className="form_group_field">
-                                                                    <select name="document_type" onChange={e => handleChanged(index, e)} value={element.document_type || ""}>
-                                                                        <option>Agency correspondence</option>
-                                                                        <option>Approval Letter</option>
-                                                                        <option>Investigational Medicinal Product Dossier (IMPD)</option>
-                                                                        <option>Investigator's Brochure</option>
-                                                                        <option>Labeling</option>
-                                                                        <option>Medication Guide</option>
-                                                                        <option>Package Insert</option>
-                                                                        <option>Package Leaflet</option>
-                                                                        <option>Patient Information Leaflet</option>
-                                                                        <option>Proof of submission</option>
-                                                                        <option>Protocol</option>
-                                                                        <option>Regulatory Decision Document</option>
-                                                                        <option>Questions</option>
-                                                                        <option>SMPC</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div className="form_group">
-                                                                <span className="form_group_label">Document title</span>
-                                                                <div className="form_group_field">
-                                                                    <input type="text" name="document_title" onChange={e => handleChanged(index, e)} value={element.document_title || ""} />
-                                                                </div>
-                                                            </div>
-                                                            <div className="form_group" >
-                                                                <span className="form_group_label">Language</span>
-                                                                <div className="form_group_field">
-                                                                    <select name="language" onChange={e => handleChanged(index, e)} value={element.language || ""} >
-                                                                        <option></option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div className="form_group">
-                                                                <span className="form_group_label">Version date</span>
-                                                                <div className="form_group_field">
-                                                                    <input type="text" name="version_date" onChange={e => handleChanged(index, e)} value={element.version_date || ""} />
-                                                                </div>
-                                                            </div>
-                                                            <div className="form_group">
-                                                                <span className="form_group_label">Remarks</span>
-                                                                <div className="form_group_field">
-                                                                    <input type="text" name="dremarks" onChange={e => handleChanged(index, e)} value={element.dremarks || ""} />
-                                                                </div>
-                                                            </div>
-                                                            <div className="form_group">
-                                                                <span className="form_group_label">Document</span>
-                                                                <div className="form_group_field">
-                                                                    <input type="file" name="document" onChange={e => handleChanged(index, e)} value={element.document || ""} />
-                                                                </div>
-                                                            </div>
-                                                            <hr />
-                                                        </div>
-                                                        
-                                                        
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <Documents handleChanged={handleChanged} addFormFields={addFormFields} formValues={formValues} />
                                     </Tab>
                                 </Tabs>
                                 <div className="form-button">
