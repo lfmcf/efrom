@@ -389,6 +389,25 @@ h5.subhead {
     position: relative;
 }
 
+.inline_form {
+    display: flex;
+    align-items: center; 
+    margin: 0 0 20px;
+}
+
+.form_group_inline {
+    width: 100%;
+}
+
+.form_group_inline .form_group_field {
+    padding: 5px 20px 0 0;
+    width: 100%;
+}
+
+.form_group_inline:last-child .form_group_field {
+    padding: 5px 0 0;
+}
+
 .form_group.last {
     margin-bottom: 30px;
 }
@@ -548,10 +567,13 @@ h5.subhead {
     background: #4ce1b6;
     color: white;
     border-radius: 5px;
-    font-size: 12px;
-    padding: 5px 10px;
+    padding: 2px 8px;
+    margin: 10px 0;
 }
-
+.add_doc_form i {
+    font-weight: 800;
+    font-size: 14px;
+}
 .errors_wrap {
     color: red;
     padding-left: 140px;

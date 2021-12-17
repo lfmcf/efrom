@@ -1,5 +1,5 @@
 import React from 'react';
-
+import 'bootstrap-icons/font/bootstrap-icons.css';
 const Documents = ({handleChanged, addFormFields, formValues}) => {
 
     return (
@@ -11,8 +11,10 @@ const Documents = ({handleChanged, addFormFields, formValues}) => {
                             <h5>Documents forms</h5>
                             <h5 className="subhead" >All fields markedd with * are required</h5>
                         </div>
-                        <div className="col-6 d-flex justify-content-end">
-                            <button className="add_doc_form" type="button" onClick={() => addFormFields()}>Add Form</button>
+                        <div className="col-6">
+                            <button className="add_doc_form" type="button" onClick={() => addFormFields()}>
+                                <i className="bi bi-plus-lg"></i>
+                            </button>
                         </div>
                     </div>
 
@@ -22,6 +24,7 @@ const Documents = ({handleChanged, addFormFields, formValues}) => {
                                 <span className="form_group_label">Document type</span>
                                 <div className="form_group_field">
                                     <select name="document_type" onChange={e => handleChanged(index, e)} value={element.document_type || ""}>
+                                        <option value="" disabled>Select</option>
                                         <option>Agency correspondence</option>
                                         <option>Approval Letter</option>
                                         <option>Investigational Medicinal Product Dossier (IMPD)</option>
