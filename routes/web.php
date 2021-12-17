@@ -59,6 +59,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/registrationtermination', [RegistrationTerminationController::class, 'index'])->name('registrationtermination');
     Route::get('/cregistrationtermination', [CregistrationTerminationController::class, 'index'])->name('cregistrationtermination');
     Route::get('/amendments', [AmendmentsController::class, 'index'])->name('amendments');
+    Route::post('/storevariation', [VariationController::class, 'store'])->name('storevariation');
 });
 
 // Route::get('/dashboard', function () {

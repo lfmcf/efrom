@@ -6,6 +6,7 @@ use App\Models\Variation;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Countries;
+use Illuminate\Support\Facades\Validator;
 
 class VariationController extends Controller
 {
@@ -40,7 +41,17 @@ class VariationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->status);
+        $validator = Validator::make($request->all(), [
+            'status.status' => 'required',
+            'status.status_date' => 'required'
+        ]);
+        // $validated = $request->validate([
+        //     'category' => 'required',
+        //     'submission_type' => 'required',
+            
+        // ]);
+        
     }
 
     /**
