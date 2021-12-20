@@ -402,8 +402,8 @@ const Index = (props) => {
                                                                     <option value="" disabled>Select</option>
                                                                     <option value="National (NP)">National (NP)</option>
                                                                     <option value="Centralized (NP)">Centralized (NP)</option>
-                                                                    <option value="Mutual Recognition (MRP)">Mutual Recognition (MRP)</option>
-                                                                    <option value="Decentralized (DCP)">Decentralized (DCP)</option>
+                                                                    <option value="mrp">Mutual Recognition (MRP)</option>
+                                                                    <option value="dcp">Decentralized (DCP)</option>
                                                                 </select>
                                                             </div>
                                                             <p className="errors_wrap" style={{display: errors.procedure_type ? 'inline-block': 'none'}}>{errors.procedure_type}</p>
@@ -417,10 +417,21 @@ const Index = (props) => {
                                                                     onChange={handleSelectChange}
                                                                     className="basic"
                                                                     classNamePrefix="basic"
+                                                                    isMulti={data.procedure_type === 'dcp' || data.procedure_type === 'mrp'  ? true : false}
                                                                 />
                                                             </div>
                                                         </div>
-
+                                                        <div className="form_group" style={{display:data.procedure_type === 'dcp' || data.procedure_type === 'mrp'  ? '' : 'none'}}>
+                                                            <span className="form_group_label">RMS</span>
+                                                            <div className="form_group_field">
+                                                                <Select options={options_4}
+                                                                    name="rms"
+                                                                    onChange={handleSelectChange}
+                                                                    className="basic"
+                                                                    classNamePrefix="basic"
+                                                                />
+                                                            </div>
+                                                        </div>
                                                         <div className="form_group">
                                                             <span className="form_group_label">Procedure Number</span>
                                                             <div className="form_group_field">
