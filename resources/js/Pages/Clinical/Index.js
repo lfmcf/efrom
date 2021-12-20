@@ -28,7 +28,7 @@ const Index = (props) => {
         orphan_designation_status: '',
         orphan_indication_type: '',
         under_intensive_monitoring: '',
-        key_dates: [{date_type: "", date:"",remarks:""}],
+        key_dates: [{date_type: "", date: new Date(),remarks:""}],
         alternate_number_type: '',
         alternate_number: '',
         remarks: '',
@@ -36,19 +36,18 @@ const Index = (props) => {
         formulations: [{ingredient: '', strength_type: '', numerator_lower_val: '', numerator_upper_val: '', numerator_unit: '', function: ''}],
         packagings: [
             {
-                packaging_type:'',packaging_name:'',package_number:'',description:'',launched:'',first_lunch_date:'',packaging_discontinued:'',discontinuation_date:'', 
+                packaging_type:'',packaging_name:'',package_number:'',description:'',launched:'',first_lunch_date:new Date(),packaging_discontinued:'',discontinuation_date:new Date(), 
                 packagelif: [{package_shelf_life_type:'', shelf_life:'',shelf_life_unit:'',package_storage_condition:[], remarks:''}]
             }
         ],
         indication: '',
         paediatric_use: '',
         manufacturing: [{manufacturer:'',operation_type:[]}],
-        statuses: [{status:'',status_date:'',ectd_sequence:'',change_control_ref:'',internal_submission_reference:'',remarks:''}],
+        statuses: [{status:'',status_date:new Date(),ectd_sequence:'',change_control_ref:'',internal_submission_reference:'',remarks:''}],
         doc: [{document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: ''}],
     });
 
     const [show, setShow] = useState(false);
-    const [startDate, setStartDate] = useState(new Date());
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -74,7 +73,7 @@ const Index = (props) => {
 
     const addDatesFields = () => {
         let arr = {...data};
-        arr.key_dates.push({date_type: "", date:"",remarks:""});
+        arr.key_dates.push({date_type: "", date:new Date(),remarks:""});
         setData(arr);
     }
 
@@ -98,7 +97,7 @@ const Index = (props) => {
 
     let addPackageValues = () => {
         let arr = {...data};
-        arr.packagings.push({packaging_type:"",packaging_name:"",package_number:"",description:"",launched:"",first_lunch_date:"",packaging_discontinued:"",discontinuation_date:"", packagelif: [{package_shelf_life_type:"", shelf_life:"",shelf_life_unit:"",package_storage_condition:[], remarks:""}]})
+        arr.packagings.push({packaging_type:"",packaging_name:"",package_number:"",description:"",launched:"",first_lunch_date:new Date(),packaging_discontinued:"",discontinuation_date:new Date(), packagelif: [{package_shelf_life_type:"", shelf_life:"",shelf_life_unit:"",package_storage_condition:[], remarks:""}]})
         setData(arr);
     }
 
@@ -134,7 +133,7 @@ const Index = (props) => {
 
     let addStatusesFields = () => {
         let newArr = {...data};
-        newArr.statuses.push({status:'',status_date:'',ectd_sequence:'',change_control_ref:'',internal_submission_reference:'',remarks:''});
+        newArr.statuses.push({status:'',status_date:new Date(),ectd_sequence:'',change_control_ref:'',internal_submission_reference:'',remarks:''});
         setData(newArr);
     }
 
@@ -156,11 +155,23 @@ const Index = (props) => {
         setData(newFormValues);
     }
 
-    let handleKyDateDateChange = (i, e) => {
-        let newFormValues = {...data};
-        setStartDate(e)
-        newFormValues.key_dates[i]['date'] = e;
-        setData(newFormValues);
+    let handleDateChange = (i,name, e) => {
+        let arr = {...data};
+        switch(name) {
+            case 'date':
+                arr.key_dates[i][name] = e;
+                break;
+            case 'first_lunch_date':
+                arr.packagings[i][name] = e;
+                break;
+            case 'discontinuation_date':
+                arr.packagings[i][name] = e;
+                break;
+            case 'status_date':
+                arr.statuses[i][name] = e;
+        }
+        setData(arr);
+
     }
 
     let handleSelectIngredientChange = (i, e) => {
@@ -677,7 +688,7 @@ const Index = (props) => {
                                                                     <div className="form_group_inline">
                                                                         <span className="form_group_label">Date</span>
                                                                         <div className="form_group_field">
-                                                                            <DatePicker name="date" selected={startDate} onChange={(date) => handleKyDateDateChange(index, date)} />
+                                                                            <DatePicker name="date" selected={data.key_dates[index].date} onChange={(date) => handleDateChange(index,'date', date)} />
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -906,7 +917,8 @@ const Index = (props) => {
                                                                     <div className="form_group_inline">
                                                                         <span className="form_group_label">First Launch Date</span>
                                                                         <div className="form_group_field">
-                                                                            <input type="text" name="first_lunch_date" onChange={(e) => handlePackagingsChange(index, e)} />
+                                                                            {/* <input type="text" name="first_lunch_date" onChange={(e) => handlePackagingsChange(index, e)} /> */}
+                                                                            <DatePicker name="first_lunch_date" selected={data.packagings[index].first_lunch_date} onChange={(date) => handleDateChange(index,'first_lunch_date', date)} />
                                                                         </div>
                                                                     </div>
                                                                     <div className="form_group_inline">
@@ -923,7 +935,8 @@ const Index = (props) => {
                                                                     <div className="form_group_inline">
                                                                         <span className="form_group_label">Discontinuation Date</span>
                                                                         <div className="form_group_field">
-                                                                            <input type="text" name="discontinuation_date" onChange={(e) => handlePackagingsChange(index, e)} />
+                                                                            {/* <input type="text" name="discontinuation_date" onChange={(e) => handlePackagingsChange(index, e)} /> */}
+                                                                            <DatePicker name="discontinuation_date" selected={data.packagings[index].discontinuation_date} onChange={(date) => handleDateChange(index,'discontinuation_date', date)} />
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1147,7 +1160,7 @@ const Index = (props) => {
                                                                         <span className="form_group_label">Status Date (*)</span>
                                                                         <div className="form_group_field">
                                                                             {/* <input type="text" name="status_date" onChange={handleChange} style={{borderColor: errors.status_date ? 'red' : '' }} /> */}
-                                                                            <DatePicker name="status_date" selected={startDate} onChange={(date) => setStartDate(date)} />
+                                                                            <DatePicker name="status_date" selected={data.statuses[index].status_date} onChange={(date) => handleDateChange(index,'status_date', date)} />
                                                                         </div>
                                                                         <p className="errors_wrap" style={{ display: errors.status_date ? 'inline-block' : 'none' }}>{errors.status_date}</p>
                                                                     </div>
