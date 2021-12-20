@@ -9,6 +9,7 @@ use App\Models\Company;
 use App\Models\substanceActive;
 use App\Models\packagingItemType;
 use App\Models\Countries;
+use Illuminate\Support\Facades\Validator;
 
 class RcController extends Controller
 {
@@ -87,6 +88,14 @@ class RcController extends Controller
         //     'status' => 'required',
         //     'status_date' => 'required',
         // ]);
+
+        // $validator = Validator::make($request->all(), [
+        //     'packagings.packaging_name' => 'required',
+        //     'packagings.package_number' => 'required',
+        //     'packagings.description' => 'required'
+        // ]);
+
+        // dd($validator);
 
         $rc = new Rc;
 
