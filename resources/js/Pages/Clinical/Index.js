@@ -11,9 +11,11 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const Index = (props) => {
+    
     const { data, setData, post, processing, errors, clearErrors,  reset } = useForm({
         procedure_type: '',
-        country: '',
+        country: [],
+        rms: '',
         procedure_number: '',
         product_type: '',
         application_stage: '',
@@ -28,7 +30,7 @@ const Index = (props) => {
         orphan_designation_status: '',
         orphan_indication_type: '',
         under_intensive_monitoring: '',
-        key_dates: [{date_type: "", date: new Date(),remarks:""}],
+        key_dates: [{date_type: "", date: '',remarks:""}],
         alternate_number_type: '',
         alternate_number: '',
         remarks: '',
@@ -36,23 +38,58 @@ const Index = (props) => {
         formulations: [{ingredient: '', strength_type: '', numerator_lower_val: '', numerator_upper_val: '', numerator_unit: '', function: ''}],
         packagings: [
             {
-                packaging_type:'',packaging_name:'',package_number:'',description:'',launched:'',first_lunch_date:new Date(),packaging_discontinued:'',discontinuation_date:new Date(), 
+                packaging_type:'',packaging_name:'',package_number:'',description:'',launched:'',first_lunch_date:'',packaging_discontinued:'',discontinuation_date:'', 
                 packagelif: [{package_shelf_life_type:'', shelf_life:'',shelf_life_unit:'',package_storage_condition:[], remarks:''}]
             }
         ],
         indication: '',
         paediatric_use: '',
         manufacturing: [{manufacturer:'',operation_type:[]}],
-        statuses: [{status:'',status_date:new Date(),ectd_sequence:'',change_control_ref:'',internal_submission_reference:'',remarks:''}],
+        statuses: [{status:'',status_date:'',ectd_sequence:'',change_control_ref:'',internal_submission_reference:'',remarks:''}],
         doc: [{document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: ''}],
+        created_by: props.auth.user.id,
     });
 
     const [show, setShow] = useState(false);
+    const countryRef = React.useRef();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(route('storefinishproduct'));
-        //console.log(data)
+        let submitType = window.event.submitter.name;
+        post(route('storefinishproduct', {'type': submitType}));
+    }
+
+    let handleProcedureTypeChange = (e) => {
+        countryRef.current.setValue([]);
+        setData((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+            country: []
+        }));
+        clearErrors(e.target.name);
+    }
+
+    let handleCountryChange = (e, k) => {
+        let arr = {...data}
+        if (k.action) {
+            if(k.action == 'select-option')
+            {
+                if (e.length > 0) {
+                    arr.country.push(k.option.value)
+                } else {
+                    arr.country.push(e.value)
+                }
+            }else if (k.action == 'remove-value') {
+                let newarr = arr.country.filter((ele) => {
+                    return ele != k.removedValue.value
+                });
+                arr.country = newarr;
+            }else {
+                arr.country.length = 0
+            }
+            
+        }
+        setData(arr)
     }
 
     const handleChange = (e) => {
@@ -73,7 +110,7 @@ const Index = (props) => {
 
     const addDatesFields = () => {
         let arr = {...data};
-        arr.key_dates.push({date_type: "", date:new Date(),remarks:""});
+        arr.key_dates.push({date_type: "", date:'',remarks:""});
         setData(arr);
     }
 
@@ -97,7 +134,7 @@ const Index = (props) => {
 
     let addPackageValues = () => {
         let arr = {...data};
-        arr.packagings.push({packaging_type:"",packaging_name:"",package_number:"",description:"",launched:"",first_lunch_date:new Date(),packaging_discontinued:"",discontinuation_date:new Date(), packagelif: [{package_shelf_life_type:"", shelf_life:"",shelf_life_unit:"",package_storage_condition:[], remarks:""}]})
+        arr.packagings.push({packaging_type:"",packaging_name:"",package_number:"",description:"",launched:"",first_lunch_date:'',packaging_discontinued:"",discontinuation_date:'', packagelif: [{package_shelf_life_type:"", shelf_life:"",shelf_life_unit:"",package_storage_condition:[], remarks:""}]})
         setData(arr);
     }
 
@@ -133,7 +170,7 @@ const Index = (props) => {
 
     let addStatusesFields = () => {
         let newArr = {...data};
-        newArr.statuses.push({status:'',status_date:new Date(),ectd_sequence:'',change_control_ref:'',internal_submission_reference:'',remarks:''});
+        newArr.statuses.push({status:'',status_date:'',ectd_sequence:'',change_control_ref:'',internal_submission_reference:'',remarks:''});
         setData(newArr);
     }
 
@@ -196,6 +233,7 @@ const Index = (props) => {
         let newFormValues = {...data};
         newFormValues.packagings[i][e.target.name] = e.target.value;
         setData(newFormValues);
+        clearErrors('packagings.'+i+'.'+e.target.name)
     }
 
     let handlePackagelifeChange = (index, i, e) => {
@@ -252,6 +290,7 @@ const Index = (props) => {
         let newFormValues = {...data};
         newFormValues.statuses[i][e.target.name] = e.target.value;
         setData(newFormValues);
+        clearErrors('statuses.'+i+'.'+e.target.name)
     }
 
     let handleDocumentChange = (i, e) => {
@@ -395,74 +434,78 @@ const Index = (props) => {
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
                                                     <Card.Body>
-                                                        <div className="form_group">
-                                                            <span className="form_group_label">Procedure Type (*)</span>
-                                                            <div className="form_group_field">
-                                                                <select onChange={handleChange} defaultValue="" name="procedure_type" style={{borderColor: errors.procedure_type ? 'red' : '' }}>
-                                                                    <option value="" disabled>Select</option>
-                                                                    <option value="National (NP)">National (NP)</option>
-                                                                    <option value="Centralized (NP)">Centralized (NP)</option>
-                                                                    <option value="mrp">Mutual Recognition (MRP)</option>
-                                                                    <option value="dcp">Decentralized (DCP)</option>
-                                                                </select>
+                                                        <div className='inline_form'>
+                                                            <div className="form_group_inline">
+                                                                <span className="form_group_label">Procedure Type (*)</span>
+                                                                <div className="form_group_field">
+                                                                    <select onChange={handleProcedureTypeChange} defaultValue="" name="procedure_type" style={{ borderColor: errors.procedure_type ? 'red' : '' }}>
+                                                                        <option value="" disabled></option>
+                                                                        <option value="National (NP)">National (NP)</option>
+                                                                        <option value="Centralized (NP)">Centralized (NP)</option>
+                                                                        <option value="mrp">Mutual Recognition (MRP)</option>
+                                                                        <option value="dcp">Decentralized (DCP)</option>
+                                                                    </select>
+                                                                </div>
+                                                                <p className="errors_wrap" style={{ display: errors.procedure_type ? 'inline-block' : 'none' }}>{errors.procedure_type}</p>
                                                             </div>
-                                                            <p className="errors_wrap" style={{display: errors.procedure_type ? 'inline-block': 'none'}}>{errors.procedure_type}</p>
-                                                        </div>
-                                                        <div className="form_group">
-                                                            <span className="form_group_label">Country</span>
-                                                            <div className="form_group_field">
-                                                                {/* <input type="text" name="country_global" onChange={handleChange} placeholder="Country global" /> */}
-                                                                <Select options={options_4}
-                                                                    name="country"
-                                                                    onChange={handleSelectChange}
-                                                                    className="basic"
-                                                                    classNamePrefix="basic"
-                                                                    isMulti={data.procedure_type === 'dcp' || data.procedure_type === 'mrp'  ? true : false}
-                                                                />
+                                                            <div className="form_group_inline">
+                                                                <span className="form_group_label">Country</span>
+                                                                <div className="form_group_field">
+                                                                    <Select options={options_4}
+                                                                        name="country"
+                                                                        onChange={(e, k) => handleCountryChange(e, k)}
+                                                                        className="basic"
+                                                                        classNamePrefix="basic"
+                                                                        isMulti={data.procedure_type === 'dcp' || data.procedure_type === 'mrp' ? true : false}
+                                                                        ref={ele => countryRef.current = ele}
+                                                                        placeholder=''
+                                                                    />
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div className="form_group" style={{display:data.procedure_type === 'dcp' || data.procedure_type === 'mrp'  ? '' : 'none'}}>
-                                                            <span className="form_group_label">RMS</span>
-                                                            <div className="form_group_field">
-                                                                <Select options={options_4}
-                                                                    name="rms"
-                                                                    onChange={handleSelectChange}
-                                                                    className="basic"
-                                                                    classNamePrefix="basic"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div className="form_group">
-                                                            <span className="form_group_label">Procedure Number</span>
-                                                            <div className="form_group_field">
-                                                                <input type="text" name="procedure_number" onChange={handleChange} />
+                                                            <div className="form_group_inline" style={{ display: data.procedure_type === 'dcp' || data.procedure_type === 'mrp' ? '' : 'none' }}>
+                                                                <span className="form_group_label">RMS</span>
+                                                                <div className="form_group_field">
+                                                                    <Select options={options_4}
+                                                                        name="rms"
+                                                                        onChange={handleSelectChange}
+                                                                        className="basic"
+                                                                        classNamePrefix="basic"
+                                                                    />
+                                                                </div>
                                                             </div>
                                                         </div>
+                                                        <div className='inline_form'>
+                                                            <div className="form_group_inline">
+                                                                <span className="form_group_label">Procedure Number</span>
+                                                                <div className="form_group_field">
+                                                                    <input type="text" name="procedure_number" onChange={handleChange} />
+                                                                </div>
+                                                            </div>
 
-                                                        <div className="form_group">
-                                                            <span className="form_group_label">Product Type (*)</span>
-                                                            <div className="form_group_field">
-                                                                <select name="product_type" defaultValue="" onChange={handleChange} style={{borderColor: errors.product_type ? 'red' : '' }}>
-                                                                    <option disabled value="">Select</option>
-                                                                    <option>Finished</option>
-                                                                    <option>References</option>
-                                                                </select>
+                                                            <div className="form_group_inline">
+                                                                <span className="form_group_label">Product Type (*)</span>
+                                                                <div className="form_group_field">
+                                                                    <select name="product_type" defaultValue="" onChange={handleChange} style={{ borderColor: errors.product_type ? 'red' : '' }}>
+                                                                        <option disabled value=""></option>
+                                                                        <option>Finished</option>
+                                                                        <option>References</option>
+                                                                    </select>
+                                                                </div>
+                                                                <p className="errors_wrap" style={{ display: errors.product_type ? 'inline-block' : 'none' }}>{errors.product_type}</p>
                                                             </div>
-                                                            <p className="errors_wrap" style={{display: errors.product_type ? 'inline-block': 'none'}}>{errors.product_type}</p>
-                                                        </div>
 
-                                                        <div className="form_group" >
-                                                            <span className="form_group_label">Applcation Stage (*)</span>
-                                                            <div className="form_group_field">
-                                                                <select name="application_stage" defaultValue="" onChange={handleChange} style={{borderColor: errors.application_stage ? 'red' : '' }}>
-                                                                    <option value="" disabled>Select</option>
-                                                                    <option>Marketing Authorisation</option>
-                                                                    <option>APSI / NPP</option>
-                                                                </select>
+                                                            <div className="form_group_inline" >
+                                                                <span className="form_group_label">Applcation Stage (*)</span>
+                                                                <div className="form_group_field">
+                                                                    <select name="application_stage" defaultValue="" onChange={handleChange} style={{ borderColor: errors.application_stage ? 'red' : '' }}>
+                                                                        <option value="" disabled></option>
+                                                                        <option>Marketing Authorisation</option>
+                                                                        <option>APSI / NPP</option>
+                                                                    </select>
+                                                                </div>
+                                                                <p className="errors_wrap" style={{ display: errors.application_stage ? 'inline-block' : 'none' }}>{errors.application_stage}</p>
                                                             </div>
-                                                            <p className="errors_wrap" style={{display: errors.application_stage ? 'inline-block': 'none'}}>{errors.application_stage}</p>
                                                         </div>
-
                                                     </Card.Body>
                                                 </Accordion.Collapse>
                                             </Card>
@@ -478,13 +521,21 @@ const Index = (props) => {
                                                             <span className="form_group_label">Product Name (*)</span>
                                                             <div className="form_group_field">
                                                                 <select name="product_name" defaultValue="" onChange={handleChange} style={{borderColor: errors.product_name ? 'red' : '' }}>
-                                                                    <option value="" disabled>Select</option>
-                                                                    <option>Albey</option>
-                                                                    <option>Actair</option>
-                                                                    <option>Alustal</option>
-                                                                    <option>Alyostal Prick</option>
-                                                                    <option>Staloral</option>
-                                                                    <option>Phostal</option>
+                                                                    <option value="" disabled></option>
+                                                                    <option>STG 320</option>
+                                                                    <option>ALBEY</option>
+                                                                    <option>ALUSTAL</option>
+                                                                    <option>ALYOSTAL IDR</option>
+                                                                    <option>ALYOSTAL PRICK</option>
+                                                                    <option>ALYOSTAL TPC</option>
+                                                                    <option>ALYOSTAL TPN</option>
+                                                                    <option>ALYOSTAL VENOM</option>
+                                                                    <option>DILUENT</option>
+                                                                    <option>ORALAIR</option>
+                                                                    <option>PHOSTAL</option>
+                                                                    <option>REFERENCES</option>
+                                                                    <option>STALORAL</option>
+                                                                    <option>STALORAL 300</option>
                                                                 </select>
                                                             </div>
                                                             <p className="errors_wrap" style={{display: errors.product_name ? 'inline-block': 'none'}}>{errors.product_name}</p>
@@ -505,6 +556,7 @@ const Index = (props) => {
                                                                     className="basic"
                                                                     classNamePrefix="basic"
                                                                     styles={selectStyles(errors.registration_holder)}
+                                                                    placeholder=''
                                                                 />
                                                                 <button className="btn-success" type="button" onClick={(e) => handleShow(e)}>
                                                                     <span className="lnr lnr-plus-circle"></span>
@@ -515,13 +567,13 @@ const Index = (props) => {
                                                         <div className="form_group">
                                                             <span className="form_group_label">Application Number</span>
                                                             <div className="form_group_field">
-                                                                <input type="text" name="application_number" onChange={handleChange} placeholder="Application Number" />
+                                                                <input type="text" name="application_number" onChange={handleChange} />
                                                             </div>
                                                         </div>
                                                         <div className="form_group" style={{display: data.country_global == "France" ? '' : 'none'}}>
                                                             <span className="form_group_label">Dossier Reference Number</span>
                                                             <div className="form_group_field">
-                                                                <input type="text" name="dossier_reference_number" onChange={handleChange} placeholder="Dossier Reference Number" />
+                                                                <input type="text" name="dossier_reference_number" onChange={handleChange}  />
                                                             </div>
                                                         </div>
                                                     </Card.Body>
@@ -540,11 +592,11 @@ const Index = (props) => {
                                                                 <span className="form_group_label">Authorized Pharmaceutical Form (*)</span>
                                                                 <div className="form_group_field">
                                                                     <select name="authorized_pharmaceutical_form" defaultValue="" onChange={handleChange} style={{ borderColor: errors.authorized_pharmaceutical_form ? 'red' : '' }}>
-                                                                        <option value="" disabled>Select</option>
-                                                                        <option>powder</option>
-                                                                        <option>solution</option>
-                                                                        <option>eye drops</option>
-                                                                        <option>nebuliser solution</option>
+                                                                        <option value="" disabled></option>
+                                                                        <option>Powder</option>
+                                                                        <option>Solution</option>
+                                                                        <option>EYE DROPS</option>
+                                                                        <option>NEBULISER SOLUTION</option>
                                                                         <option>oral solution</option>
                                                                         <option>powder and solvent for solution for injection</option>
                                                                         <option>solution for injection</option>
@@ -562,14 +614,11 @@ const Index = (props) => {
                                                                 <span className="form_group_label">Administrable pharmaceutical form</span>
                                                                 <div className="form_group_field">
                                                                     <select name="administrable_pharmaceutical_form" defaultValue="" onChange={handleChange} style={{ borderColor: errors.route_of_admin ? 'red' : '' }}>
-                                                                        <option value="" disabled>Select</option>
-                                                                        <option>cutaneous use</option>
-                                                                        <option>intrademal use</option>
-                                                                        <option>eye drops</option>
-                                                                        <option>nasal use</option>
-                                                                        <option>ocular use</option>
-                                                                        <option>subcutaneous use</option>
-                                                                        <option>sublingual use</option>
+                                                                        <option value="" disabled></option>
+                                                                        <option>Same as Authorised pharmaceutical form</option>
+                                                                        <option>EYE DROPS</option>
+                                                                        <option>NEBULISER SOLUTION</option>
+                                                                        <option>SOLUTION FOR INJECTION</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -579,7 +628,7 @@ const Index = (props) => {
                                                                 <span className="form_group_label">Route Of Admin (*)</span>
                                                                 <div className="form_group_field">
                                                                     <select name="route_of_admin" defaultValue="" onChange={handleChange} style={{ borderColor: errors.route_of_admin ? 'red' : '' }}>
-                                                                        <option value="" disabled>Select</option>
+                                                                        <option value="" disabled></option>
                                                                         <option>cutaneous use</option>
                                                                         <option>intrademal use</option>
                                                                         <option>eye drops</option>
@@ -595,9 +644,24 @@ const Index = (props) => {
                                                                 <span className="form_group_label">ATC (*)</span>
                                                                 <div className="form_group_field">
                                                                     <select name="atc" onChange={handleChange} defaultValue="" style={{ borderColor: errors.atc ? 'red' : '' }}>
-                                                                        <option value="" disabled>Select</option>
-                                                                        <option>option 1</option>
-                                                                        <option>option 2</option>
+                                                                        <option value="" disabled></option>
+                                                                        <option>V01 - ALLERGENS</option>
+                                                                        <option>V01A - ALLERGENS</option>
+                                                                        <option>V01AA - ALLERGEN EXTRACTS</option>
+                                                                        <option>V01AA01 - FEATHER</option>
+                                                                        <option>V01AA02 - GRASS POLLEN</option>
+                                                                        <option>V01AA03 - HOUSE DUST MITES</option>
+                                                                        <option>V01AA04 - MOULD FUNGUS AND YEAST FUNGUS</option>
+                                                                        <option>V01AA05 - TREE POLLEN</option>
+                                                                        <option>V01AA07 - INSECTS</option>
+                                                                        <option>V01AA08 - FOOD</option>
+                                                                        <option>V01AA09 - TEXTILES</option>
+                                                                        <option>V01AA10 - FLOWERS</option>
+                                                                        <option>V01AA11 - ANIMALS</option>
+                                                                        <option>V01AA20 - VARIOUS</option>
+                                                                        <option>V04C - OTHER DIAGNOSTIC AGENTS</option>
+                                                                        <option>V04CL - TESTS FOR ALLERGIC DISEASES</option>
+                                                                        <option>V07AB - SOLVENTS AND DILUTING AGENTS</option>
                                                                     </select>
                                                                 </div>
                                                                 <p className="errors_wrap" style={{ display: errors.atc ? 'inline-block' : 'none' }}>{errors.atc}</p>
@@ -619,7 +683,7 @@ const Index = (props) => {
                                                                 <span className="form_group_label">Orphan Designation Status</span>
                                                                 <div className="form_group_field">
                                                                     <select name="orphan_designation_status" defaultValue="" onChange={handleChange}>
-                                                                        <option value="" disabled>Select</option>
+                                                                        <option value="" disabled></option>
                                                                         <option value="yes">Yes</option>
                                                                         <option value="no">No</option>
                                                                     </select>
@@ -629,7 +693,7 @@ const Index = (props) => {
                                                                 <span className="form_group_label">Orphan Indication Type</span>
                                                                 <div className="form_group_field">
                                                                     <select name="orphan_indication_type" defaultValue="" onChange={handleChange}>
-                                                                        <option value="" disabled>Select</option>
+                                                                        <option value="" disabled></option>
                                                                         <option value="diagnostic">Diagnostic</option>
                                                                         <option value="prevention">Prevention</option>
                                                                         <option value="treatment">Treatment</option>
@@ -652,7 +716,7 @@ const Index = (props) => {
                                                             <span className="form_group_label">Under Intensive Monitoring</span>
                                                             <div className="form_group_field">
                                                                 <select name="under_intensive_monitoring" defaultValue="" onChange={handleChange}>
-                                                                    <option value="" disabled>Select</option>
+                                                                    <option value="" disabled></option>
                                                                     <option value="yes">Yes</option>
                                                                     <option value="no">No</option>
                                                                 </select>
@@ -693,6 +757,7 @@ const Index = (props) => {
                                                                                 onChange={(e) => handleKyDateTypeChange(index, e)}
                                                                                 className="basic"
                                                                                 classNamePrefix="basic"
+                                                                                placeholder=''
                                                                             />
                                                                         </div>
                                                                     </div>
@@ -717,7 +782,7 @@ const Index = (props) => {
                                                                 <span className="form_group_label">Alternate Number Type</span>
                                                                 <div className="form_group_field">
                                                                     <select name="alternate_number_type" defaultValue="" onChange={handleChange}>
-                                                                        <option value="" disabled>Select</option>
+                                                                        <option value="" disabled></option>
                                                                         <option>Application Number</option>
                                                                         <option>FDA Listing Number</option>
                                                                         <option>NDC Number</option>
@@ -758,6 +823,7 @@ const Index = (props) => {
                                                                     className="basic"
                                                                     classNamePrefix="basic"
                                                                     styles={selectStyles(errors.local_agent_company)}
+                                                                    placeholder=''
                                                                 />
                                                                 <button className="btn-success" type="button" onClick={(e) => handleShow(e)}>
                                                                 <span className="lnr lnr-plus-circle"></span>
@@ -800,6 +866,7 @@ const Index = (props) => {
                                                                                 onChange={(e) => handleSelectIngredientChange(index, e)}
                                                                                 className="basic"
                                                                                 classNamePrefix="basic"
+                                                                                placeholder=''
                                                                             />
                                                                         </div>
                                                                     </div>
@@ -807,7 +874,7 @@ const Index = (props) => {
                                                                         <span className="form_group_label">Strength Type</span>
                                                                         <div className="form_group_field">
                                                                             <select name="strength_type" defaultValue="" onChange={(e) => handleFormulationsChange(index, e)}>
-                                                                                <option value="" disabled>Select</option>
+                                                                                <option value="" disabled></option>
                                                                                 <option>approximately</option>
                                                                                 <option>average</option>
                                                                                 <option>equal</option>
@@ -836,7 +903,7 @@ const Index = (props) => {
                                                                         <span className="form_group_label">Numerator Unit</span>
                                                                         <div className="form_group_field">
                                                                             <select name="numerator_unit" defaultValue="" onChange={(e) => handleFormulationsChange(index, e)}>
-                                                                                <option value="" disabled>Select</option>
+                                                                                <option value="" disabled></option>
                                                                                 <option>% (W/V)</option>
                                                                                 <option>% (W/W)</option>
                                                                                 <option>IC</option>
@@ -850,7 +917,7 @@ const Index = (props) => {
                                                                         <span className="form_group_label">Function</span>
                                                                         <div className="form_group_field">
                                                                             <select name="function" defaultValue="" onChange={(e) => handleFormulationsChange(index, e)}>
-                                                                                <option value="" disabled>Select</option>
+                                                                                <option value="" disabled></option>
                                                                                 <option>Active</option>
                                                                                 <option>Excipient</option>
                                                                             </select>
@@ -887,30 +954,31 @@ const Index = (props) => {
                                                                                 name="packaging_type"
                                                                                 onChange={(e) => handlePackageTypeSelectChange(index, e)}
                                                                                 className="basic"
-                                                                                classNamePrefix="ba"
+                                                                                classNamePrefix="basic"
+                                                                                placeholder=''
                                                                             />
                                                                         </div>
                                                                     </div>
                                                                     <div className="form_group_inline">
                                                                         <span className="form_group_label">Packaging Name (*)</span>
                                                                         <div className="form_group_field">
-                                                                            <input type="text" name="packaging_name" onChange={(e) => handlePackagingsChange(index, e)} style={{ borderColor: errors.packaging_name ? 'red' : '' }} />
+                                                                            <input type="text" name="packaging_name" onChange={(e) => handlePackagingsChange(index, e)} style={{ borderColor: errors['packagings.'+ index +'.packaging_name'] ? 'red' : '' }} />
                                                                         </div>
-                                                                        <p className="errors_wrap" style={{ display: errors.packaging_name ? 'inline-block' : 'none' }}>{errors.packaging_name}</p>
+                                                                        <p className="errors_wrap" style={{ display: errors['packagings.'+ index +'.packaging_name'] ? 'inline-block' : 'none' }}>{errors['packagings.'+ index +'.packaging_name']}</p>
                                                                     </div>
                                                                     <div className="form_group_inline">
                                                                         <span className="form_group_label">Package Number (*)</span>
                                                                         <div className="form_group_field">
-                                                                            <input type="text" name="package_number" onChange={(e) => handlePackagingsChange(index, e)} style={{ borderColor: errors.package_registrationr_number ? 'red' : '' }} />
+                                                                            <input type="text" name="package_number" onChange={(e) => handlePackagingsChange(index, e)} style={{ borderColor: errors['packagings.'+ index +'.package_number'] ? 'red' : '' }} />
                                                                         </div>
-                                                                        <p className="errors_wrap" style={{ display: errors.package_registrationr_number ? 'inline-block' : 'none' }}>{errors.package_registrationr_number}</p>
+                                                                        <p className="errors_wrap" style={{ display: errors['packagings.'+ index +'.package_number'] ? 'inline-block' : 'none' }}>{errors['packagings.'+ index +'.package_number']}</p>
                                                                     </div>
                                                                     <div className="form_group_inline">
                                                                         <span className="form_group_label">Description (*)</span>
                                                                         <div className="form_group_field">
-                                                                            <input type="text" name="description" onChange={(e) => handlePackagingsChange(index, e)} style={{ borderColor: errors.description ? 'red' : '' }} />
+                                                                            <input type="text" name="description" onChange={(e) => handlePackagingsChange(index, e)} style={{ borderColor: errors['packagings.'+ index +'.description'] ? 'red' : '' }} />
                                                                         </div>
-                                                                        <p className="errors_wrap" style={{ display: errors.description ? 'inline-block' : 'none' }}>{errors.description}</p>
+                                                                        <p className="errors_wrap" style={{ display: errors['packagings.'+ index +'.description'] ? 'inline-block' : 'none' }}>{errors['packagings.'+ index +'.description']}</p>
                                                                     </div>
                                                                 </div>
                                                                 <div className="inline_form">
@@ -918,7 +986,7 @@ const Index = (props) => {
                                                                         <span className="form_group_label">Launched</span>
                                                                         <div className="form_group_field">
                                                                             <select name="launched" defaultValue="" onChange={(e) => handlePackagingsChange(index, e)}>
-                                                                                <option value="" disabled>Select</option>
+                                                                                <option value="" disabled></option>
                                                                                 <option>Yes</option>
                                                                                 <option>No</option>
                                                                                 <option>Not Applicable</option>
@@ -936,7 +1004,7 @@ const Index = (props) => {
                                                                         <span className="form_group_label">Packaging Discontinued</span>
                                                                         <div className="form_group_field">
                                                                             <select name="packaging_discontinued" defaultValue="" onChange={(e) => handlePackagingsChange(index, e)}>
-                                                                                <option value="" disabled>Select</option>
+                                                                                <option value="" disabled></option>
                                                                                 <option>Yes</option>
                                                                                 <option>No</option>
                                                                                 <option>Not Applicable</option>
@@ -963,7 +1031,7 @@ const Index = (props) => {
                                                                                 <span className="form_group_label">Package Shelf-life Type</span>
                                                                                 <div className="form_group_field">
                                                                                     <select name="package_shelf_life_type" defaultValue="" onChange={(e) => handlePackagelifeChange(index, i, e)}>
-                                                                                        <option value="" disabled>Select</option>
+                                                                                        <option value="" disabled></option>
                                                                                         <option>shelf life of the medicinal product as packaged for sale</option>
                                                                                         <option>shelf life after first opening the immediate packaging</option>
                                                                                         <option>shelf life after dilution or reconstitution according to direction</option>
@@ -984,7 +1052,7 @@ const Index = (props) => {
                                                                                 <span className="form_group_label">Shelf-life Unit</span>
                                                                                 <div className="form_group_field">
                                                                                     <select name="shelf_life_unit" defaultValue="" onChange={(e) => handlePackagelifeChange(index, i, e)}>
-                                                                                        <option value="" disabled>Select</option>
+                                                                                        <option value="" disabled></option>
                                                                                         <option>Days</option>
                                                                                         <option>Hours</option>
                                                                                         <option>Months</option>
@@ -996,7 +1064,7 @@ const Index = (props) => {
                                                                             <div className="form_group_inline">
                                                                                 <span className="form_group_label">Package Storage Condition</span>
                                                                                 <div className="form_group_field">
-                                                                                    <Select options={packageCondistion} onChange={(e, key) => handlePackagelifeSelectChange(index, i, e, key)} isMulti name="package_storage_condition" className="basic" classNamePrefix="ba" />
+                                                                                    <Select options={packageCondistion} onChange={(e, key) => handlePackagelifeSelectChange(index, i, e, key)} isMulti name="package_storage_condition" className="basic" classNamePrefix="basic" placeholder='' />
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -1021,7 +1089,7 @@ const Index = (props) => {
                                                                 <span className="form_group_label">Indications (*)</span>
                                                                 <div className="form_group_field">
                                                                     <select name="indication" defaultValue="" onChange={handleChange} style={{ borderColor: errors.indication ? 'red' : '' }}>
-                                                                        <option value="" disabled>Select</option>
+                                                                        <option value="" disabled></option>
                                                                         <option>10001709 - Allergic Conjunctivitis</option>
                                                                         <option>10056352 - Allergy Test Positive</option>
                                                                         <option>10001728 - Allergic Rhinoconjunctivitis</option>
@@ -1045,7 +1113,7 @@ const Index = (props) => {
                                                                 <span className="form_group_label">Paediatric Use</span>
                                                                 <div className="form_group_field">
                                                                     <select name="paediatric_use" defaultValue="" onChange={handleChange}>
-                                                                        <option value="" disabled>Select</option>
+                                                                        <option value="" disabled></option>
                                                                         <option>Yes</option>
                                                                         <option>No</option>
                                                                     </select>
@@ -1087,13 +1155,14 @@ const Index = (props) => {
                                                                                 className="basic"
                                                                                 classNamePrefix="basic"
                                                                                 styles={selectStyles(errors.manufacturer)}
+                                                                                placeholder=''
                                                                             />
                                                                         </div>
                                                                     </div>
                                                                     <div className="form_group_inline">
                                                                         <span className="form_group_label">Operation Type</span>
                                                                         <div className="form_group_field">
-                                                                            <Select className="basic" name="operation_type" onChange={(e, key) => handleOperationTypeChange(index, e, key)} classNamePrefix="basic" options={operations} isMulti />
+                                                                            <Select className="basic" name="operation_type" onChange={(e, key) => handleOperationTypeChange(index, e, key)} classNamePrefix="basic" options={operations} isMulti placeholder='' />
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1130,8 +1199,8 @@ const Index = (props) => {
                                                                     <div className="form_group_inline">
                                                                         <span className="form_group_label">Status (*)</span>
                                                                         <div className="form_group_field">
-                                                                            <select name="status" defaultValue="" onChange={(e) => handleStatusesChange(index, e)} style={{ borderColor: errors.status ? 'red' : '' }}>
-                                                                                <option value="" disabled>Select</option>
+                                                                            <select name="status" defaultValue="" onChange={(e) => handleStatusesChange(index, e)} style={{ borderColor: errors['statuses.'+ index +'.status'] ? 'red' : '' }}>
+                                                                                <option value="" disabled></option>
                                                                                 <option>Application / Submitted</option>
                                                                                 <option>Approval / Obtained</option>
                                                                                 <option>Application / Rejected</option>
@@ -1165,15 +1234,14 @@ const Index = (props) => {
                                                                                 <option>MRP Application / End of procedure</option>
                                                                             </select>
                                                                         </div>
-                                                                        <p className="errors_wrap" style={{ display: errors.status ? 'inline-block' : 'none' }}>{errors.status}</p>
+                                                                        <p className="errors_wrap" style={{ display: errors['statuses.'+ index +'.status'] ? 'inline-block' : 'none' }}>{errors['statuses.'+ index +'.status']}</p>
                                                                     </div>
                                                                     <div className="form_group_inline">
                                                                         <span className="form_group_label">Status Date (*)</span>
                                                                         <div className="form_group_field">
-                                                                            {/* <input type="text" name="status_date" onChange={handleChange} style={{borderColor: errors.status_date ? 'red' : '' }} /> */}
                                                                             <DatePicker name="status_date" selected={data.statuses[index].status_date} onChange={(date) => handleDateChange(index,'status_date', date)} />
                                                                         </div>
-                                                                        <p className="errors_wrap" style={{ display: errors.status_date ? 'inline-block' : 'none' }}>{errors.status_date}</p>
+                                                                        <p className="errors_wrap" style={{ display: errors['statuses.'+ index +'.status_date'] ? 'inline-block' : 'none' }}>{errors['statuses.'+ index +'.status_date']}</p>
                                                                     </div>
                                                                     <div className="form_group_inline">
                                                                         <span className="form_group_label">eCTD Sequence</span>
@@ -1214,9 +1282,15 @@ const Index = (props) => {
                                     </Tab>
                                     
                                 </Tabs>
-                                <div className="form-button">
-                                    <button type="submit" className="btn btn-primary" disabled={processing}>Submit</button>
+                                <div style={{ display: 'flex' }}>
+                                    <div className="form-button">
+                                        <button style={{ width: '80px' }} type="submit" className="btn btn-primary" name="submit" disabled={processing}>Submit</button>
+                                    </div>
+                                    <div className="form-button">
+                                        <button type="submit" style={{ width: '80px', marginLeft: '10px' }} className="btn btn-primary" name="draft" disabled={processing}>Draft</button>
+                                    </div>
                                 </div>
+                                
                             </form>
                         </div>
                     </div>

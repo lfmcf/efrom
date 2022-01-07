@@ -6,6 +6,7 @@ use App\Models\CregistrationTermination;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Countries;
+use Illuminate\Support\Facades\Storage;
 
 class CregistrationTerminationController extends Controller
 {
@@ -40,7 +41,56 @@ class CregistrationTerminationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if($request->query('type') === 'submit') {
+            $validator = $request->validate(
+                [
+                    'statuses.*.status' => 'required',
+                    'statuses.*.status_date' => 'required',
+                ],
+                [
+                    'statuses.*.status.required' => 'A status is required',
+                    'statuses.*.status_date.required' => 'A status date is required',
+                ]
+            );
+        }
+
+        $docs = $request->doc;
+        
+        if(!empty($docs)) {
+            $arr = array_map(function($doc) {
+                if ($doc['document']) {
+                    $uploadedFile = $doc['document'];
+                    $filename = time() . $uploadedFile->getClientOriginalName();
+                    $path = Storage::putFileAs(
+                        'Documents',
+                        $uploadedFile,
+                        $filename
+                    );
+                    $doc['document'] = $path;
+                }
+                return $doc;
+            }, $docs);
+            $docs = $arr;
+        }
+
+        $crt = new CregistrationTermination();
+        $crt->product = $request->product;
+        $crt->procedure_type = $request->procedure_type;
+        $crt->country = $request->country;
+        $crt->rms = $request->rms;
+        $crt->application_stage = $request->application_stage;
+        $crt->procedure_num = $request->procedure_num;
+        $crt->local_tradename = $request->local_tradename;
+        $crt->product_type = $request->product_type;
+        $crt->description = $request->description;
+        $crt->type = $request->type;
+        $crt->reason = $request->reason;
+        $crt->remarks = $request->remarks;
+        $crt->statuses = $request->statuses;
+        $crt->doc = $docs;
+        $crt->created_by = $request->created_by;
+        $crt->type = $request->query('type');
+        $crt->save();
     }
 
     /**
