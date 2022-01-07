@@ -12493,7 +12493,7 @@ h5.subhead {
 
 .errors_wrap {
   color: red;
-  padding-left: 140px;
+  /* padding-left: 140px; */
   font-size: 12px;
 }
 

@@ -9,7 +9,7 @@ use App\Models\Company;
 use App\Models\substanceActive;
 use App\Models\packagingItemType;
 use App\Models\Countries;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class RcController extends Controller
 {
@@ -31,17 +31,6 @@ class RcController extends Controller
             'countries' => $countries
         ]);
     }
-
-    public function clinical()
-    {
-        $compnies = Company::orderBy('name')->get();
-        $countries = Countries::orderBy('country_name')->get('country_name');
-        return Inertia::render('Clinical/Clinical', [
-            'companies' => $compnies,
-            'countries' => $countries
-        ]);
-    }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -60,47 +49,61 @@ class RcController extends Controller
      */
     public function store(Request $request)
     {
-       
-        // $validated = $request->validate([
-        //     'procedure_type' => 'required',
-        //     'product_type' => 'required',
-        //     'product_name' => 'required',
-        //     'application_stage' => 'required',
-        //     'local_tradename' => 'required',
-        //     'registration_holder' => 'required',
-        //     'authorized_pharmaceutical_form' => 'required',
-        //     'route_of_admin' => 'required',
-        //     'atc' => 'required',
-        //     'packaging_name' => 'required',
-        //     'description' => 'required',
-        //     'package_registrationr_number' => 'required',
-        //     'indication' => 'required',
-        //     'control_site' => 'required',
-        //     'distributor' => 'required',
-        //     'exploitant' => 'required',
-        //     'manufacturer_of_the_active_substance' => 'required',
-        //     'manufacturer_of_the_finished_product' => 'required',
-        //     'inner_packaging_site' => 'required',
-        //     'outer_packaging_site' => 'required',
-        //     'release_site' => 'required',
-        //     'supplier_of_active_ingredient' => 'required',
-        //     'bulk_manufacturing_site' => 'required',
-        //     'status' => 'required',
-        //     'status_date' => 'required',
-        // ]);
+        if($request->query('type') === 'submit') {
+            $validator = $request->validate(
+                [
+                    'procedure_type' => 'required',
+                    'product_type' => 'required',
+                    'application_stage' => 'required',
+                    'product_name' => 'required',
+                    'local_tradename' => 'required',
+                    'registration_holder' => 'required',
+                    'authorized_pharmaceutical_form' => 'required',
+                    'route_of_admin' => 'required',
+                    'atc' => 'required',
+                    'packagings.*.packaging_name' => 'required',
+                    'packagings.*.package_number' => 'required',
+                    'packagings.*.description' => 'required',
+                    'indication' => 'required',
+                    'statuses.*.status' => 'required',
+                    'statuses.*.status_date' => 'required',
+                ],
+                [
+                    'packagings.*.packaging_name.required' => 'A package name is required',
+                    'packagings.*.package_number.required' => 'A package number is required',
+                    'packagings.*.description.required' => 'A package description is required',
+                    'statuses.*.status.required' => 'A status is required',
+                    'statuses.*.status_date.required' => 'A status date is required',
+                ]
+            );
+        }
+        
 
-        // $validator = Validator::make($request->all(), [
-        //     'packagings.packaging_name' => 'required',
-        //     'packagings.package_number' => 'required',
-        //     'packagings.description' => 'required'
-        // ]);
-
-        // dd($validator);
-
+        
+        $docs = $request->doc;
+        
+        if(!empty($docs)) {
+            $arr = array_map(function($doc) {
+                if ($doc['document']) {
+                    $uploadedFile = $doc['document'];
+                    $filename = time() . $uploadedFile->getClientOriginalName();
+                    $path = Storage::putFileAs(
+                        'Documents',
+                        $uploadedFile,
+                        $filename
+                    );
+                    $doc['document'] = $path;
+                }
+                return $doc;
+            }, $docs);
+            $docs = $arr;
+        }
+        
         $rc = new Rc;
 
         $rc->procedure_type = $request->procedure_type;
         $rc->country = $request->country;
+        $rc->rms = $request->rms;
         $rc->procedure_number = $request->procedure_number;
         $rc->product_type = $request->product_type;
         $rc->application_stage = $request->application_stage;
@@ -126,38 +129,10 @@ class RcController extends Controller
         $rc->paediatric_use = $request->paediatric_use;
         $rc->manufacturing = $request->manufacturing;
         $rc->statuses = $request->statuses;
-        $rc->doc = $request->doc;
+        $rc->doc = $docs;
+        $rc->created_by = $request->created_by;
+        $rc->type = $request->query('type');
         $rc->save();
-
-        
-    }
-
-    public function storeclinical(Request $request)
-    {
-        $validated = $request->validate([
-            'procedure_type' => 'required',
-            'product_type' => 'required',
-            'product_name' => 'required',
-            'application_stage' => 'required',
-            'authorized_pharmaceutical_form' => 'required',
-            'route_of_admin' => 'required',
-            'atc' => 'required',
-            'indication' => 'required',
-            'control_site' => 'required',
-            'distributor' => 'required',
-            'exploitant' => 'required',
-            'manufacturer_of_the_active_substance' => 'required',
-            'manufacturer_of_the_finished_product' => 'required',
-            'inner_packaging_site' => 'required',
-            'outer_packaging_site' => 'required',
-            'release_site' => 'required',
-            'supplier_of_active_ingredient' => 'required',
-            'bulk_manufacturing_site' => 'required',
-            'status' => 'required',
-            'status_date' => 'required',
-        ]);
-
-        dd($request->all());
     }
 
 
@@ -204,5 +179,12 @@ class RcController extends Controller
     public function destroy(Rc $rc)
     {
         //
+    }
+
+    public function messages()
+    {
+        return [
+            'packagings.*.packaging_name' => 'A package name is required',
+        ];
     }
 }

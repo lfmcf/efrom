@@ -6,6 +6,7 @@ use App\Models\Transfer;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Countries;
+use Illuminate\Support\Facades\Storage;
 
 class TransferController extends Controller
 {
@@ -40,7 +41,55 @@ class TransferController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if($request->query('type') === 'submit') {
+            $validator = $request->validate(
+                [
+                    'statuses.*.status' => 'required',
+                    'statuses.*.status_date' => 'required',
+                ],
+                [
+                    'statuses.*.status.required' => 'A status is required',
+                    'statuses.*.status_date.required' => 'A status date is required',
+                ]
+            );
+        }
+
+        $docs = $request->doc;
+        
+        if(!empty($docs)) {
+            $arr = array_map(function($doc) {
+                if ($doc['document']) {
+                    $uploadedFile = $doc['document'];
+                    $filename = time() . $uploadedFile->getClientOriginalName();
+                    $path = Storage::putFileAs(
+                        'Documents',
+                        $uploadedFile,
+                        $filename
+                    );
+                    $doc['document'] = $path;
+                }
+                return $doc;
+            }, $docs);
+            $docs = $arr;
+        }
+
+        $transfer = new Transfer();
+
+        $transfer->product = $request->product;
+        $transfer->procedure_type = $request->procedure_type;
+        $transfer->country = $request->country;
+        $transfer->rms = $request->rms;
+        $transfer->application_stage = $request->application_stage;
+        $transfer->procedure_num = $request->procedure_num;
+        $transfer->local_tradename = $request->local_tradename;
+        $transfer->product_type = $request->product_type;
+        $transfer->description = $request->description;
+        $transfer->reason = $request->reason;
+        $transfer->statuses = $request->statuses;
+        $transfer->doc = $docs;
+        $transfer->created_by = $request->created_by;
+        $transfer->type = $request->query('type');
+        $transfer->save();
     }
 
     /**

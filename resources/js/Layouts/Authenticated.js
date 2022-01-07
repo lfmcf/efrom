@@ -64,10 +64,10 @@ export default function Authenticated({ auth, header, children }) {
                             </button>
                             <div className="topbar_dropdown_wrap" style={{display: topbarnav ? 'flex' : 'none'}}>
                                 <div className="topbar_dropdown">
-                                    <Link className="topbar_link" href="#">
+                                    <Link className="topbar_link" href="#" as="a">
                                         <p className="topbar_link_title">My Profile</p>
                                     </Link>
-                                    <Link className="topbar_link" href={route('logout')} method="post" as="a">
+                                    <Link className="topbar_link" href={route('logout')} method="post" as="button">
                                         <p className="topbar_link_title">Log Out</p>
                                     </Link>
                                 </div>
@@ -83,7 +83,7 @@ export default function Authenticated({ auth, header, children }) {
                     {/* <div> */}
                         <div className="sidebar_content">
                             <ul className="sidebar_block">
-                                <Link className={`topbar_link ${route().current('dashboard') ? `sidebar_link_active` : ''}`} href={route('dashboard')}>
+                                <Link className={`topbar_link ${route().current('dashboard') ? `sidebar_link_active` : ''}`} href={route('dashboard')} >
                                     <li className="sidebar_link" >
                                         <span className="sidebar_link_icon lnr lnr-home"></span>
                                         <p className="sidebar_link_title">Dashboard</p>

@@ -14,6 +14,8 @@ use App\Http\Controllers\BaselineController;
 use App\Http\Controllers\RegistrationTerminationController;
 use App\Http\Controllers\cRegistrationTerminationController;
 use App\Http\Controllers\AmendmentsController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ClinicalController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,18 +43,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return redirect()->route('dashboard');
     });
 
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
-
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/interaction', [InteractionController::class, 'index'])->name('interaction');
     Route::get('/finished', [RcController::class, 'index'])->name('finished');
-    Route::get('/clinical', [RcController::class, 'clinical'])->name('clinical');
+    Route::get('/clinical', [ClinicalController::class, 'index'])->name('clinical');
     Route::get('/variation', [VariationController::class, 'index'])->name('variation');
     Route::get('/renouvellement', [RenouvellementController::class, 'index'])->name('renouvellement');
     Route::post('/addcompany', [CompanyController::class, 'store'])->name('addcompany');
     Route::post('/storefinishproduct', [RcController::class, 'store'])->name('storefinishproduct');
-    Route::post('/storeclinical', [RcController::class, 'storeclinical'])->name('storeclinical');
     Route::get('/company', [CompanyController::class, 'index'])->name('company');
     Route::get('/transfer', [TransferController::class, 'index'])->name('transfer');
     Route::get('/baseline', [BaselineController::class, 'index'])->name('baseline');
@@ -60,6 +58,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/cregistrationtermination', [CregistrationTerminationController::class, 'index'])->name('cregistrationtermination');
     Route::get('/amendments', [AmendmentsController::class, 'index'])->name('amendments');
     Route::post('/storevariation', [VariationController::class, 'store'])->name('storevariation');
+    Route::post('/storerenewal', [RenouvellementController::class, 'store'])->name('storerenewal');
+    Route::post('/storetransfer', [TransferController::class, 'store'])->name('storetransfer');
+    Route::post('/storebaseline', [BaselineController::class, 'store'])->name('storebaseline');
+    Route::post('/storeamendment', [AmendmentsController::class, 'store'])->name('storeamendment');
+    Route::post('/storeclinical', [ClinicalController::class, 'store'])->name('storeclinical');
+    Route::post('/storeclinical_registration_termination', [CregistrationTerminationController::class, 'store'])->name('storeclinical_registration_termination');
 });
 
 // Route::get('/dashboard', function () {
