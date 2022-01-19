@@ -44,6 +44,7 @@ const Index = (props) => {
         ],
         indication: '',
         paediatric_use: '',
+        age: '',
         manufacturing: [{manufacturer:'',operation_type:[]}],
         statuses: [{status:'',status_date:'',ectd_sequence:'',change_control_ref:'',internal_submission_reference:'',remarks:''}],
         doc: [{document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: ''}],
@@ -440,10 +441,10 @@ const Index = (props) => {
                                                                 <div className="form_group_field">
                                                                     <select onChange={handleProcedureTypeChange} defaultValue="" name="procedure_type" style={{ borderColor: errors.procedure_type ? 'red' : '' }}>
                                                                         <option value="" disabled></option>
-                                                                        <option value="National (NP)">National (NP)</option>
-                                                                        <option value="Centralized (NP)">Centralized (NP)</option>
-                                                                        <option value="mrp">Mutual Recognition (MRP)</option>
-                                                                        <option value="dcp">Decentralized (DCP)</option>
+                                                                        <option >National</option>
+                                                                        <option >Centralized</option>
+                                                                        <option >Decentralized</option>
+                                                                        <option >Mutual Recognition</option>
                                                                     </select>
                                                                 </div>
                                                                 <p className="errors_wrap" style={{ display: errors.procedure_type ? 'inline-block' : 'none' }}>{errors.procedure_type}</p>
@@ -456,13 +457,13 @@ const Index = (props) => {
                                                                         onChange={(e, k) => handleCountryChange(e, k)}
                                                                         className="basic"
                                                                         classNamePrefix="basic"
-                                                                        isMulti={data.procedure_type === 'dcp' || data.procedure_type === 'mrp' ? true : false}
+                                                                        isMulti={data.procedure_type === 'Decentralized' || data.procedure_type === 'Mutual Recognition' ? true : false}
                                                                         ref={ele => countryRef.current = ele}
                                                                         placeholder=''
                                                                     />
                                                                 </div>
                                                             </div>
-                                                            <div className="form_group_inline" style={{ display: data.procedure_type === 'dcp' || data.procedure_type === 'mrp' ? '' : 'none' }}>
+                                                            <div className="form_group_inline" style={{ display: data.procedure_type === 'Decentralized' || data.procedure_type === 'Mutual Recognition' ? '' : 'none' }}>
                                                                 <span className="form_group_label">RMS</span>
                                                                 <div className="form_group_field">
                                                                     <Select options={options_4}
@@ -1122,7 +1123,7 @@ const Index = (props) => {
                                                             <div className="form_group_inline" style={{ display: data.paediatric_use == "Yes" ? "" : 'none' }}>
                                                                 <span className="form_group_label">Age</span>
                                                                 <div className="form_group_field">
-                                                                    <input type="text" />
+                                                                    <input type="text" name='age' onChange={handleChange} />
                                                                 </div>
                                                             </div>
                                                         </div>

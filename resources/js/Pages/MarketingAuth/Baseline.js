@@ -92,6 +92,12 @@ const Baseline = (props) => {
         setData(arr);
     }
 
+    let addStatusFields = () => {
+        let newArr = {...data};
+        newArr.statuses.push({status: '',status_date: '',ectd: '',control: '',cdds: '',remarks: '',implimentation_deadline: '', next_renewals: '',next_renewals_deadline: '', next_renewals_date:''});
+        setData(newArr);
+    }
+
     let handleStatusChanged = (i, e) => {
         let newFormValues = {...data};
         newFormValues.statuses[i][e.target.name] = e.target.value;
@@ -297,6 +303,11 @@ const Baseline = (props) => {
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
                                                     <Card.Body>
+                                                        <div style={{ display: 'flex', justifyContent: 'end' }}>
+                                                            <button type="button" className="add_doc_form" onClick={addStatusFields}>
+                                                                <i className="bi bi-plus-lg"></i>
+                                                            </button>
+                                                        </div>
                                                         {data.statuses.map((element, index) => (
                                                             <div key={index}>
                                                                 {index > 0 ?

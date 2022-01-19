@@ -12,15 +12,18 @@ const Hqproject = (props) => {
 
     const { data, setData, post, processing, errors, clearErrors, reset } = useForm({
         identification: [{product: "", procedure_type: "", country: [], application_stage: "", rms: "", procedure_num: "", local_tradename: "", product_type: ""}],
-        variation: [{category: "", variation_type: "", submission_type: "", application_number: "", submission_number: "", submission_format: "", variation_reason: ""}],
-        statuses: [{status: "", status_date: "", ectd: "", control: "", cdds: "", remarks: "", local_implementation: "", implimentation_deadline: "", actual_implementation: ""}],
+        variation: [{product: "",country:"",category: "", variation_type: "", submission_type: "", application_number: "", submission_number: "", submission_format: "", variation_reason: ""}],
+        statuses: [{product: "",country:"",status: "", status_date: "", ectd: "", control: "", cdds: "", remarks: "", local_implementation: "", implimentation_deadline: "", actual_implementation: ""}],
         doc: [{document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: ''}],
         isHq: true,
         created_by: props.user.id,
     });
 
-    const [statuscountries, setStatusContries] = useState([])
+    const [variationcountries, setVariationCountries] = useState([]);
+    const [statuscountries, setStatusContries] = useState([]);
+
     const selectInputRef = React.useRef({});
+    const ctrRef = React.useRef({});
 
     let addProductFields = () => {
         let arr = {...data};
@@ -30,13 +33,13 @@ const Hqproject = (props) => {
 
     let addVariationFields = () => {
         let arr = {...data};
-        arr.variation.push({category: "", variation_type: "", submission_type: "", application_number: "", submission_number: "", submission_format: "", variation_reason: ""});
+        arr.variation.push({product: "",country:"",category: "", variation_type: "", submission_type: "", application_number: "", submission_number: "", submission_format: "", variation_reason: ""});
         setData(arr);
     }
 
     let addStatusFields = () => {
         let arr = {...data};
-        arr.statuses.push({status: "", status_date: "", ectd: "", control: "", cdds: "", remarks: "", local_implementation: "", implimentation_deadline: "", actual_implementation: ""});
+        arr.statuses.push({product: "",country:"",status: "", status_date: "", ectd: "", control: "", cdds: "", remarks: "", local_implementation: "", implimentation_deadline: "", actual_implementation: ""});
         setData(arr);
     }
 
@@ -71,7 +74,15 @@ const Hqproject = (props) => {
     const handlIdentificationeChange = (i, e) => {
         let arr = {...data}
         arr.identification[i][e.target.name] = e.target.value
-        setData(arr);        
+        setData(arr);
+        
+    }
+
+    const handleIdentificationProductChange = (i, e) => {
+        let arr = {...data}
+        arr.identification[i][e.target.name] = e.target.value
+        setData(arr);
+        // setStatusContries([])
     }
 
     const handleVariationChange = (i, e) => {
@@ -90,9 +101,7 @@ const Hqproject = (props) => {
 
    
     let handleCountryChange = (i, e, k) => {
-        
         let arr = {...data}
-        
         if (k.action) {
             if(k.action == 'select-option')
             {
@@ -108,30 +117,14 @@ const Hqproject = (props) => {
                 arr.identification[i].country = newarr;
             }else {
                 arr.identification[i].country.length = 0
-            }
-            
+            } 
         }
-        
-        //setStatusContries([{...statuscountries}], c)
-       
         setData(arr)
     }
-    // let cdata = data.identification.map((ele) => {
-    //     let c = ele.country.map(function (country) {
-    //         return { value: country, label: country };
-    //     })
-    //     return c
-    // })
-
-    // console.log(cdata)
-    
 
     let handleChanged = (i, e) => {
-
         let newFormValues = [...prductValues];
-
         newFormValues[i][e.target.name] = e.target.value;
-
         setData("identification", newFormValues);
     }
 
@@ -153,25 +146,46 @@ const Hqproject = (props) => {
     const handleSelectChange = (i, name) => {
         let newFormValues = {...data};
         if (name.length > 0 && name) {
-            newFormValues.identification[i]["country"] = name;
+            newFormValues.identification[i]["rms"] = name;
         } else {
-            newFormValues.identification[i]["country"] = name.value;
+            newFormValues.identification[i]["rms"] = name.value;
         }
         setData(newFormValues);
     }
 
-    const StatusProductChange = (e) => {
+    const handleVariationProductChange = (i, e) => {
+        let arr = {...data}
+        arr.variation[i][e.target.name] = e.target.value
+        setData(arr);
         data.identification.map(ele => {
             if (ele.product === e.target.value) {
-                setStatusContries(ele.country)
+                setVariationCountries(old => [...old, {id: i, country:ele.country}])
             }
         })
+        
+    }
+    
+    const StatusProductChange = (i, e) => {
+        let arr = {...data}
+        arr.statuses[i][e.target.name] = e.target.value
+        setData(arr);
+        data.identification.map(ele => {
+            if (ele.product === e.target.value) {
+                setStatusContries(old => [...old, {id: i, country:ele.country}])
+            }
+        })
+    }
+
+    const CountryStatusEventChange = (i, e) => {
+        let arr = {...data}
+        arr.statuses[i][e.target.name] = e.target.value
+        setData(arr);
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
         let submitType = window.event.submitter.name;
-        post(route("storevariation", {'type': submitType}));
+        post(route("storehqproject", {'type': submitType}));
     }
 
     return (
@@ -198,7 +212,7 @@ const Hqproject = (props) => {
                                         <div key={index}>
                                             {index > 0 ?
                                                 <div style={{ display: 'flex', justifyContent: 'end' }}>
-                                                    <button style={{ width: '14px', height: '14px', background: 'transparent', padding: '0', margin: '0 0 20px 0' }} onClick={() => removeProductFields(index)}>
+                                                    <button type='button' style={{ width: '14px', height: '14px', background: 'transparent', padding: '0', margin: '0 0 20px 0' }} onClick={() => removeProductFields(index)}>
                                                         <svg className="mdi-icon" style={{ verticalAlign: 'middle' }} width="14" height="14" fill="#000" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path></svg>
                                                     </button>
                                                 </div>
@@ -208,7 +222,7 @@ const Hqproject = (props) => {
                                                 <div className="form_group_inline">
                                                     <span className="form_group_label">Product</span>
                                                     <div className="form_group_field">
-                                                        <select name="product" defaultValue="" onChange={(e) => handlIdentificationeChange(index, e)}>
+                                                        <select name="product" defaultValue="" onChange={(e) => handleIdentificationProductChange(index, e)}>
                                                             <option value="" disabled></option>
                                                             <option>STG 320</option>
                                                             <option>ALBEY</option>
@@ -232,10 +246,10 @@ const Hqproject = (props) => {
                                                     <div className="form_group_field">
                                                         <select name="procedure_type" defaultValue="" onChange={e => handleprocedureChange(index, e)}>
                                                             <option value="" disabled></option>
-                                                            <option value="na">National</option>
-                                                            <option value="cp">Centralized</option>
-                                                            <option value="dcp">Decentralized</option>
-                                                            <option value="mrp">Mutual Recognition</option>
+                                                            <option>National</option>
+                                                            <option>Centralized</option>
+                                                            <option>Decentralized</option>
+                                                            <option>Mutual Recognition</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -246,7 +260,7 @@ const Hqproject = (props) => {
                                                             name="country"
                                                             onChange={(e, k) => handleCountryChange(index, e, k)}
                                                             className="basic"
-                                                            isMulti={data.identification[index].procedure_type === "dcp" || data.identification[index].procedure_type === "mrp" ? true : false}
+                                                            isMulti={data.identification[index].procedure_type === "Decentralized" || data.identification[index].procedure_type === "Mutual Recognition" ? true : false}
                                                             classNamePrefix="basic"
                                                             ref={ele => selectInputRef.current[index] = ele}
                                                             id={index}
@@ -255,7 +269,7 @@ const Hqproject = (props) => {
                                                         />
                                                     </div>
                                                 </div>
-                                                <div className="form_group_inline" style={{ display: data.identification[index].procedure_type === "dcp" || data.identification[index].procedure_type === "mrp" ? '' : 'none' }}>
+                                                <div className="form_group_inline" style={{ display: data.identification[index].procedure_type === "Decentralized" || data.identification[index].procedure_type === "Mutual Recognition" ? '' : 'none' }}>
                                                     <span className="form_group_label">RMS</span>
                                                     <div className="form_group_field">
                                                         <Select options={contries}
@@ -300,7 +314,7 @@ const Hqproject = (props) => {
                                                     <span className="form_group_label">Product Type</span>
                                                     <div className="form_group_field">
                                                         <select defaultValue='' name='product_type' onChange={(e) => handlIdentificationeChange(index, e)}>
-                                                            <option value=''></option>
+                                                            <option value='' disabled></option>
                                                             <option>Finished</option>
                                                             <option>Reference</option>
                                                         </select>
@@ -336,6 +350,47 @@ const Hqproject = (props) => {
                                                 : ''}
                                             <div className="inline_form">
                                                 <div className="form_group_inline">
+                                                    <span className="form_group_label">Product</span>
+                                                    <div className="form_group_field">
+                                                        <select name='product' onChange={(e) => handleVariationProductChange(index, e)} defaultValue='' >
+                                                            <option defaultValue='' disabled ></option>
+                                                            {data.identification.map((ele, i) => {
+                                                                if (ele.product) {
+                                                                    return <option value={ele.product} key={i}>{ele.product}</option>
+                                                                }
+                                                            })}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div className="form_group_inline">
+                                                    <span className="form_group_label">Country</span>
+                                                    <div className="form_group_field">
+                                                        <select defaultValue='' name='country' onChange={(e) => handleVariationChange(index, e)} >
+                                                            <option defaultValue='' disabled></option>
+                                                            {variationcountries.map(s => (
+                                                                s.id == index ? 
+                                                                <React.Fragment key={s.id}>
+                                                                <option value="All">All</option>
+                                                                
+                                                                {s.country.map(country => (
+                                                                    <option value={country} key={country}>{country}</option>
+                                                                ))}
+                                                                </React.Fragment>
+                                                                : ""
+                                                            ))}        
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="inline_form">
+                                                <div className="form_group_inline">
+                                                    <span className="form_group_label">Variation Title</span>
+                                                    <div className="form_group_field">
+                                                        <input type="text" name='variation_title' onChange={(e) => handleVariationChange(index, e)} />
+                                                    </div>
+
+                                                </div>
+                                                <div className="form_group_inline">
                                                     <span className="form_group_label">Variation Category (*)</span>
                                                     <div className="form_group_field">
                                                         <select defaultValue="" name='category' onChange={(e) => handleVariationChange(index, e)} style={{ borderColor: errors['variation.' + index + '.category'] ? 'red' : '' }}>
@@ -360,6 +415,23 @@ const Hqproject = (props) => {
                                                         </select>
                                                     </div>
                                                 </div>
+                                                
+                                                <div className="form_group_inline">
+                                                    <span className="form_group_label">Reason for variation</span>
+                                                    <div className="form_group_field">
+                                                        <select defaultValue="" name='variation_reason' onChange={(e) => handleVariationChange(index, e)}>
+                                                            <option value="" disabled></option>
+                                                            <option>Indication</option>
+                                                            <option>Paediatric Indication</option>
+                                                            <option>Safety</option>
+                                                            <option>Following Urgent Safety Restriction</option>
+                                                            <option>Quality</option>
+                                                            <option>Others</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="inline_form">
                                                 <div className="form_group_inline">
                                                     <span className="form_group_label">Submission Type (*)</span>
                                                     <div className="form_group_field">
@@ -372,8 +444,6 @@ const Hqproject = (props) => {
                                                     </div>
                                                     <p className="errors_wrap" style={{ display: errors['variation.' + index + '.submission_type'] ? 'inline-block' : 'none' }}>{errors['variation.' + index + '.submission_type']}</p>
                                                 </div>
-                                            </div>
-                                            <div className="inline_form">
                                                 <div className="form_group_inline">
                                                     <span className="form_group_label">Applcation N°</span>
                                                     <div className="form_group_field">
@@ -399,20 +469,7 @@ const Hqproject = (props) => {
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div className="form_group_inline">
-                                                    <span className="form_group_label">Reason for variation</span>
-                                                    <div className="form_group_field">
-                                                        <select defaultValue="" name='variation_reason' onChange={(e) => handleVariationChange(index, e)}>
-                                                            <option value="" disabled></option>
-                                                            <option>Indication</option>
-                                                            <option>Paediatric Indication</option>
-                                                            <option>Safety</option>
-                                                            <option>Following Urgent Safety Restriction</option>
-                                                            <option>Quality</option>
-                                                            <option>Others</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
+                                                
                                             </div>
                                         </div>
                                     ))}
@@ -437,7 +494,7 @@ const Hqproject = (props) => {
                                         <div key={index}>
                                             {index > 0 ?
                                                 <div style={{ display: 'flex', justifyContent: 'end' }}>
-                                                    <button style={{ width: '14px', height: '14px', background: 'transparent', padding: '0', margin: '0 0 20px 0' }} onClick={() => removeStatusFields(index)}>
+                                                    <button type='button' style={{ width: '14px', height: '14px', background: 'transparent', padding: '0', margin: '0 0 20px 0' }} onClick={() => removeStatusFields(index)}>
                                                         <svg className="mdi-icon" style={{ verticalAlign: 'middle' }} width="14" height="14" fill="#000" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path></svg>
                                                     </button>
                                                 </div>
@@ -446,37 +503,34 @@ const Hqproject = (props) => {
                                                 <div className="form_group_inline">
                                                     <span className="form_group_label">Product</span>
                                                     <div className="form_group_field">
-                                                        <select onChange={StatusProductChange} defaultValue=''>
-                                                            <option value=''></option>
-                                                            {data.identification.map((ele, i) => (
-                                                                <option value={ele.product} key={i}>{ele.product}</option>
-                                                            ))}
+                                                        <select name='product' onChange={(e) => StatusProductChange(index, e)} defaultValue='' >
+                                                            <option value='' disabled></option>
+                                                            {data.identification.map((ele, i) => {
+                                                                if(ele.product) {
+                                                                    return <option value={ele.product} key={i}>{ele.product}</option>
+                                                                }
+                                                                
+                                                            })}
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div className="form_group_inline">
                                                     <span className="form_group_label">Country</span>
                                                     <div className="form_group_field">
-                                                        <select onChange={StatusProductChange} defaultValue=''>
-                                                            {data.identification.map((ele, i) => (
-                                                                ele.country.map(country => {
-                                                                    
-                                                                    return <option>{country}</option>
-                                                                })
+                                                        <select defaultValue='' name='country' onChange={(e) => CountryStatusEventChange(index, e)}>
+                                                            <option value='' disabled></option>
+                                                            {statuscountries.map(s => (
+                                                                s.id == index ? 
+                                                                <React.Fragment key={s.id}>
+                                                                <option value="All">All</option>
+                                                                
+                                                                {s.country.map(country => (
+                                                                    <option value={country} key={country}>{country}</option>
+                                                                ))}
+                                                                </React.Fragment>
+                                                                : ""
                                                             ))}
                                                         </select>
-                                                        {/* {typeof cdata === 'object' ? (
-                                                            <Select options={cdata}
-                                                                name="registration_holder"
-                                                                onChange={handleSelectChange}
-                                                                className="basic"
-                                                                classNamePrefix="basic"
-                                                                placeholder=''
-                                                            styles={selectStyles(errors.registration_holder)}
-                                                            />
-                                                        ) :
-                                                            <input type="text" defaultValue={cdata} />
-                                                        } */}
                                                     </div>
                                                 </div>
                                             </div>

@@ -19,7 +19,7 @@ const Nohqproject = (props) => {
         procedure_num: '',
         local_tradename: '',
         product_type: '',
-        groupedOrsingle: '',
+        variation_title: '',
         category: '',
         variation_type: '',
         submission_type: '',
@@ -176,8 +176,8 @@ const Nohqproject = (props) => {
                                                     <option value="" disabled></option>
                                                     <option>National</option>
                                                     <option>Centralized</option>
-                                                    <option value="dcp">Decentralized</option>
-                                                    <option value="mrp">Mutual Recognition</option>
+                                                    <option>Decentralized</option>
+                                                    <option>Mutual Recognition</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -189,7 +189,7 @@ const Nohqproject = (props) => {
                                                     onChange={(e, k) => handleCountryChange(e, k)}
                                                     className="basic"
                                                     classNamePrefix="basic"
-                                                    isMulti={data.procedure_type === 'dcp' || data.procedure_type === 'mrp' ? true : false}
+                                                    isMulti={data.procedure_type === 'Mutual Recognition' || data.procedure_type === 'Decentralized' ? true : false}
                                                     ref={ele => countryRef.current = ele}
                                                     placeholder=''
                                                 // styles={selectStyles(errors.registration_holder)}
@@ -197,7 +197,7 @@ const Nohqproject = (props) => {
                                             </div>
                                         </div>
 
-                                        <div className="form_group_inline" style={{ display: data.procedure_type === 'dcp' || data.procedure_type === 'mrp' ? '' : 'none' }}>
+                                        <div className="form_group_inline" style={{ display: data.procedure_type === 'Mutual Recognition' || data.procedure_type === 'Decentralized' ? '' : 'none' }}>
                                             <span className="form_group_label">RMS</span>
                                             <div className="form_group_field" >
                                                 <Select options={contries}
@@ -264,6 +264,12 @@ const Nohqproject = (props) => {
                                 <Card.Body>
                                     <div className="inline_form">
                                         <div className="form_group_inline">
+                                            <span className="form_group_label">Variation Title</span>
+                                            <div className="form_group_field">
+                                                <input type="text" name='variation_title' onChange={handleChange} />
+                                            </div>
+                                        </div>
+                                        <div className="form_group_inline">
                                             <span className="form_group_label">Variation Category (*)</span>
                                             <div className="form_group_field">
                                                 <select defaultValue="" name="category" onChange={handleChange} style={{borderColor: errors.category ? 'red' : ''}}>
@@ -289,6 +295,23 @@ const Nohqproject = (props) => {
                                             </div>
                                         </div>
                                         <div className="form_group_inline">
+                                            <span className="form_group_label">Reason for variation</span>
+                                            <div className="form_group_field">
+                                                <select defaultValue="" name="variation_reason" onChange={handleChange}>
+                                                    <option value="" disabled></option>
+                                                    <option>Indication</option>
+                                                    <option>Paediatric Indication</option>
+                                                    <option>Safety</option>
+                                                    <option>Following Urgent Safety Restriction</option>
+                                                    <option>Quality</option>
+                                                    <option>Others</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <div className="inline_form">
+                                        <div className="form_group_inline">
                                             <span className="form_group_label">Submission Type (*)</span>
                                             <div className="form_group_field">
                                                 <select defaultValue="" name="submission_type" onChange={handleChange} style={{borderColor: errors.submission_type ? 'red' : ''}}>
@@ -300,8 +323,6 @@ const Nohqproject = (props) => {
                                             </div>
                                             <p className="errors_wrap" style={{ display: errors.submission_type ? 'inline-block' : 'none' }}>{errors.submission_type}</p>
                                         </div>
-                                    </div>
-                                    <div className="inline_form">
                                         <div className="form_group_inline">
                                             <span className="form_group_label">Applcation N°</span>
                                             <div className="form_group_field">
@@ -327,20 +348,7 @@ const Nohqproject = (props) => {
                                                 </select>
                                             </div>
                                         </div>
-                                        <div className="form_group_inline">
-                                            <span className="form_group_label">Reason for variation</span>
-                                            <div className="form_group_field">
-                                                <select defaultValue="" name="variation_reason" onChange={handleChange}>
-                                                    <option value="" disabled></option>
-                                                    <option>Indication</option>
-                                                    <option>Paediatric Indication</option>
-                                                    <option>Safety</option>
-                                                    <option>Following Urgent Safety Restriction</option>
-                                                    <option>Quality</option>
-                                                    <option>Others</option>
-                                                </select>
-                                            </div>
-                                        </div>
+                                        
                                     </div>
                                 </Card.Body>
                             </Accordion.Collapse>
@@ -362,7 +370,7 @@ const Nohqproject = (props) => {
                                         <div key={index}>
                                             {index > 0 ?
                                                 <div style={{ display: 'flex', justifyContent: 'end' }}>
-                                                    <button style={{ width: '14px', height: '14px', background: 'transparent', padding: '0', margin: '0 0 20px 0' }} onClick={() => removeStatusFields(index)}>
+                                                    <button type='button' style={{ width: '14px', height: '14px', background: 'transparent', padding: '0', margin: '0 0 20px 0' }} onClick={() => removeStatusFields(index)}>
                                                         <svg className="mdi-icon" style={{ verticalAlign: 'middle' }} width="14" height="14" fill="#000" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path></svg>
                                                     </button>
                                                 </div>
