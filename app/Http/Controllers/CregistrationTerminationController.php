@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Countries;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Illuminate\Support\Facades\Mail;
 
 class CregistrationTerminationController extends Controller
 {
@@ -91,6 +94,101 @@ class CregistrationTerminationController extends Controller
         $crt->created_by = $request->created_by;
         $crt->type = $request->query('type');
         $crt->save();
+
+        if ($request->query('type') === 'submit') {
+            $registrationIdentification = array(
+                'Product',
+                'Procedure Type',
+                'Country',
+                'RMS',
+                'Procedure Number',
+                'Local Tradename',
+                'Application Stage',
+                'Product Type'
+            );
+            $details = array(
+                'Description of the event',
+                'Registration Termination Type',
+                'Reason of the event',
+                'Remarks'
+            );
+            $status = array(
+                'Status',
+                'Status Date',
+                'eCTD sequence',
+                'Change Control or pre-assessment',
+                'CCDS/Core PIL ref n°',
+                'Remarks',
+                'Effective internal implementation date',
+                'Implementation Deadline of deadline for answer',
+                'Impacted of changes approved'
+            );
+            $document = array(
+                'Document type',
+                'Document title',
+                'Language',
+                'Version date',
+                'Remarks',
+                'Document'
+            );
+
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+            $sheet->setTitle('Registration identification');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+
+            $sheet->fromArray($registrationIdentification, NULL, 'A1');
+            $sheet->fromArray([
+                $crt->product,
+                $crt->procedure_type,
+                "",
+                $crt->rms,
+                $crt->procedure_num,
+                $crt->local_tradename,
+                $crt->application_stage,
+                $crt->product_type
+            ], NULL, 'A2');
+
+            if(is_array($crt->country)) {
+                foreach ($crt->country as $cnt => $country) {
+                    $cnt += 2;
+                    $sheet->setCellValue('C' . $cnt, $country);
+                }
+            }
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(1);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Registration Termination Details');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($details, NULL, 'A1');
+            $sheet->fromArray([
+                $crt->description,
+                $crt->type,
+                $crt->reason,
+                $crt->remarks
+            ], NULL, 'A2');
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(2);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Events Status');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($status, NULL, 'A1');
+            $sheet->fromArray($crt->statuses, NULL, 'A2');
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(3);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Documents');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($document, NULL, 'A1');
+            $sheet->fromArray($crt->doc, NULL, 'A2');
+
+            $writer = new Xlsx($spreadsheet);
+            
+            $date = date('d-m-y');
+            $name = 'Registration Termination Marketing Authorization ' . $date . '.xlsx';
+            $writer->save($name);
+
+        }
     }
 
     /**

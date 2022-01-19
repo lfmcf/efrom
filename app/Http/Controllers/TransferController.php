@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Transfer as MailTransfer;
 use App\Models\Transfer;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Countries;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Illuminate\Support\Facades\Mail;
 
 class TransferController extends Controller
 {
@@ -90,6 +94,100 @@ class TransferController extends Controller
         $transfer->created_by = $request->created_by;
         $transfer->type = $request->query('type');
         $transfer->save();
+
+        if ($request->query('type') === 'submit') {
+            $registrationIdentification = array(
+                'Product',
+                'Procedure Type',
+                'Country',
+                'RMS',
+                'Procedure Number',
+                'Local Tradename',
+                'Application Stage',
+                'Product Type'
+            );
+            $maTransferDetail = array(
+                'Event Description',
+                'Reason for the event'
+            );
+            $eventStatus = array(
+                'Status',
+                'Status Date',
+                'eCTD sequence',
+                'Change Control or pre-assessment',
+                'CCDS/Core PIL ref n°',
+                'Remarks',
+                'Effective internal implementation date',
+                'Implementation Deadline of deadline for answer',
+                'Impacted of changes approved'
+            );
+            $document = array(
+                'Document type',
+                'Document title',
+                'Language',
+                'Version date',
+                'Remarks',
+                'Document'
+            );
+
+
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+            $sheet->setTitle('Registration identification');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+
+            $sheet->fromArray($registrationIdentification, NULL, 'A1');
+
+            $sheet->fromArray([
+                $transfer->product,
+                $transfer->procedure_type,
+                "",
+                $transfer->rms,
+                $transfer->procedure_num,
+                $transfer->local_tradename,
+                $transfer->application_stage,
+                $transfer->product_type
+            ], NULL, 'A2');
+
+            if(is_array($transfer->country)) {
+                foreach ($transfer->country as $cnt => $country) {
+                    $cnt += 2;
+                    $sheet->setCellValue('C' . $cnt, $country);
+                }
+            }
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(1);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('MA Transfer Details');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($maTransferDetail, NULL, 'A1');
+            $sheet->fromArray([
+                $transfer->description,
+                $transfer->reason
+            ], NULL, 'A2');
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(2);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Events Status');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($eventStatus, NULL, 'A1');
+            $sheet->fromArray($transfer->statuses, NULL, 'A2');
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(3);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Documents');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($document, NULL, 'A1');
+            $sheet->fromArray($transfer->doc, NULL, 'A2');
+
+            $writer = new Xlsx($spreadsheet);
+            
+            $date = date('d-m-y');
+            $name = 'Transfer ' . $date . '.xlsx';
+            $writer->save($name);
+
+            Mail::to(getenv('MAIL_TO'))->send(new MailTransfer($name));
+        }
     }
 
     /**

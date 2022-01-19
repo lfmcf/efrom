@@ -58,6 +58,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/cregistrationtermination', [CregistrationTerminationController::class, 'index'])->name('cregistrationtermination');
     Route::get('/amendments', [AmendmentsController::class, 'index'])->name('amendments');
     Route::post('/storevariation', [VariationController::class, 'store'])->name('storevariation');
+    Route::post('/storehqproject', [VariationController::class, 'storehq'])->name('storehqproject');
     Route::post('/storerenewal', [RenouvellementController::class, 'store'])->name('storerenewal');
     Route::post('/storetransfer', [TransferController::class, 'store'])->name('storetransfer');
     Route::post('/storebaseline', [BaselineController::class, 'store'])->name('storebaseline');

@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Baseline as MailBaseline;
 use App\Models\Baseline;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Countries;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Illuminate\Support\Facades\Mail;
+
 
 class BaselineController extends Controller
 {
@@ -91,6 +96,104 @@ class BaselineController extends Controller
         $baseline->created_by = $request->created_by;
         $baseline->type = $request->query('type');
         $baseline->save();
+
+        if($request->query('type') === 'submit') {
+
+            $registrationIdentification = array(
+                'Product',
+                'Procedure Type',
+                'Country',
+                'RMS',
+                'Procedure Number',
+                'Local Tradename',
+                'Application Stage',
+                'Product Type'
+            );
+            $baselineDetails = array(
+                'Description of the event',
+                'Application N°',
+                'Reason for variation',
+                'Remarks'
+            );
+            $eventStatus = array(
+                'Status',
+                'Status Date',
+                'eCTD sequence',
+                'Change Control or pre-assessment',
+                'CCDS/Core PIL ref n°',
+                'Remarks',
+                'Effective internal implementation date',
+                'Implementation Deadline of deadline for answer',
+                'Impacted of changes approved'
+            );
+            $document = array(
+                'Document type',
+                'Document title',
+                'Language',
+                'Version date',
+                'Remarks',
+                'Document'
+            );
+
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+            $sheet->setTitle('Registration identification');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+
+            $sheet->fromArray($registrationIdentification, NULL, 'A1');
+
+            $sheet->fromArray([
+                $baseline->product,
+                $baseline->procedure_type,
+                "",
+                $baseline->rms,
+                $baseline->procedure_num,
+                $baseline->local_tradename,
+                $baseline->application_stage,
+                $baseline->product_type
+            ], NULL, 'A2');
+
+            if(is_array($baseline->country)) {
+                foreach ($baseline->country as $cnt => $country) {
+                    $cnt += 2;
+                    $sheet->setCellValue('C' . $cnt, $country);
+                }
+            }
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(1);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Baseline Details');
+            $sheet->fromArray($baselineDetails, NULL, 'A1');
+            $sheet->fromArray([
+                $baseline->description,
+                $baseline->application_num,
+                $baseline->reason,
+                $baseline->remarks
+            ], NULL, 'A2');
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(2);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Events Status');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($eventStatus, NULL, 'A1');
+            $sheet->fromArray($baseline->statuses, NULL, 'A2');
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(3);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Documents');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($document, NULL, 'A1');
+            $sheet->fromArray($baseline->doc, NULL, 'A2');
+
+            $writer = new Xlsx($spreadsheet);
+            
+            $date = date('d-m-y');
+            $name = 'Baseline ' . $date . '.xlsx';
+            $writer->save($name);
+
+            Mail::to(getenv('MAIL_TO'))->send(new MailBaseline($name));
+
+        }
     }
 
     /**
