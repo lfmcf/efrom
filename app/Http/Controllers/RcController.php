@@ -53,6 +53,8 @@ class RcController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->query('type'));
+        
         
         if($request->query('type') === 'submit') {
             $validator = $request->validate(
@@ -90,12 +92,15 @@ class RcController extends Controller
                 if ($doc['document']) {
                     $uploadedFile = $doc['document'];
                     $filename = time() . $uploadedFile->getClientOriginalName();
+                    // $destinationPath = public_path().'/images' ;
+                    // dd($uploadedFile->move($destinationPath,$filename));
                     $path = Storage::putFileAs(
-                        'Documents',
+                        'public',
                         $uploadedFile,
                         $filename
                     );
-                    $doc['document'] = $path;
+                    $doc['document'] = asset('storage/'.$filename);
+                    
                 }
                 return $doc;
             }, $docs);
@@ -110,6 +115,7 @@ class RcController extends Controller
         $rc->procedure_number = $request->procedure_number;
         $rc->product_type = $request->product_type;
         $rc->application_stage = $request->application_stage;
+        $rc->registration_title = $request->registration_title;
         $rc->product_name = $request->product_name;
         $rc->local_tradename = $request->local_tradename;
         $rc->registration_holder = $request->registration_holder;
@@ -148,10 +154,13 @@ class RcController extends Controller
                 'Applcation Stage'
             );
             $basicInfo = array(
+                'Registration Title',
                 'Product Name',
                 'Local Tradename',
                 'Registration Holder',
                 'Application Number',
+                'Dossier Reference Number',
+                'Remarks',
             );
             $OrphanDrug = array(
                 'Orphan Designation Status',
@@ -238,22 +247,26 @@ class RcController extends Controller
                 $rc->product_type,
                 $rc->application_stage,
             ], NULL, 'A2');
-
-            foreach ($rc->country as $cnt => $country) {
-                $cnt += 2;
-                $sheet->setCellValue('B' . $cnt, $country);
+            if(is_array($rc->country)) {
+                foreach ($rc->country as $cnt => $country) {
+                    $cnt += 2;
+                    $sheet->setCellValue('B' . $cnt, $country);
+                }
             }
-
+            
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(1);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Basic information');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($basicInfo, NULL, 'A1');
             $sheet->fromArray([
+                $rc->registration_title,
                 $rc->product_name,
                 $rc->local_tradename,
                 $rc->registration_holder,
                 $rc->application_number,
+                $rc->dossier_reference,
+                $rc->bremarks
             ], NULL, 'A2');
 
             $spreadsheet->createSheet();
@@ -292,7 +305,14 @@ class RcController extends Controller
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Key Dates');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($keyDates, NULL, 'A1');
-            $sheet->fromArray($rc->key_dates, NULL, 'A2');
+            // $sheet->fromArray($rc->key_dates, NULL, 'A2');
+            $n = 2;
+            foreach($rc->key_dates as  $kd) {
+                $sheet->setCellValue('A' . $n, $kd['date_type']);
+                $sheet->setCellValue('B' . $n, date("d-m-Y",strtotime($kd['date'])));
+                $sheet->setCellValue('C' . $n, $kd['remarks']);
+                $n+1;
+            }
             $sheet->setCellValue('D2', $rc->alternate_number_type);
             $sheet->setCellValue('E2', $rc->alternate_number);
             $sheet->setCellValue('F2', $rc->remarks);
@@ -323,25 +343,20 @@ class RcController extends Controller
                 $sheet->setCellValue('C' . $c, $package['package_number']);
                 $sheet->setCellValue('D' . $c, $package['description']);
                 $sheet->setCellValue('E' . $c, $package['launched']);
-                $sheet->setCellValue('F' . $c, $package['first_lunch_date']);
+                $sheet->setCellValue('F' . $c, date("d-m-Y",strtotime($package['first_lunch_date'])));
                 $sheet->setCellValue('G' . $c, $package['packaging_discontinued']);
-                $sheet->setCellValue('H' . $c, $package['discontinuation_date']);
-                // $spreadsheet->getActiveSheet()->getStyle('A' . $c)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED);
-                // $spreadsheet->getActiveSheet()->getStyle('B' . $c)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED);
-                // $spreadsheet->getActiveSheet()->getStyle('C' . $c)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED);
-                // $spreadsheet->getActiveSheet()->getStyle('D' . $c)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED);
-                // $spreadsheet->getActiveSheet()->getStyle('E' . $c)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED);
-                // $spreadsheet->getActiveSheet()->getStyle('F' . $c)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED);
-                // $spreadsheet->getActiveSheet()->getStyle('G' . $c)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED);
-                // $spreadsheet->getActiveSheet()->getStyle('H' . $c)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED);
-                foreach ($package['packagelif'] as $i => $pl) {
-                    $sheet->setCellValue('I' . $c, $pl['package_shelf_life_type']);
-                    $sheet->setCellValue('J' . $c, $pl['shelf_life']);
-                    $sheet->setCellValue('K' . $c, $pl['shelf_life_unit']);
-                    $c += 1;
-                    foreach ($pl['package_storage_condition'] as $psc) {
-                        $sheet->setCellValue('L' . $c, $psc);
-                        $c += 1;
+                $sheet->setCellValue('H' . $c, date("d-m-Y",strtotime($package['discontinuation_date'])));
+                if(is_array($package['packagelif'])) {
+                    foreach ($package['packagelif'] as $i => $pl) {
+                        $sheet->setCellValue('I' . $c, $pl['package_shelf_life_type']);
+                        $sheet->setCellValue('J' . $c, $pl['shelf_life']);
+                        $sheet->setCellValue('K' . $c, $pl['shelf_life_unit']);
+                        if (isset($pl['package_storage_condition']));
+                        continue;
+                        foreach ($pl['package_storage_condition'] as $psc) {
+                            $sheet->setCellValue('L' . $c, $psc);
+                            $c += 1;
+                        }
                     }
                 }
             }
@@ -363,27 +378,41 @@ class RcController extends Controller
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($manufacturing, NULL, 'A1');
             $b = 2;
-            foreach ($rc->manufacturing as $mnf) {
-                $sheet->setCellValue('A' . $b, $mnf['manufacturer']);
-                foreach ($mnf['operation_type'] as $opt) {
-                    $sheet->setCellValue('B' . $b, $opt);
-                    $b++;
+            if(is_array($rc->manufacturing)) {
+                foreach ($rc->manufacturing as $mnf) {
+                    $sheet->setCellValue('A' . $b, $mnf['manufacturer']);
+                    if (isset($mnf['operation_type']));
+                    continue;
+                    foreach ($mnf['operation_type'] as $opt) {
+                        $sheet->setCellValue('B' . $b, $opt);
+                        $b++;
+                    }
                 }
             }
-
+            
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(11);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Status');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($status, NULL, 'A1');
             $sheet->fromArray($rc->statuses, NULL, 'A2');
+            $hr = $sheet->getHighestRow();
+            for($i=2; $i<=$hr; $i++) {
+                $datef = $sheet->getCell('B'.$i);
+                $sheet->setCellValue('B'.$i, date("d-m-Y", strtotime($datef)));
+            }
 
             $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(3);
+            $spreadsheet->setActiveSheetIndex(12);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Documents');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($document, NULL, 'A1');
             $sheet->fromArray($rc->doc, NULL, 'A2');
+            $hr = $sheet->getHighestRow();
+            for($i=2; $i<=$hr; $i++) {
+                $datef = $sheet->getCell('D'.$i);
+                $sheet->setCellValue('D'.$i, date("d-m-Y", strtotime($datef)));
+            }
 
             $writer = new Xlsx($spreadsheet);
             
@@ -391,6 +420,8 @@ class RcController extends Controller
             $name = 'Medicinal Product ' . $date . '.xlsx';
             $writer->save($name);
             Mail::to(getenv('MAIL_TO'))->send(new RcSubmit($name));
+
+            return redirect('dashboard')->with('message', 'insert succes');
             
         }
     }

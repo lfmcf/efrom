@@ -32,8 +32,7 @@ const ModalS = ({ show, handleClose}) => {
                 <Modal.Title>New Company</Modal.Title>
             </Modal.Header>
             <form className="form" onSubmit={submit}>
-            <Modal.Body>
-                
+                <Modal.Body>
                     <div className="form_group">
                         <span className="form_group_label">Company Name</span>
                         <div className="form_group_field">
@@ -64,7 +63,7 @@ const ModalS = ({ show, handleClose}) => {
                             <input type="text" name="countryname" onChange={onHandleChange} />
                         </div>
                     </div>
-            </Modal.Body>
+                </Modal.Body>
             <Modal.Footer>
                 <Button variant="btn btn-danger" onClick={handleClose}>
                     Close

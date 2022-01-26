@@ -113,6 +113,12 @@ const RegistrationTermination = (props) => {
         setData(arr);
     }
 
+    const handleDocumentdate = (i, date) => {
+        let arr = {...data};
+        arr.doc[i].version_date = date
+        setData(arr);
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         let submitType = window.event.submitter.name;
@@ -431,7 +437,7 @@ const RegistrationTermination = (props) => {
                                         </Accordion>
                                     </Tab>
                                     <Tab eventKey="second" title="Documents">
-                                        <Documents handleChanged={handleDocumentChange} addFormFields={addFormFields} formValues={data.doc} />
+                                        <Documents handleChanged={handleDocumentChange} handleDocumentdate={handleDocumentdate} addFormFields={addFormFields} formValues={data.doc} />
                                     </Tab>
                                 </Tabs>
                                 <div className="form-button">

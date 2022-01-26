@@ -118,6 +118,12 @@ const Transfer = (props) => {
         clearErrors('statuses.'+i+'.'+e.target.name);
     }
 
+    const handleDocumentdate = (i, date) => {
+        let arr = {...data};
+        arr.doc[i].version_date = date
+        setData(arr);
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         let submitType = window.event.submitter.name;
@@ -233,9 +239,6 @@ const Transfer = (props) => {
                                                                         <option value='' disabled></option>
                                                                         <option>Marketing Authorisation</option>
                                                                         <option>APSI / NPP</option>
-                                                                        <option>PIP*</option>
-                                                                        <option>CTA*</option>
-                                                                        <option>IND*</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -295,11 +298,13 @@ const Transfer = (props) => {
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0">
                                                     <Card.Body>
-                                                        <div style={{ display: 'flex', justifyContent: 'end' }}>
-                                                            <button type="button" className="add_doc_form" onClick={addStatusFields}>
-                                                                <i className="bi bi-plus-lg"></i>
-                                                            </button>
-                                                        </div>
+                                                        {data.procedure_type == 'Decentralized' || data.procedure_type == 'Mutual Recognition' ?
+                                                            <div style={{ display: 'flex', justifyContent: 'end' }}>
+                                                                <button type="button" className="add_doc_form" onClick={addStatusFields}>
+                                                                    <i className="bi bi-plus-lg"></i>
+                                                                </button>
+                                                            </div>
+                                                        : ''}
                                                         {data.statuses.map((element, index) => (
                                                             <div key={index}>
                                                                 {index > 0 ?
@@ -419,7 +424,7 @@ const Transfer = (props) => {
                                         </Accordion>
                                     </Tab>
                                     <Tab eventKey="second" title="Documents">
-                                        <Documents handleChanged={handleDocumentChange} addFormFields={addFormFields} formValues={data.doc} />
+                                        <Documents handleChanged={handleDocumentChange} handleDocumentdate={handleDocumentdate} addFormFields={addFormFields} formValues={data.doc} />
                                     </Tab>
                                 </Tabs>
                                 <div className="form-button">

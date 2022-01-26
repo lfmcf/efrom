@@ -1,6 +1,8 @@
 import React from 'react';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-const Documents = ({handleChanged, addFormFields, formValues}) => {
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+const Documents = ({handleChanged,handleDocumentdate, addFormFields, formValues}) => {
 
     return (
         <div className="row">
@@ -62,7 +64,8 @@ const Documents = ({handleChanged, addFormFields, formValues}) => {
                                 <div className="form_group_inline">
                                     <span className="form_group_label">Version date</span>
                                     <div className="form_group_field">
-                                        <input type="text" name="version_date" onChange={e => handleChanged(index, e)} value={element.version_date || ""} />
+                                        
+                                        <DatePicker name="version_date" selected={element.version_date} onChange={(date) => handleDocumentdate(index, date)} />
                                     </div>
                                 </div>
                             </div>
