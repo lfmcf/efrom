@@ -46,19 +46,20 @@ export default function Authenticated({ auth, header, children }) {
         <div>
             <div className="topbar">
                 <div className="tleft">
+                {/*<Link href={route('dashboard')} style={{margin:'auto 100px', color:"white"}}>Logo</Link>
                     <div>
                         <button style={{width:'60px', height:'60px', display:'flex', border:'none',justifyContent:'center',alignItems:'center',background:'transparent'}}>
-                            <span className="lnr lnr-menu" style={{fontSize:'16px', color:"#fff"}}></span>
+                            <span className="lnr lnr-menu" style={{fontSize:'16px', color:"#3bb78f"}}></span>
                         </button>
                         
                     </div>
-                    <Link href={route('dashboard')} style={{margin:'auto 0', color:"white"}}>Logo</Link>
+                    */}
                 </div>
                 <div className="tright">
                     <div className="topbar_right">
                         <div className="topbar_profile">
                             <button className="topbar_avatar" onClick={() => setTopbarnav(!topbarnav)}>
-                                <img className="topbar_avatar_img" />
+                                <img className="topbar_avatar_img" src="..\avatar.png" />
                                 <p>{auth.user.name}</p>
                                 <svg className="mdi-icon topbar_icon" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"></path></svg>
                             </button>
@@ -82,6 +83,15 @@ export default function Authenticated({ auth, header, children }) {
                 {/* <Scrollbar style={{ height: 'calc(100vh - 60px)' }}> */}
                     {/* <div> */}
                         <div className="sidebar_content">
+                        <div>
+                        <Link href={route('dashboard')} style={{margin:'auto 100px', color:"white"}}>Logo</Link>
+                        </div>
+                  {/*  <div>
+                        <button style={{width:'60px', height:'60px', display:'flex', border:'none',justifyContent:'center',alignItems:'center',background:'transparent'}}>
+                            <span className="lnr lnr-menu" style={{fontSize:'16px', color:"#3bb78f"}}></span>
+                        </button>
+                        
+                  </div>*/}
                             <ul className="sidebar_block">
                                 <Link className={`topbar_link ${route().current('dashboard') ? `sidebar_link_active` : ''}`} href={route('dashboard')} >
                                     <li className="sidebar_link" >
@@ -95,7 +105,12 @@ export default function Authenticated({ auth, header, children }) {
                                         <p className="sidebar_link_title">Data Entry Request</p>
                                         <span style={{transform: settings.find(item => item.id === 1).open ? 'rotate(90deg)': 'rotate(0deg)'}} className="sidebar_category_icon lnr lnr-chevron-right"></span>
                                        
-                                    </button>
+    </button>
+                                      {/* <button className="sidebar_link topbar_link" onClick={() => handleClick(1)}>
+                                       <span className="sidebar_link_icon lnr lnr-file-add"></span>
+                                       <p className="sidebar_link_title">Data Entry Request</p>
+                                       <span style={{transform: settings.find(item => item.id === 1).open ? 'rotate(90deg)': 'rotate(0deg)'}} className="sidebar_category_icon lnr lnr-chevron-right"></span>
+</button>*/}
                                     <div style={{ display: settings.find(item => item.id === 1).open ? 'block' : 'none' }}>
                                         <ul className="sidebar_submenu">
                                             <button className="sidebar_link topbar_link" onClick={() => handleClick(2)}>
@@ -107,7 +122,7 @@ export default function Authenticated({ auth, header, children }) {
                                                 <ul className="sidebar_submenu">
                                                     <button className="sidebar_link topbar_link" onClick={() => handleClick(3)}>
                                                         {/* <span className="sidebar_link_icon lnr lnr-file-add"></span> */}
-                                                        <p className="sidebar_link_title h_1">Registration Creation</p>
+                                                        <p className="sidebar_link_title h_2">Registration Creation</p>
                                                         <span style={{ transform: settings.find(item => item.id === 3).open ? 'rotate(90deg)' : 'rotate(0deg)' }} className="sidebar_category_icon lnr lnr-chevron-right"></span>
                                                     </button>
                                                     <div style={{ display: settings.find(item => item.id === 3).open ? 'block' : 'none' }}>
@@ -126,7 +141,7 @@ export default function Authenticated({ auth, header, children }) {
                                                     </div>
                                                     <button className="sidebar_link topbar_link" onClick={() => handleClick(4)}>
                                                         {/* <span className="sidebar_link_icon lnr lnr-file-add"></span> */}
-                                                        <p className="sidebar_link_title h_1">Lifecycle Management</p>
+                                                        <p className="sidebar_link_title h_2">Lifecycle Management</p>
                                                         <span style={{ transform: settings.find(item => item.id === 4).open ? 'rotate(90deg)' : 'rotate(0deg)' }} className="sidebar_category_icon lnr lnr-chevron-right"></span>
                                                     </button>
                                                     <div style={{ display: settings.find(item => item.id === 4).open ? 'block' : 'none' }}>
@@ -155,32 +170,32 @@ export default function Authenticated({ auth, header, children }) {
                                                                 <ul className="sidebar_submenu">
                                                                     <Link className={`topbar_link ${route().current('baseline') ? `sidebar_link_active` : ''}`} href={route('baseline')}>
                                                                         <li className="sidebar_link topbar_link">
-                                                                            <p className="sidebar_link_title h_3">Baseline</p>
+                                                                            <p className="sidebar_link_title h_2">Baseline</p>
                                                                         </li>
                                                                     </Link>
                                                                     <Link href="#">
                                                                         <li className="sidebar_link topbar_link">
-                                                                            <p className="sidebar_link_title h_3">Safety Reports</p>
+                                                                            <p className="sidebar_link_title h_2">Safety Reports</p>
                                                                         </li>
                                                                     </Link>
                                                                     <Link href="#">
                                                                         <li className="sidebar_link topbar_link">
-                                                                            <p className="sidebar_link_title h_3">RMP</p>
+                                                                            <p className="sidebar_link_title h_2">RMP</p>
                                                                         </li>
                                                                     </Link>
                                                                     <Link href="#">
                                                                         <li className="sidebar_link topbar_link">
-                                                                            <p className="sidebar_link_title h_3">PAMs</p>
+                                                                            <p className="sidebar_link_title h_2">PAMs</p>
                                                                         </li>
                                                                     </Link>
                                                                     <Link href="#">
                                                                         <li className="sidebar_link topbar_link">
-                                                                            <p className="sidebar_link_title h_3">Commitment</p>
+                                                                            <p className="sidebar_link_title h_2">Commitment</p>
                                                                         </li>
                                                                     </Link>
                                                                     <Link href="#">
                                                                         <li className="sidebar_link topbar_link">
-                                                                            <p className="sidebar_link_title h_3">Interaction</p>
+                                                                            <p className="sidebar_link_title h_2">Interaction</p>
                                                                         </li>
                                                                     </Link>
                                                                 </ul>
@@ -189,7 +204,7 @@ export default function Authenticated({ auth, header, children }) {
                                                     </div>
                                                     <Link className={`topbar_link ${route().current('registrationtermination') ? `sidebar_link_active` : ''}`} href={route('registrationtermination')}>
                                                         <li className="sidebar_link topbar_link">
-                                                            <p className="sidebar_link_title h_1">Registration Termination</p>
+                                                            <p className="sidebar_link_title h_2">Registration Termination</p>
                                                         </li>
                                                     </Link>
                                                 </ul>
@@ -205,12 +220,12 @@ export default function Authenticated({ auth, header, children }) {
                                                 <ul className="sidebar_submenu">
                                                     <Link className={`topbar_link ${route().current('clinical') ? `sidebar_link_active` : ''}`} href={route('clinical')}>
                                                         <li className="sidebar_link topbar_link">
-                                                            <p className="sidebar_link_title h_1">Registration Creation</p>
+                                                            <p className="sidebar_link_title h_2">Registration Creation</p>
                                                         </li>
                                                     </Link>
                                                     <button className="sidebar_link topbar_link" onClick={() => handleClick(11)}>
                                                         {/* <span className="sidebar_link_icon lnr lnr-file-add"></span> */}
-                                                        <p className="sidebar_link_title h_1">Lifecycle Management</p>
+                                                        <p className="sidebar_link_title h_2">Lifecycle Management</p>
                                                         <span style={{ transform: settings.find(item => item.id === 11).open ? 'rotate(90deg)' : 'rotate(0deg)' }} className="sidebar_category_icon lnr lnr-chevron-right"></span>
                                                     </button>
                                                     <div style={{ display: settings.find(item => item.id === 11).open ? 'block' : 'none' }}>
@@ -224,7 +239,7 @@ export default function Authenticated({ auth, header, children }) {
                                                     </div>
                                                     <Link className={`topbar_link ${route().current('cregistrationtermination') ? `sidebar_link_active` : ''}`} href={route('cregistrationtermination')}>
                                                         <li className="sidebar_link topbar_link">
-                                                            <p className="sidebar_link_title h_1">Registration Termination</p>
+                                                            <p className="sidebar_link_title h_2">Registration Termination</p>
                                                         </li>
                                                     </Link>
                                                 </ul>
@@ -239,17 +254,17 @@ export default function Authenticated({ auth, header, children }) {
                                                 <ul className="sidebar_submenu">
                                                     <Link href="#">
                                                         <li className="sidebar_link topbar_link">
-                                                            <p className="sidebar_link_title h_1">Registration Creation</p>
+                                                            <p className="sidebar_link_title h_2">Registration Creation</p>
                                                         </li>
                                                     </Link>
                                                     <Link href="#">
                                                         <li className="sidebar_link topbar_link">
-                                                            <p className="sidebar_link_title h_1">Lifecycle Management</p>
+                                                            <p className="sidebar_link_title h_2">Lifecycle Management</p>
                                                         </li>
                                                     </Link>
                                                     <Link href="#">
                                                         <li className="sidebar_link topbar_link">
-                                                            <p className="sidebar_link_title h_1">Registration Termination</p>
+                                                            <p className="sidebar_link_title h_2">Registration Termination</p>
                                                         </li>
                                                     </Link>
                                                 </ul>
@@ -277,7 +292,7 @@ export default function Authenticated({ auth, header, children }) {
                                             </Link> */}
                                             <Link href="#">
                                                 <li className="sidebar_link topbar_link">
-                                                    <p className="sidebar_link_title h_1">User Creation Request</p>
+                                                    <p className="sidebar_link_title h_2">User Creation Request</p>
                                                 </li>
                                             </Link>
                                            

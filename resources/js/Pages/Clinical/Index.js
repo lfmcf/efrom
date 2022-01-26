@@ -430,8 +430,8 @@ const Index = (props) => {
                                                 <h5 className="subhead">All fields markedd with * are required</h5>
                                             </div>
                                             <Card>
-                                                <Accordion.Toggle as={Card.Header} eventKey="0">
-                                                    General information
+                                                <Accordion.Toggle as={Card.Header} eventKey="0"  >
+                                                <i className="bi bi-plus"></i>   General information
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
                                                     <Card.Body>
@@ -736,15 +736,18 @@ const Index = (props) => {
                                                     <Card.Body>
                                                         <div style={{ display: 'flex', justifyContent: 'end' }}>
                                                             <button type="button" className="add_doc_form" onClick={addDatesFields}>
-                                                                <i className="bi bi-plus-lg"></i>
+                                                                <i className="bi bi-plus-lg"></i>Add Key
                                                             </button>
                                                         </div>
+                                                        <fieldset >
+                                                                <legend >Keys</legend>
                                                         {data.key_dates.map((element, index) => (
+                                                          
                                                             <div key={index} style={{marginBottom:'20px'}}>
                                                                 {index > 0 ?
                                                                     <div style={{ display: 'flex', justifyContent: 'end' }}>
                                                                         <button type="button" style={{ width: '14px', height: '14px', background: 'transparent', padding: '0', margin: '0 0 20px 0' }} onClick={() => removeDateFields(index)}>
-                                                                            <svg className="mdi-icon" style={{ verticalAlign: 'middle' }} width="14" height="14" fill="#000" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path></svg>
+                                                                            <svg className="mdi-icon" style={{ verticalAlign: 'middle' }} width="14" height="14" fill="#000" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path></svg> 
                                                                         </button>
                                                                     </div>
                                                                     :
@@ -776,8 +779,9 @@ const Index = (props) => {
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                          
                                                         ))}
-
+  </fieldset>
                                                         <div className="inline_form">
                                                             <div className="form_group_inline">
                                                                 <span className="form_group_label">Alternate Number Type</span>
@@ -1284,12 +1288,16 @@ const Index = (props) => {
                                     
                                 </Tabs>
                                 <div style={{ display: 'flex' }}>
-                                    <div className="form-button">
-                                        <button style={{ width: '80px' }} type="submit" className="btn btn-primary" name="submit" disabled={processing}>Submit</button>
+                                <div className="form-button">
+                                        <button style={{ width: '100px' }} type="submit" className="btn_submit btn btn-primary" name="submit" disabled={processing}>Submit</button>
                                     </div>
                                     <div className="form-button">
-                                        <button type="submit" style={{ width: '80px', marginLeft: '10px' }} className="btn btn-primary" name="draft" disabled={processing}>Draft</button>
+                                        <button type="submit" style={{ width: '100px', marginLeft: '10px' }} className="btn_submit btn btn-primary" name="draft" disabled={processing}>Draft</button>
                                     </div>
+                                    <div className="form-button">
+                                        <button type="submit" style={{ width: '100px', marginLeft: '10px' }} className="btn btn-danger" name="reset" disabled={processing}>Reset</button>
+                                    </div>
+                                   
                                 </div>
                                 
                             </form>
