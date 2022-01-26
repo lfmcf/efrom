@@ -7,6 +7,8 @@ use App\Models\Clinical;
 use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\Countries;
+use App\Models\substanceActive;
+use App\Models\packagingItemType;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -19,19 +21,23 @@ class ClinicalController extends Controller
     {
         $compnies = Company::orderBy('name')->get();
         $countries = Countries::orderBy('country_name')->get('country_name');
+        $substanceActive = substanceActive::all();
+        $packagingItemTypes = packagingItemType::all();
         return Inertia::render('Clinical/Clinical', [
             'companies' => $compnies,
-            'countries' => $countries
+            'substanceActive' => $substanceActive,
+            'countries' => $countries,
+            'packagingItemTypes' => $packagingItemTypes,
         ]);
     }
 
     public function store(Request $request) 
     {
+        
         if($request->query('type') === 'submit') {
             $validator = $request->validate(
                 [
                     'procedure_type' => 'required',
-                    'product_type' => 'required',
                     'application_stage' => 'required',
                     'product_name' => 'required',
                     'authorized_pharmaceutical_form' => 'required',
@@ -50,6 +56,8 @@ class ClinicalController extends Controller
         }
 
         $docs = $request->doc;
+
+        
         
         if(!empty($docs)) {
             $arr = array_map(function($doc) {
@@ -57,11 +65,11 @@ class ClinicalController extends Controller
                     $uploadedFile = $doc['document'];
                     $filename = time() . $uploadedFile->getClientOriginalName();
                     $path = Storage::putFileAs(
-                        'Documents',
+                        'public',
                         $uploadedFile,
                         $filename
                     );
-                    $doc['document'] = $path;
+                    $doc['document'] = asset('storage/'.$filename);;
                 }
                 return $doc;
             }, $docs);
@@ -73,19 +81,30 @@ class ClinicalController extends Controller
         $clinical->country = $request->country;
         $clinical->rms = $request->rms;
         $clinical->procedure_number = $request->procedure_number;
-        $clinical->product_type = $request->product_type;
         $clinical->application_stage = $request->application_stage;
-        $clinical->product_name = $request->product_name;
         $clinical->registration_title = $request->registration_title;
+        $clinical->product_name = $request->product_name;
         $clinical->protocol_number = $request->protocol_number;
         $clinical->study_sponsor = $request->study_sponsor;
         $clinical->full_study_title = $request->full_study_title;
-        $clinical->remarks = $request->remarks;
-        $clinical->protocol_type = $request->protocol_type;
         $clinical->clinical_phase = $request->clinical_phase;
+        $clinical->protocol_type = $request->protocol_type;
+        $clinical->paediatric_indication = $request->paediatric_indication;
+        $clinical->remarks = $request->remarks;
         $clinical->authorized_pharmaceutical_form = $request->authorized_pharmaceutical_form;
+        $clinical->administrable_pharmaceutical_form = $request->administrable_pharmaceutical_form;
         $clinical->route_of_admin = $request->route_of_admin;
         $clinical->atc = $request->atc;
+        $clinical->orphan_designation = $request->orphan_designation;
+        $clinical->orphan_indication = $request->orphan_indication;
+        $clinical->under_intensive_monitoring = $request->under_intensive_monitoring;
+        $clinical->key_dates = $request->key_dates;
+        $clinical->alternate_number_type = $request->alternate_number_type;
+        $clinical->alternate_number = $request->alternate_number;
+        $clinical->remarks = $request->remarks;
+        $clinical->local_agent_company = $request->local_agent_company;
+        $clinical->formulations = $request->formulations;
+        $clinical->packagings = $request->packagings;
         $clinical->indication = $request->indication;
         $clinical->paediatric_use = $request->paediatric_use;
         $clinical->manufacturing = $request->manufacturing;
@@ -101,23 +120,64 @@ class ClinicalController extends Controller
                 'Country',
                 'RMS',
                 'Procedure Number',
-                'Product Type',
-                'Applcation Stage'
+                'Applcation Stage',
             );
             $basicInfo = array(
-                'Product name',
                 'Registration Title',
+                'Product name',
                 'Protocol Number',
                 'Study Sponsor',
                 'Full Study Title',
-                'Remarks',
+                'Clinical Phase',
                 'Protocol Type',
-                'Clinical Phase'
+                'Peadiatric indication',
+                'Remarks',
             );
             $dosageForm = array(
                 'Authorized Pharmaceutical Form',
+                'dministrable pharmaceutical form',
                 'Route Of Admin',
                 'ATC'
+            );
+            $OrphanDrug = array(
+                'Orphan Designation Status',
+                'Orphan Indication Type',
+            );
+            $UnderIntensiveMonitoring = array(
+                'Under Intensive Monitoring'
+            );
+            $keyDates = array(
+                'Key Date Type',
+                'Date',
+                'Remarks',
+                'Alternate Number Type',
+                'Alternate Number',
+                'Remarks',
+            );
+            $localAgent = array(
+                'Local Agent Company',
+            );
+            $formulations = array(
+                'Ingredient',
+                'Strength Type',
+                'Numerator Lower Val',
+                'Numerator Upper Val',
+                'Numerator Unit',
+                'Function'
+            );
+            $packagings = array(
+                'Packaging Type',
+                'Packaging Name',
+                'Package Number',
+                'Description',
+                'Launched',
+                'First Launch Date',
+                'Packaging Discontinued',
+                'Discontinuation Date',
+                'Package Shelf-life Type',
+                'Shelf Life',
+                'Shelf-life Unit',
+                'Package Storage Condition',
             );
             $indications = array(
                 'Indications',
@@ -155,7 +215,6 @@ class ClinicalController extends Controller
                 "",
                 $clinical->rms,
                 $clinical->procedure_number,
-                $clinical->product_type,
                 $clinical->application_stage,
             ], NULL, 'A2');
 
@@ -173,14 +232,15 @@ class ClinicalController extends Controller
             $sheet->fromArray($basicInfo, NULL, 'A1');
 
             $sheet->fromArray([
-                $clinical->product_name,
                 $clinical->registration_title,
+                $clinical->product_name,
                 $clinical->protocol_number,
                 $clinical->study_sponsor,
                 $clinical->full_study_title,
-                $clinical->remarks,
+                $clinical->clinical_phase,
                 $clinical->protocol_type,
-                $clinical->clinical_phase
+                $clinical->paediatric_indication,
+                $clinical->remarks,
             ], NULL, 'A2');
 
             $spreadsheet->createSheet();
@@ -190,12 +250,93 @@ class ClinicalController extends Controller
             $sheet->fromArray($dosageForm, NULL, 'A1');
             $sheet->fromArray([
                 $clinical->authorized_pharmaceutical_form,
+                $clinical->administrable_pharmaceutical_form,
                 $clinical->route_of_admin,
                 $clinical->atc
             ], NULL, 'A2');
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(3);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Orphan Drug');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($OrphanDrug, NULL, 'A1');
+            $sheet->fromArray([
+                $clinical->orphan_designation,
+                $clinical->orphan_indication,
+            ], NULL, 'A2');
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(4);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Under Intensive');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($UnderIntensiveMonitoring, NULL, 'A1');
+            $sheet->fromArray([
+                $clinical->under_intensive_monitoring,
+            ], NULL, 'A2');
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(5);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Key Dates');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($keyDates, NULL, 'A1');
+            // $sheet->fromArray($rc->key_dates, NULL, 'A2');
+            $n = 2;
+            foreach($clinical->key_dates as  $kd) {
+                $sheet->setCellValue('A' . $n, $kd['date_type']);
+                $sheet->setCellValue('B' . $n, date("d-m-Y",strtotime($kd['date'])));
+                $sheet->setCellValue('C' . $n, $kd['remarks']);
+                $n+1;
+            }
+            $sheet->setCellValue('D2', $clinical->alternate_number_type);
+            $sheet->setCellValue('E2', $clinical->alternate_number);
+            $sheet->setCellValue('F2', $clinical->remarks);
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(6);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Local Agent');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($localAgent, NULL, 'A1');
+            $sheet->fromArray([$clinical->local_agent_company], NULL, 'A2');
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(7);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Formulations');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($formulations, NULL, 'A1');
+            $sheet->fromArray($clinical->formulations, NULL, 'A2');
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(8);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Packagings');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($packagings, NULL, 'A1');
+            $c = 2;
+            foreach ($clinical->packagings as $package) {
+                $sheet->setCellValue('A' . $c, $package['packaging_type']);
+                $sheet->setCellValue('B' . $c, $package['packaging_name']);
+                $sheet->setCellValue('C' . $c, $package['package_number']);
+                $sheet->setCellValue('D' . $c, $package['description']);
+                $sheet->setCellValue('E' . $c, $package['launched']);
+                $sheet->setCellValue('F' . $c, date("d-m-Y",strtotime($package['first_lunch_date'])));
+                $sheet->setCellValue('G' . $c, $package['packaging_discontinued']);
+                $sheet->setCellValue('H' . $c, date("d-m-Y",strtotime($package['discontinuation_date'])));
+                if(is_array($package['packagelif'])) {
+                    foreach ($package['packagelif'] as $i => $pl) {
+                        $sheet->setCellValue('I' . $c, $pl['package_shelf_life_type']);
+                        $sheet->setCellValue('J' . $c, $pl['shelf_life']);
+                        $sheet->setCellValue('K' . $c, $pl['shelf_life_unit']);
+                        if (is_array($pl['package_storage_condition'])) {
+                            foreach ($pl['package_storage_condition'] as $psc) {
+                                $sheet->setCellValue('L' . $c, $psc);
+                                $c += 1;
+                            }
+                        }
+                    }
+                }
+            }
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(9);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Indications');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($indications, NULL, 'A1');
@@ -205,7 +346,7 @@ class ClinicalController extends Controller
             ], NULL, 'A2');
 
             $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(4);
+            $spreadsheet->setActiveSheetIndex(10);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Manufacturing');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($manufacturing, NULL, 'A1');
@@ -220,18 +361,28 @@ class ClinicalController extends Controller
             }
 
             $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(5);
+            $spreadsheet->setActiveSheetIndex(11);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Status');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($status, NULL, 'A1');
             $sheet->fromArray($clinical->statuses, NULL, 'A2');
+            $hr = $sheet->getHighestRow();
+            for($i=2; $i<=$hr; $i++) {
+                $datef = $sheet->getCell('B'.$i);
+                $sheet->setCellValue('B'.$i, date("d-m-Y", strtotime($datef)));
+            }
 
             $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(6);
+            $spreadsheet->setActiveSheetIndex(12);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Documents');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($document, NULL, 'A1');
             $sheet->fromArray($clinical->doc, NULL, 'A2');
+            $hr = $sheet->getHighestRow();
+            for($i=2; $i<=$hr; $i++) {
+                $datef = $sheet->getCell('D'.$i);
+                $sheet->setCellValue('D'.$i, date("d-m-Y", strtotime($datef)));
+            }
 
             $writer = new Xlsx($spreadsheet);
             

@@ -9,9 +9,10 @@ import Documents from '@/Layouts/Documents';
 import ModalS from '@/Components/Modal';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import SaveModal from '@/Components/SaveModal';
+import { has } from 'lodash';
 
 const Index = (props) => {
-    
     const { data, setData, post, processing, errors, clearErrors,  reset } = useForm({
         procedure_type: '',
         country: [],
@@ -19,10 +20,13 @@ const Index = (props) => {
         procedure_number: '',
         product_type: '',
         application_stage: '',
+        registration_title: '',
         product_name: '',
         local_tradename: '',
         registration_holder: '',
         application_number: '',
+        dossier_reference: '',
+        bremarks: '',
         authorized_pharmaceutical_form: '',
         administrable_pharmaceutical_form: '',
         route_of_admin: '',
@@ -52,11 +56,15 @@ const Index = (props) => {
     });
 
     const [show, setShow] = useState(false);
+    const [packagehaserror, setPackagehaserror] = useState(false);
+    const [statuserror, setStatusError] = useState(false);
+    const [showsavemodal, setSavemodal] = useState({show: false, name:''});
     const countryRef = React.useRef();
+    const formRef = React.useRef();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        let submitType = window.event.submitter.name;
+        let submitType = window.event.target.name;
         post(route('storefinishproduct', {'type': submitType}));
     }
 
@@ -207,9 +215,10 @@ const Index = (props) => {
                 break;
             case 'status_date':
                 arr.statuses[i][name] = e;
+                // clearErrors(errors['statuses.'+ i +'.status_date']);
+                clearErrors('statuses.'+i+'.'+name)
         }
         setData(arr);
-
     }
 
     let handleSelectIngredientChange = (i, e) => {
@@ -405,9 +414,62 @@ const Index = (props) => {
         setShow(true)
     }
 
+    const handleDocumentdate = (i, date) => {
+        let arr = {...data};
+        arr.doc[i].version_date = date
+        setData(arr);
+    }
+
     const handleClose = () => {
         setShow(false)
     }
+
+    const handleSaveModalClose = () => {
+        setSavemodal(prev => ({
+            ...prev,
+            show: false
+        }))
+    }
+
+    const showdraftmodel = () => {
+        setSavemodal(prev =>({...prev, show: true, name:'draft'}))
+    }
+
+    const showsavemodel = () => {
+        setSavemodal(prev =>({...prev, show: true, name:'submit'}))
+    }
+
+    const handleSaveModalConfirm = () => {
+        setSavemodal(prev => ({
+            ...prev,
+            show: false
+        }))
+        formRef.current.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true}))
+    }
+
+    React.useEffect(() => {
+        let l = data.packagings.length
+        for (let i = 0; i <= l; i++) {
+            if (errors['packagings.' + i + '.packaging_name'] || errors['packagings.' + i + '.package_number'] || errors['packagings.' + i + '.description']) {
+                setPackagehaserror(true);
+                break;
+            }else {
+                setPackagehaserror(false);
+            }
+        }
+        let s = data.statuses.length
+        for(let j = 0; j <= s; j++){
+            if(errors['statuses.' + j + '.status'] || errors['statuses.' + j + '.status_date'])
+            {
+                setStatusError(true);
+                break;
+            }else {
+                setStatusError(false);
+            }
+        }
+    }, [errors]);
+
+    
 
     return(
         <>
@@ -421,7 +483,7 @@ const Index = (props) => {
                 <div className="col-md-12">
                     <div className="card main-card">
                         <div className="card-body">
-                            <form className="form" onSubmit={handleSubmit}>
+                            <form className="form" onSubmit={handleSubmit} ref={formRef}>
                                 <Tabs defaultActiveKey="first">
                                     <Tab eventKey="first" title="New registration">
                                         <Accordion style={{ marginTop: '20px'  }} defaultActiveKey="0">
@@ -430,7 +492,7 @@ const Index = (props) => {
                                                 <h5 className="subhead">All fields markedd with * are required</h5>
                                             </div>
                                             <Card>
-                                                <Accordion.Toggle as={Card.Header} eventKey="0">
+                                                <Accordion.Toggle as={Card.Header} eventKey="0" style={{background: errors.procedure_type || errors.product_type || errors.application_stage ? 'red': ''}}>
                                                     General information
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
@@ -496,7 +558,7 @@ const Index = (props) => {
                                                             </div>
 
                                                             <div className="form_group_inline" >
-                                                                <span className="form_group_label">Applcation Stage (*)</span>
+                                                                <span className="form_group_label">Application Stage (*)</span>
                                                                 <div className="form_group_field">
                                                                     <select name="application_stage" defaultValue="" onChange={handleChange} style={{ borderColor: errors.application_stage ? 'red' : '' }}>
                                                                         <option value="" disabled></option>
@@ -513,11 +575,17 @@ const Index = (props) => {
                                         </Accordion>  
                                         <Accordion >
                                             <Card>
-                                                <Accordion.Toggle as={Card.Header} eventKey="0">
+                                                <Accordion.Toggle as={Card.Header} eventKey="0" style={{background : errors.product_name || errors.local_tradename || errors.registration_holder ? 'red' : ''}}>
                                                     Basic information
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
                                                     <Card.Body>
+                                                        <div className="form_group">
+                                                            <span className="form_group_label">Registration Title</span>
+                                                            <div className="form_group_field">
+                                                                <input type="text" name='registration_title' onChange={handleChange} />
+                                                            </div>
+                                                        </div>
                                                         <div className="form_group">
                                                             <span className="form_group_label">Product Name (*)</span>
                                                             <div className="form_group_field">
@@ -541,6 +609,7 @@ const Index = (props) => {
                                                             </div>
                                                             <p className="errors_wrap" style={{display: errors.product_name ? 'inline-block': 'none'}}>{errors.product_name}</p>
                                                         </div>
+                                                       
                                                         <div className="form_group">
                                                             <span className="form_group_label">Local Tradename (*)</span>
                                                             <div className="form_group_field">
@@ -571,10 +640,16 @@ const Index = (props) => {
                                                                 <input type="text" name="application_number" onChange={handleChange} />
                                                             </div>
                                                         </div>
-                                                        <div className="form_group" style={{display: data.country_global == "France" ? '' : 'none'}}>
+                                                        <div className="form_group" >
                                                             <span className="form_group_label">Dossier Reference Number</span>
                                                             <div className="form_group_field">
-                                                                <input type="text" name="dossier_reference_number" onChange={handleChange}  />
+                                                                <input type="text" name="dossier_reference" onChange={handleChange}  />
+                                                            </div>
+                                                        </div>
+                                                        <div className="form_group" >
+                                                            <span className="form_group_label">Remarks</span>
+                                                            <div className="form_group_field">
+                                                                <input type="text" name="bremarks" onChange={handleChange}  />
                                                             </div>
                                                         </div>
                                                     </Card.Body>
@@ -583,7 +658,7 @@ const Index = (props) => {
                                         </Accordion>
                                         <Accordion>
                                             <Card>
-                                                <Accordion.Toggle as={Card.Header} eventKey="0">
+                                                <Accordion.Toggle as={Card.Header} eventKey="0" style={{background: errors.administrable_pharmaceutical_form || errors.authorized_pharmaceutical_form || errors.route_of_admin || errors.atc ? 'red' : ''}}>
                                                     Dosage Form / Route of Admin / ATC
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
@@ -690,6 +765,7 @@ const Index = (props) => {
                                                                     </select>
                                                                 </div>
                                                             </div>
+
                                                             <div className="form_group_inline">
                                                                 <span className="form_group_label">Orphan Indication Type</span>
                                                                 <div className="form_group_field">
@@ -725,7 +801,7 @@ const Index = (props) => {
                                                         </div>
                                                     </Card.Body>
                                                 </Accordion.Collapse>
-                                        </Card>
+                                            </Card>
                                         </Accordion>
                                         <Accordion>
                                             <Card>
@@ -934,7 +1010,7 @@ const Index = (props) => {
                                         </Accordion>
                                         <Accordion >
                                             <Card>
-                                                <Accordion.Toggle as={Card.Header} eventKey="0">
+                                                <Accordion.Toggle as={Card.Header} eventKey="0" style={{background: packagehaserror ? 'red' : ''}}>
                                                     Packagings
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
@@ -1080,7 +1156,7 @@ const Index = (props) => {
                                         </Accordion>
                                         <Accordion>
                                             <Card>
-                                                <Accordion.Toggle as={Card.Header} eventKey="0">
+                                                <Accordion.Toggle as={Card.Header} eventKey="0" style={{background: errors.indication ? 'red' : ''}}>
                                                     Indications
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
@@ -1176,16 +1252,19 @@ const Index = (props) => {
                                         </Accordion>
                                         <Accordion>
                                             <Card>
-                                                <Accordion.Toggle as={Card.Header} eventKey="0">
+                                                <Accordion.Toggle as={Card.Header} eventKey="0" style={{background: statuserror ? 'red' : '' }}>
                                                     Status
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
                                                     <Card.Body>
+                                                        {data.procedure_type == 'Decentralized' || data.procedure_type == 'Mutual Recognition' ? 
                                                         <div style={{ display: 'flex', justifyContent: 'end' }}>
                                                             <button type="button" className="add_doc_form" data-toggle="tooltip" data-placement="top" title="Add Status" onClick={addStatusesFields}>
                                                                 <i className="bi bi-plus-lg"></i>
                                                             </button>
                                                         </div>
+                                                        : ''
+                                                        } 
                                                         {data.statuses.map((element, index) => (
                                                             <div key={index}>
                                                                 {index > 0 ?
@@ -1279,16 +1358,16 @@ const Index = (props) => {
                                         </Accordion>
                                     </Tab>
                                     <Tab eventKey="second" title="Documents">
-                                        <Documents handleChanged={handleDocumentChange} addFormFields={addFormFields} formValues={data.doc} />
+                                        <Documents handleChanged={handleDocumentChange} handleDocumentdate={handleDocumentdate} addFormFields={addFormFields} formValues={data.doc} />
                                     </Tab>
                                     
                                 </Tabs>
                                 <div style={{ display: 'flex' }}>
                                     <div className="form-button">
-                                        <button style={{ width: '80px' }} type="submit" className="btn btn-primary" name="submit" disabled={processing}>Submit</button>
+                                        <button style={{ width: '80px' }} type="button" className="btn btn-primary" onClick={showsavemodel} disabled={processing}>Submit</button>
                                     </div>
                                     <div className="form-button">
-                                        <button type="submit" style={{ width: '80px', marginLeft: '10px' }} className="btn btn-primary" name="draft" disabled={processing}>Draft</button>
+                                        <button type='button' onClick={showdraftmodel} style={{ width: '80px', marginLeft: '10px' }} className="btn btn-primary" name="draft" disabled={processing}>Draft</button>
                                     </div>
                                 </div>
                                 
@@ -1297,6 +1376,7 @@ const Index = (props) => {
                     </div>
                 </div>
                 <ModalS show={show} handleClose={handleClose} />
+                <SaveModal show={showsavemodal.show} handleClose={handleSaveModalClose} handleSubmited={handleSaveModalConfirm} name={showsavemodal.name} />
             </div>
             
         </>

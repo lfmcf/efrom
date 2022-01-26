@@ -182,6 +182,12 @@ const Hqproject = (props) => {
         setData(arr);
     }
 
+    const handleDocumentdate = (i, date) => {
+        let arr = {...data};
+        arr.doc[i].version_date = date
+        setData(arr);
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault()
         let submitType = window.event.submitter.name;
@@ -303,9 +309,6 @@ const Hqproject = (props) => {
                                                             <option value="" disabled></option>
                                                             <option>Marketing Authorisation</option>
                                                             <option>APSI / NPP</option>
-                                                            <option>PIP*</option>
-                                                            <option>CTA*</option>
-                                                            <option>IND*</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -397,7 +400,7 @@ const Hqproject = (props) => {
                                                             <option value="" disabled></option>
                                                             <option>Variation/Supplement</option>
                                                             <option>FUM</option>
-                                                            <option>Registration Termination</option>
+                                                            
                                                         </select>
                                                     </div>
                                                     <p className="errors_wrap" style={{ display: errors['variation.' + index + '.category'] ? 'inline-block' : 'none' }}>{errors['variation.' + index + '.category']}</p>
@@ -484,11 +487,13 @@ const Hqproject = (props) => {
                             </Accordion.Toggle>
                             <Accordion.Collapse eventKey="0" >
                                 <Card.Body>
+                                    
                                     <div style={{ display: 'flex', justifyContent: 'end' }}>
                                         <button type="button" className="add_doc_form" onClick={addStatusFields}>
                                             <i className="bi bi-plus-lg"></i>
                                         </button>
                                     </div>
+                                    
                                     {data.statuses.map((element, index) => (
 
                                         <div key={index}>
@@ -638,7 +643,7 @@ const Hqproject = (props) => {
                     </Accordion>
                 </Tab>
                 <Tab eventKey="second" title="Documents">
-                    <Documents handleChanged={handleChanged} addFormFields={addFormFields} formValues={data.doc} />
+                    <Documents handleChanged={handleChanged} handleDocumentdate={handleDocumentdate} addFormFields={addFormFields} formValues={data.doc} />
                 </Tab>
             </Tabs>
             <div style={{display:'flex'}}>

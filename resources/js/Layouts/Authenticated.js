@@ -26,9 +26,7 @@ export default function Authenticated({ auth, header, children }) {
     ]);
 
     const handleClick = id => {
-        
         setSettings(settings =>  settings.map(item => item.id === id ? {...item, open: !item.open } : item));
-        
     };
 
     const options = {

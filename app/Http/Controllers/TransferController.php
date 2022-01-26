@@ -66,11 +66,11 @@ class TransferController extends Controller
                     $uploadedFile = $doc['document'];
                     $filename = time() . $uploadedFile->getClientOriginalName();
                     $path = Storage::putFileAs(
-                        'Documents',
+                        'public',
                         $uploadedFile,
                         $filename
                     );
-                    $doc['document'] = $path;
+                    $doc['document'] = asset('storage/'.$filename);;
                 }
                 return $doc;
             }, $docs);
@@ -172,6 +172,11 @@ class TransferController extends Controller
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($eventStatus, NULL, 'A1');
             $sheet->fromArray($transfer->statuses, NULL, 'A2');
+            $hr = $sheet->getHighestRow();
+            for($i=2; $i<=$hr; $i++) {
+                $datef = $sheet->getCell('B'.$i);
+                $sheet->setCellValue('B'.$i, date("d-m-Y", strtotime($datef)));
+            }
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(3);
@@ -179,6 +184,11 @@ class TransferController extends Controller
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($document, NULL, 'A1');
             $sheet->fromArray($transfer->doc, NULL, 'A2');
+            $hr = $sheet->getHighestRow();
+            for($i=2; $i<=$hr; $i++) {
+                $datef = $sheet->getCell('D'.$i);
+                $sheet->setCellValue('D'.$i, date("d-m-Y", strtotime($datef)));
+            }
 
             $writer = new Xlsx($spreadsheet);
             
