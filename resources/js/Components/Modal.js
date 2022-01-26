@@ -65,10 +65,10 @@ const ModalS = ({ show, handleClose}) => {
                     </div>
                 </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
+                <Button variant="btn btn-danger" onClick={handleClose}>
                     Close
                 </Button>
-                <Button variant="primary" type="submit">
+                <Button variant="btn_submit btn btn-success" type="submit">
                     Save Changes
                 </Button>
             </Modal.Footer>
