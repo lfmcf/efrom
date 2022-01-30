@@ -133,13 +133,14 @@ export default function Authenticated({ auth, header, children }) {
             
             <div className="topbar">
                 <div className="tleft">
+                {/*<Link href={route('dashboard')} style={{margin:'auto 100px', color:"white"}}>Logo</Link>
                     <div>
                         <button style={{width:'60px', height:'60px', display:'flex', border:'none',justifyContent:'center',alignItems:'center',background:'transparent'}}>
-                            <span className="lnr lnr-menu" style={{fontSize:'16px', color:"#fff"}}></span>
+                            <span className="lnr lnr-menu" style={{fontSize:'16px', color:"#3bb78f"}}></span>
                         </button>
                         
                     </div>
-                    <Link href={route('dashboard')} style={{margin:'auto 0', color:"white"}}>Logo</Link>
+                    */}
                 </div>
                 <div className='tmiddle' >
                     {/* <MultilevelMenu data={menuData} /> */}
@@ -153,7 +154,7 @@ export default function Authenticated({ auth, header, children }) {
                     <div className="topbar_right">
                         <div className="topbar_profile">
                             <button className="topbar_avatar" onClick={() => setTopbarnav(!topbarnav)}>
-                                <img className="topbar_avatar_img" />
+                                <img className="topbar_avatar_img" src="..\avatar.png" />
                                 <p>{auth.user.name}</p>
                                 <svg className="mdi-icon topbar_icon" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"></path></svg>
                             </button>

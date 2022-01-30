@@ -15,7 +15,7 @@ const Documents = ({handleChanged,handleDocumentdate, addFormFields, formValues}
                         </div>
                         <div className="col-6">
                             <button className="add_doc_form" type="button" onClick={() => addFormFields()}>
-                                <i className="bi bi-plus-lg"></i>
+                                <i className="bi bi-plus-lg"></i> Ajouter un document
                             </button>
                         </div>
                     </div>
