@@ -486,7 +486,7 @@ const Index = (props) => {
                             <form className="form" onSubmit={handleSubmit} ref={formRef}>
                                 <Tabs defaultActiveKey="first">
                                     <Tab eventKey="first" title="New registration">
-                                        <Accordion style={{ marginTop: '20px'  }} defaultActiveKey="0">
+                                        <Accordion  style={{ marginTop: '20px'  }} defaultActiveKey="0" >
                                             <div className="card_title" style={{ marginBottom: '20px'  }}>
                                                 <h5>First Submission</h5>
                                                 <h5 className="subhead">All fields markedd with * are required</h5>
@@ -494,9 +494,9 @@ const Index = (props) => {
                                             <Card>
                                                 
                                                 
-                                                <Accordion.Toggle as={Card.Header} eventKey="0" style={{background: errors.procedure_type || errors.product_type || errors.application_stage ? 'red': ''}}>
-                                                    <i className="bi bi-plus"></i>   General information
-                                                    General information
+                                                <Accordion.Toggle  as={Card.Header} eventKey="0" style={{border: errors.procedure_type || errors.product_type || errors.application_stage ? '1px groove #FF0000': ''}}>
+                
+                                                    General information <span className="lnr lnr-chevron-down" style={{ transform: 'rotate(00deg)'  }} ></span>
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
                                                     <Card.Body>
@@ -572,13 +572,14 @@ const Index = (props) => {
                                                                 <p className="errors_wrap" style={{ display: errors.application_stage ? 'inline-block' : 'none' }}>{errors.application_stage}</p>
                                                             </div>
                                                         </div>
+                                                        
                                                     </Card.Body>
                                                 </Accordion.Collapse>
                                             </Card>
                                         </Accordion>  
                                         <Accordion >
                                             <Card>
-                                                <Accordion.Toggle as={Card.Header} eventKey="0" style={{background : errors.product_name || errors.local_tradename || errors.registration_holder ? 'red' : ''}}>
+                                                <Accordion.Toggle as={Card.Header} eventKey="0" style={{background : errors.product_name || errors.local_tradename || errors.registration_holder ? '1px solid red' : ''}}>
                                                     Basic information
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
@@ -661,7 +662,7 @@ const Index = (props) => {
                                         </Accordion>
                                         <Accordion>
                                             <Card>
-                                                <Accordion.Toggle as={Card.Header} eventKey="0" style={{background: errors.administrable_pharmaceutical_form || errors.authorized_pharmaceutical_form || errors.route_of_admin || errors.atc ? 'red' : ''}}>
+                                                <Accordion.Toggle as={Card.Header} eventKey="0" style={{background: errors.administrable_pharmaceutical_form || errors.authorized_pharmaceutical_form || errors.route_of_admin || errors.atc ? '1px solid red' : ''}}>
                                                     Dosage Form / Route of Admin / ATC
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
@@ -818,15 +819,16 @@ const Index = (props) => {
                                                                 <i className="bi bi-plus-lg"></i>Add Key
                                                             </button>
                                                         </div>
-                                                        <fieldset >
-                                                                <legend >Keys</legend>
+                                                       
                                                         {data.key_dates.map((element, index) => (
-                                                          
-                                                            <div key={index} style={{marginBottom:'20px'}}>
+                                                           <fieldset>
+                                                           <legend >Keys 1</legend>
+                                                            <div key={index} style={{marginBottom:'30px'}}>
+                                                                
                                                                 {index > 0 ?
                                                                     <div style={{ display: 'flex', justifyContent: 'end' }}>
-                                                                        <button type="button" style={{ width: '14px', height: '14px', background: 'transparent', padding: '0', margin: '0 0 20px 0' }} onClick={() => removeDateFields(index)}>
-                                                                            <svg className="mdi-icon" style={{ verticalAlign: 'middle' }} width="14" height="14" fill="#000" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path></svg> 
+                                                                        <button type="button" style={{ width: '14px', height: '14px', background: '000', padding: '0', margin: '0 0 20px 0' }} onClick={() => removeDateFields(index)}>
+                                                                            <svg className="mdi-icon" style={{ verticalAlign: 'middle' }} width="40" height="40" fill="#000" viewBox="0 0 56 32"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path></svg> 
                                                                         </button>
                                                                     </div>
                                                                     :
@@ -858,9 +860,9 @@ const Index = (props) => {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                          
+                                                            </fieldset>
                                                         ))}
-  </fieldset>
+  
                                                         <div className="inline_form">
                                                             <div className="form_group_inline">
                                                                 <span className="form_group_label">Alternate Number Type</span>
@@ -927,11 +929,12 @@ const Index = (props) => {
                                                     <Card.Body>
                                                         <div style={{ display: 'flex', justifyContent: 'end' }}>
                                                             <button type="button" className="add_doc_form" data-toggle="tooltip" data-placement="top" title="Add Formulation" onClick={addFormulationValues}>
-                                                                <i className="bi bi-plus-lg"></i>
+                                                                <i className="bi bi-plus-lg"></i>Add Formulation
                                                             </button>
                                                         </div>
                                                         {data.formulations.map((element, index) => (
                                                             <div key={index}>
+                                                                <hr></hr>
                                                                 {index > 0 ?
                                                                     <div style={{ display: 'flex', justifyContent: 'end' }}>
                                                                         <button type="button" style={{ width: '14px', height: '14px', background: 'transparent', padding: '0', margin: '0 0 20px 0' }} onClick={() => removeFormulationFields(index)}>
@@ -1017,17 +1020,20 @@ const Index = (props) => {
                                         </Accordion>
                                         <Accordion >
                                             <Card>
-                                                <Accordion.Toggle as={Card.Header} eventKey="0" style={{background: packagehaserror ? 'red' : ''}}>
+                                                <Accordion.Toggle as={Card.Header} eventKey="0" style={{border: packagehaserror ? '1px groove #ff0000' : ''}}>
                                                     Packagings
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
                                                     <Card.Body>
                                                         <div style={{ display: 'flex', justifyContent: 'end' }}>
                                                             <button type="button" className="add_doc_form" data-toggle="tooltip" data-placement="top" title="Add Package" onClick={addPackageValues}>
-                                                                <i className="bi bi-plus-lg"></i>
+                                                                <i className="bi bi-plus-lg"></i> Add Packaging
                                                             </button>
                                                         </div>
+                                                        
                                                         {data.packagings.map((element, index) => (
+                                                            <fieldset>
+                                                            <legend >Packaging 1</legend>
                                                             <div key={index} style={{padding:"10px",marginBottom:'10px' }}>
                                                                 
                                                                 <div className="inline_form">
@@ -1105,11 +1111,16 @@ const Index = (props) => {
                                                                 </div>
                                                                 <div style={{ display: 'flex', justifyContent: 'end' }}>
                                                                     <button type="button" className="add_doc_form" data-toggle="tooltip" data-placement="top" title="Add Package life" onClick={() => addPackagelifeValues(index)}>
-                                                                        <i className="bi bi-plus-lg"></i>
+                                                                        <i className="bi bi-plus-lg"></i>Add Package 
                                                                     </button>
+                                                                    
                                                                 </div>
+                                                               
                                                                 {element.packagelif.map((ele, i) => (
+                                                                     <fieldset style={{ border: '4px dotted #e6e6e6' }}>
+                                                                     <legend>Package 1-1</legend>
                                                                     <div key={i} style={{padding:'20px' }}>
+                                                                
                                                                         <div className="inline_form">
                                                                             <div className="form_group_inline">
                                                                                 <span className="form_group_label">Package Shelf-life Type</span>
@@ -1153,17 +1164,21 @@ const Index = (props) => {
                                                                             </div>
                                                                         </div>
                                                                     </div>
+                                                                    </fieldset>
                                                                 ))}
                                                                 
+                                                                
                                                             </div>
+                                                            </fieldset>
                                                         ))}
+                                                        
                                                     </Card.Body>
                                                 </Accordion.Collapse>
                                             </Card>
                                         </Accordion>
                                         <Accordion>
                                             <Card>
-                                                <Accordion.Toggle as={Card.Header} eventKey="0" style={{background: errors.indication ? 'red' : ''}}>
+                                                <Accordion.Toggle as={Card.Header} eventKey="0" style={{border: errors.indication ? '1px groove #ff0000' : ''}}>
                                                     Indications
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
@@ -1224,11 +1239,15 @@ const Index = (props) => {
                                                     <Card.Body>
                                                         <div style={{ display: 'flex', justifyContent: 'end' }}>
                                                             <button type="button" className="add_doc_form" data-toggle="tooltip" data-placement="top" title="Add Manufacturer" onClick={addManufacturerFields}>
-                                                                <i className="bi bi-plus-lg"></i>
+                                                                <i className="bi bi-plus-lg"></i> Add Manufacturing
                                                             </button>
                                                         </div>
                                                         {data.manufacturing.map((element, index) => (
+                                                            <fieldset>
+                                                                <legend>Manufacturing 1</legend>
+                                                            
                                                             <div key={index}>
+                                                            
                                                                 <div className="inline_form">
                                                                     <div className="form_group_inline">
                                                                         <span className="form_group_label">Manufacturer</span>
@@ -1251,6 +1270,7 @@ const Index = (props) => {
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            </fieldset>
                                                         ))}
                                                         
                                                     </Card.Body>
@@ -1259,7 +1279,7 @@ const Index = (props) => {
                                         </Accordion>
                                         <Accordion>
                                             <Card>
-                                                <Accordion.Toggle as={Card.Header} eventKey="0" style={{background: statuserror ? 'red' : '' }}>
+                                                <Accordion.Toggle as={Card.Header} eventKey="0" style={{border: statuserror ? '1px groove #ff0000' : '' }}>
                                                     Status
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
@@ -1369,17 +1389,17 @@ const Index = (props) => {
                                     </Tab>
                                     
                                 </Tabs>
-                                <div style={{ display: 'flex' }}>
-                                <div className="form-button">
-                                        <button style={{ width: '100px' }} type="submit" className="btn_submit btn btn-primary" name="submit" disabled={processing}>Submit</button>
+                                <div style={{ display: 'flex' , width:'80%' }}>
+                                
+                                    <div className="form-button">
+                                        <button style={{ width: '100px' }} type="button" className="btn_submit btn btn-primary" onClick={showsavemodel} disabled={processing}>Submit</button>
                                     </div>
                                     <div className="form-button">
-                                        <button style={{ width: '80px' }} type="button" className="btn btn-primary" onClick={showsavemodel} disabled={processing}>Submit</button>
+                                        <button type='button' onClick={showdraftmodel} style={{ width: '100px' }} className="btn_submit btn btn-primary" name="draft" disabled={processing}>Draft</button>
                                     </div>
                                     <div className="form-button">
-                                        <button type='button' onClick={showdraftmodel} style={{ width: '80px', marginLeft: '10px' }} className="btn btn-primary" name="draft" disabled={processing}>Draft</button>
+                                        <button style={{ width: '100px' }} type="reset" className=" btn btn-danger" name="Reset" disabled={processing}>Reset</button>
                                     </div>
-                                   
                                 </div>
                                 
                             </form>

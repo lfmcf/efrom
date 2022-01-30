@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
         <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
-
+<link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/font-awesome-line-awesome/css/all.min.css">
         <!-- Scripts -->
         @routes
         <script src="{{ mix('js/app.js') }}" defer></script>

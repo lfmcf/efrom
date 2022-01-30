@@ -874,7 +874,7 @@ const Clinical = (props) => {
                                                     <Card.Body>
                                                         <div style={{ display: 'flex', justifyContent: 'end' }}>
                                                             <button type="button" className="add_doc_form" data-toggle="tooltip" data-placement="top" title="Add Formulation" onClick={addFormulationValues}>
-                                                                <i className="bi bi-plus-lg"></i>
+                                                                <i className="bi bi-plus-lg"></i> Add Formulation
                                                             </button>
                                                         </div>
                                                         {data.formulations.map((element, index) => (
@@ -883,6 +883,7 @@ const Clinical = (props) => {
                                                                     <div style={{ display: 'flex', justifyContent: 'end' }}>
                                                                         <button type="button" style={{ width: '14px', height: '14px', background: 'transparent', padding: '0', margin: '0 0 20px 0' }} onClick={() => removeFormulationFields(index)}>
                                                                             <svg className="mdi-icon" style={{ verticalAlign: 'middle' }} width="14" height="14" fill="#000" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path></svg>
+                                                                            Add Formulation
                                                                         </button>
                                                                     </div>
                                                                     :
@@ -1313,10 +1314,10 @@ const Clinical = (props) => {
                                         <button style={{ width: '100px' }} type="submit" className="btn_submit btn btn-primary" name="submit" disabled={processing}>Submit</button>
                                     </div>
                                     <div className="form-button">
-                                        <button type="submit" style={{ width: '100px', marginLeft: '10px' }} className="btn_submit btn btn-primary" name="draft" disabled={processing}>Draft</button>
+                                        <button type="submit" style={{ width: '100px' }} className="btn_submit btn btn-primary" name="draft" disabled={processing}>Draft</button>
                                     </div>
                                     <div className="form-button">
-                                        <button type="submit" style={{ width: '100px', marginLeft: '10px' }} className="btn btn-danger" name="reset" disabled={processing}>Reset</button>
+                                        <button type="submit" style={{ width: '100px' }} className="btn btn-danger" name="reset" disabled={processing}>Reset</button>
                                     </div>
                                 </div>
                             </form>

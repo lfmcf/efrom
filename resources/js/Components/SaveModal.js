@@ -10,10 +10,10 @@ const SaveModal = ({show, handleClose, handleSubmited, name}) => {
                 
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
+                <Button variant="btn btn-danger" onClick={handleClose}>
                     Close
                 </Button>
-                <Button variant="primary" name={name} onClick={handleSubmited}>
+                <Button variant="btn_submit btn btn-success" name={name} onClick={handleSubmited}>
                     Save Changes
                 </Button>
             </Modal.Footer>

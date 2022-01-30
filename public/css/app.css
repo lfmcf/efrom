@@ -12021,8 +12021,8 @@ button {
   box-shadow: 0 1px 30px 1px rgb(0 0 0 / 11%);
   padding-top: 60px;
   transition: transform .3s;
-  background-color: #3bb78f;
-  background-image: linear-gradient(315deg, #3bb78f 0%, #0bab64 74%);
+  background-color: #00887a;
+  background-image: linear-gradient(315deg, #019c8c 0%, #00887a 74%);
   color:#fff
 }
 
@@ -12056,6 +12056,7 @@ button {
 .sidebar_link_icon {
   font-size: 15px;
   line-height: 13px;
+  margin-top: 0px !important;
   color: #fff;
   margin-right: 10px;
   transition: transform 0.8s ease-in-out;
@@ -12114,11 +12115,11 @@ button {
 }
 
 .sidebar_submenu .sidebar_link {
-  padding-left: 43px;
+  /*padding-left: 0px;*/
 }
 
 .main {
-  background-color: #bcff9d;
+  background-color: #019c8c;
   height: 100vh;
   width: 100%;
   min-height: 100vh;
@@ -12133,13 +12134,12 @@ button {
 
 .main_card {
   padding: 50px 60px;
-  max-width: 520px;
   width: 100%;
   background-color: #FFF;
 }
 
 .main_head {
-  border-left: 4px solid #3bb78f;
+  border-left: 4px solid #019c8c;
   padding-left: 10px;
   margin-bottom: 30px;
 }
@@ -12198,7 +12198,7 @@ h5.subhead {
 
 .main_form input, form input, form select, form textarea {
   width: 100%;
-  padding: 17px 10px;
+  padding: 7px 10px;
   font-size: 12px;
   height: 32px;
   transition: border .3s;
@@ -12262,38 +12262,45 @@ h5.subhead {
 .btn_form_group {
   display: flex;
   align-items: center;
-  width: 60%;
+  width: 80%;
   justify-content: center;
   margin: 10px auto;
 }
 
 .btn_submit{
   padding:7px 0px;
-  background-color: #3bb78f;
-  background-image: linear-gradient(315deg, #3bb78f 0%, #0bab64 74%);
+  background-color: #00887a;
+  background-image: linear-gradient(315deg, #019c8c 0%, #00887a 74%);
   border:none
 }
 
 .btn_submit:hover{
-  background-color: #248365;
-  background-image: linear-gradient(315deg, #2e8b6e 0%, #087745 74%);
+  background-color: #02756a;
+  background-image: linear-gradient(315deg, #02756a 0%, #02756a 74%);
   border:none;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
 .btn_signin {
   border-radius: 5px;
-  padding: 10px 25px;
+  padding: 10px 30px;
   font-size: 14px;
   overflow: hidden;
-  background-color: #3bb78f;
-  background-image: linear-gradient(315deg, #3bb78f 0%, #0bab64 74%);
+  background-color: #00887a;
+  background-image: linear-gradient(315deg, #019c8c 0%, #00887a 74%);
   border-color: #3bb78f;
   color: #FFF;
   line-height: 1.5;
   font-weight: 400;
   /* display: inline-block; */
   width: 100%;
+}
+
+.btn_signin:hover{
+  background-color: #02756a;
+  background-image: linear-gradient(315deg, #02756a 0%, #02756a 74%);
+  border:none;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
 .container_main {
@@ -12340,6 +12347,16 @@ h5.subhead {
   background-color: #fff;
   height: 100%;
   border-radius: 5px;
+}
+
+.card-header{
+  background-color: #d3e3fc;
+  font-size:15px;
+  width: 100%;
+}
+
+.card-header:after{
+  transition: rotate(180deg);
 }
 
 .form_group {
@@ -12394,7 +12411,7 @@ h5.subhead {
 } */
 
 fieldset {
-  border: 1px solid #e6e6e6 !important;
+  border: 1px solid #e6e6e6;
   padding: 0 1.4em 1.4em 1.4em !important;
   margin: 0 0 1.5em 0 !important;
   box-shadow:  0px 0px 0px 0px #000;
@@ -12421,7 +12438,7 @@ legend {
 }
 
 .form-button {
-  margin: 30px 0;
+  margin: 30px 10px;
 }
 
 /* .form input {
@@ -12443,8 +12460,8 @@ legend {
 }
 
 .form .nav-link.active {
-  background-color: #3bb78f;
-  background-image: linear-gradient(315deg, #3bb78f 0%, #0bab64 74%);
+  background-color: #00887a;
+  background-image: linear-gradient(315deg, #019c8c 0%, #00887a 74%);
   color: #fff;
 }
 
@@ -12455,6 +12472,7 @@ legend {
 .nav-tabs .nav-link {
   border-color: unset;
   border: none;
+  font-size: 15px;
 }
 
 .form .card {
@@ -12476,7 +12494,7 @@ legend {
 
 .panel-heading.collapsed .accordion-toggle:after {
   /* symbol for "collapsed" panels */
-  content:"\f0fe";
+  transform: rotate(180deg);
 }
 
 .rc_holder {
@@ -12551,8 +12569,8 @@ legend {
 }
 
 .sidebar_link_active {
-  background-color: #267059;
-  background-image: linear-gradient(315deg, #267059 0%, #057241 74%);
+  background-color: #02756a;
+  background-image: linear-gradient(315deg, #02756a 0%, #02756a 74%);
 }
 
 .sidebar_link_active::before {
@@ -12560,7 +12578,7 @@ legend {
 }
 
 .add_doc_form {
-  background: #4ce1b6;
+  background: #77a6f7;
   color: white;
   border-radius: 5px;
   padding: 2px 8px;
