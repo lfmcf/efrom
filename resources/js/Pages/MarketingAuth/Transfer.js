@@ -160,7 +160,7 @@ const Transfer = (props) => {
                                                                 <span className="form_group_label">Product</span>
                                                                 <div className="form_group_field">
                                                                     <select name='product' defaultValue='' onChange={handleChange}>
-                                                                        <option value='' disabled></option>
+                                                                        <option value=''></option>
                                                                         <option>STG 320</option>
                                                                         <option>ALBEY</option>
                                                                         <option>ALUSTAL</option>
@@ -236,7 +236,7 @@ const Transfer = (props) => {
                                                                 <span className="form_group_label">Application Stage</span>
                                                                 <div className="form_group_field">
                                                                     <select name='application_stage' defaultValue='' onChange={handleChange}>
-                                                                        <option value='' disabled></option>
+                                                                        <option value=''></option>
                                                                         <option>Marketing Authorisation</option>
                                                                         <option>APSI / NPP</option>
                                                                     </select>
@@ -246,7 +246,7 @@ const Transfer = (props) => {
                                                                 <span className="form_group_label">Product Type</span>
                                                                 <div className="form_group_field">
                                                                     <select name='product_type' defaultValue='' onChange={handleChange}>
-                                                                        <option value='' disabled></option>
+                                                                        <option value=''></option>
                                                                         <option>Finished</option>
                                                                         <option>Reference</option>
                                                                     </select>
@@ -320,7 +320,7 @@ const Transfer = (props) => {
                                                                         <span className="form_group_label">Status (*)</span>
                                                                         <div className="form_group_field">
                                                                             <select name='status' defaultValue='' onChange={e => handleStatusChanged(index, e)} style={{ borderColor: errors['statuses.' + index + '.status'] ? 'red' : '' }}>
-                                                                                <option value='' disabled></option>
+                                                                                <option value=''></option>
                                                                                 <option>Application / Submitted</option>
                                                                                 <option>Approval / Obtained</option>
                                                                                 <option>Application / Rejected</option>

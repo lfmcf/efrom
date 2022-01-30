@@ -159,7 +159,7 @@ const Hqproject = (props) => {
         setData(arr);
         data.identification.map(ele => {
             if (ele.product === e.target.value) {
-                setVariationCountries(old => [...old, {id: i, country:ele.country}])
+                setVariationCountries([{id: i, country:ele.country}])
             }
         })
         
@@ -171,7 +171,7 @@ const Hqproject = (props) => {
         setData(arr);
         data.identification.map(ele => {
             if (ele.product === e.target.value) {
-                setStatusContries(old => [...old, {id: i, country:ele.country}])
+                setStatusContries([{id: i, country:ele.country}])
             }
         })
     }
@@ -229,7 +229,7 @@ const Hqproject = (props) => {
                                                     <span className="form_group_label">Product</span>
                                                     <div className="form_group_field">
                                                         <select name="product" defaultValue="" onChange={(e) => handleIdentificationProductChange(index, e)}>
-                                                            <option value="" disabled></option>
+                                                            <option value=""></option>
                                                             <option>STG 320</option>
                                                             <option>ALBEY</option>
                                                             <option>ALUSTAL</option>
@@ -251,7 +251,7 @@ const Hqproject = (props) => {
                                                     <span className="form_group_label">Procedure Type</span>
                                                     <div className="form_group_field">
                                                         <select name="procedure_type" defaultValue="" onChange={e => handleprocedureChange(index, e)}>
-                                                            <option value="" disabled></option>
+                                                            <option value=""></option>
                                                             <option>National</option>
                                                             <option>Centralized</option>
                                                             <option>Decentralized</option>
@@ -306,7 +306,7 @@ const Hqproject = (props) => {
                                                     <span className="form_group_label">Application Stage</span>
                                                     <div className="form_group_field">
                                                         <select defaultValue="" name='application_stage' onChange={(e) => handlIdentificationeChange(index, e)} >
-                                                            <option value="" disabled></option>
+                                                            <option value="" ></option>
                                                             <option>Marketing Authorisation</option>
                                                             <option>APSI / NPP</option>
                                                         </select>
@@ -317,7 +317,7 @@ const Hqproject = (props) => {
                                                     <span className="form_group_label">Product Type</span>
                                                     <div className="form_group_field">
                                                         <select defaultValue='' name='product_type' onChange={(e) => handlIdentificationeChange(index, e)}>
-                                                            <option value='' disabled></option>
+                                                            <option value='' ></option>
                                                             <option>Finished</option>
                                                             <option>Reference</option>
                                                         </select>
@@ -356,7 +356,7 @@ const Hqproject = (props) => {
                                                     <span className="form_group_label">Product</span>
                                                     <div className="form_group_field">
                                                         <select name='product' onChange={(e) => handleVariationProductChange(index, e)} defaultValue='' >
-                                                            <option defaultValue='' disabled ></option>
+                                                            <option defaultValue=''></option>
                                                             {data.identification.map((ele, i) => {
                                                                 if (ele.product) {
                                                                     return <option value={ele.product} key={i}>{ele.product}</option>
@@ -369,7 +369,7 @@ const Hqproject = (props) => {
                                                     <span className="form_group_label">Country</span>
                                                     <div className="form_group_field">
                                                         <select defaultValue='' name='country' onChange={(e) => handleVariationChange(index, e)} >
-                                                            <option defaultValue='' disabled></option>
+                                                            <option defaultValue=''></option>
                                                             {variationcountries.map(s => (
                                                                 s.id == index ? 
                                                                 <React.Fragment key={s.id}>
@@ -397,7 +397,7 @@ const Hqproject = (props) => {
                                                     <span className="form_group_label">Variation Category (*)</span>
                                                     <div className="form_group_field">
                                                         <select defaultValue="" name='category' onChange={(e) => handleVariationChange(index, e)} style={{ borderColor: errors['variation.' + index + '.category'] ? 'red' : '' }}>
-                                                            <option value="" disabled></option>
+                                                            <option value=""></option>
                                                             <option>Variation/Supplement</option>
                                                             <option>FUM</option>
                                                             
@@ -409,7 +409,7 @@ const Hqproject = (props) => {
                                                     <span className="form_group_label">Variation Type</span>
                                                     <div className="form_group_field">
                                                         <select defaultValue="" name='variation_type' onChange={(e) => handleVariationChange(index, e)}>
-                                                            <option value="" disabled></option>
+                                                            <option value=""></option>
                                                             <option>Prior Authorisation (II)</option>
                                                             <option>Do and Tell Immediate (IAIN Immediate Notification)</option>
                                                             <option>Do and Tell Later (IA)</option>
@@ -423,7 +423,7 @@ const Hqproject = (props) => {
                                                     <span className="form_group_label">Reason for variation</span>
                                                     <div className="form_group_field">
                                                         <select defaultValue="" name='variation_reason' onChange={(e) => handleVariationChange(index, e)}>
-                                                            <option value="" disabled></option>
+                                                            <option value="" ></option>
                                                             <option>Indication</option>
                                                             <option>Paediatric Indication</option>
                                                             <option>Safety</option>
@@ -439,9 +439,9 @@ const Hqproject = (props) => {
                                                     <span className="form_group_label">Submission Type (*)</span>
                                                     <div className="form_group_field">
                                                         <select defaultValue="" name='submission_type' onChange={(e) => handleVariationChange(index, e)} style={{ borderColor: errors['variation.' + index + '.submission_type'] ? 'red' : '' }}>
-                                                            <option value="" disabled></option>
+                                                            <option value="" ></option>
                                                             <option>CARDEAC</option>
-                                                            <option>Inetial MAA</option>
+                                                            <option>Initial MAA</option>
                                                             <option>NPP-Initial</option>
                                                         </select>
                                                     </div>
@@ -463,7 +463,7 @@ const Hqproject = (props) => {
                                                     <span className="form_group_label">Dossier Submission Format</span>
                                                     <div className="form_group_field" >
                                                         <select defaultValue="" name='submission_format' onChange={(e) => handleVariationChange(index, e)}>
-                                                            <option value="" disabled></option>
+                                                            <option value=""></option>
                                                             <option>CTD</option>
                                                             <option>Nees</option>
                                                             <option>eCTD</option>
@@ -509,7 +509,7 @@ const Hqproject = (props) => {
                                                     <span className="form_group_label">Product</span>
                                                     <div className="form_group_field">
                                                         <select name='product' onChange={(e) => StatusProductChange(index, e)} defaultValue='' >
-                                                            <option value='' disabled></option>
+                                                            <option value=''></option>
                                                             {data.identification.map((ele, i) => {
                                                                 if(ele.product) {
                                                                     return <option value={ele.product} key={i}>{ele.product}</option>
@@ -523,7 +523,7 @@ const Hqproject = (props) => {
                                                     <span className="form_group_label">Country</span>
                                                     <div className="form_group_field">
                                                         <select defaultValue='' name='country' onChange={(e) => CountryStatusEventChange(index, e)}>
-                                                            <option value='' disabled></option>
+                                                            <option value=''></option>
                                                             {statuscountries.map(s => (
                                                                 s.id == index ? 
                                                                 <React.Fragment key={s.id}>
@@ -544,7 +544,7 @@ const Hqproject = (props) => {
                                                     <span className="form_group_label">Status (*)</span>
                                                     <div className="form_group_field">
                                                         <select name="status" defaultValue='' onChange={e => handleStatusChange(index, e)}>
-                                                            <option value="" disabled></option>
+                                                            <option value=""></option>
                                                             <option>Application / Submitted</option>
                                                             <option>Approval / Obtained</option>
                                                             <option>Application / Rejected</option>

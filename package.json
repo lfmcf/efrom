@@ -33,8 +33,10 @@
         "prop-types": "^15.7.2",
         "react-bootstrap": "^1.6.4",
         "react-datepicker": "^4.5.0",
+        "react-flash-message": "^1.0.8",
         "react-select": "^5.1.0",
         "react-table": "^7.7.0",
+        "react-transition-group": "^4.4.2",
         "smooth-scrollbar": "^8.7.0"
     }
 }

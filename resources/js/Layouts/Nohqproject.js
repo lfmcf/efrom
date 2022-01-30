@@ -157,7 +157,7 @@ const Nohqproject = (props) => {
                                             <span className="form_group_label">Product</span>
                                             <div className="form_group_field">
                                                 <select name="product" defaultValue="" onChange={handleChange}>
-                                                    <option value="" disabled></option>
+                                                    <option value="" ></option>
                                                     <option>STG 320</option>
                                                     <option>ALBEY</option>
                                                     <option>ALUSTAL</option>
@@ -179,7 +179,7 @@ const Nohqproject = (props) => {
                                             <span className="form_group_label">Procedure Type</span>
                                             <div className="form_group_field">
                                                 <select name="procedure_type" defaultValue="" onChange={handleProcedureTypeChange}>
-                                                    <option value="" disabled></option>
+                                                    <option value=""></option>
                                                     <option>National</option>
                                                     <option>Centralized</option>
                                                     <option>Decentralized</option>
@@ -234,7 +234,7 @@ const Nohqproject = (props) => {
                                             <span className="form_group_label">Application Stage</span>
                                             <div className="form_group_field">
                                                 <select name="application_stage" defaultValue="" onChange={handleChange}>
-                                                    <option value="" disabled></option>
+                                                    <option value=""></option>
                                                     <option>Marketing Authorisation</option>
                                                     <option>APSI / NPP</option>
                                                     
@@ -246,7 +246,7 @@ const Nohqproject = (props) => {
                                             <span className="form_group_label">Product Type</span>
                                             <div className="form_group_field">
                                                 <select name="product_type" defaultValue="" onChange={handleChange}>
-                                                    <option value="" disabled></option>
+                                                    <option value="" ></option>
                                                     <option>Finished</option>
                                                     <option>Reference</option>
                                                 </select>
@@ -277,7 +277,7 @@ const Nohqproject = (props) => {
                                             <span className="form_group_label">Variation Category (*)</span>
                                             <div className="form_group_field">
                                                 <select defaultValue="" name="category" onChange={handleChange} style={{borderColor: errors.category ? 'red' : ''}}>
-                                                    <option value="" disabled></option>
+                                                    <option value="" ></option>
                                                     <option>Variation/Supplement</option>
                                                     <option>FUM</option>
                                                    
@@ -289,7 +289,7 @@ const Nohqproject = (props) => {
                                             <span className="form_group_label">Variation Type</span>
                                             <div className="form_group_field">
                                                 <select defaultValue="" name="variation_type" onChange={handleChange}>
-                                                    <option value="" disabled></option>
+                                                    <option value="" ></option>
                                                     <option>Prior Authorisation (II)</option>
                                                     <option>Do and Tell Immediate (IAIN Immediate Notification)</option>
                                                     <option>Do and Tell Later (IA)</option>
@@ -302,7 +302,7 @@ const Nohqproject = (props) => {
                                             <span className="form_group_label">Reason for variation</span>
                                             <div className="form_group_field">
                                                 <select defaultValue="" name="variation_reason" onChange={handleChange}>
-                                                    <option value="" disabled></option>
+                                                    <option value=""></option>
                                                     <option>Indication</option>
                                                     <option>Paediatric Indication</option>
                                                     <option>Safety</option>
@@ -319,7 +319,7 @@ const Nohqproject = (props) => {
                                             <span className="form_group_label">Submission Type (*)</span>
                                             <div className="form_group_field">
                                                 <select defaultValue="" name="submission_type" onChange={handleChange} style={{borderColor: errors.submission_type ? 'red' : ''}}>
-                                                    <option value="" disabled></option>
+                                                    <option value=""></option>
                                                     <option>CARDEAC</option>
                                                     <option>Inetial MAA</option>
                                                     <option>NPP-Initial</option>
@@ -343,7 +343,7 @@ const Nohqproject = (props) => {
                                             <span className="form_group_label">Dossier Submission Format</span>
                                             <div className="form_group_field">
                                                 <select defaultValue="" name="submission_format" onChange={handleChange}>
-                                                    <option value="" disabled></option>
+                                                    <option value="" ></option>
                                                     <option>CTD</option>
                                                     <option>Nees</option>
                                                     <option>eCTD</option>
@@ -387,7 +387,7 @@ const Nohqproject = (props) => {
                                                     <span className="form_group_label">Status (*)</span>
                                                     <div className="form_group_field">
                                                         <select name="status" defaultValue="" onChange={e => handleStatusChanged(index, e)} style={{ borderColor: errors['statuses.' + index + '.status'] ? 'red' : '' }}>
-                                                            <option value="" disabled></option>
+                                                            <option value="" ></option>
                                                             <option>Application / Submitted</option>
                                                             <option>Approval / Obtained</option>
                                                             <option>Application / Rejected</option>
