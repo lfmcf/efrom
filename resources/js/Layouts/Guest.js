@@ -17,7 +17,10 @@ export default function Guest({ children }) {
         // </div>
         <div className="main">
             <div className="main">
-                <div className="main_wrapper">
+                <div className="main_wrapper" style={{ display: 'flex' }}>
+				    <div className="main_card" style={{backgroundImage:'url(../medicinal.jpg)',backgroundSize:'100%' }}>
+                       
+                    </div>
                     <div className="main_card">
                         <div className="main_head">
                             <h3 className="login_title">Welcome to</h3>

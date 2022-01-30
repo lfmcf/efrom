@@ -31,6 +31,7 @@ export default function Login({ status, canResetPassword }) {
     };
 
     return (
+       
         <Guest>
             <Head title="Login" />
 
@@ -71,11 +72,14 @@ export default function Login({ status, canResetPassword }) {
                     </div>
                 </div>
                 <div className="btn_form_group">
-                    <button type="submit" className="btn_signin">Sign In</button>
+                    <div className="form-button">
+                        <button type="submit" className="btn_signin">Sign In</button>
+                    </div>
+                    <div className="form-button">
+                         <button onClick={() => window.location.replace('http://localhost:8000/saml2/test/login')} className="btn_signin">SSO</button>
+                    </div>
                 </div>
-                <div className="btn_form_group">
-                    <button onClick={() => window.location.replace('http://localhost:8000/saml2/test/login')} className="btn_signin">SSO</button>
-                </div>
+                
             </form>
             
         </Guest>

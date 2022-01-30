@@ -112,7 +112,7 @@ export default function Authenticated({ auth, header, children }) {
                                     <div style={{ display: settings.find(item => item.id === 1).open ? 'block' : 'none' }}>
                                         <ul className="sidebar_submenu">
                                             <button className="sidebar_link topbar_link" onClick={() => handleClick(2)}>
-                                                {/* <span className="sidebar_link_icon lnr lnr-file-add"></span> */}
+                                                <span className="sidebar_link_icon lnr lnr-bullhorn"></span>
                                                 <p className="sidebar_link_title">Marketing Authorization</p>
                                                 <span style={{ transform: settings.find(item => item.id === 2).open ? 'rotate(90deg)' : 'rotate(0deg)' }} className="sidebar_category_icon lnr lnr-chevron-right"></span>
                                             </button>
@@ -210,7 +210,7 @@ export default function Authenticated({ auth, header, children }) {
                                             </div>
 
                                             <button className="sidebar_link topbar_link" onClick={() => handleClick(10)}>
-                                                {/* <span className="sidebar_link_icon lnr lnr-file-add"></span> */}
+                                                 <span className="sidebar_link_icon lnr lnr-heart-pulse"></span><i className="las la-battery-three-quarters"></i>
                                                 <p className="sidebar_link_title">Clinical</p>
                                                 <span style={{ transform: settings.find(item => item.id === 10).open ? 'rotate(90deg)' : 'rotate(0deg)' }} className="sidebar_category_icon lnr lnr-chevron-right"></span>
                                             </button>
@@ -244,7 +244,7 @@ export default function Authenticated({ auth, header, children }) {
                                             </div>
 
                                             <button className="sidebar_link topbar_link" onClick={() => handleClick(6)}>
-                                                {/* <span className="sidebar_link_icon lnr lnr-file-add"></span> */}
+                                                <span className="sidebar_link_icon lnr lnr-star"></span>
                                                 <p className="sidebar_link_title">Devices</p>
                                                 <span style={{ transform: settings.find(item => item.id === 6).open ? 'rotate(90deg)' : 'rotate(0deg)' }} className="sidebar_category_icon lnr lnr-chevron-right"></span>
                                             </button>
@@ -290,6 +290,7 @@ export default function Authenticated({ auth, header, children }) {
                                             </Link> */}
                                             <Link href="#">
                                                 <li className="sidebar_link topbar_link">
+                                                <span className="sidebar_link_icon lnr lnr-user"></span>
                                                     <p className="sidebar_link_title h_2">User Creation Request</p>
                                                 </li>
                                             </Link>

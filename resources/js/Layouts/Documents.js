@@ -19,8 +19,12 @@ const Documents = ({handleChanged,handleDocumentdate, addFormFields, formValues}
                             </button>
                         </div>
                     </div>
-
+<br></br>
                     {formValues.map((element, index) => (
+                       
+                        <fieldset>
+                            <legend>Document 1</legend>
+                        
                         <div style={{ marginTop: '20px' }} key={index}>
                             <div className="inline_form">
                                 <div className="form_group_inline" >
@@ -84,6 +88,7 @@ const Documents = ({handleChanged,handleDocumentdate, addFormFields, formValues}
                                 </div>
                             </div>
                         </div>
+                        </fieldset>
                     ))}
 
                 </div>
