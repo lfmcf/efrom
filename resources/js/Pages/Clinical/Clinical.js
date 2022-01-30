@@ -430,7 +430,7 @@ const Clinical = (props) => {
                                                                 <span className="form_group_label">Procedure Type (*)</span>
                                                                 <div className="form_group_field">
                                                                     <select onChange={handleProcedureTypeChange} defaultValue="" name="procedure_type" style={{ borderColor: errors.procedure_type ? 'red' : '' }}>
-                                                                        <option value="" disabled></option>
+                                                                        <option value=""></option>
                                                                         <option value="National (NP)">National (NP)</option>
                                                                         <option value="Centralized (NP)">Centralized (NP)</option>
                                                                         <option value="Mutual Recognition">Mutual Recognition</option>
@@ -490,7 +490,7 @@ const Clinical = (props) => {
                                                                 <span className="form_group_label">Applcation Stage (*)</span>
                                                                 <div className="form_group_field">
                                                                     <select name="application_stage" defaultValue="" onChange={handleChange} style={{ borderColor: errors.application_stage ? 'red' : '' }}>
-                                                                        <option value="" disabled></option>
+                                                                        <option value=""></option>
                                                                         <option>CTA</option>
                                                                         <option>PIP</option>
                                                                         <option>IND</option>
@@ -521,7 +521,7 @@ const Clinical = (props) => {
                                                                 <span className="form_group_label">Product name (*)</span>
                                                                 <div className="form_group_field">
                                                                     <select defaultValue='' name='product_name' onChange={handleChange} style={{ borderColor: errors.product_name ? 'red' : '' }} >
-                                                                        <option value="" disabled></option>
+                                                                        <option value=""></option>
                                                                         <option>STG 320</option>
                                                                         <option>ALBEY</option>
                                                                         <option>ALUSTAL</option>
@@ -567,7 +567,7 @@ const Clinical = (props) => {
                                                                 <div className="form_group_field">
                                                                     <div className="form_group_field">
                                                                         <select defaultValue='' name='clinical_phase' onChange={handleChange}>
-                                                                            <option value='' disabled></option>
+                                                                            <option value=''></option>
                                                                             <option>Clinical phase 1</option>
                                                                             <option>Clinical phase 2</option>
                                                                             <option>Clinical phase 1&2</option>
@@ -584,7 +584,7 @@ const Clinical = (props) => {
                                                                 <span className="form_group_label">Protocol Type</span>
                                                                 <div className="form_group_field">
                                                                     <select name="protocol_type" defaultValue='' onChange={handleChange}>
-                                                                        <option value='' disabled></option>
+                                                                        <option value=''></option>
                                                                         <option>Dose Response</option>
                                                                         <option>Efficacy</option>
                                                                         <option>Safety</option>
@@ -595,7 +595,7 @@ const Clinical = (props) => {
                                                                 <span className="form_group_label">Peadiatric indication</span>
                                                                 <div className="form_group_field">
                                                                     <select defaultValue='' name="paediatric_indication" onChange={handleChange}>
-                                                                        <option value='' disabled></option>
+                                                                        <option value=''></option>
                                                                         <option>Peadiatric Only</option>
                                                                         <option>Adults Only</option>
                                                                         <option>Peadiatric & Adults</option>
@@ -625,7 +625,7 @@ const Clinical = (props) => {
                                                                 <span className="form_group_label">Authorized Pharmaceutical Form (*)</span>
                                                                 <div className="form_group_field">
                                                                     <select name="authorized_pharmaceutical_form" defaultValue='' onChange={handleChange} style={{ borderColor: errors.authorized_pharmaceutical_form ? 'red' : '' }}>
-                                                                        <option value='' disabled></option>
+                                                                        <option value=''></option>
                                                                         <option>powder</option>
                                                                         <option>solution</option>
                                                                         <option>eye drops</option>
@@ -647,7 +647,7 @@ const Clinical = (props) => {
                                                                 <span className="form_group_label">Administrable pharmaceutical form</span>
                                                                 <div className="form_group_field">
                                                                     <select defaultValue='' name='administrable_pharmaceutical_form' onChange={handleChange}>
-                                                                        <option value='' disabled></option>
+                                                                        <option value='' ></option>
                                                                         <option>Same as Authorised pharmaceutical form</option>
                                                                         <option>Eye drops</option>
                                                                         <option>Nebuliser Solution</option>
@@ -659,7 +659,7 @@ const Clinical = (props) => {
                                                                 <span className="form_group_label">Route Of Admin (*)</span>
                                                                 <div className="form_group_field">
                                                                     <select name="route_of_admin" defaultValue='' onChange={handleChange} style={{ borderColor: errors.route_of_admin ? 'red' : '' }}>
-                                                                        <option value='' disabled></option>
+                                                                        <option value='' ></option>
                                                                         <option>cutaneous use</option>
                                                                         <option>intrademal use</option>
                                                                         <option>nasal use</option>
@@ -675,7 +675,7 @@ const Clinical = (props) => {
                                                                 <span className="form_group_label">ATC (*)</span>
                                                                 <div className="form_group_field">
                                                                     <select name="atc" defaultValue='' onChange={handleChange} style={{ borderColor: errors.atc ? 'red' : '' }}>
-                                                                        <option value="" disabled></option>
+                                                                        <option value="" ></option>
                                                                         <option>V01 - ALLERGENS</option>
                                                                         <option>V01A - ALLERGENS</option>
                                                                         <option>V01AA - ALLERGEN EXTRACTS</option>
@@ -714,7 +714,7 @@ const Clinical = (props) => {
                                                                 <span className="form_group_label">Orphan Designation Status</span>
                                                                 <div className="form_group_field">
                                                                     <select name='orphan_designation' defaultValue='' onChange={handleChange}>
-                                                                        <option value='' disabled></option>
+                                                                        <option value='' ></option>
                                                                         <option>Yes</option>
                                                                         <option>No</option>
                                                                     </select>
@@ -725,7 +725,7 @@ const Clinical = (props) => {
                                                                 <span className="form_group_label">Orphan Indication Type</span>
                                                                 <div className="form_group_field">
                                                                     <select defaultValue='' name='orphan_indication' onChange={handleChange}>
-                                                                        <option value='' disabled></option>
+                                                                        <option value='' ></option>
                                                                         <option>Diagnostic</option>
                                                                         <option>Prevention</option>
                                                                         <option>Treatment</option>
@@ -748,7 +748,7 @@ const Clinical = (props) => {
                                                             <span className="form_group_label">Under Intensive Monitoring</span>
                                                             <div className="form_group_field">
                                                                 <select name="under_intensive_monitoring" defaultValue="" onChange={handleChange}>
-                                                                    <option value="" disabled></option>
+                                                                    <option value="" ></option>
                                                                     <option value="yes">Yes</option>
                                                                     <option value="no">No</option>
                                                                 </select>
@@ -814,7 +814,7 @@ const Clinical = (props) => {
                                                                 <span className="form_group_label">Alternate Number Type</span>
                                                                 <div className="form_group_field">
                                                                     <select name="alternate_number_type" defaultValue="" onChange={handleChange}>
-                                                                        <option value="" disabled></option>
+                                                                        <option value="" ></option>
                                                                         <option>Application Number</option>
                                                                         <option>FDA Listing Number</option>
                                                                         <option>NDC Number</option>
@@ -905,7 +905,7 @@ const Clinical = (props) => {
                                                                         <span className="form_group_label">Strength Type</span>
                                                                         <div className="form_group_field">
                                                                             <select name="strength_type" defaultValue="" onChange={(e) => handleFormulationsChange(index, e)}>
-                                                                                <option value="" disabled></option>
+                                                                                <option value="" ></option>
                                                                                 <option>approximately</option>
                                                                                 <option>average</option>
                                                                                 <option>equal</option>
@@ -934,7 +934,7 @@ const Clinical = (props) => {
                                                                         <span className="form_group_label">Numerator Unit</span>
                                                                         <div className="form_group_field">
                                                                             <select name="numerator_unit" defaultValue="" onChange={(e) => handleFormulationsChange(index, e)}>
-                                                                                <option value="" disabled></option>
+                                                                                <option value="" ></option>
                                                                                 <option>% (W/V)</option>
                                                                                 <option>% (W/W)</option>
                                                                                 <option>IC</option>
@@ -948,7 +948,7 @@ const Clinical = (props) => {
                                                                         <span className="form_group_label">Function</span>
                                                                         <div className="form_group_field">
                                                                             <select name="function" defaultValue="" onChange={(e) => handleFormulationsChange(index, e)}>
-                                                                                <option value="" disabled></option>
+                                                                                <option value="" ></option>
                                                                                 <option>Active</option>
                                                                                 <option>Excipient</option>
                                                                             </select>
@@ -1017,7 +1017,7 @@ const Clinical = (props) => {
                                                                         <span className="form_group_label">Launched</span>
                                                                         <div className="form_group_field">
                                                                             <select name="launched" defaultValue="" onChange={(e) => handlePackagingsChange(index, e)}>
-                                                                                <option value="" disabled></option>
+                                                                                <option value="" ></option>
                                                                                 <option>Yes</option>
                                                                                 <option>No</option>
                                                                                 <option>Not Applicable</option>
@@ -1035,7 +1035,7 @@ const Clinical = (props) => {
                                                                         <span className="form_group_label">Packaging Discontinued</span>
                                                                         <div className="form_group_field">
                                                                             <select name="packaging_discontinued" defaultValue="" onChange={(e) => handlePackagingsChange(index, e)}>
-                                                                                <option value="" disabled></option>
+                                                                                <option value="" ></option>
                                                                                 <option>Yes</option>
                                                                                 <option>No</option>
                                                                                 <option>Not Applicable</option>
@@ -1062,7 +1062,7 @@ const Clinical = (props) => {
                                                                                 <span className="form_group_label">Package Shelf-life Type</span>
                                                                                 <div className="form_group_field">
                                                                                     <select name="package_shelf_life_type" defaultValue="" onChange={(e) => handlePackagelifeChange(index, i, e)}>
-                                                                                        <option value="" disabled></option>
+                                                                                        <option value="" ></option>
                                                                                         <option>shelf life of the medicinal product as packaged for sale</option>
                                                                                         <option>shelf life after first opening the immediate packaging</option>
                                                                                         <option>shelf life after dilution or reconstitution according to direction</option>
@@ -1083,7 +1083,7 @@ const Clinical = (props) => {
                                                                                 <span className="form_group_label">Shelf-life Unit</span>
                                                                                 <div className="form_group_field">
                                                                                     <select name="shelf_life_unit" defaultValue="" onChange={(e) => handlePackagelifeChange(index, i, e)}>
-                                                                                        <option value="" disabled></option>
+                                                                                        <option value="" ></option>
                                                                                         <option>Days</option>
                                                                                         <option>Hours</option>
                                                                                         <option>Months</option>
@@ -1120,7 +1120,7 @@ const Clinical = (props) => {
                                                                 <span className="form_group_label">Indications (*)</span>
                                                                 <div className="form_group_field">
                                                                     <select name="indication" defaultValue='' onChange={handleChange} style={{ borderColor: errors.indication ? 'red' : '' }}>
-                                                                        <option value='' disabled></option>
+                                                                        <option value='' ></option>
                                                                         <option>10001709 - Allergic Conjunctivitis</option>
                                                                         <option>10056352 - Allergy Test Positive</option>
                                                                         <option>10001728 - Allergic Rhinoconjunctivitis</option>
@@ -1144,7 +1144,7 @@ const Clinical = (props) => {
                                                                 <span className="form_group_label">Paediatric use</span>
                                                                 <div className="form_group_field">
                                                                     <select name="paediatric_use" defaultValue='' onChange={handleChange}>
-                                                                        <option value='' disabled></option>
+                                                                        <option value='' ></option>
                                                                         <option>Yes</option>
                                                                         <option>No</option>
                                                                     </select>
@@ -1227,7 +1227,7 @@ const Clinical = (props) => {
                                                                         <span className="form_group_label">Status (*)</span>
                                                                         <div className="form_group_field">
                                                                             <select name="status" defaultValue="" onChange={(e) => handleStatusesChange(index, e)} style={{ borderColor: errors['statuses.'+ index +'.status'] ? 'red' : '' }}>
-                                                                                <option value="" disabled></option>
+                                                                                <option value="" ></option>
                                                                                 <option>Application / Submitted</option>
                                                                                 <option>Approval / Obtained</option>
                                                                                 <option>Application / Rejected</option>

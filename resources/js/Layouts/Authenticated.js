@@ -5,10 +5,12 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/inertia-react';
 import  Scrollbar from "smooth-scrollbar";
+import MultilevelMenu from '@/Components/MultilevelMenu';
 // import 'smooth-scrollbar/dist/smooth-scrollbar.css';
 
 export default function Authenticated({ auth, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+    const [whichMenu, SetwichMenu] = useState('');
     const [dropdownnav, setDropdownnav] = useState(false);
     const [topbarnav, setTopbarnav] = useState(false)
     const [settings, setSettings] = useState( [{ id: 1, open: false }, 
@@ -26,6 +28,7 @@ export default function Authenticated({ auth, header, children }) {
     ]);
 
     const handleClick = id => {
+        console.log(id)
         setSettings(settings =>  settings.map(item => item.id === id ? {...item, open: !item.open } : item));
     };
 
@@ -35,13 +38,99 @@ export default function Authenticated({ auth, header, children }) {
         renderByPixels: true
     }
 
+    const handleSelectMenu = (menu) => {
+        SetwichMenu(menu);
+    }
+
     useEffect(() => {
         Scrollbar.init(document.querySelector('.sidebar_content'), options)
     }, [])
+
+    const madata = [
+        {
+            name: "Registration Creation",
+            children: [
+                {
+                    name: "Medicinal Product",
+                    url: "/finished"
+                },
+                {
+                    name: "Company Registration",
+                    url: "/company"
+                }
+            ],
+        },
+        {
+            name: "Lifecycle Mnagement",
+            children: [
+                {
+                    name: "Variation",
+                    url: "/variation"
+                },
+                {
+                    name: "Renewal",
+                    url: "/renouvellement"
+                },
+                {
+                    name: "Transfer",
+                    url: "/transfer"
+                },
+                {
+                    name: "Others",
+                    children: [
+                        {
+                            name: "Baseline",
+                            url: '/baseline'
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            name: "Registration Termination",
+            url: "/registrationtermination"
+        }
+    ]
+
+    const clinicaldata = [
+        {
+            name: "Registration Creation",
+            url: "/clinical",
+        },
+        {
+            name: "Lifecycle Mnagement",
+            children: [
+                {
+                    name: "Amendments",
+                    url: "/amendments"
+                }
+            ]
+        },
+        {
+            name: "Registration Termination",
+            url: "/cregistrationtermination"
+        }
+    ];
+
+    const devicesdata = [
+        {
+            name: "Registration Creation",
+            url: "",
+        },
+        {
+            name: "Lifecycle Mnagement",
+            url: ""
+        },
+        {
+            name: "Registration Termination",
+            url: "",
+        }
+    ]
     
     
     return (
         <div>
+            
             <div className="topbar">
                 <div className="tleft">
                 {/*<Link href={route('dashboard')} style={{margin:'auto 100px', color:"white"}}>Logo</Link>
@@ -52,6 +141,14 @@ export default function Authenticated({ auth, header, children }) {
                         
                     </div>
                     */}
+                </div>
+                <div className='tmiddle' >
+                    {/* <MultilevelMenu data={menuData} /> */}
+                       
+                    {whichMenu === 'ma' ? 
+                    <MultilevelMenu data={madata} /> : whichMenu === 'clinical' ? 
+                    <MultilevelMenu data={clinicaldata} /> : whichMenu === 'devices' ? 
+                    <MultilevelMenu data={devicesdata} />: '' }
                 </div>
                 <div className="tright">
                     <div className="topbar_right">
@@ -78,230 +175,53 @@ export default function Authenticated({ auth, header, children }) {
                 </div>
             </div>
             <div className="sidebar">
-                {/* <Scrollbar style={{ height: 'calc(100vh - 60px)' }}> */}
-                    {/* <div> */}
-                        <div className="sidebar_content">
+                <div className="sidebar_content">
+                    <ul className="sidebar_block">
+                        <Link className={`topbar_link ${route().current('dashboard') ? `sidebar_link_active` : ''}`} href={route('dashboard')} onClick={() =>SetwichMenu('')}>
+                            <li className="sidebar_link" >
+                                <span className="sidebar_link_icon lnr lnr-home"></span>
+                                <p className="sidebar_link_title">Dashboard</p>
+                            </li>
+                        </Link>
                         <div>
-                        <Link href={route('dashboard')} style={{margin:'auto 100px', color:"white"}}>Logo</Link>
-                        </div>
-                  {/*  <div>
-                        <button style={{width:'60px', height:'60px', display:'flex', border:'none',justifyContent:'center',alignItems:'center',background:'transparent'}}>
-                            <span className="lnr lnr-menu" style={{fontSize:'16px', color:"#3bb78f"}}></span>
-                        </button>
-                        
-                  </div>*/}
-                            <ul className="sidebar_block">
-                                <Link className={`topbar_link ${route().current('dashboard') ? `sidebar_link_active` : ''}`} href={route('dashboard')} >
-                                    <li className="sidebar_link" >
-                                        <span className="sidebar_link_icon lnr lnr-home"></span>
-                                        <p className="sidebar_link_title">Dashboard</p>
-                                    </li>
-                                </Link>
-                                <div>
-                                    <button className="sidebar_link topbar_link" onClick={() => handleClick(1)}>
-                                        <span className="sidebar_link_icon lnr lnr-file-add"></span>
-                                        <p className="sidebar_link_title">Data Entry Request</p>
-                                        <span style={{transform: settings.find(item => item.id === 1).open ? 'rotate(90deg)': 'rotate(0deg)'}} className="sidebar_category_icon lnr lnr-chevron-right"></span>
-                                       
-    </button>
-                                      {/* <button className="sidebar_link topbar_link" onClick={() => handleClick(1)}>
-                                       <span className="sidebar_link_icon lnr lnr-file-add"></span>
-                                       <p className="sidebar_link_title">Data Entry Request</p>
-                                       <span style={{transform: settings.find(item => item.id === 1).open ? 'rotate(90deg)': 'rotate(0deg)'}} className="sidebar_category_icon lnr lnr-chevron-right"></span>
-</button>*/}
-                                    <div style={{ display: settings.find(item => item.id === 1).open ? 'block' : 'none' }}>
-                                        <ul className="sidebar_submenu">
-                                            <button className="sidebar_link topbar_link" onClick={() => handleClick(2)}>
-                                                {/* <span className="sidebar_link_icon lnr lnr-file-add"></span> */}
-                                                <p className="sidebar_link_title">Marketing Authorization</p>
-                                                <span style={{ transform: settings.find(item => item.id === 2).open ? 'rotate(90deg)' : 'rotate(0deg)' }} className="sidebar_category_icon lnr lnr-chevron-right"></span>
-                                            </button>
-                                            <div style={{ display: settings.find(item => item.id === 2).open ? 'block' : 'none' }}>
-                                                <ul className="sidebar_submenu">
-                                                    <button className="sidebar_link topbar_link" onClick={() => handleClick(3)}>
-                                                        {/* <span className="sidebar_link_icon lnr lnr-file-add"></span> */}
-                                                        <p className="sidebar_link_title h_2">Registration Creation</p>
-                                                        <span style={{ transform: settings.find(item => item.id === 3).open ? 'rotate(90deg)' : 'rotate(0deg)' }} className="sidebar_category_icon lnr lnr-chevron-right"></span>
-                                                    </button>
-                                                    <div style={{ display: settings.find(item => item.id === 3).open ? 'block' : 'none' }}>
-                                                        <ul className="sidebar_submenu">
-                                                            <Link className={`topbar_link ${route().current('finished') ? `sidebar_link_active` : ''}`} href={route('finished')}>
-                                                                <li className="sidebar_link">
-                                                                    <p className="sidebar_link_title h_2">Medicinal Product</p>
-                                                                </li>
-                                                            </Link>
-                                                            <Link className={`topbar_link ${route().current('company') ? `sidebar_link_active` : ''}`} href={route('company')}>
-                                                                <li className="sidebar_link">
-                                                                    <p className="sidebar_link_title h_2">Company Registration</p>
-                                                                </li>
-                                                            </Link>
-                                                        </ul>
-                                                    </div>
-                                                    <button className="sidebar_link topbar_link" onClick={() => handleClick(4)}>
-                                                        {/* <span className="sidebar_link_icon lnr lnr-file-add"></span> */}
-                                                        <p className="sidebar_link_title h_2">Lifecycle Management</p>
-                                                        <span style={{ transform: settings.find(item => item.id === 4).open ? 'rotate(90deg)' : 'rotate(0deg)' }} className="sidebar_category_icon lnr lnr-chevron-right"></span>
-                                                    </button>
-                                                    <div style={{ display: settings.find(item => item.id === 4).open ? 'block' : 'none' }}>
-                                                        <ul className="sidebar_submenu">
-                                                            <Link className={`topbar_link ${route().current('variation') ? `sidebar_link_active` : ''}`} href={route('variation')}>
-                                                                <li className="sidebar_link ">
-                                                                    <p className="sidebar_link_title h_2">Variation</p>
-                                                                </li>
-                                                            </Link>
-                                                            <Link className={`topbar_link ${route().current('renouvellement') ? `sidebar_link_active` : ''}`} href={route('renouvellement')}>
-                                                                <li className="sidebar_link ">
-                                                                    <p className="sidebar_link_title h_2">Renewal</p>
-                                                                </li>
-                                                            </Link>
-                                                            <Link className={`topbar_link ${route().current('transfer') ? `sidebar_link_active` : ''}`} href={route('transfer')}>
-                                                                <li className="sidebar_link topbar_link">
-                                                                    <p className="sidebar_link_title h_2">Transfer</p>
-                                                                </li>
-                                                            </Link>
-                                                            <button className="sidebar_link topbar_link" onClick={() => handleClick(8)}>
-                                                                {/* <span className="sidebar_link_icon lnr lnr-file-add"></span> */}
-                                                                <p className="sidebar_link_title h_2">Others</p>
-                                                                <span style={{ transform: settings.find(item => item.id === 8).open ? 'rotate(90deg)' : 'rotate(0deg)' }} className="sidebar_category_icon lnr lnr-chevron-right"></span>
-                                                            </button>
-                                                            <div style={{ display: settings.find(item => item.id === 8).open ? 'block' : 'none' }}>
-                                                                <ul className="sidebar_submenu">
-                                                                    <Link className={`topbar_link ${route().current('baseline') ? `sidebar_link_active` : ''}`} href={route('baseline')}>
-                                                                        <li className="sidebar_link topbar_link">
-                                                                            <p className="sidebar_link_title h_2">Baseline</p>
-                                                                        </li>
-                                                                    </Link>
-                                                                    <Link href="#">
-                                                                        <li className="sidebar_link topbar_link">
-                                                                            <p className="sidebar_link_title h_2">Safety Reports</p>
-                                                                        </li>
-                                                                    </Link>
-                                                                    <Link href="#">
-                                                                        <li className="sidebar_link topbar_link">
-                                                                            <p className="sidebar_link_title h_2">RMP</p>
-                                                                        </li>
-                                                                    </Link>
-                                                                    <Link href="#">
-                                                                        <li className="sidebar_link topbar_link">
-                                                                            <p className="sidebar_link_title h_2">PAMs</p>
-                                                                        </li>
-                                                                    </Link>
-                                                                    <Link href="#">
-                                                                        <li className="sidebar_link topbar_link">
-                                                                            <p className="sidebar_link_title h_2">Commitment</p>
-                                                                        </li>
-                                                                    </Link>
-                                                                    <Link href="#">
-                                                                        <li className="sidebar_link topbar_link">
-                                                                            <p className="sidebar_link_title h_2">Interaction</p>
-                                                                        </li>
-                                                                    </Link>
-                                                                </ul>
-                                                            </div>
-                                                        </ul>
-                                                    </div>
-                                                    <Link className={`topbar_link ${route().current('registrationtermination') ? `sidebar_link_active` : ''}`} href={route('registrationtermination')}>
-                                                        <li className="sidebar_link topbar_link">
-                                                            <p className="sidebar_link_title h_2">Registration Termination</p>
-                                                        </li>
-                                                    </Link>
-                                                </ul>
-                                                
-                                            </div>
-
-                                            <button className="sidebar_link topbar_link" onClick={() => handleClick(10)}>
-                                                {/* <span className="sidebar_link_icon lnr lnr-file-add"></span> */}
-                                                <p className="sidebar_link_title">Clinical</p>
-                                                <span style={{ transform: settings.find(item => item.id === 10).open ? 'rotate(90deg)' : 'rotate(0deg)' }} className="sidebar_category_icon lnr lnr-chevron-right"></span>
-                                            </button>
-                                            <div style={{ display: settings.find(item => item.id === 10).open ? 'block' : 'none' }}>
-                                                <ul className="sidebar_submenu">
-                                                    <Link className={`topbar_link ${route().current('clinical') ? `sidebar_link_active` : ''}`} href={route('clinical')}>
-                                                        <li className="sidebar_link topbar_link">
-                                                            <p className="sidebar_link_title h_2">Registration Creation</p>
-                                                        </li>
-                                                    </Link>
-                                                    <button className="sidebar_link topbar_link" onClick={() => handleClick(11)}>
-                                                        {/* <span className="sidebar_link_icon lnr lnr-file-add"></span> */}
-                                                        <p className="sidebar_link_title h_2">Lifecycle Management</p>
-                                                        <span style={{ transform: settings.find(item => item.id === 11).open ? 'rotate(90deg)' : 'rotate(0deg)' }} className="sidebar_category_icon lnr lnr-chevron-right"></span>
-                                                    </button>
-                                                    <div style={{ display: settings.find(item => item.id === 11).open ? 'block' : 'none' }}>
-                                                        <ul className="sidebar_submenu">
-                                                            <Link className={`topbar_link ${route().current('amendments') ? `sidebar_link_active` : ''}`} href={route('amendments')}>
-                                                                <li className="sidebar_link topbar_link">
-                                                                    <p className="sidebar_link_title h_2">Amendments</p>
-                                                                </li>
-                                                            </Link>
-                                                        </ul>
-                                                    </div>
-                                                    <Link className={`topbar_link ${route().current('cregistrationtermination') ? `sidebar_link_active` : ''}`} href={route('cregistrationtermination')}>
-                                                        <li className="sidebar_link topbar_link">
-                                                            <p className="sidebar_link_title h_2">Registration Termination</p>
-                                                        </li>
-                                                    </Link>
-                                                </ul>
-                                            </div>
-
-                                            <button className="sidebar_link topbar_link" onClick={() => handleClick(6)}>
-                                                {/* <span className="sidebar_link_icon lnr lnr-file-add"></span> */}
-                                                <p className="sidebar_link_title">Devices</p>
-                                                <span style={{ transform: settings.find(item => item.id === 6).open ? 'rotate(90deg)' : 'rotate(0deg)' }} className="sidebar_category_icon lnr lnr-chevron-right"></span>
-                                            </button>
-                                            <div style={{ display: settings.find(item => item.id === 6).open ? 'block' : 'none' }}>
-                                                <ul className="sidebar_submenu">
-                                                    <Link href="#">
-                                                        <li className="sidebar_link topbar_link">
-                                                            <p className="sidebar_link_title h_2">Registration Creation</p>
-                                                        </li>
-                                                    </Link>
-                                                    <Link href="#">
-                                                        <li className="sidebar_link topbar_link">
-                                                            <p className="sidebar_link_title h_2">Lifecycle Management</p>
-                                                        </li>
-                                                    </Link>
-                                                    <Link href="#">
-                                                        <li className="sidebar_link topbar_link">
-                                                            <p className="sidebar_link_title h_2">Registration Termination</p>
-                                                        </li>
-                                                    </Link>
-                                                </ul>
-                                            </div>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div>
-                                    <button className="sidebar_link topbar_link" onClick={() => setDropdownnav((previousState) => !previousState)}>
-                                        <span className="sidebar_link_icon lnr lnr-history"></span>
-                                        <p className="sidebar_link_title">Contact</p>
-                                        <span style={{transform: dropdownnav ? 'rotate(90deg)': 'rotate(0deg)'}} className="sidebar_category_icon lnr lnr-chevron-right"></span>
+                            <button className="sidebar_link topbar_link" onClick={() => handleClick(1)}>
+                                <span className="sidebar_link_icon lnr lnr-file-add"></span>
+                                <p className="sidebar_link_title">Data Entry Request</p>
+                                <span style={{ transform: settings.find(item => item.id === 1).open ? 'rotate(90deg)' : 'rotate(0deg)' }} className="sidebar_category_icon lnr lnr-chevron-right"></span>
+                            </button>
+                            <div style={{ display: settings.find(item => item.id === 1).open ? 'block' : 'none' }}>
+                                <ul className="sidebar_submenu">
+                                    <button className="sidebar_link topbar_link" onClick={() => handleSelectMenu('ma')}>
+                                        <p className="sidebar_link_title">Marketing Authorization</p>
                                     </button>
-                                    <div style={{display: dropdownnav ? 'block' : 'none'}}>
-                                        <ul className="sidebar_submenu">
-                                            {/* <Link className={`topbar_link ${route().current('variation') ? `sidebar_link_active` : ''}`} href={route('variation')}>
-                                                <li className="sidebar_link ">
-                                                    <p className="sidebar_link_title">Variation</p>
-                                                </li>
-                                            </Link>
-                                            <Link className={`topbar_link ${route().current('renouvellement') ? `sidebar_link_active` : ''}`} href={route('renouvellement')}>
-                                                <li className="sidebar_link ">
-                                                    <p className="sidebar_link_title">Renouvellement</p>
-                                                </li>
-                                            </Link> */}
-                                            <Link href="#">
-                                                <li className="sidebar_link topbar_link">
-                                                    <p className="sidebar_link_title h_2">User Creation Request</p>
-                                                </li>
-                                            </Link>
-                                           
-                                        </ul>
-                                    </div>
-                                </div>
-                            </ul>
+                                    <button className="sidebar_link topbar_link" onClick={() => handleSelectMenu('clinical')}>
+                                        <p className="sidebar_link_title">Clinical</p>
+                                    </button>
+                                    <button className="sidebar_link topbar_link" onClick={() => handleSelectMenu('devices')}>
+                                        <p className="sidebar_link_title">Devices</p>
+                                    </button>
+                                </ul>
+                            </div>
                         </div>
-                    {/* </div> */}
-                    
-                {/* </Scrollbar> */}
+                        <div>
+                            <button className="sidebar_link topbar_link" onClick={() => setDropdownnav((previousState) => !previousState)}>
+                                <span className="sidebar_link_icon lnr lnr-history"></span>
+                                <p className="sidebar_link_title">Contact</p>
+                                <span style={{ transform: dropdownnav ? 'rotate(90deg)' : 'rotate(0deg)' }} className="sidebar_category_icon lnr lnr-chevron-right"></span>
+                            </button>
+                            <div style={{ display: dropdownnav ? 'block' : 'none' }}>
+                                <ul className="sidebar_submenu">
+                                    <Link href="#">
+                                        <li className="sidebar_link topbar_link">
+                                            <p className="sidebar_link_title h_1">User Creation Request</p>
+                                        </li>
+                                    </Link>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </ul>
+                </div>
             </div>
             <main>
                 <div className="container_main">

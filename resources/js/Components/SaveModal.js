@@ -5,7 +5,9 @@ const SaveModal = ({show, handleClose, handleSubmited, name}) => {
     return(
         <Modal show={show}>
             <Modal.Body>
-                <p>do you confirm the saving of the form</p>
+                {name == 'submit' ? <p>Confirmez-vous la soumission du formulaire</p> : 
+                <p>Confirmez-vous la sauvegarde du formulaire</p>}
+                
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
