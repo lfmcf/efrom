@@ -48,7 +48,7 @@ export default function Authenticated({ auth, header, children }) {
 
     const madata = [
         {
-            name: "Registration Creation",
+            name: "Registration Creation ",
             children: [
                 {
                     name: "Medicinal Product",
@@ -61,7 +61,7 @@ export default function Authenticated({ auth, header, children }) {
             ],
         },
         {
-            name: "Lifecycle Mnagement",
+            name: "Lifecycle Management ",
             children: [
                 {
                     name: "Variation",
@@ -133,8 +133,8 @@ export default function Authenticated({ auth, header, children }) {
             
             <div className="topbar">
                 <div className="tleft">
-                {/*<Link href={route('dashboard')} style={{margin:'auto 100px', color:"white"}}>Logo</Link>
-                    <div>
+                <Link href={route('dashboard')} style={{margin:'auto 20px', color:"white"}}>Logo</Link>
+                {/* <div>
                         <button style={{width:'60px', height:'60px', display:'flex', border:'none',justifyContent:'center',alignItems:'center',background:'transparent'}}>
                             <span className="lnr lnr-menu" style={{fontSize:'16px', color:"#3bb78f"}}></span>
                         </button>
@@ -161,7 +161,7 @@ export default function Authenticated({ auth, header, children }) {
                             <div className="topbar_dropdown_wrap" style={{display: topbarnav ? 'flex' : 'none'}}>
                                 <div className="topbar_dropdown">
                                     <Link className="topbar_link" href="#" as="a">
-                                        <p className="topbar_link_title">My Profile</p>
+                                        <p className="topbar_link_title" style={{color:'black'}}>My Profile</p>
                                     </Link>
                                     <Link className="topbar_link" href={route('logout')} method="post" as="button">
                                         <p className="topbar_link_title">Log Out</p>
@@ -176,7 +176,11 @@ export default function Authenticated({ auth, header, children }) {
             </div>
             <div className="sidebar">
                 <div className="sidebar_content">
+                <Link href={route('dashboard')} style={{margin:'auto 20px', color:"white", fontsize:'15px',}}>
+                <img src="../logo.png" alt="logo" className='logo'></img>
+                    </Link>
                     <ul className="sidebar_block">
+                   
                         <Link className={`topbar_link ${route().current('dashboard') ? `sidebar_link_active` : ''}`} href={route('dashboard')} onClick={() =>SetwichMenu('')}>
                             <li className="sidebar_link" >
                                 <span className="sidebar_link_icon lnr lnr-home"></span>
@@ -213,7 +217,7 @@ export default function Authenticated({ auth, header, children }) {
                                 <ul className="sidebar_submenu">
                                     <Link href="#">
                                         <li className="sidebar_link topbar_link">
-                                            <p className="sidebar_link_title h_1">User Creation Request</p>
+                                            <p className="sidebar_link_title">User Creation Request</p>
                                         </li>
                                     </Link>
 

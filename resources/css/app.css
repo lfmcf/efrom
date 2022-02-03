@@ -2,6 +2,7 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities'; */
 @import 'bootstrap';
+@import url("https://use.fontawesome.com/releases/v5.15.0/css/all.css");
 
 body {
     font-family: "Poppins",sans-serif; 
@@ -36,7 +37,7 @@ button {
     top: 0;
     min-height: 60px;
     display: flex;
-    /*box-shadow: 0 2px 15px 0 rgb(0 0 0 / 5%);*/
+    box-shadow: 0 2px 15px 0 rgb(0 0 0 / 5%);
     border-bottom:1px solid #e6e6e6;
     z-index: 99;
     background: #fff;
@@ -48,6 +49,7 @@ button {
     height: 100%;
     width: 240px;
     /* left: 0; */
+    
 }
 
 .tright {
@@ -109,9 +111,13 @@ button {
     box-shadow: 0 1px 30px 1px rgb(0 0 0 / 11%);
     padding-top: 60px;
     transition: transform .3s,-webkit-transform .3s;
-    background-color: #00887a;
-    background-image: linear-gradient(315deg, #019c8c 0%, #00887a 74%);
+    background-color: #3d4350;
+    background-image: linear-gradient(315deg, #434c61 0%, #3d4350 74%);
     color:#fff
+}
+
+.logo{
+    width:200px;
 }
 
 
@@ -146,7 +152,7 @@ button {
 .sidebar_link_icon {
     font-size: 15px;
     line-height: 13px;
-    margin-top: 0px !important;
+    margin-top: -3px !important;
     color: #fff;
     margin-right: 10px;
     -webkit-transition: -webkit-transform 0.8s ease-in-out;
@@ -187,9 +193,9 @@ button {
     transition: height .5s 0s,padding .5s 0s,opacity .4s .1s;
     -webkit-transition: all 0.5s ease-out;
     background-color: transparent;
-    -webkit-box-shadow: inset 0px 1px 20px 8px rgba(46, 50, 50, 0.2);
-    -moz-box-shadow:    inset 0px 1px 20px 8px rgba(46, 50, 50, 0.2);
-    box-shadow:         inset 0px 1px 20px 8px rgba(46, 50, 50, 0.2);
+    -webkit-box-shadow: inset 0px 1px 20px 8px rgba(46, 50, 50, 0.5);
+    -moz-box-shadow:    inset 0px 1px 20px 8px rgba(46, 50, 50, 0.5);
+    box-shadow:         inset 0px 1px 20px 8px rgba(46, 50, 50, 0.5);
     border-bottom: 1px solid var(--color-inverse-border);
 }
 .sidebar_submenu_left {
@@ -212,7 +218,7 @@ button {
 }
 
 .main {
-    background-color: #019c8c;
+    background-color: #3d4350;
     height: 100vh;
     width: 100%;
     min-height: 100vh;
@@ -222,7 +228,8 @@ button {
 
 .main_wrapper {
     margin: auto;
-    padding: 10px;
+    -webkit-box-shadow: 5px 5px 15px 5px #FFFFFF; 
+box-shadow: 2px 2px 10px 2px #FFFFFF;
 }
 
 .main_card {
@@ -233,7 +240,7 @@ button {
 }
 
 .main_head {
-    border-left: 4px solid #019c8c;
+    border-left: 4px solid #216ba5;
     padding-left: 10px;
     margin-bottom: 30px;
 }
@@ -254,8 +261,12 @@ h5.subhead {
     line-height: 18px !important;
     opacity: .7 !important;
     color: #999 !important;
-    margin-top: 3px !important;
+    margin-top: 13px !important;
     font-weight: 400 !important;
+    float: right;
+    padding-bottom: 20px;
+    
+
 }
 
 .main_form {
@@ -360,10 +371,23 @@ h5.subhead {
 }
 .btn_submit{
     padding:7px 0px;
-    background-color: #00887a;
-    background-image: linear-gradient(315deg, #019c8c 0%, #00887a 74%);
+    background-color: #2dc5a2;
+    background-image: linear-gradient(315deg, #33bd9c 0%, #2dc5a2 74%);
     border:none
 }
+.btn_close{
+    padding:7px 0px;
+    background-color: #f16690;
+    background-image: linear-gradient(315deg, #f1749a 0%, #f16690 74%);
+    border:none
+}
+
+.btn_close:hover{
+    padding:7px 0px;
+    background-color: #ca597b;
+    border:none
+}
+
 .btn_submit:hover{
     background-color: #02756a;
     background-image: linear-gradient(315deg, #02756a 0%, #02756a 74%);
@@ -401,9 +425,12 @@ h5.subhead {
 }
 
 .page-title {
+    /*font-family:"Lato",sans-serif; */
+    font-family:"Open Sans",sans-serif;
+    /*font-family:"Roboto",sans-serif;*/
     color: #646777;
     text-transform: capitalize;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 20px;
     line-height: 32px;
     margin-bottom: 20px;
@@ -438,9 +465,12 @@ h5.subhead {
     
 }
 .card-header{
-background-color: #d3e3fc;
+background-color: #ecf0f3;
 font-size:15px;
 width: 100%;
+text-transform: capitalize;
+font-weight: 500;
+font-family:"Open Sans",sans-serif; 
 }
 .card-header:after{
     transition: rotate(180deg);
@@ -503,6 +533,7 @@ fieldset {
     margin: 0 0 1.5em 0 !important;
     -webkit-box-shadow:  0px 0px 0px 0px #000;
             box-shadow:  0px 0px 0px 0px #000;
+            border-radius: 5px;
 }
 legend {
     font-size: 1.2em !important;
@@ -533,33 +564,56 @@ legend {
     width: 100%;
     padding: 5px 10;
 } */
+.tab-content > .tab-pane{
+    border-top: 1px solid #686df4;
+}
 
 .form .nav {
-    width: 100%;
+    width: 50%;
     justify-content: space-around;
+    font-family:"Lato",sans-serif;
+    text-transform: capitalize;
 }
 
 .form .nav-link {
     flex: 1;
     text-align: center;
-    background: #fafbfe;
-    color: #646777;
-    border-radius: 0.25rem;
+    background: #686df4;
+    color: #fff;
+    -webkit-border-top-left-radius: 4px;
+-webkit-border-top-right-radius: 4px;
+-moz-border-radius-topleft: 4px;
+-moz-border-radius-topright: 4px;
+border-top-left-radius: 4px;
+border-top-right-radius: 4px;
+-webkit-box-shadow: inset 0px 3px 12px 3px rgba(0,0,0,0.28); 
+box-shadow: inset 0px 1px 12px 1px rgba(0,0,0,0.15);
+font-family: 'Open Sans' , sans-serif;
+
+}
+
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link{
+    border-top: 1px solid #686df4;
+    border-right: 1px double #686df4;
+    border-left: 1px solid #686df4;
+    
 }
 
 .form .nav-link.active {
-    background-color: #00887a;
-    background-image: linear-gradient(315deg, #019c8c 0%, #00887a 74%);
-    color: #fff;
+    background-color: #fff;
+    color: #686df4;
+    box-shadow: none;
 }
 .nav-tabs {
     border-bottom: none;
+
 }
 
 .nav-tabs .nav-link {
     border-color: unset;
     border: none;
     font-size: 15px;
+    
 }
 
 .form .card {
@@ -617,7 +671,7 @@ legend {
     width: 100%;
     position: relative;
     cursor: pointer;
-    color: #000;
+    color: #fff;
 }
 
 .topbar_dropdown .topbar_link {
@@ -636,7 +690,7 @@ legend {
     top: 0;
     height: 100%;
     width: 2px;
-    background: #4ce1b6;
+    background: #216ba5;
     opacity: 0;
     transition: all .3s;
     left: 0;
@@ -654,8 +708,7 @@ legend {
 }
 
 .sidebar_link_active {
-    background-color: #02756a;
-    background-image: linear-gradient(315deg, #02756a 0%, #02756a 74%);
+    color: #02756a !important;
 }
 
 .sidebar_link_active::before {
@@ -733,20 +786,44 @@ legend {
     list-style: none;
     height: 100%;
 }
+.multilevelMenu li + li::before {
+	content: "|";
+	float: left;
+	width: 2px;
+	line-height: 36px;
+	color: #2980b9;
+	
+}
+
+.multilevelMenu .submenu li + li::before {
+	content: " ";
+	float: left;
+	width: 2px;
+	line-height: 36px;
+	color: #216ba5;
+	
+}
   
   .multilevelMenu ul li {
     display: block;
     position: relative;
     float: left;
-    background: transparent;
+    background: white;
     height: 100%;
     display: flex;
     align-items: center;
   }
+
+ .submenu li:hover{
+    border-bottom: none;
+    background: #f8fbff;
+    
+}
   .multilevelMenu li ul {
     display: none;
     position: absolute;
-    top: 60px;
+    top: 58px;
+    
   }
   
   .multilevelMenu ul li a {
@@ -754,9 +831,24 @@ legend {
     padding: 1em;
     text-decoration: none;
     white-space: nowrap;
-    /* color: #fff; */
+     color: #216ba5;
   }
-  
+
+  .multilevelMenu ul li a:after > ul{
+       content: 'xdfsdf';
+  }
+
+  .multilevelMenu .main-navigation li ul li:hover > a{
+    background: #f8fbff;
+    padding-left: 10px;
+    
+  }
+  .multilevelMenu .main-navigation li ul li ul{
+    background: transparent;
+    color:#fff ;
+    height: 125%;
+  }
+
   /* .multilevelMenu ul li a:hover {
     background: #151e27;
   } */
@@ -780,20 +872,31 @@ legend {
   }
   
 .multilevelMenu ul:after { clear: both; }
-  
-  
+.multilevelMenu li > a:after {  font-family: "Font Awesome 5 Free"; content: '\f0d7'; font-weight: 900; } 
+.multilevelMenu li > a:only-child:after { content: ''; }
+.multilevelMenu li ul li > a:after { content: '\f0da';} 
+.multilevelMenu li ul li > a:only-child:after { content: ''; }
+.multilevelMenu li ul li:last-child{
+    border-bottom: 1px solid #216ba5;
+}
 .multilevelMenu .main-navigation li ul li {
     border-top: 0;
+    
+    transition: padding-left 2s;
+    height: 81%;
 }
-
+.multilevelMenu ul li a::after > ul{
+    content: ' \00A7';
+}
 .submenu {
     width: 200px;
     background-color: white;
     color: black;
 }
 .submenu li {
-    background-color: white !important;
+    background-color: white ;
 }
+
 .submenu li a {
     color: black;
 }
@@ -803,3 +906,93 @@ legend {
       max-width: 1630px !important;
     }
   }
+
+.table{
+    border-collapse: collapse;
+    margin: 75px 0 40px;
+    font-size: 0.9em;
+    min-width: 400px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.10);
+}
+.table thead tr{
+     color: #000;
+     background-color: #edf0f3;
+     text-align: left;
+     font-weight: bold;
+}
+.table th,
+.table td{
+    padding:12px 15px;
+}
+.table tbody tr{
+    border-bottom: 1px solid rgba(209, 226, 255, 0.5);
+}
+.table tbody tr:nth-last-of-type(even){
+    background-color: #fbfbfb;
+}
+.table > :not(:first-child){
+    border-top: none;
+}
+
+.table tbody tr:last-of-type{
+   border-bottom: 2px solid #d3e3fc;
+}
+
+.update_table{
+    color:#00887a;
+}
+.pagination{
+    display:block;
+    margin-top: -20px;
+
+}
+.btn_table{
+    background:transparent;
+    color:#00887a;
+    font-size: 15px;
+    padding: 3px;
+    vertical-align: middle;
+}
+.pagination-button{
+    background:transparent;
+    font-size:16px;
+    padding: 6px;
+    vertical-align: middle;
+}
+*, *::before, *::after{
+    vertical-align: middle;
+}
+
+.inner-addon {
+    position: relative;
+  }
+  
+  /* style glyph */
+  .inner-addon .glyphicon {
+    position: absolute;
+    padding: 10px;
+    pointer-events: none;
+  }
+  
+  /* align glyph */
+  .left-addon .glyphicon  { left:  0px;}
+  .right-addon .glyphicon { right: 16px; top:-4px}
+  
+  /* add padding  */
+  .left-addon input  { padding-left:  30px; }
+  .right-addon input { padding-right: 30px; }
+
+  .form-control:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.1rem rgba(40, 167, 69, 0.15);
+} 
+
+.head-table{
+    font-family:"Open Sans",sans-serif; 
+    font-weight: 600;
+    color: #2c4166;
+    text-transform: capitalize;
+}
+

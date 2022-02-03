@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import { useTable, usePagination, useGlobalFilter, useAsyncDebounce } from 'react-table';
 import BTable from 'react-bootstrap/Table';
+import { borderRadius } from 'tailwindcss/defaultTheme';
 
 function GlobalFilter({
     preGlobalFilteredRows,
@@ -15,20 +16,27 @@ function GlobalFilter({
     }, 200)
 
     return (
-        <span>
-            Search:{' '}
-            <input
+        <span className="inner-addon right-addon" style={{float:'right'}}>
+            <span className="glyphicon lnr lnr-magnifier"></span>
+            <input className='form-control'
                 value={value || ""}
                 onChange={e => {
                     setValue(e.target.value);
                     onChange(e.target.value);
                 }}
-                placeholder={`${count} records...`}
+                placeholder={`${count} records... `}
                 style={{
-                    fontSize: '1.1rem',
-                    border: '0',
+                    fontSize: '0.6rem',
+                    border: '1px solid #f2f2f2',
+                    padding:'5px',
+                    marginRight:'10px',
+                    borderRadius:'5px',
+                    width: '85%',
+                    display: 'inline'
+
                 }}
             />
+            {' '}
         </span>
     )
 }
@@ -68,7 +76,9 @@ function Table({ columns, data }) {
                     <tr {...headerGroup.getHeaderGroupProps()}>
                         {headerGroup.headers.map(column => (
                             <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                           
                         ))}
+                         <th>Action</th>
                     </tr>
                 ))}
                 {/* <tr>
@@ -85,54 +95,64 @@ function Table({ columns, data }) {
                             {row.cells.map(cell => {
                                 return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                             })}
+                            <td>
+                            <button className="btn_table" data-toggle="tooltip" data-placement="top" title="Accéder" ><span style={{color:'#80e4ff'}} className=" lnr lnr-pencil"  ></span></button>
+                            <button className="btn_table" data-toggle="tooltip" data-placement="top" title="Dupliquer" ><span style={{color:'#9195fd'}} className=" lnr lnr-layers"  ></span></button>
+                            </td>
                         </tr>
                     )
                 })}
             </tbody>
         </BTable>
         <div className="pagination">
-                <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-                    {'<<'}
-                </button>{' '}
-                <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-                    {'<'}
-                </button>{' '}
-                <button onClick={() => nextPage()} disabled={!canNextPage}>
-                    {'>'}
-                </button>{' '}
-                <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-                    {'>>'}
-                </button>{' '}
-                <span>
-                    Page{' '}
-                    <strong>
-                        {pageIndex + 1} of {pageOptions.length}
-                    </strong>{' '}
-                </span>
-                <span>
-                    | Go to page:{' '}
-                    <input
+                <span > 
+                    {' '}
+                   {/* <input className='form-control'
                         type="number"
                         defaultValue={pageIndex + 1}
                         onChange={e => {
                             const page = e.target.value ? Number(e.target.value) - 1 : 0
                             gotoPage(page)
                         }}
-                        style={{ width: '100px' }}
-                    />
-                </span>{' '}
-                <select
+                        style={{ width: '60px'  , display:'inline' , padding:'5px' , fontSize:'0.6rem' , border: '1px solid #f2f2f2'}}
+                    />*/}
+                    {'    '} Rows per page :{'    '} <select className='form-select' style={{ border: '1px solid #f2f2f2' , width:'65px' , display:'inline' , padding:'5px' , fontSize:'0.6rem' }}
                     value={pageSize}
                     onChange={e => {
                         setPageSize(Number(e.target.value))
                     }}
-                >
+                    >
                     {[5, 10, 20, 30, 40, 50].map(pageSize => (
                         <option key={pageSize} value={pageSize}>
-                            Show {pageSize}
+                             {pageSize}
                         </option>
                     ))}
-                </select>
+                    </select>
+                </span>{' '}
+                <span style={{float:'right'}}>
+                <span>
+                    {'  '}
+                    <strong style={{fontWeight:"400"}}>
+                        {pageIndex + 1}{'-'}{pageOptions.length} of {' '}{pageOptions.length} items
+                    </strong>{'  '}
+                </span>{' '}
+                <button className="pagination-button" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+                    {'<<'}
+                </button>{' '}
+                <button className="pagination-button" onClick={() => previousPage()} disabled={!canPreviousPage}>
+                    {'<'}
+                </button>{' '}
+               
+                <button className="pagination-button" onClick={() => nextPage()} disabled={!canNextPage}>
+                    {'>'}
+                </button>{' '}
+                <button className="pagination-button" onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+                    {'>>'}
+                </button>
+                </span>{' '}
+               
+               
+               
             </div>
         </>
     )

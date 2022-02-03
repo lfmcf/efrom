@@ -476,7 +476,7 @@ const Index = (props) => {
            
             <div className="row">
                 <div className="col-md-12">
-                    <h3 className="page-title">registration creation - finished product</h3>
+                    <h3 className="page-title">MA - registration creation</h3>
                 </div>
             </div>
             <div className="row">
@@ -488,7 +488,7 @@ const Index = (props) => {
                                     <Tab eventKey="first" title="New registration">
                                         <Accordion  style={{ marginTop: '20px'  }} defaultActiveKey="0" >
                                             <div className="card_title" style={{ marginBottom: '20px'  }}>
-                                                <h5>First Submission</h5>
+                                               
                                                 <h5 className="subhead">All fields markedd with * are required</h5>
                                             </div>
                                             <Card>
@@ -496,7 +496,7 @@ const Index = (props) => {
                                                 
                                                 <Accordion.Toggle  as={Card.Header} eventKey="0" style={{border: errors.procedure_type || errors.product_type || errors.application_stage ? '1px groove #FF0000': ''}}>
                 
-                                                    General information <span className="lnr lnr-chevron-down" style={{ transform: 'rotate(00deg)'  }} ></span>
+                                                    General information 
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
                                                     <Card.Body>
@@ -632,7 +632,7 @@ const Index = (props) => {
                                                                     styles={selectStyles(errors.registration_holder)}
                                                                     placeholder=''
                                                                 />
-                                                                <button className="btn-success" type="button" onClick={(e) => handleShow(e)}>
+                                                                <button className="btn-success" type="button" style={{background: '#77a6f7'}} onClick={(e) => handleShow(e)}>
                                                                     <span className="lnr lnr-plus-circle"></span>
                                                                 </button>
                                                             </div>
@@ -911,7 +911,7 @@ const Index = (props) => {
                                                                     styles={selectStyles(errors.local_agent_company)}
                                                                     placeholder=''
                                                                 />
-                                                                <button className="btn-success" type="button" onClick={(e) => handleShow(e)}>
+                                                                <button className="btn-success" style={{background: '#77a6f7'}} type="button" onClick={(e) => handleShow(e)}>
                                                                 <span className="lnr lnr-plus-circle"></span>
                                                             </button>
                                                             </div>
@@ -1287,17 +1287,21 @@ const Index = (props) => {
                                                         {data.procedure_type == 'Decentralized' || data.procedure_type == 'Mutual Recognition' ? 
                                                         <div style={{ display: 'flex', justifyContent: 'end' }}>
                                                             <button type="button" className="add_doc_form" data-toggle="tooltip" data-placement="top" title="Add Status" onClick={addStatusesFields}>
-                                                                <i className="bi bi-plus-lg"></i>
+                                                                <i className="bi bi-plus-lg"></i>Add Statut
                                                             </button>
                                                         </div>
                                                         : ''
                                                         } 
                                                         {data.statuses.map((element, index) => (
+                                                             <fieldset>
+                                                             <legend>Statut 1</legend>
+                                                            
                                                             <div key={index}>
+                                                                
                                                                 {index > 0 ?
                                                                     <div style={{ display: 'flex', justifyContent: 'end' }}>
                                                                         <button type="button" style={{ width: '14px', height: '14px', background: 'transparent', padding: '0', margin: '0 0 20px 0' }} onClick={() => removeStatusFields(index)}>
-                                                                            <svg className="mdi-icon" style={{ verticalAlign: 'middle' }} width="14" height="14" fill="#000" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path></svg>
+                                                                            <svg className="mdi-icon" style={{ verticalAlign: 'middle' }} width="14" height="14" fill="#000" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path></svg> 
                                                                         </button>
                                                                     </div>
                                                                     :
@@ -1378,6 +1382,7 @@ const Index = (props) => {
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            </fieldset>
                                                         ))}
                                                     </Card.Body>
                                                 </Accordion.Collapse>
@@ -1395,10 +1400,10 @@ const Index = (props) => {
                                         <button style={{ width: '100px' }} type="button" className="btn_submit btn btn-primary" onClick={showsavemodel} disabled={processing}>Submit</button>
                                     </div>
                                     <div className="form-button">
-                                        <button type='button' onClick={showdraftmodel} style={{ width: '100px' }} className="btn_submit btn btn-primary" name="draft" disabled={processing}>Draft</button>
+                                        <button type='button' onClick={showdraftmodel} style={{ width: '100px' }} className="btn_submit btn btn-primary" name="draft" disabled={processing}>Save</button>
                                     </div>
                                     <div className="form-button">
-                                        <button style={{ width: '100px' }} type="reset" className=" btn btn-danger" name="Reset" disabled={processing}>Reset</button>
+                                        <button style={{ width: '100px' }} type="reset" className="btn_close btn btn-danger" name="Reset" disabled={processing}>Reset</button>
                                     </div>
                                 </div>
                                 
