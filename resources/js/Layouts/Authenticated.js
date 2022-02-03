@@ -195,13 +195,13 @@ export default function Authenticated({ auth, header, children }) {
                             </button>
                             <div style={{ display: settings.find(item => item.id === 1).open ? 'block' : 'none' }}>
                                 <ul className="sidebar_submenu">
-                                    <button className="sidebar_link topbar_link" onClick={() => handleSelectMenu('ma')}>
+                                    <button className="sidebar_link topbar_link" style={{background: whichMenu == 'ma' ? 'rgba(243, 243, 243, 0.3)': ''}} onClick={() => handleSelectMenu('ma')} >
                                         <p className="sidebar_link_title">Marketing Authorization</p>
                                     </button>
-                                    <button className="sidebar_link topbar_link" onClick={() => handleSelectMenu('clinical')}>
+                                    <button className="sidebar_link topbar_link" style={{background: whichMenu == 'clinical' ? 'rgba(243, 243, 243, 0.3)': ''}} onClick={() => handleSelectMenu('clinical')}>
                                         <p className="sidebar_link_title">Clinical</p>
                                     </button>
-                                    <button className="sidebar_link topbar_link" onClick={() => handleSelectMenu('devices')}>
+                                    <button className="sidebar_link topbar_link" style={{background: whichMenu == 'devices' ? 'rgba(243, 243, 243, 0.3)': ''}} onClick={() => handleSelectMenu('devices')}>
                                         <p className="sidebar_link_title">Devices</p>
                                     </button>
                                 </ul>

@@ -636,24 +636,10 @@ const Index = (props) => {
                                                                     </button>
                                                                 </div>
                                                                 <p className="errors_wrap" style={{ display: errors.registration_holder ? 'inline-block' : 'none' }}>{errors.registration_holder}</p>
-                                                            <p className="errors_wrap" style={{display: errors.local_tradename ? 'inline-block': 'none'}}>{errors.local_tradename}</p>
-                                                        </div>
-                                                        <div className="form_group">
-                                                            <span className="form_group_label">Registration Holder (*)</span>
-                                                            <div className="form_group_field form_group_holder" >
-                                                                <Select options={options}
-                                                                    name="registration_holder"
-                                                                    onChange={handleSelectChange}
-                                                                    className="basic"
-                                                                    classNamePrefix="basic"
-                                                                    styles={selectStyles(errors.registration_holder)}
-                                                                    placeholder=''
-                                                                />
-                                                                <button className="btn-success" type="button" style={{background: '#77a6f7'}} onClick={(e) => handleShow(e)}>
-                                                                    <span className="lnr lnr-plus-circle"></span>
-                                                                </button>
+                                                            {/* <p className="errors_wrap" style={{display: errors.local_tradename ? 'inline-block': 'none'}}>{errors.local_tradename}</p> */}
                                                             </div>
                                                         </div>
+                                                        
                                                         
                                                         <div className='inline_form'>
                                                             <div className="form_group_inline">
@@ -676,7 +662,7 @@ const Index = (props) => {
                                                             </div>
                                                         </div>
                                                         
-                                                      </div>  
+                                                      
                                                     </Card.Body>
                                                 </Accordion.Collapse>
                                             </Card>
@@ -941,7 +927,7 @@ const Index = (props) => {
                                                                     styles={selectStyles(errors.local_agent_company)}
                                                                     placeholder=''
                                                                 />
-                                                                <button className="btn-success" style={{background: '#77a6f7'}} type="button" onClick={(e) => handleShow(e)}>
+                                                                <button className="btn-success" style={{background: '#77a6f7',width:'6%'}} type="button" onClick={(e) => handleShow(e)}>
                                                                 <span className="lnr lnr-plus-circle"></span>
                                                             </button>
                                                             </div>

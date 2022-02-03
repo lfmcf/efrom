@@ -6,7 +6,7 @@ const MultilevelMenu = ({ data }) => {
     const renderMenuItems = data => {
         return data.map((item, index) =>
             (item?.children && item?.children.length) ?
-                (<li key={index}><Link href={"#"}>{item.name}</Link>
+                (<li key={index}><Link href={"#"} active={route().current(item.name)}>{item.name}</Link>
                     <ul className='submenu'>
                         {renderMenuItems(item.children)}
                     </ul>

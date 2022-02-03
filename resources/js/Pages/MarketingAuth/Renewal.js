@@ -495,11 +495,16 @@ const Renewal = (props) => {
                                         <Documents handleChanged={handleDocumentChange} handleDocumentdate={handleDocumentdate} addFormFields={addFormFields} formValues={data.doc} />
                                     </Tab>
                                 </Tabs>
-                                <div className="form-button">
-                                    <button type="submit" className="btn btn-primary" name="submit" disabled={processing}>Submit</button>
-                                </div>
-                                <div className="form-button">
-                                    <button type="submit" className="btn btn-primary" name="draft" disabled={processing}>Draft</button>
+                                <div style={{ display: 'flex' }}>
+                                    <div className="form-button">
+                                        <button style={{ width: '100px' }} type="submit" className="btn_submit btn btn-primary" name="submit" disabled={processing}>Submit</button>
+                                    </div>
+                                    <div className="form-button">
+                                        <button type="submit" style={{ width: '100px' }} className="btn_submit btn btn-primary" name="draft" disabled={processing}>Draft</button>
+                                    </div>
+                                    <div className="form-button">
+                                        <button type="submit" style={{ width: '100px' }} className="btn btn-danger" name="reset" disabled={processing}>Reset</button>
+                                    </div>
                                 </div>
                             </form>
                         </div>

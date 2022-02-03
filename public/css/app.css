@@ -12461,7 +12461,8 @@ legend {
 }
 
 .form_group_holder button {
-  width: 5%;
+  width: 10%;
+  background-color: #77a6f7;
 }
 
 .form-button {
@@ -12616,6 +12617,7 @@ legend {
 
 .sidebar_link_active {
   color: #02756a !important;
+  background: rgba(243, 243, 243, 0.3);
 }
 
 .sidebar_link_active::before {
