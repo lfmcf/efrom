@@ -174,6 +174,7 @@ class ClinicalController extends Controller
                 'First Launch Date',
                 'Packaging Discontinued',
                 'Discontinuation Date',
+                'Remarks',
                 'Package Shelf-life Type',
                 'Shelf Life',
                 'Shelf-life Unit',
@@ -188,6 +189,7 @@ class ClinicalController extends Controller
                 'Operation Type'
             );
             $status = array(
+                'Country',
                 'Status',
                 'Status Date',
                 'eCTD Sequence',
@@ -320,14 +322,15 @@ class ClinicalController extends Controller
                 $sheet->setCellValue('F' . $c, date("d-m-Y",strtotime($package['first_lunch_date'])));
                 $sheet->setCellValue('G' . $c, $package['packaging_discontinued']);
                 $sheet->setCellValue('H' . $c, date("d-m-Y",strtotime($package['discontinuation_date'])));
-                if(is_array($package['packagelif'])) {
+                $sheet->setCellValue('I' . $c, $package['remarks']);
+                if(isset($package['packagelif'])) {
                     foreach ($package['packagelif'] as $i => $pl) {
-                        $sheet->setCellValue('I' . $c, $pl['package_shelf_life_type']);
-                        $sheet->setCellValue('J' . $c, $pl['shelf_life']);
-                        $sheet->setCellValue('K' . $c, $pl['shelf_life_unit']);
-                        if (is_array($pl['package_storage_condition'])) {
+                        $sheet->setCellValue('J' . $c, $pl['package_shelf_life_type']);
+                        $sheet->setCellValue('K' . $c, $pl['shelf_life']);
+                        $sheet->setCellValue('L' . $c, $pl['shelf_life_unit']);
+                        if (isset($pl['package_storage_condition'])) {
                             foreach ($pl['package_storage_condition'] as $psc) {
-                                $sheet->setCellValue('L' . $c, $psc);
+                                $sheet->setCellValue('M' . $c, $psc);
                                 $c += 1;
                             }
                         }
@@ -368,8 +371,8 @@ class ClinicalController extends Controller
             $sheet->fromArray($clinical->statuses, NULL, 'A2');
             $hr = $sheet->getHighestRow();
             for($i=2; $i<=$hr; $i++) {
-                $datef = $sheet->getCell('B'.$i);
-                $sheet->setCellValue('B'.$i, date("d-m-Y", strtotime($datef)));
+                $datef = $sheet->getCell('C'.$i);
+                $sheet->setCellValue('C'.$i, date("d-m-Y", strtotime($datef)));
             }
 
             $spreadsheet->createSheet();

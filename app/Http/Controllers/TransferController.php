@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Support\Facades\Mail;
+use App\Models\Company;
 
 class TransferController extends Controller
 {
@@ -21,9 +22,11 @@ class TransferController extends Controller
      */
     public function index()
     {
+        $compnies = Company::orderBy('name')->get();
         $countries = Countries::orderBy('country_name')->get('country_name');
         return Inertia::render('MarketingAuth/Transfer', [
-            'countries' => $countries
+            'countries' => $countries,
+            'companies' => $compnies
         ]);
     }
 
@@ -89,6 +92,9 @@ class TransferController extends Controller
         $transfer->product_type = $request->product_type;
         $transfer->description = $request->description;
         $transfer->reason = $request->reason;
+        $transfer->previous_mah = $request->previous_mah;
+        $transfer->new_mah = $request->new_mah;
+        $transfer->remarks = $request->remarks;
         $transfer->statuses = $request->statuses;
         $transfer->doc = $docs;
         $transfer->created_by = $request->created_by;
@@ -107,10 +113,14 @@ class TransferController extends Controller
                 'Product Type'
             );
             $maTransferDetail = array(
-                'Event Description',
-                'Reason for the event'
+                'Transfer Description',
+                'Reason for transfer',
+                'Previous MAH',
+                'New MAH',
+                'Remarks',
             );
             $eventStatus = array(
+                'Country',
                 'Status',
                 'Status Date',
                 'eCTD sequence',
@@ -163,7 +173,10 @@ class TransferController extends Controller
             $sheet->fromArray($maTransferDetail, NULL, 'A1');
             $sheet->fromArray([
                 $transfer->description,
-                $transfer->reason
+                $transfer->reason,
+                $transfer->previous_mah,
+                $transfer->new_mah,
+                $transfer->remarks
             ], NULL, 'A2');
 
             $spreadsheet->createSheet();
@@ -174,8 +187,8 @@ class TransferController extends Controller
             $sheet->fromArray($transfer->statuses, NULL, 'A2');
             $hr = $sheet->getHighestRow();
             for($i=2; $i<=$hr; $i++) {
-                $datef = $sheet->getCell('B'.$i);
-                $sheet->setCellValue('B'.$i, date("d-m-Y", strtotime($datef)));
+                $datef = $sheet->getCell('C'.$i);
+                $sheet->setCellValue('C'.$i, date("d-m-Y", strtotime($datef)));
             }
 
             $spreadsheet->createSheet();

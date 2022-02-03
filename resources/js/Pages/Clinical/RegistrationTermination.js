@@ -24,7 +24,7 @@ const RegistrationTermination = (props) => {
         type: '',
         reason: '',
         remarks: '',
-        statuses: [{status: '',status_date: '',ectd: '',control: '',cdds: '',remarks: '',implimentation_date: '' ,deadline_for_answer: '', changes_approved:''}],
+        statuses: [{country:'',status: '',status_date: '',ectd: '',control: '',cdds: '',remarks: '',implimentation_date: '' ,deadline_for_answer: '', changes_approved:''}],
         doc: [{document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: ''}],
         created_by: props.auth.user.id,
     });
@@ -52,7 +52,7 @@ const RegistrationTermination = (props) => {
 
     let addStatusFields = () => {
         let newArr = {...data};
-        newArr.statuses.push({status: '',status_date: '',ectd: '',control: '',cdds: '',remarks: '',implimentation_date: '', deadline_for_answer: '', changes_approved:''});
+        newArr.statuses.push({country:'',status: '',status_date: '',ectd: '',control: '',cdds: '',remarks: '',implimentation_date: '', deadline_for_answer: '', changes_approved:''});
         setData(newArr);
     }
 
@@ -138,16 +138,16 @@ const RegistrationTermination = (props) => {
                         <div className="card-body">
                             <form className="form" onSubmit={handleSubmit}>
                                 <Tabs defaultActiveKey="first">
-                                    <Tab eventKey="first" title="Form">
+                                    <Tab eventKey="first" title="New Registration Termination">
                                         <Accordion defaultActiveKey="0" style={{ marginTop: '20px' }}>
                                             <div className="card_title" style={{ marginBottom: '20px' }}>
                                                 {/* <h5>First Submission</h5> */}
-                                                <h5 className="subhead">All fields markedd with * are required</h5>
+                                                <h5 className="subhead">All fields marked with * are required</h5>
                                             </div>
 
                                             <Card>
                                                 <Accordion.Toggle as={Card.Header} eventKey="0">
-                                                    Registration identification
+                                                    Registration Identification
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
                                                     <Card.Body>
@@ -232,8 +232,8 @@ const RegistrationTermination = (props) => {
                                                                 <div className="form_group_field">
                                                                     <select name='application_stage' defaultValue='' onChange={handleChange}>
                                                                         <option value='' disabled></option>
-                                                                        <option>Marketing Authorisation</option>
-                                                                        <option>APSI / NPP</option>
+                                                                        {/* <option>Marketing Authorisation</option>
+                                                                        <option>APSI / NPP</option> */}
                                                                         <option>PIP*</option>
                                                                         <option>CTA*</option>
                                                                         <option>IND*</option>
@@ -309,7 +309,7 @@ const RegistrationTermination = (props) => {
                                         <Accordion>
                                             <Card>
                                                 <Accordion.Toggle as={Card.Header} eventKey="0">
-                                                    Events Status
+                                                    Status Details
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
                                                     <Card.Body>
@@ -329,6 +329,20 @@ const RegistrationTermination = (props) => {
                                                                     : ''
                                                                 }
                                                                 <div className="inline_form">
+                                                                    {data.procedure_type == 'Decentralized' || data.procedure_type == 'Mutual Recognition' ?
+                                                                        <div className="form_group_inline">
+                                                                            <span className="form_group_label">Country</span>
+                                                                            <div className="form_group_field">
+                                                                                <select defaultValue="" name='country' onChange={(e) => handleStatusesChange(index, e)}>
+                                                                                    <option value=""></option>
+                                                                                    <option value="All">All</option>
+                                                                                    {data.country.map(c => (
+                                                                                        <option key={c}>{c}</option>
+                                                                                    ))}
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        : ''}
                                                                     <div className="form_group_inline">
                                                                         <span className="form_group_label">Status (*)</span>
                                                                         <div className="form_group_field">

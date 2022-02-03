@@ -34,7 +34,7 @@ const Variation = ({countries, auth}) => {
                                     </label>
                                 </div>
                             </div>
-                            {isHq ? <Hqproject countries={countries} user={auth.user} /> : <Nohqproject countries={countries} user={auth.user} />}
+                            {isHq ? <Hqproject countries={countries} user={auth.user} handlehqChange={handlehqChange} /> : <Nohqproject countries={countries} user={auth.user} handlehqChange={handlehqChange} />}
                         </div>
                     </div>
                 </div>

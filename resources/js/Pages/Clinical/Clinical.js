@@ -42,7 +42,7 @@ const Clinical = (props) => {
         formulations: [{ingredient: '', strength_type: '', numerator_lower_val: '', numerator_upper_val: '', numerator_unit: '', function: ''}],
         packagings: [
             {
-                packaging_type:'',packaging_name:'',package_number:'',description:'',launched:'',first_lunch_date:'',packaging_discontinued:'',discontinuation_date:'', 
+                packaging_type:'',packaging_name:'',package_number:'',description:'',launched:'',first_lunch_date:'',packaging_discontinued:'',discontinuation_date:'', remarks: '',
                 packagelif: [{package_shelf_life_type:'', shelf_life:'',shelf_life_unit:'',package_storage_condition:[], remarks:''}]
             }
         ],
@@ -50,7 +50,7 @@ const Clinical = (props) => {
         indication: '',
         paediatric_use: '',
         manufacturing: [{manufacturer:'',operation_type:[]}],
-        statuses: [{status:'',status_date:'',ectd_sequence:'',change_control_ref:'',internal_submission_reference:'',remarks:''}],
+        statuses: [{country: '',status:'',status_date:'',ectd_sequence:'',change_control_ref:'',internal_submission_reference:'',remarks:''}],
         doc: [{document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: ''}],
         created_by: props.auth.user.id,
     });
@@ -163,7 +163,7 @@ const Clinical = (props) => {
 
     let addStatusesFields = () => {
         let newArr = {...data};
-        newArr.statuses.push({status:'',status_date:'',ectd_sequence:'',change_control_ref:'',internal_submission_reference:'',remarks:''});
+        newArr.statuses.push({country: '',status:'',status_date:'',ectd_sequence:'',change_control_ref:'',internal_submission_reference:'',remarks:''});
         setData(newArr);
     }
    
@@ -309,8 +309,14 @@ const Clinical = (props) => {
 
     let addPackageValues = () => {
         let arr = {...data};
-        arr.packagings.push({packaging_type:"",packaging_name:"",package_number:"",description:"",launched:"",first_lunch_date:'',packaging_discontinued:"",discontinuation_date:'', packagelif: [{package_shelf_life_type:"", shelf_life:"",shelf_life_unit:"",package_storage_condition:[], remarks:""}]})
+        arr.packagings.push({packaging_type:"",packaging_name:"",package_number:"",description:"",launched:"",first_lunch_date:'',packaging_discontinued:"",discontinuation_date:'',remarks:'', packagelif: [{package_shelf_life_type:"", shelf_life:"",shelf_life_unit:"",package_storage_condition:[], remarks:""}]})
         setData(arr);
+    }
+
+    let addPackagelifeValues = (i) => {
+        let newArr = {...data};
+        newArr.packagings[i].packagelif.push({package_shelf_life_type:'', shelf_life:'',shelf_life_unit:'',package_storage_condition:[], remarks:''});
+        setData(newArr)
     }
 
     let handlePackagelifeSelectChange = (index, i, e, key) => {
@@ -413,11 +419,11 @@ const Clinical = (props) => {
                         <div className="card-body">
                             <form className="form" onSubmit={handleSubmit}>
                                 <Tabs defaultActiveKey="first">
-                                    <Tab eventKey="first" title="New registration">
+                                    <Tab eventKey="first" title="New Registration">
                                         <Accordion style={{ marginTop: '20px' }} defaultActiveKey="0">
                                             <div className="card_title" style={{ marginBottom: '20px'  }}>
                                                 <h5>First Submission</h5>
-                                                <h5 className="subhead">All fields markedd with * are required</h5>
+                                                <h5 className="subhead">All fields marked with * are required</h5>
                                             </div>
                                             <Card>
                                                 <Accordion.Toggle as={Card.Header} eventKey="0">
@@ -616,7 +622,7 @@ const Clinical = (props) => {
                                         <Accordion>
                                             <Card>
                                                 <Accordion.Toggle as={Card.Header} eventKey="0">
-                                                    Dosages Form
+                                                    Dosage Form / ATC
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
                                                     <Card.Body>
@@ -626,19 +632,19 @@ const Clinical = (props) => {
                                                                 <div className="form_group_field">
                                                                     <select name="authorized_pharmaceutical_form" defaultValue='' onChange={handleChange} style={{ borderColor: errors.authorized_pharmaceutical_form ? 'red' : '' }}>
                                                                         <option value=''></option>
-                                                                        <option>powder</option>
-                                                                        <option>solution</option>
-                                                                        <option>eye drops</option>
-                                                                        <option>nebuliser solution</option>
-                                                                        <option>oral solution</option>
-                                                                        <option>powder and solvent for solution for injection</option>
-                                                                        <option>solution for injection</option>
-                                                                        <option>sublingual tablet</option>
-                                                                        <option>suspension for injection</option>
-                                                                        <option>sieved powder</option>
-                                                                        <option>solution for skin-prick test</option>
-                                                                        <option>eye drops powder and solvent for injection</option>
-                                                                        <option>powder and solvent for nebuliser solution</option>
+                                                                        <option>Powder</option>
+                                                                        <option>Solution</option>
+                                                                        <option>Eye drops</option>
+                                                                        <option>Nebuliser solution</option>
+                                                                        <option>Oral solution</option>
+                                                                        <option>Powder and solvent for solution for injection</option>
+                                                                        <option>Solution for injection</option>
+                                                                        <option>Sublingual tablet</option>
+                                                                        <option>Suspension for injection</option>
+                                                                        <option>Sieved powder</option>
+                                                                        <option>Solution for skin-prick test</option>
+                                                                        <option>Eye drops powder and solvent for injection</option>
+                                                                        <option>Powder and solvent for nebuliser solution</option>
                                                                     </select>
                                                                 </div>
                                                                 <p className="errors_wrap" style={{ display: errors.authorized_pharmaceutical_form ? 'inline-block' : 'none' }}>{errors.authorized_pharmaceutical_form}</p>
@@ -660,12 +666,12 @@ const Clinical = (props) => {
                                                                 <div className="form_group_field">
                                                                     <select name="route_of_admin" defaultValue='' onChange={handleChange} style={{ borderColor: errors.route_of_admin ? 'red' : '' }}>
                                                                         <option value='' ></option>
-                                                                        <option>cutaneous use</option>
-                                                                        <option>intrademal use</option>
-                                                                        <option>nasal use</option>
-                                                                        <option>ocular use</option>
-                                                                        <option>subcutaneous use</option>
-                                                                        <option>sublingual use</option>
+                                                                        <option>Cutaneous use</option>
+                                                                        <option>Intrademal use</option>
+                                                                        <option>Nasal use</option>
+                                                                        <option>Ocular use</option>
+                                                                        <option>Subcutaneous use</option>
+                                                                        <option>Sublingual use</option>
                                                                     </select>
 
                                                                 </div>
@@ -676,23 +682,23 @@ const Clinical = (props) => {
                                                                 <div className="form_group_field">
                                                                     <select name="atc" defaultValue='' onChange={handleChange} style={{ borderColor: errors.atc ? 'red' : '' }}>
                                                                         <option value="" ></option>
-                                                                        <option>V01 - ALLERGENS</option>
-                                                                        <option>V01A - ALLERGENS</option>
-                                                                        <option>V01AA - ALLERGEN EXTRACTS</option>
-                                                                        <option>V01AA01 - FEATHER</option>
-                                                                        <option>V01AA02 - GRASS POLLEN</option>
-                                                                        <option>V01AA03 - HOUSE DUST MITES</option>
-                                                                        <option>V01AA04 - MOULD FUNGUS AND YEAST FUNGUS</option>
-                                                                        <option>V01AA05 - TREE POLLEN</option>
-                                                                        <option>V01AA07 - INSECTS</option>
-                                                                        <option>V01AA08 - FOOD</option>
-                                                                        <option>V01AA09 - TEXTILES</option>
-                                                                        <option>V01AA10 - FLOWERS</option>
-                                                                        <option>V01AA11 - ANIMALS</option>
-                                                                        <option>V01AA20 - VARIOUS</option>
-                                                                        <option>V04C - OTHER DIAGNOSTIC AGENTS</option>
-                                                                        <option>V04CL - TESTS FOR ALLERGIC DISEASES</option>
-                                                                        <option>V07AB - SOLVENTS AND DILUTING AGENTS</option>
+                                                                        <option>V01 - Allergens</option>
+                                                                        <option>V01A - Allergens</option>
+                                                                        <option>V01AA - Allergen extracts</option>
+                                                                        <option>V01AA01 - Feather</option>
+                                                                        <option>V01AA02 - Grass pollen</option>
+                                                                        <option>V01AA03 - House dust mites</option>
+                                                                        <option>V01AA04 - Mould fungs and yeast fungus</option>
+                                                                        <option>V01AA05 - Tree pollen</option>
+                                                                        <option>V01AA07 - Insects</option>
+                                                                        <option>V01AA08 - Food</option>
+                                                                        <option>V01AA09 - Textiles</option>
+                                                                        <option>V01AA10 - Flowers</option>
+                                                                        <option>V01AA11 - Animals</option>
+                                                                        <option>V01AA20 - Various</option>
+                                                                        <option>V04C - Other diagnostic agents</option>
+                                                                        <option>V04CL - Tests for allergic diseases</option>
+                                                                        <option>V07AB - Solvents and diluting agents</option>
                                                                     </select>
                                                                 </div>
                                                                 <p className="errors_wrap" style={{ display: errors.atc ? 'inline-block' : 'none' }}>{errors.atc}</p>
@@ -999,7 +1005,7 @@ const Clinical = (props) => {
                                                                         <p className="errors_wrap" style={{ display: errors['packagings.'+ index +'.packaging_name'] ? 'inline-block' : 'none' }}>{errors['packagings.'+ index +'.packaging_name']}</p>
                                                                     </div>
                                                                     <div className="form_group_inline">
-                                                                        <span className="form_group_label">Package Number (*)</span>
+                                                                        <span className="form_group_label">Package Size (*)</span>
                                                                         <div className="form_group_field">
                                                                             <input type="text" name="package_number" onChange={(e) => handlePackagingsChange(index, e)} style={{ borderColor: errors['packagings.'+ index +'.package_number'] ? 'red' : '' }} />
                                                                         </div>
@@ -1049,6 +1055,15 @@ const Clinical = (props) => {
                                                                             {/* <input type="text" name="discontinuation_date" onChange={(e) => handlePackagingsChange(index, e)} /> */}
                                                                             <DatePicker name="discontinuation_date" selected={data.packagings[index].discontinuation_date} onChange={(date) => handleDateChange(index,'discontinuation_date', date)} />
                                                                         </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    <div className='form_group_inline'>
+                                                                        <span className='form_group_label'>Remarks</span>
+                                                                        <div className='form_group_field'>
+                                                                            <input type="text" name='remarks' onChange={(e) => handlePackagingsChange(index, e)} />
+                                                                        </div>
+                                                                        
                                                                     </div>
                                                                 </div>
                                                                 <div style={{ display: 'flex', justifyContent: 'end' }}>
@@ -1200,7 +1215,7 @@ const Clinical = (props) => {
                                         <Accordion>
                                             <Card>
                                                 <Accordion.Toggle as={Card.Header} eventKey="0">
-                                                    Status
+                                                    Status Details
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
                                                     <Card.Body>
@@ -1224,42 +1239,40 @@ const Clinical = (props) => {
                                                                     :
                                                                 ''}
                                                                 <div className="inline_form">
+                                                                    {data.procedure_type == 'Decentralized' || data.procedure_type == 'Mutual Recognition' ?
+                                                                        <div className="form_group_inline">
+                                                                            <span className="form_group_label">Country</span>
+                                                                            <div className="form_group_field">
+                                                                                <select defaultValue="" name='country' onChange={(e) => handleStatusesChange(index, e)}>
+                                                                                    <option value=""></option>
+                                                                                    <option value="All">All</option>
+                                                                                    {data.country.map(c => (
+                                                                                        <option key={c}>{c}</option>
+                                                                                    ))}
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                    : ''}
                                                                     <div className="form_group_inline">
                                                                         <span className="form_group_label">Status (*)</span>
                                                                         <div className="form_group_field">
                                                                             <select name="status" defaultValue="" onChange={(e) => handleStatusesChange(index, e)} style={{ borderColor: errors['statuses.'+ index +'.status'] ? 'red' : '' }}>
                                                                                 <option value="" ></option>
                                                                                 <option>Application / Submitted</option>
+                                                                                <option>Positive Opinion / Obtained</option>
                                                                                 <option>Approval / Obtained</option>
                                                                                 <option>Application / Rejected</option>
-                                                                                <option>Application / Withdrawn by MAH due to Safety/Efficacy</option>
                                                                                 <option>Application / Withdrawn by MAH not due Safety/Efficacy</option>
-                                                                                <option>Marketing Application / Dispatched To Local RA</option>
-                                                                                <option>Application / Validated (administrative / technical admissibility)</option>
-                                                                                <option>Assessment report / received</option>
-                                                                                <option>Dossier Update / Submitted</option>
-                                                                                <option>eCTD Dossier Update / Submitted</option>
-                                                                                <option>Marketing / Launched</option>
-                                                                                <option>Marketing / Discontinued</option>
+                                                                                <option>Application / Withdrawn by MAH not due to safety/efficacy</option>
+                                                                                <option>Study / Start Date Submitted</option>
+                                                                                <option>Study / End Date Submitted</option>
+                                                                                <option>Study / Results Submitted</option>
+                                                                                <option>Application / Dispatch to local RA</option>
+                                                                                <option>Application / Validated</option>
                                                                                 <option>Application / Dispatch Planned</option>
                                                                                 <option>Application / Submission Planned</option>
                                                                                 <option>Application / Approval Expected</option>
-                                                                                <option>Dossier Update / Submission Planned</option>
-                                                                                <option>eCTD Dossier Update / Submission Planned</option>
-                                                                                <option>Application / Submission of dossier update to RMS planned</option>
-                                                                                <option>Application / Dossier update submitted to CMS</option>
-                                                                                <option>Application / Submission to CMS Planned</option>
-                                                                                <option>MRP Application / Dossier update submitted to CMS</option>
-                                                                                <option>National Translations / Submitted</option>
-                                                                                <option>Application / List of dispatch dates submitted</option>
-                                                                                <option>Application / Start of procedure expected</option>
-                                                                                <option>MRP Application / Procedure started</option>
-                                                                                <option>Applicaton / CMS comments expected</option>
-                                                                                <option>Application / / CMS comments received</option>
-                                                                                <option>Assessment Report / Expected</option>
-                                                                                <option>MRP Assessment Report / Received</option>
-                                                                                <option>Positive Opinion / Obtained</option>
-                                                                                <option>MRP Application / End of procedure</option>
+                                                                                <option>Application/ End of Procedur</option>
                                                                             </select>
                                                                         </div>
                                                                         <p className="errors_wrap" style={{ display: errors['statuses.'+ index +'.status'] ? 'inline-block' : 'none' }}>{errors['statuses.'+ index +'.status']}</p>
