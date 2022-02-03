@@ -158,7 +158,17 @@ const Dashboard = (props) => {
             },
             {
                 Header: 'Country / Countries',
-                accessor: 'country',
+                // accessor: 'country',
+                accessor: function (originalRow, rowIndex) {
+                    if (originalRow.country && Array.isArray(originalRow.country)) {
+                        
+                        return originalRow.country.map(ele => (
+                            <ul>
+                                <li>{ele}</li>
+                            </ul>
+                        ))
+                    }
+               }
             },
             {
                 Header: 'Procedure N°',
@@ -190,7 +200,16 @@ const Dashboard = (props) => {
             },
             {
                 Header: 'Country / Countries',
-                accessor: 'country',
+                accessor: function (originalRow, rowIndex) {
+                    if (originalRow.country && Array.isArray(originalRow.country)) {
+                        
+                        return originalRow.country.map(ele => (
+                            <ul>
+                                <li>{ele}</li>
+                            </ul>
+                        ))
+                    }
+               }
             },
             {
                 Header: 'Variation Title',
@@ -222,12 +241,21 @@ const Dashboard = (props) => {
             },
             {
                 Header: 'Country / Countries',
-                accessor: 'country',
+                accessor: function (originalRow, rowIndex) {
+                    if (originalRow.country && Array.isArray(originalRow.country)) {
+                        
+                        return originalRow.country.map(ele => (
+                            <ul>
+                                <li>{ele}</li>
+                            </ul>
+                        ))
+                    }
+               }
             },
-            // {
-            //     Header: 'Renewal Title',
-            //     accessor: 'renewal_title',
-            // },
+            {
+                Header: 'Renewal Title',
+                accessor: 'renewal_title',
+            },
             {
                 Header: 'Status',
                 accessor: 'type',
@@ -254,12 +282,21 @@ const Dashboard = (props) => {
             },
             {
                 Header: 'Country / Countries',
-                accessor: 'country',
+                accessor: function (originalRow, rowIndex) {
+                    if (originalRow.country && Array.isArray(originalRow.country)) {
+                        
+                        return originalRow.country.map(ele => (
+                            <ul>
+                                <li>{ele}</li>
+                            </ul>
+                        ))
+                    }
+               }
             },
-            // {
-            //     Header: 'Renewal Title',
-            //     accessor: 'renewal_title',
-            // },
+            {
+                Header: 'Baseline Title',
+                accessor: 'baseline_title',
+            },
             {
                 Header: 'Status',
                 accessor: 'type',

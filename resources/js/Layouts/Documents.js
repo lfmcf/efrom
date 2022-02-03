@@ -2,13 +2,13 @@ import React from 'react';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-const Documents = ({handleChanged,handleDocumentdate, addFormFields, formValues}) => {
+const Documents = ({handleChanged,handleDocumentdate, addFormFields, formValues, removeDocumentsFields}) => {
 
     return (
-        <div className="row">
-            <div className="col-md-12 col-lg-12">
-                <div style={{ marginTop: '20px' }}>
-                    <div className="row">
+        <div className="row"  style={{height:'100%'}}>
+            <div className="col-md-12 col-lg-12" style={{height:'100%'}}>
+                <div style={{ marginTop: '20px',padding:'20px',  overflowY: 'auto',height: '100%' }}>
+                    <div className="row" >
                       
                         <div className="col-6">
                             
@@ -28,10 +28,18 @@ const Documents = ({handleChanged,handleDocumentdate, addFormFields, formValues}
 <br></br>
                     {formValues.map((element, index) => (
                        
-                        <fieldset>
+                        <fieldset  key={index}>
                             <legend>Document {index + 1}</legend>
                         
-                        <div style={{ marginTop: '20px' }} key={index}>
+                        <div style={{ marginTop: '20px' }}>
+                                {index > 0 ?
+                                    <div style={{ display: 'flex', justifyContent: 'end' }}>
+                                        <button type="button" style={{ width: '14px', height: '14px', background: 'transparent', padding: '0', margin: '0 0 20px 0' }} onClick={() => removeDocumentsFields(index)}>
+                                            <svg className="mdi-icon" style={{ verticalAlign: 'middle' }} width="14" height="14" fill="#000" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path></svg>
+                                        </button>
+                                    </div>
+                                    :
+                                    ''}
                             <div className="inline_form">
                                 <div className="form_group_inline" >
                                     <span className="form_group_label">Document type</span>

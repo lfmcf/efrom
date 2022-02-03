@@ -12336,11 +12336,10 @@ h5.subhead {
   /*font-family:"Roboto",sans-serif;*/
   color: #646777;
   text-transform: capitalize;
-  font-weight: 600;
-  font-size: 20px;
+  font-weight: 500;
+  font-size: 18px;
   line-height: 32px;
-  margin-bottom: 20px;
-  margin-top: 20px;
+  margin: 5px 0 10px 0;
 }
 
 .card {
@@ -12422,6 +12421,8 @@ h5.subhead {
   max-height: 32px;
   line-height: 18px;
   margin: auto 0;
+  font-weight: 100;
+  font-size: 12px;
 }
 
 .form_group_field {
@@ -12474,9 +12475,9 @@ legend {
     padding: 5px 10;
 } */
 
-.tab-content > .tab-pane{
-  border-top: 1px solid #686df4;
-}
+/* .tab-content > .tab-pane{
+    border-top: 1px solid #686df4;
+} */
 
 .form .nav {
   width: 50%;
@@ -12488,38 +12489,59 @@ legend {
 .form .nav-link {
   flex: 1;
   text-align: center;
-  background: #686df4;
-  color: #fff;
-  -webkit-border-top-left-radius: 4px;
-  -webkit-border-top-right-radius: 4px;
-  -moz-border-radius-topleft: 4px;
-  -moz-border-radius-topright: 4px;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  box-shadow: inset 0px 1px 12px 1px rgba(0,0,0,0.15);
+  /* background: #686df4;
+    color: #fff; */
+  /* -webkit-border-top-left-radius: 4px;
+-webkit-border-top-right-radius: 4px;
+-moz-border-radius-topleft: 4px;
+-moz-border-radius-topright: 4px;
+border-top-left-radius: 4px;
+border-top-right-radius: 4px;
+-webkit-box-shadow: inset 0px 3px 12px 3px rgba(0,0,0,0.28); 
+box-shadow: inset 0px 1px 12px 1px rgba(0,0,0,0.15); */
   font-family: 'Open Sans' , sans-serif;
 }
 
-.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link{
-  border-top: 1px solid #686df4;
-  border-right: 1px double #686df4;
-  border-left: 1px solid #686df4;
+/* .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link{
+    border-top: 1px solid #686df4;
+    border-right: 1px double #686df4;
+    border-left: 1px solid #686df4;
+    
 }
 
 .form .nav-link.active {
-  background-color: #fff;
-  color: #686df4;
-  box-shadow: none;
+    background-color: #fff;
+    color: #686df4;
+    box-shadow: none;
 }
+
+
+.nav-tabs .nav-link {
+    border-color: unset;
+    border: none;
+    font-size: 15px;
+    
+} */
 
 .nav-tabs {
   border-bottom: none;
 }
 
-.nav-tabs .nav-link {
-  border-color: unset;
-  border: none;
-  font-size: 15px;
+.muitab {
+  width: 100%;
+  overflow-y: auto;
+  height: 100%;
+  padding: 24px;
+}
+
+.MuiTabs-flexContainerVertical button {
+  font-size: 0.75rem;
+  align-items: start;
+  text-align: left;
+}
+
+.MuiTabScrollButton-vertical {
+  height: 30px !important;
 }
 
 .form .card {
@@ -12935,5 +12957,8 @@ legend {
   color: #2c4166;
   text-transform: capitalize;
 }
+
+/* Mui Tabs */
+
 
 

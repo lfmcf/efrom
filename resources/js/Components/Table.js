@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import { useTable, usePagination, useGlobalFilter, useAsyncDebounce } from 'react-table';
 import BTable from 'react-bootstrap/Table';
-import { borderRadius } from 'tailwindcss/defaultTheme';
 
 function GlobalFilter({
     preGlobalFilteredRows,
