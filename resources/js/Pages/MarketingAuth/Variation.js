@@ -15,7 +15,7 @@ const Variation = ({countries, auth}) => {
         <>
             <div className="row">
                 <div className="col-md-12">
-                    <h3 className="page-title">Variation</h3>
+                    <h3 className="page-title">MA - Variation</h3>
                 </div>
             </div>
             <div className="row">
@@ -29,7 +29,7 @@ const Variation = ({countries, auth}) => {
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '10px 0' }}>
                                 <div>
                                     <input className="form-check-input" type="checkbox" value="checked" id="flexCheckDefault" onChange={handlehqChange} />
-                                    <label className="form-check-label" htmlFor="flexCheckDefault">
+                                    <label className="form-check-label" style={{paddingLeft:'10px'}}htmlFor="flexCheckDefault">
                                         HQ project
                                     </label>
                                 </div>

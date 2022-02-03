@@ -297,7 +297,7 @@ const Dashboard = (props) => {
             <Head title="Dashboard" />
             <div className="row">
                 <div className="col-md-12">
-                    <h3 className="page-title">Online Marketing Dashboard</h3>
+                    <h3 className="page-title"><i style={{paddingBottom:'8px'}}class="fas fa-home"></i> / Dashboard</h3>
                 </div>
             </div>
             
@@ -306,19 +306,19 @@ const Dashboard = (props) => {
                     <div className="card main-card">
                         <div className="card-body">
                             <div style={{marginBottom: '50px'}}>
-                                <h5 className="mb-3">MA Registration Creation</h5>
+                                <h5 className="mb-3 head-table" style={{float: 'left'}}>MA Registration Creation</h5>
                                 <Table columns={Rccolumns} data={Rcdata} />
                             </div>
                             <div style={{marginBottom: '50px'}}>
-                                <h5 className="mb-3">Variation</h5>
+                                <h5 className="mb-3 head-table" style={{float: 'left'}}>Variation</h5>
                                 <Table columns={Variationcolumns} data={VariationData} />
                             </div>
                             <div style={{marginBottom: '50px'}}>
-                                <h5 className="mb-3">Renewal</h5>
+                                <h5 className="mb-3 head-table" style={{float: 'left'}}>Renewal</h5>
                                 <Table columns={Renewalcolumns} data={RenewalData} />
                             </div>
                             <div style={{marginBottom: '50px'}}>
-                                <h5 className="mb-3">Baseline</h5>
+                                <h5 className="mb-3 head-table" style={{float: 'left'}}>Baseline</h5>
                                 <Table columns={Baselinecolumns} data={BaselineData} />
                             </div>
                         </div>

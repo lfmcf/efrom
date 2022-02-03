@@ -567,11 +567,14 @@ const Nohqproject = (props) => {
             </Tabs>
             <div style={{display:'flex'}}>
                 <div className="form-button">
-                    <button style={{width:'80px'}} type="submit" className="btn btn-primary" name="submit" disabled={processing}>Submit</button>
+                    <button style={{width:'100px'}} type="submit" className="btn_submit btn btn-primary" name="submit" disabled={processing}>Submit</button>
                 </div>
                 <div className="form-button">
-                    <button type="submit" style={{width:'80px',marginLeft:'10px'}} className="btn btn-primary" name="draft" disabled={processing}>Draft</button>
+                    <button type="submit" style={{width:'100px'}} className="btn_submit btn btn-primary" name="draft" disabled={processing}>Draft</button>
                 </div>
+                <div className="form-button">
+                                        <button style={{ width: '100px' }} type="reset" className="btn_close btn btn-danger" name="Reset" disabled={processing}>Reset</button>
+                                    </div>
             </div>
             
         </form>

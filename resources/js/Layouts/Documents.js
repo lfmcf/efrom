@@ -9,13 +9,19 @@ const Documents = ({handleChanged,handleDocumentdate, addFormFields, formValues}
             <div className="col-md-12 col-lg-12">
                 <div style={{ marginTop: '20px' }}>
                     <div className="row">
+                      
+                        <div className="col-6">
+                            
+                        </div>
                         <div className="card_title col-6">
-                            <h5>Documents forms</h5>
                             <h5 className="subhead" >All fields markedd with * are required</h5>
                         </div>
                         <div className="col-6">
-                            <button className="add_doc_form" type="button" onClick={() => addFormFields()}>
-                                <i className="bi bi-plus-lg"></i> Ajouter un document
+                            
+                            </div>
+                        <div className="card_title col-6">
+                        <button className="add_doc_form" type="button" style={{float:'right',marginTop:'-10px',marginBottom:'-10px'}} onClick={() => addFormFields()}>
+                                <i className="bi bi-plus-lg"></i> Add Document
                             </button>
                         </div>
                     </div>
@@ -85,7 +91,7 @@ const Documents = ({handleChanged,handleDocumentdate, addFormFields, formValues}
                                 <div className="form_group_inline">
                                     <span className="form_group_label">Document</span>
                                     <div className="form_group_field">
-                                        <input type="file" name="document" onChange={e => handleChanged(index, e)} alue={element.document || ""} />
+                                        <input type="file" name="document" style={{paddingTop:'2.5px'}} onChange={e => handleChanged(index, e)} alue={element.document || ""} />
                                     </div>
                                 </div>
                             </div>
