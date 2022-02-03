@@ -103,9 +103,10 @@ class AmendmentsController extends Controller
                 'Procedure Number',
                 'Local Tradename',
                 'Application Stage',
-                'Product Type'
+                // 'Product Type'
             );
             $amendmentsDetails = array(
+                'Amendment Title',
                 'Description of the event',
                 'Reason for variation',
                 'Remarks'
@@ -145,7 +146,7 @@ class AmendmentsController extends Controller
                 $amendments->procedure_num,
                 $amendments->local_tradename,
                 $amendments->application_stage,
-                $amendments->product_type
+                // $amendments->product_type
             ], NULL, 'A2');
 
             if(is_array($amendments->country)) {
@@ -161,6 +162,7 @@ class AmendmentsController extends Controller
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($amendmentsDetails, NULL, 'A1');
             $sheet->fromArray([
+                $amendments->amendment_title,
                 $amendments->description,
                 $amendments->reason,
                 $amendments->remarks
@@ -174,8 +176,8 @@ class AmendmentsController extends Controller
             $sheet->fromArray($amendments->statuses, NULL, 'A2');
             $hr = $sheet->getHighestRow();
             for($i=2; $i<=$hr; $i++) {
-                $datef = $sheet->getCell('B'.$i);
-                $sheet->setCellValue('B'.$i, date("d-m-Y", strtotime($datef)));
+                $datef = $sheet->getCell('C'.$i);
+                $sheet->setCellValue('C'.$i, date("d-m-Y", strtotime($datef)));
             }
 
             $spreadsheet->createSheet();

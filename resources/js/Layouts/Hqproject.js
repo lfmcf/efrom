@@ -7,6 +7,7 @@ import Select from 'react-select';
 import Documents from "@/Layouts/Documents";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import {product_name, procedure_type, status } from '@/Components/List';
 
 const Hqproject = (props) => {
 
@@ -24,6 +25,13 @@ const Hqproject = (props) => {
 
     const selectInputRef = React.useRef({});
     const ctrRef = React.useRef({});
+
+    const selectStyles = (hasErrors) => ({
+        control: (styles) => ({
+            ...styles,
+            ...(hasErrors && { borderColor: 'red' }),
+        }),
+    });
 
     let addProductFields = () => {
         let arr = {...data};
@@ -78,11 +86,24 @@ const Hqproject = (props) => {
         
     }
 
-    const handleIdentificationProductChange = (i, e) => {
+    // const handleIdentificationProductChange = (i, e) => {
+    //     let arr = {...data}
+    //     arr.identification[i][e.target.name] = e.target.value
+    //     setData(arr);
+        
+    // }
+
+    let handleIdentificationSelectChange = (i, e, name) => {
         let arr = {...data}
-        arr.identification[i][e.target.name] = e.target.value
+        arr.identification[i][name] = e.value;
         setData(arr);
-        // setStatusContries([])
+    }
+
+    let handleVariationSelectChange = (i, e, name) => {
+        let arr = {...data}
+        arr.variation[i][name] = e.value;
+        setData(arr);
+        clearErrors('variation.' + i + '.' + name)
     }
 
     const handleVariationChange = (i, e) => {
@@ -194,18 +215,26 @@ const Hqproject = (props) => {
         post(route("storehqproject", {'type': submitType}));
     }
 
+    let handleStatusSelectChange = (i, e) => {
+        let newFormValues = {...data};
+        newFormValues.statuses[i]['status'] = e.value;
+        setData(newFormValues);
+        clearErrors('statuses.'+i+'.status')
+    }
+
     return (
         <form className="form" onSubmit={handleSubmit}>
             <Tabs defaultActiveKey="first">
-                <Tab eventKey="first" title="Form">
+                <Tab eventKey="first" title="New Variation">
                     <Accordion defaultActiveKey="0" style={{ marginTop: '20px' }}>
                         <div className="card_title" style={{ marginBottom: '20px' }}>
                             {/* <h5>First Submission</h5> */}
-                            <h5 className="subhead">All fields markedd with * are required</h5>
+                            <h5 className="subhead">All fields marked with * are required</h5>
                         </div>
+                        
                         <Card>
                             <Accordion.Toggle as={Card.Header} eventKey="0">
-                                Registration identification
+                                Registration Identification
                             </Accordion.Toggle>
                             <Accordion.Collapse eventKey="0" >
                                 <Card.Body>
@@ -226,9 +255,9 @@ const Hqproject = (props) => {
                                             ''}
                                             <div className="inline_form">
                                                 <div className="form_group_inline">
-                                                    <span className="form_group_label">Product</span>
+                                                    <span className="form_group_label">Product Name</span>
                                                     <div className="form_group_field">
-                                                        <select name="product" defaultValue="" onChange={(e) => handleIdentificationProductChange(index, e)}>
+                                                        {/* <select name="product" defaultValue="" onChange={(e) => handleIdentificationProductChange(index, e)}>
                                                             <option value=""></option>
                                                             <option>STG 320</option>
                                                             <option>ALBEY</option>
@@ -244,19 +273,34 @@ const Hqproject = (props) => {
                                                             <option>REFERENCES</option>
                                                             <option>STALORAL</option>
                                                             <option>STALORAL 300</option>
-                                                        </select>
+                                                        </select> */}
+                                                        <Select options={product_name}
+                                                            name="product"
+                                                            onChange={(e) => handleIdentificationSelectChange(index, e, 'product')}
+                                                            className="basic"
+                                                            classNamePrefix="basic"
+                                                            // styles={selectStyles(errors.product_name)}
+                                                            placeholder=''
+                                                        />
                                                     </div>
                                                 </div>
                                                 <div className="form_group_inline">
                                                     <span className="form_group_label">Procedure Type</span>
                                                     <div className="form_group_field">
-                                                        <select name="procedure_type" defaultValue="" onChange={e => handleprocedureChange(index, e)}>
+                                                        {/* <select name="procedure_type" defaultValue="" onChange={e => handleprocedureChange(index, e)}>
                                                             <option value=""></option>
                                                             <option>National</option>
                                                             <option>Centralized</option>
                                                             <option>Decentralized</option>
                                                             <option>Mutual Recognition</option>
-                                                        </select>
+                                                        </select> */}
+                                                        <Select options={procedure_type}
+                                                            name="procedure_type"
+                                                            onChange={(e) => handleIdentificationSelectChange(index, e, 'procedure_type')}
+                                                            className="basic"
+                                                            classNamePrefix="basic"
+                                                            placeholder=''
+                                                        />
                                                     </div>
                                                 </div>
                                                 <div className="form_group_inline">
@@ -305,22 +349,44 @@ const Hqproject = (props) => {
                                                 <div className="form_group_inline">
                                                     <span className="form_group_label">Application Stage</span>
                                                     <div className="form_group_field">
-                                                        <select defaultValue="" name='application_stage' onChange={(e) => handlIdentificationeChange(index, e)} >
+                                                        {/* <select defaultValue="" name='application_stage' onChange={(e) => handlIdentificationeChange(index, e)} >
                                                             <option value="" ></option>
                                                             <option>Marketing Authorisation</option>
                                                             <option>APSI / NPP</option>
-                                                        </select>
+                                                        </select> */}
+                                                        <Select options={[
+                                                            { value: 'Marketing Authorisation', label: 'Marketing Authorisation' },
+                                                            { value: 'APSI / NPP', label: 'APSI / NPP' },
+                                                        ]}
+                                                            name="application_stage"
+                                                            onChange={(e) => handleIdentificationSelectChange(index, e, 'application_stage')}
+                                                            className="basic"
+                                                            classNamePrefix="basic"
+                                                            placeholder=''
+                                                        // styles={selectStyles(errors.application_stage)}
+                                                        />
                                                     </div>
                                                 </div>
 
                                                 <div className="form_group_inline">
                                                     <span className="form_group_label">Product Type</span>
                                                     <div className="form_group_field">
-                                                        <select defaultValue='' name='product_type' onChange={(e) => handlIdentificationeChange(index, e)}>
+                                                        {/* <select defaultValue='' name='product_type' onChange={(e) => handlIdentificationeChange(index, e)}>
                                                             <option value='' ></option>
                                                             <option>Finished</option>
                                                             <option>Reference</option>
-                                                        </select>
+                                                        </select> */}
+                                                        <Select options={[
+                                                            { value: 'Finished', label: 'Finished' },
+                                                            { value: 'References', label: 'References' },
+                                                        ]}
+                                                            name="product_type"
+                                                            onChange={(e) => handleIdentificationSelectChange(index, e, 'product_type')}
+                                                            className="basic"
+                                                            classNamePrefix="basic"
+                                                            placeholder=''
+                                                        // styles={selectStyles(errors.product_type)}
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
@@ -396,41 +462,58 @@ const Hqproject = (props) => {
                                                 <div className="form_group_inline">
                                                     <span className="form_group_label">Variation Category (*)</span>
                                                     <div className="form_group_field">
-                                                        <select defaultValue="" name='category' onChange={(e) => handleVariationChange(index, e)} style={{ borderColor: errors['variation.' + index + '.category'] ? 'red' : '' }}>
-                                                            <option value=""></option>
-                                                            <option>Variation/Supplement</option>
-                                                            <option>FUM</option>
-                                                            
-                                                        </select>
+                                                        
+                                                        <Select options={[
+                                                            { value: 'Variation/Supplement', label: 'Variation/Supplement' },
+                                                            { value: 'FUM', label: 'FUM' },
+                                                        ]}
+                                                            name="category"
+                                                            onChange={(e) => handleVariationSelectChange(index, e, 'category')}
+                                                            className="basic"
+                                                            classNamePrefix="basic"
+                                                            placeholder=''
+                                                            styles={selectStyles(errors['variation.' + index + '.category'])}
+                                                        />
                                                     </div>
                                                     <p className="errors_wrap" style={{ display: errors['variation.' + index + '.category'] ? 'inline-block' : 'none' }}>{errors['variation.' + index + '.category']}</p>
                                                 </div>
                                                 <div className="form_group_inline">
                                                     <span className="form_group_label">Variation Type</span>
                                                     <div className="form_group_field">
-                                                        <select defaultValue="" name='variation_type' onChange={(e) => handleVariationChange(index, e)}>
-                                                            <option value=""></option>
-                                                            <option>Prior Authorisation (II)</option>
-                                                            <option>Do and Tell Immediate (IAIN Immediate Notification)</option>
-                                                            <option>Do and Tell Later (IA)</option>
-                                                            <option>Tell, Wait and Do (IB)</option>
-                                                            <option>Other</option>
-                                                        </select>
+                                                       
+                                                        <Select options={[
+                                                            { value: 'Variation/Supplement', label: 'Variation/Supplement' },
+                                                            { value: 'FUM', label: 'FUM' },
+                                                        ]}
+                                                            name="variation_type"
+                                                            onChange={(e) => handleVariationSelectChange(index, e, 'variation_type')}
+                                                            className="basic"
+                                                            classNamePrefix="basic"
+                                                            placeholder=''
+                                                        // styles={selectStyles(errors.product_type)}
+                                                        />
                                                     </div>
                                                 </div>
                                                 
                                                 <div className="form_group_inline">
                                                     <span className="form_group_label">Reason for variation</span>
                                                     <div className="form_group_field">
-                                                        <select defaultValue="" name='variation_reason' onChange={(e) => handleVariationChange(index, e)}>
-                                                            <option value="" ></option>
-                                                            <option>Indication</option>
-                                                            <option>Paediatric Indication</option>
-                                                            <option>Safety</option>
-                                                            <option>Following Urgent Safety Restriction</option>
-                                                            <option>Quality</option>
-                                                            <option>Others</option>
-                                                        </select>
+                                                        
+                                                        <Select options={[
+                                                            { value: 'Indication', label: 'Indication' },
+                                                            { value: 'Paediatric Indication', label: 'Paediatric Indication' },
+                                                            { value: 'Safety', label: 'Safety' },
+                                                            { value: 'Following Urgent Safety Restriction', label: 'Following Urgent Safety Restriction' },
+                                                            { value: 'Quality', label: 'Quality' },
+                                                            { value: 'Others', label: 'Others' },
+                                                        ]}
+                                                            name="variation_reason"
+                                                            onChange={(e) => handleVariationSelectChange(index, e, 'variation_reason')}
+                                                            className="basic"
+                                                            classNamePrefix="basic"
+                                                            placeholder=''
+                                                        // styles={selectStyles(errors.product_type)}
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
@@ -438,12 +521,20 @@ const Hqproject = (props) => {
                                                 <div className="form_group_inline">
                                                     <span className="form_group_label">Submission Type (*)</span>
                                                     <div className="form_group_field">
-                                                        <select defaultValue="" name='submission_type' onChange={(e) => handleVariationChange(index, e)} style={{ borderColor: errors['variation.' + index + '.submission_type'] ? 'red' : '' }}>
-                                                            <option value="" ></option>
-                                                            <option>CARDEAC</option>
-                                                            <option>Initial MAA</option>
-                                                            <option>NPP-Initial</option>
-                                                        </select>
+                                                       
+                                                        <Select options={[
+                                                            { value: 'CARDEAC', label: 'CARDEAC' },
+                                                            { value: 'Initial MAA', label: 'Initial MAA' },
+                                                            { value: 'Safety', label: 'Safety' },
+                                                            { value: 'NPP-Initial', label: 'NPP-Initial' },
+                                                        ]}
+                                                            name="submission_type"
+                                                            onChange={(e) => handleVariationSelectChange(index, e, 'submission_type')}
+                                                            className="basic"
+                                                            classNamePrefix="basic"
+                                                            placeholder=''
+                                                            styles={selectStyles(errors['variation.' + index + '.submission_type'])}
+                                                        />
                                                     </div>
                                                     <p className="errors_wrap" style={{ display: errors['variation.' + index + '.submission_type'] ? 'inline-block' : 'none' }}>{errors['variation.' + index + '.submission_type']}</p>
                                                 </div>
@@ -462,14 +553,21 @@ const Hqproject = (props) => {
                                                 <div className="form_group_inline">
                                                     <span className="form_group_label">Dossier Submission Format</span>
                                                     <div className="form_group_field" >
-                                                        <select defaultValue="" name='submission_format' onChange={(e) => handleVariationChange(index, e)}>
-                                                            <option value=""></option>
-                                                            <option>CTD</option>
-                                                            <option>Nees</option>
-                                                            <option>eCTD</option>
-                                                            <option>briefing Book</option>
-                                                            <option>Drug Master File</option>
-                                                        </select>
+                                                        
+                                                        <Select options={[
+                                                            { value: 'CTD', label: 'CTD' },
+                                                            { value: 'Nees', label: 'Nees' },
+                                                            { value: 'eCTD', label: 'eCTD' },
+                                                            { value: 'briefing Book', label: 'briefing Book' },
+                                                            { value: 'Drug Master File', label: 'Drug Master File' },
+                                                        ]}
+                                                            name="submission_format"
+                                                            onChange={(e) => handleVariationSelectChange(index, e, 'submission_format')}
+                                                            className="basic"
+                                                            classNamePrefix="basic"
+                                                            placeholder=''
+                                                        // styles={selectStyles(errors.product_type)}
+                                                        />
                                                     </div>
                                                 </div>
                                                 
@@ -483,7 +581,7 @@ const Hqproject = (props) => {
                     <Accordion>
                         <Card>
                             <Accordion.Toggle as={Card.Header} eventKey="0">
-                                Event Status
+                                Status Details
                             </Accordion.Toggle>
                             <Accordion.Collapse eventKey="0" >
                                 <Card.Body>
@@ -512,7 +610,7 @@ const Hqproject = (props) => {
                                                             <option value=''></option>
                                                             {data.identification.map((ele, i) => {
                                                                 if(ele.product) {
-                                                                    return <option value={ele.product} key={i}>{ele.product}</option>
+                                                                    return <option value={ele.product} key={i}>{ele.product} - {ele.procedure_type}</option>
                                                                 }
                                                                 
                                                             })}
@@ -543,40 +641,14 @@ const Hqproject = (props) => {
                                                 <div className="form_group_inline">
                                                     <span className="form_group_label">Status (*)</span>
                                                     <div className="form_group_field">
-                                                        <select name="status" defaultValue='' onChange={e => handleStatusChange(index, e)}>
-                                                            <option value=""></option>
-                                                            <option>Application / Submitted</option>
-                                                            <option>Approval / Obtained</option>
-                                                            <option>Application / Rejected</option>
-                                                            <option>Application / Withdrawn by MAH due to Safety/Efficacy</option>
-                                                            <option>Application / Withdrawn by MAH not due Safety/Efficacy</option>
-                                                            <option>Marketing Application / Dispatched To Local RA</option>
-                                                            <option>Application / Validated (administrative / technical admissibility)</option>
-                                                            <option>Assessment report / received</option>
-                                                            <option>Dossier Update / Submitted</option>
-                                                            <option>eCTD Dossier Update / Submitted</option>
-                                                            <option>Marketing / Launched</option>
-                                                            <option>Marketing / Discontinued</option>
-                                                            <option>Application / Dispatch Planned</option>
-                                                            <option>Application / Submission Planned</option>
-                                                            <option>Application / Approval Expected</option>
-                                                            <option>Dossier Update / Submission Planned</option>
-                                                            <option>eCTD Dossier Update / Submission Planned</option>
-                                                            <option>Application / Submission of dossier update to RMS planned</option>
-                                                            <option>Application / Dossier update submitted to CMS</option>
-                                                            <option>Application / Submission to CMS Planned</option>
-                                                            <option>MRP Application / Dossier update submitted to CMS</option>
-                                                            <option>National Translations / Submitted</option>
-                                                            <option>Application / List of dispatch dates submitted</option>
-                                                            <option>Application / Start of procedure expected</option>
-                                                            <option>MRP Application / Procedure started</option>
-                                                            <option>Applicaton / CMS comments expected</option>
-                                                            <option>Application / / CMS comments received</option>
-                                                            <option>Assessment Report / Expected</option>
-                                                            <option>MRP Assessment Report / Received</option>
-                                                            <option>Positive Opinion / Obtained</option>
-                                                            <option>MRP Application / End of procedure</option>
-                                                        </select>
+                                                        <Select options={status}
+                                                            onChange={(e) => handleStatusSelectChange(index, e)}
+                                                            name="status"
+                                                            className="basic"
+                                                            classNamePrefix="basic"
+                                                            styles={selectStyles(errors['statuses.' + index + '.status'])}
+                                                            placeholder=''
+                                                        />
                                                     </div>
                                                     <p className="errors_wrap" style={{ display: errors['statuses.' + index + '.status'] ? 'inline-block' : 'none' }}>{errors['statuses.' + index + '.status']}</p>
                                                 </div>
@@ -630,7 +702,8 @@ const Hqproject = (props) => {
                                                 <div className="form_group_inline">
                                                     <span className="form_group_label">Actual Local Implementation</span>
                                                     <div className="form_group_field">
-                                                        <input type="text" name="actual_implementation" onChange={e => handleStatusChange(index, e)} />
+                                                        <DatePicker  name="actual_implementation" selected={data.statuses[index].actual_implementation} onChange={(date) => handleDateChange(index, 'actual_implementation', date)} />
+                                                        {/* <input type="text" name="actual_implementation" onChange={e => handleStatusChange(index, e)} /> */}
                                                     </div>
                                                 </div>
                                             </div>
@@ -646,12 +719,15 @@ const Hqproject = (props) => {
                     <Documents handleChanged={handleChanged} handleDocumentdate={handleDocumentdate} addFormFields={addFormFields} formValues={data.doc} />
                 </Tab>
             </Tabs>
-            <div style={{display:'flex'}}>
+            <div style={{ display: 'flex' , width:'80%' }}>
                 <div className="form-button">
-                    <button style={{width:'80px'}} type="submit" className="btn btn-primary" name="submit" disabled={processing}>Submit</button>
+                    <button style={{ width: '100px' }} type="submit" className="btn_submit btn btn-primary" name="submit" disabled={processing}>Submit</button>
                 </div>
                 <div className="form-button">
-                    <button type="submit" style={{width:'80px',marginLeft:'10px'}} className="btn btn-primary" name="draft" disabled={processing}>Draft</button>
+                    <button type="submit" style={{ width: '100px' }} className="btn_submit btn btn-primary" name="draft" disabled={processing}>Draft</button>
+                </div>
+                <div className="form-button">
+                    <button style={{ width: '100px' }} type="reset" className=" btn btn-danger" name="Reset" disabled={processing}>Reset</button>
                 </div>
             </div>
         </form>

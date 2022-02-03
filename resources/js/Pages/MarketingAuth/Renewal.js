@@ -20,12 +20,14 @@ const Renewal = (props) => {
         procedure_num: '',
         local_tradename: '',
         product_type: '',
-        category: '',
-        description: '',
+        renewal_title: '',
+        // category: '',
+        // description: '',
         application_num: '',
         submission_format: '',
         validation_reason: '',
-        statuses: [{status: '',status_date: '',ectd: '',control: '',cdds: '',remarks: '',implimentation_deadline: '', next_renewals: '',next_renewals_deadline: '', next_renewals_date:''}],
+        remarks: '',
+        statuses: [{country: '',status: '',status_date: '',ectd: '',control: '',cdds: '',remarks: '',implimentation_deadline: '', next_renewals: '',next_renewals_deadline: '', next_renewals_date:''}],
         doc: [{document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: ''}],
         created_by: props.auth.user.id,
     });
@@ -49,7 +51,7 @@ const Renewal = (props) => {
 
     let addStatusFields = () => {
         let newArr = {...data};
-        newArr.statuses.push({status: '',status_date: '',ectd: '',control: '',cdds: '',remarks: '',implimentation_deadline: '', next_renewals: '',next_renewals_deadline: '', next_renewals_date:''});
+        newArr.statuses.push({country:'',status: '',status_date: '',ectd: '',control: '',cdds: '',remarks: '',implimentation_deadline: '', next_renewals: '',next_renewals_deadline: '', next_renewals_date:''});
         setData(newArr);
     }
 
@@ -145,16 +147,16 @@ const Renewal = (props) => {
                         <div className="card-body">
                             <form className="form" onSubmit={handleSubmit}>
                                 <Tabs defaultActiveKey="first">
-                                    <Tab eventKey="first" title="Form">
+                                    <Tab eventKey="first" title="New Renewal">
                                         <Accordion defaultActiveKey="0" style={{ marginTop: '20px' }}>
                                             <div className="card_title" style={{ marginBottom: '20px'  }}>
                                                 {/* <h5>First Submission</h5> */}
-                                                <h5 className="subhead">All fields markedd with * are required</h5>
+                                                <h5 className="subhead">All fields marked with * are required</h5>
                                             </div>
                                             <Card>
                                                
                                                 <Accordion.Toggle as={Card.Header} eventKey="0">
-                                                    Registration identification
+                                                    Registration Identification
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
                                                     <Card.Body>
@@ -242,9 +244,9 @@ const Renewal = (props) => {
                                                                         <option value=''></option>
                                                                         <option>Marketing Authorisation</option>
                                                                         <option>APSI / NPP</option>
-                                                                        <option>PIP*</option>
+                                                                        {/* <option>PIP*</option>
                                                                         <option>CTA*</option>
-                                                                        <option>IND*</option>
+                                                                        <option>IND*</option> */}
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -253,7 +255,7 @@ const Renewal = (props) => {
                                                                 <div className="form_group_field">
                                                                     <select name='product_type' defaultValue='' onChange={handleChange}>
                                                                         <option value=''></option>
-                                                                        <option>Clinical</option>
+                                                                        {/* <option>Clinical</option> */}
                                                                         <option>Finished</option>
                                                                         <option>Reference</option>
                                                                     </select>
@@ -273,24 +275,39 @@ const Renewal = (props) => {
                                                     <Card.Body>
                                                         <div className="inline_form">
                                                             <div className="form_group_inline">
+                                                                <span className="form_group_label">Renewal Title</span>
+                                                                <div className="form_group_field">
+                                                                    <input type="text" name="renewal_title" onChange={handleChange} />
+                                                                </div>
+                                                            </div>
+                                                            {/* <div className="form_group_inline">
                                                                 <span className="form_group_label">Variation Category (*)</span>
                                                                 <div className="form_group_field">
                                                                     <input type="text" name='category' onChange={handleChange} style={{borderColor: errors.category ? 'red' : ''}} />
                                                                 </div>
                                                                 <p className="errors_wrap" style={{ display: errors.category ? 'inline-block' : 'none' }}>{errors.category}</p>
-                                                            </div>
-                                                            <div className="form_group_inline">
+                                                            </div> */}
+                                                            {/* <div className="form_group_inline">
                                                                 <span className="form_group_label">Event Description</span>
                                                                 <div className="form_group_field">
                                                                     <input type="text" name='description' onChange={handleChange} />
                                                                 </div>
-                                                            </div>
+                                                            </div> */}
                                                             <div className="form_group_inline">
-                                                                <span className="form_group_label">Application N°</span>
+                                                                <span className="form_group_label">Reason For Renewal</span>
                                                                 <div className="form_group_field">
-                                                                    <input type="text" name='application_num' onChange={handleChange} />
+                                                                    <select name='validation_reason' defaultValue='' onChange={handleChange}>
+                                                                        <option value=''></option>
+                                                                        <option>Indication</option>
+                                                                        <option>Paediatric Indication</option>
+                                                                        <option>Safety</option>
+                                                                        <option>Following Urgent Safety Restriction</option>
+                                                                        <option>Quality</option>
+                                                                        <option>Others</option>
+                                                                    </select>
                                                                 </div>
                                                             </div>
+                                                            
                                                         </div>
                                                         <div className="inline_form">
                                                             <div className="form_group_inline">
@@ -307,18 +324,15 @@ const Renewal = (props) => {
                                                                 </div>
                                                             </div>
                                                             <div className="form_group_inline">
-                                                                <span className="form_group_label">Reason For Variation</span>
+                                                                <span className="form_group_label">Renewal Procedure N°</span>
                                                                 <div className="form_group_field">
-                                                                    <select name='validation_reason' defaultValue='' onChange={handleChange}>
-                                                                        <option value=''></option>
-                                                                        <option>Indication</option>
-                                                                        <option>Paediatric Indication</option>
-                                                                        <option>Safety</option>
-                                                                        <option>Following Urgent Safety Restriction</option>
-                                                                        <option>Quality</option>
-                                                                        <option>Others</option>
-                                                                    </select>
+                                                                    <input type="text" name='application_num' onChange={handleChange} />
                                                                 </div>
+                                                            </div>
+                                                            
+                                                            <div className="form_group_inline">
+                                                                <span className="form_group_label">Remarks</span>
+                                                                <input type="text" name="remarks" onChange={handleChange} />
                                                             </div>
                                                         </div>
                                                         
@@ -329,7 +343,7 @@ const Renewal = (props) => {
                                         <Accordion >
                                             <Card>
                                                 <Accordion.Toggle as={Card.Header} eventKey="0">
-                                                    Events Status
+                                                    Status Details
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
                                                     <Card.Body>
@@ -351,6 +365,20 @@ const Renewal = (props) => {
                                                                     : ''
                                                                 }
                                                                 <div className="inline_form">
+                                                                    {data.procedure_type == 'Decentralized' || data.procedure_type == 'Mutual Recognition' ?
+                                                                        <div className="form_group_inline">
+                                                                            <span className="form_group_label">Country</span>
+                                                                            <div className="form_group_field">
+                                                                                <select defaultValue="" name='country' onChange={(e) => handleStatusesChange(index, e)}>
+                                                                                    <option value=""></option>
+                                                                                    <option value="All">All</option>
+                                                                                    {data.country.map(c => (
+                                                                                        <option key={c}>{c}</option>
+                                                                                    ))}
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        : ''}
                                                                     <div className="form_group_inline">
                                                                         <span className="form_group_label">Status (*)</span>
                                                                         <div className="form_group_field">

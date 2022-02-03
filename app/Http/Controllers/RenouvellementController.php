@@ -89,11 +89,13 @@ class RenouvellementController extends Controller
         $ren->procedure_num = $request->procedure_num;
         $ren->local_tradename = $request->local_tradename;
         $ren->product_type = $request->product_type;
-        $ren->category = $request->category;
-        $ren->description = $request->description;
+        $ren->renewal_title = $request->renewal_title;
+        // $ren->category = $request->category;
+        // $ren->description = $request->description;
         $ren->application_num = $request->application_num;
         $ren->submission_format = $request->submission_format;
         $ren->validation_reason = $request->validation_reason;
+        $ren->remarks = $request->remarks;
         $ren->statuses = $request->statuses;
         $ren->doc = $docs;
         $ren->created_by = $request->created_by;
@@ -112,13 +114,16 @@ class RenouvellementController extends Controller
                 'Product Type'
             );
             $renewalDetail = array(
-                'Variation Category',
-                'Event Description',
+                'Renewal Title',
+                // 'Variation Category',
+                // 'Event Description',
                 'Application N°',
                 'Dossier Submission Format',
-                'Reason For Variation'
+                'Reason For Variation',
+                'Remarks'
             );
             $renewalStatus = array(
+                'Country',
                 'Status',
                 'Status Date',
                 'eCTD sequence',
@@ -169,11 +174,13 @@ class RenouvellementController extends Controller
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($renewalDetail, NULL, 'A1');
             $sheet->fromArray([
-                $ren->category,
-                $ren->description,
+                $ren->renewal_title,
+                // $ren->category,
+                // $ren->description,
                 $ren->application_num,
                 $ren->submission_format,
-                $ren->validation_reason
+                $ren->validation_reason,
+                $ren->remarks,
             ], NULL, 'A2');
 
             $spreadsheet->createSheet();
@@ -184,8 +191,8 @@ class RenouvellementController extends Controller
             $sheet->fromArray($ren->statuses, NULL, 'A2');
             $hr = $sheet->getHighestRow();
             for($i=2; $i<=$hr; $i++) {
-                $datef = $sheet->getCell('B'.$i);
-                $sheet->setCellValue('B'.$i, date("d-m-Y", strtotime($datef)));
+                $datef = $sheet->getCell('C'.$i);
+                $sheet->setCellValue('C'.$i, date("d-m-Y", strtotime($datef)));
             }
 
             $spreadsheet->createSheet();

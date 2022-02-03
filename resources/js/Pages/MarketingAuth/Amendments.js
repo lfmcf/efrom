@@ -19,11 +19,12 @@ const Amendments = (props) => {
         application_stage: '',
         procedure_num: '',
         local_tradename: '',
-        product_type: '',
+        // product_type: '',
+        amendment_title: '',
         description: '',
         reason: '',
         remarks: '',
-        statuses: [{status: '',status_date: '',ectd: '',control: '',cdds: '',remarks: '',implimentation_date: '' ,deadline_for_answer: '', changes_approved:''}],
+        statuses: [{country:'',status: '',status_date: '',ectd: '',control: '',cdds: '',remarks: '',implimentation_date: '' ,deadline_for_answer: '', changes_approved:''}],
         doc: [{document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: ''}],
         created_by: props.auth.user.id,
     });
@@ -101,7 +102,7 @@ const Amendments = (props) => {
 
     let addStatusFields = () => {
         let newArr = {...data};
-        newArr.statuses.push({status: '',status_date: '',ectd: '',control: '',cdds: '',remarks: '',implimentation_date: '', deadline_for_answer: '', changes_approved:''});
+        newArr.statuses.push({country:'',status: '',status_date: '',ectd: '',control: '',cdds: '',remarks: '',implimentation_date: '', deadline_for_answer: '', changes_approved:''});
         setData(newArr);
     }
 
@@ -144,15 +145,15 @@ const Amendments = (props) => {
                         <div className="card-body">
                             <form className="form" onSubmit={handleSubmit}>
                                 <Tabs defaultActiveKey="first">
-                                    <Tab eventKey="first" title="Form">
+                                    <Tab eventKey="first" title="New Amendment">
                                         <Accordion defaultActiveKey="0" style={{ marginTop: '20px'  }}>
                                             <div className="card_title" style={{ marginBottom: '20px'  }}>
                                                 {/* <h5>First Submission</h5> */}
-                                                <h5 className="subhead">All fields markedd with * are required</h5>
+                                                <h5 className="subhead">All fields marked with * are required</h5>
                                             </div>
                                             <Card>
                                                 <Accordion.Toggle as={Card.Header} eventKey="0">
-                                                    Registration identification
+                                                    Registration Identification
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
                                                     <Card.Body>
@@ -245,7 +246,7 @@ const Amendments = (props) => {
                                                                     </select>
                                                                 </div>
                                                             </div>
-                                                            <div className="form_group_inline">
+                                                            {/* <div className="form_group_inline">
                                                                 <span className="form_group_label">Product Type</span>
                                                                 <div className="form_group_field">
                                                                     <select name='product_type' defaultValue='' onChange={handleChange}>
@@ -254,7 +255,7 @@ const Amendments = (props) => {
                                                                         <option>Reference</option>
                                                                     </select>
                                                                 </div>
-                                                            </div>
+                                                            </div> */}
                                                         </div>
                                                     </Card.Body>
                                                 </Accordion.Collapse>
@@ -268,6 +269,12 @@ const Amendments = (props) => {
                                                 <Accordion.Collapse eventKey="0" >
                                                     <Card.Body>
                                                         <div className="inline_form">
+                                                            <div className="form_group_inline">
+                                                                <span className="form_group_label">Amendment Title</span>
+                                                                <div className="form_group_field">
+                                                                    <input type="text" name="amendment_title" onChange={handleChange} />
+                                                                </div>
+                                                            </div>
                                                             <div className="form_group_inline">
                                                                 <span className="form_group_label">Description of the event</span>
                                                                 <div className="form_group_field">
@@ -303,7 +310,7 @@ const Amendments = (props) => {
                                         <Accordion>
                                             <Card>
                                                 <Accordion.Toggle as={Card.Header} eventKey="0">
-                                                    Events Status
+                                                    Status Details
                                                 </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0" >
                                                     <Card.Body>
@@ -327,42 +334,40 @@ const Amendments = (props) => {
                                                                     : ''
                                                                 }
                                                                 <div className="inline_form">
+                                                                    {data.procedure_type == 'Decentralized' || data.procedure_type == 'Mutual Recognition' ?
+                                                                        <div className="form_group_inline">
+                                                                            <span className="form_group_label">Country</span>
+                                                                            <div className="form_group_field">
+                                                                                <select defaultValue="" name='country' onChange={(e) => handleStatusesChange(index, e)}>
+                                                                                    <option value=""></option>
+                                                                                    <option value="All">All</option>
+                                                                                    {data.country.map(c => (
+                                                                                        <option key={c}>{c}</option>
+                                                                                    ))}
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        : ''}
                                                                     <div className="form_group_inline">
                                                                         <span className="form_group_label">Status (*)</span>
                                                                         <div className="form_group_field">
                                                                             <select name='status' defaultValue='' onChange={e => handleStatusChanged(index, e)} style={{ borderColor: errors['statuses.' + index + '.status'] ? 'red' : '' }}>
                                                                                 <option value=''></option>
                                                                                 <option>Application / Submitted</option>
+                                                                                <option>Positive Opinion / Obtained</option>
                                                                                 <option>Approval / Obtained</option>
                                                                                 <option>Application / Rejected</option>
-                                                                                <option>Application / Withdrawn by MAH due to Safety/Efficacy</option>
                                                                                 <option>Application / Withdrawn by MAH not due Safety/Efficacy</option>
-                                                                                <option>Marketing Application / Dispatched To Local RA</option>
-                                                                                <option>Application / Validated (administrative / technical admissibility)</option>
-                                                                                <option>Assessment report / received</option>
-                                                                                <option>Dossier Update / Submitted</option>
-                                                                                <option>eCTD Dossier Update / Submitted</option>
-                                                                                <option>Marketing / Launched</option>
-                                                                                <option>Marketing / Discontinued</option>
+                                                                                <option>Application / Withdrawn by MAH not due to safety/efficacy</option>
+                                                                                <option>Study / Start Date Submitted</option>
+                                                                                <option>Study / End Date Submitted</option>
+                                                                                <option>Study / Results Submitted</option>
+                                                                                <option>Application / Dispatch to local RA</option>
+                                                                                <option>Application / Validated</option>
                                                                                 <option>Application / Dispatch Planned</option>
                                                                                 <option>Application / Submission Planned</option>
                                                                                 <option>Application / Approval Expected</option>
-                                                                                <option>Dossier Update / Submission Planned</option>
-                                                                                <option>eCTD Dossier Update / Submission Planned</option>
-                                                                                <option>Application / Submission of dossier update to RMS planned</option>
-                                                                                <option>Application / Dossier update submitted to CMS</option>
-                                                                                <option>Application / Submission to CMS Planned</option>
-                                                                                <option>MRP Application / Dossier update submitted to CMS</option>
-                                                                                <option>National Translations / Submitted</option>
-                                                                                <option>Application / List of dispatch dates submitted</option>
-                                                                                <option>Application / Start of procedure expected</option>
-                                                                                <option>MRP Application / Procedure started</option>
-                                                                                <option>Applicaton / CMS comments expected</option>
-                                                                                <option>Application / / CMS comments received</option>
-                                                                                <option>Assessment Report / Expected</option>
-                                                                                <option>MRP Assessment Report / Received</option>
-                                                                                <option>Positive Opinion / Obtained</option>
-                                                                                <option>MRP Application / End of procedure</option>
+                                                                                <option>Application/ End of Procedur</option>
                                                                             </select>
                                                                         </div>
                                                                         <p className="errors_wrap" style={{ display: errors['statuses.' + index + '.status'] ? 'inline-block' : 'none' }}>{errors['statuses.' + index + '.status']}</p>

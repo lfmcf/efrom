@@ -87,6 +87,7 @@ class BaselineController extends Controller
         $baseline->procedure_num = $request->procedure_num;
         $baseline->local_tradename = $request->local_tradename;
         $baseline->product_type = $request->product_type;
+        $baseline->baseline_title = $request->baseline_title;
         $baseline->description = $request->description;
         $baseline->application_num = $request->application_num;
         $baseline->reason = $request->reason;
@@ -110,12 +111,14 @@ class BaselineController extends Controller
                 'Product Type'
             );
             $baselineDetails = array(
+                'Baseline Title',
                 'Description of the event',
                 'Application N°',
                 'Reason for variation',
                 'Remarks'
             );
             $eventStatus = array(
+                'Country',
                 'Status',
                 'Status Date',
                 'eCTD sequence',
@@ -165,6 +168,7 @@ class BaselineController extends Controller
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Baseline Details');
             $sheet->fromArray($baselineDetails, NULL, 'A1');
             $sheet->fromArray([
+                $baseline->baseline_title,
                 $baseline->description,
                 $baseline->application_num,
                 $baseline->reason,
@@ -179,8 +183,8 @@ class BaselineController extends Controller
             $sheet->fromArray($baseline->statuses, NULL, 'A2');
             $hr = $sheet->getHighestRow();
             for($i=2; $i<=$hr; $i++) {
-                $datef = $sheet->getCell('B'.$i);
-                $sheet->setCellValue('B'.$i, date("d-m-Y", strtotime($datef)));
+                $datef = $sheet->getCell('C'.$i);
+                $sheet->setCellValue('C'.$i, date("d-m-Y", strtotime($datef)));
             }
 
             $spreadsheet->createSheet();

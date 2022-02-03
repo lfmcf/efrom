@@ -113,6 +113,7 @@ class CregistrationTerminationController extends Controller
                 'Remarks'
             );
             $status = array(
+                'Country',
                 'Status',
                 'Status Date',
                 'eCTD sequence',
@@ -176,8 +177,8 @@ class CregistrationTerminationController extends Controller
             $sheet->fromArray($crt->statuses, NULL, 'A2');
             $hr = $sheet->getHighestRow();
             for($i=2; $i<=$hr; $i++) {
-                $datef = $sheet->getCell('B'.$i);
-                $sheet->setCellValue('B'.$i, date("d-m-Y", strtotime($datef)));
+                $datef = $sheet->getCell('C'.$i);
+                $sheet->setCellValue('C'.$i, date("d-m-Y", strtotime($datef)));
             }
 
             $spreadsheet->createSheet();

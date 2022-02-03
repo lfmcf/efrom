@@ -23,7 +23,7 @@ const Documents = ({handleChanged,handleDocumentdate, addFormFields, formValues}
                     {formValues.map((element, index) => (
                        
                         <fieldset>
-                            <legend>Document 1</legend>
+                            <legend>Document {index + 1}</legend>
                         
                         <div style={{ marginTop: '20px' }} key={index}>
                             <div className="inline_form">
@@ -60,8 +60,10 @@ const Documents = ({handleChanged,handleDocumentdate, addFormFields, formValues}
                                 <div className="form_group_inline" >
                                     <span className="form_group_label">Language</span>
                                     <div className="form_group_field">
-                                        <select name="language" onChange={e => handleChanged(index, e)} value={element.language || ""} >
-                                            <option></option>
+                                        <select defaultValue="" name="language" onChange={e => handleChanged(index, e)} value={element.language || ""} >
+                                            <option value=''></option>
+                                            <option>English</option>
+                                            <option>Frensh</option>
                                         </select>
                                     </div>
                                 </div>
