@@ -536,7 +536,7 @@ const Transfer = (props) => {
 
             </div>
             <footer style={{ margin: '5px 0', display: 'flex', justifyContent: 'center' }}>
-                <Typography variant="p" component="p">Powered By <span style={{ color: 'green', fontWeight: '800' }}>Ekemia</span></Typography>
+                <Typography variant="p" component="p">Powered By <span style={{ color: 'rgb(44, 197,162)', fontWeight: '800' }}>Ekemia</span> &copy; 2022</Typography>
             </footer>
         </>
     )
