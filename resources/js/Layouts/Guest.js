@@ -22,8 +22,8 @@ export default function Guest({ children }) {
                     <div className="main_card">
                         <div className="main_head">
                             {/* <h3 className="login_title">Welcome to</h3>
-                            <h4 className="subhead">Start your business easily</h4>
-                            <img src="../logo.png" alt="logo" className='logo' /> */}
+                            <h4 className="subhead">Start your business easily</h4> */}
+                            <img src="../slogo.png" alt="logo" className='logo' />
                         </div>
                         {children}
                     </div>

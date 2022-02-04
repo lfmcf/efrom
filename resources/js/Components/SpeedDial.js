@@ -35,16 +35,20 @@ export default function BasicSpeedDial(props) {
             key="Reset"
             icon={<RestartAltIcon onClick={() => props.reset()} />}
             tooltipTitle="Reset"
+            className="ResetD"
           />
           <SpeedDialAction
             key="Save"
-            icon={<SaveIcon onClick={() => props.showdraftmodel()} />}
+            icon={<SaveIcon onClick={() => props.showdraftmodel()}  />}
             tooltipTitle="Save"
+            className="SaveD"
           />
           <SpeedDialAction
             key="Submit"
             icon={<DoneIcon onClick={() => props.showsavemodel()}/>}
             tooltipTitle="Submit"
+            ButtonProps={{ background: "rgb(44, 197,162)" }}
+            className="SubmitD"
           />
       </SpeedDial>
     </Box>

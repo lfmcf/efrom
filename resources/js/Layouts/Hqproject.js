@@ -12,7 +12,7 @@ import BasicSpeedDial from '@/Components/SpeedDial';
 import { Tabs as Mtabs, Tab as Mtab } from '@mui/material';
 import Box from '@mui/material/Box';
 import SaveModal from '@/Components/SaveModal';
-
+import { Typography } from '@mui/material';
 function a11yProps(index) {
     return {
         id: `vertical-tab-${index}`,
@@ -313,7 +313,18 @@ const Hqproject = (props) => {
         reset()
     }
 
+    let handleDocumentChange = (i, e) => {
+        let arr = {...data};
+        if(e.target.name === "document" ) {
+            arr.doc[i][e.target.name] = e.target.files[0];
+        }else {
+            arr.doc[i][e.target.name] = e.target.value; 
+        }
+        setData(arr);
+    }
+
     return (
+        <>
         <form className="form" onSubmit={handleSubmit} ref={formRef}>
             <Tabs defaultActiveKey="first">
                 <Tab eventKey="first" title="New Variation" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>
@@ -352,7 +363,7 @@ const Hqproject = (props) => {
                                             ''}
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">REG-id</span>
+                                                <span className="form_group_label">Registration ID</span>
                                                 <div className="form_group_field">
                                                     <input type="text" />
                                                 </div>
@@ -781,12 +792,16 @@ const Hqproject = (props) => {
                   
                 </Tab>
                 <Tab eventKey="second" title="Documents" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>
-                    <Documents handleChanged={handleChanged} handleDocumentdate={handleDocumentdate} addFormFields={addFormFields} formValues={data.doc} removeDocumentsFields={removeDocumentsFields} />
+                    <Documents handleChanged={handleDocumentChange} handleDocumentdate={handleDocumentdate} addFormFields={addFormFields} formValues={data.doc} removeDocumentsFields={removeDocumentsFields} />
                 </Tab>
             </Tabs>
             <BasicSpeedDial processing={processing} showsavemodel={showsavemodel} showdraftmodel={showdraftmodel} reset={handleReset}  />
             <SaveModal show={showsavemodal.show} handleClose={handleSaveModalClose} handleSubmited={handleSaveModalConfirm} name={showsavemodal.name}  />
         </form>
+         <footer style={{margin:'5px 0', display:'flex', justifyContent:'center'}}>
+                <Typography variant="p" component="p">Powered By <span style={{color:'green',fontWeight:'800'}}>Ekemia</span></Typography>
+            </footer>
+            </>
     )
 }
 

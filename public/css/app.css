@@ -12145,9 +12145,10 @@ button {
 }
 
 .main_head {
-  border-left: 4px solid #216ba5;
-  padding-left: 10px;
-  margin-bottom: 30px;
+  /* border-left: 4px solid #216ba5; */
+  /* padding-left: 10px; */
+  margin-bottom: 10px;
+  text-align: center;
 }
 
 h3.login_title {
@@ -12214,6 +12215,10 @@ h5.subhead {
   color: #646777;
   border: 1px solid #d2d2d2;
   border-radius: 5px;
+}
+
+.form select {
+  padding: 8px 10px;
 }
 
 .main_forget_password {
@@ -12456,6 +12461,21 @@ legend {
   margin-top:-11px;
   margin-bottom: 13px;
   background-color: #FFF;
+}
+
+.SubmitD {
+  background-color :rgb(44, 197,162) !important;
+  color: white !important;
+}
+
+.ResetD {
+  background-color :rgb(241, 103,144) !important;
+  color: white !important;
+}
+
+.SaveD {
+  background-color :rgb(255, 173,68) !important;
+  color: white !important;
 }
 
 .form_group_holder select {

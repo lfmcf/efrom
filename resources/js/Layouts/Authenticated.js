@@ -98,7 +98,7 @@ export default function Authenticated({ auth, header, children }) {
             url: "/clinical",
         },
         {
-            name: "Lifecycle Mnagement",
+            name: "Lifecycle Management ",
             children: [
                 {
                     name: "Amendments",
@@ -118,7 +118,7 @@ export default function Authenticated({ auth, header, children }) {
             url: "",
         },
         {
-            name: "Lifecycle Mnagement",
+            name: "Lifecycle Management",
             url: ""
         },
         {

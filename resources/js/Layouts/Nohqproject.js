@@ -12,6 +12,7 @@ import BasicSpeedDial from '@/Components/SpeedDial';
 import { Tabs as Mtabs, Tab as Mtab } from '@mui/material';
 import Box from '@mui/material/Box';
 import SaveModal from '@/Components/SaveModal';
+import { Typography } from '@mui/material';
 
 function a11yProps(index) {
     return {
@@ -231,6 +232,7 @@ const Nohqproject = (props) => {
     }
 
     return (
+        <>
         <form className="form" onSubmit={handleSubmit} ref={formRef} id='eform'>
             <Tabs defaultActiveKey="first">
                 <Tab eventKey="first" title="New Variation" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>
@@ -252,12 +254,12 @@ const Nohqproject = (props) => {
                         </Mtabs>
                         <div value={value} index={0} className="muitab" style={{ display: value != 0 ? 'none' : '' }}>
                             <div className="inline_form">
-                            <div className="form_group_inline">
-                                                <span className="form_group_label">REG-id</span>
-                                                <div className="form_group_field">
-                                                    <input type="text" />
-                                                </div>
-                                            </div>
+                                <div className="form_group_inline">
+                                    <span className="form_group_label">Registration ID</span>
+                                    <div className="form_group_field">
+                                        <input type="text" />
+                                    </div>
+                                </div>
                                 <div className="form_group_inline">
                                     <span className="form_group_label">Product Name</span>
                                     <div className="form_group_field">
@@ -612,6 +614,11 @@ const Nohqproject = (props) => {
             <SaveModal show={showsavemodal.show} handleClose={handleSaveModalClose} handleSubmited={handleSaveModalConfirm} name={showsavemodal.name}  />
             
         </form>
+            <footer style={{ margin: '5px 0', display: 'flex', justifyContent: 'center' }}>
+                <Typography variant="p" component="p">Powered By <span style={{ color: 'green', fontWeight: '800' }}>Ekemia</span></Typography>
+            </footer>
+        </>
+       
     )
 }
 

@@ -11,6 +11,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import MuiAlert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import { Typography } from '@mui/material';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -414,6 +415,9 @@ const Dashboard = (props) => {
                 </div>
                
             </div>
+            <footer style={{margin:'5px 0', display:'flex', justifyContent:'center'}}>
+                <Typography variant="p" component="p">Powered By <span style={{color:'green',fontWeight:'800'}}>Ekemia</span></Typography>
+            </footer>
 
         </>
         // </Authenticated>

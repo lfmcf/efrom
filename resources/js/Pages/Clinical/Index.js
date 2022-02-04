@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import BasicSpeedDial from '@/Components/SpeedDial';
 import { Tabs as Mtabs, Tab as Mtab } from '@mui/material';
 import Box from '@mui/material/Box';
+import { Typography } from '@mui/material';
 
 
 const steps = ['General information', 'Basic information', 'Dosage Form / ATC', 'Orphan Drug Details', 'Under Intensive Monitoring Details', 'Key Dates / Alternate Numbers', 'Local Agent', 'Formulations', 'Packagings', 'Indications', 'Manufacturing & Supply Chai', 'Status Details'];
@@ -559,7 +560,7 @@ const Index = (props) => {
                 <div className="col-md-12">
                     {/* <div className="card main-card">
                         <div className="card-body"> */}
-                    <form className="form" onSubmit={handleSubmit} ref={formRef} style={{ marginBottom: '30px' }}>
+                    <form className="form" onSubmit={handleSubmit} ref={formRef} style={{ marginBottom: '10px' }}>
                         <Tabs defaultActiveKey="first">
                             <Tab eventKey="first" title="New Registration" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>
                                 <Box
@@ -1496,27 +1497,16 @@ const Index = (props) => {
                             </Tab>
                         </Tabs>
                         <BasicSpeedDial showsavemodel={showsavemodel} showdraftmodel={showdraftmodel}  />
-                        {/* <div style={{ position:'fixed',bottom:'30px',right:'30px', fontSize:'10px', textAlign:'center'}}>
-                                    <button style={{background:'rgb(144,202,249)',width:'50px',height:'50px',borderRadius:'50%'}}>Actions</button>
-                                    <div className="form-button">
-                                        <button style={{ width: '100px' }} type="button" className="btn_submit btn btn-primary" onClick={showsavemodel} disabled={processing}>Submit</button>
-                                    </div>
-                                    <div className="form-button">
-                                        <button type='button' onClick={showdraftmodel} style={{ width: '100px' }} className="btn_submit btn btn-primary" name="draft" disabled={processing}>Save</button>
-                                    </div>
-                                    <div className="form-button">
-                                        <button style={{ width: '100px' }} type="reset" className="btn_close btn btn-danger" name="Reset" disabled={processing}>Reset</button>
-                                    </div>
-                                </div> */}
-
+                       
                     </form>
                 </div>
-                {/* </div>
-                </div> */}
+                
                 <ModalS show={show} handleClose={handleClose} />
                 <SaveModal show={showsavemodal.show} handleClose={handleSaveModalClose} handleSubmited={handleSaveModalConfirm} name={showsavemodal.name}  />
             </div>
-
+            <footer style={{margin:'5px 0', display:'flex', justifyContent:'center'}}>
+                <Typography variant="p" component="p">Powered By <span style={{color:'green',fontWeight:'800'}}>Ekemia</span></Typography>
+            </footer>
         </>
     )
 }

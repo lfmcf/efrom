@@ -12,6 +12,7 @@ import BasicSpeedDial from '@/Components/SpeedDial';
 import { Tabs as Mtabs, Tab as Mtab } from '@mui/material';
 import Box from '@mui/material/Box';
 import SaveModal from '@/Components/SaveModal';
+import { Typography } from "@mui/material";
 
 function a11yProps(index) {
     return {
@@ -213,6 +214,12 @@ const Baseline = (props) => {
                                     <div value={value} index={0} className="muitab" style={{ display: value != 0 ? 'none' : '' }}>
                                         <div className="inline_form">
                                             <div className="form_group_inline">
+                                                <span className="form_group_label">Registration ID</span>
+                                                <div className="form_group_field">
+                                                    <input type="text" />
+                                                </div>
+                                            </div>
+                                            <div className="form_group_inline">
                                                 <span className="form_group_label">Product</span>
                                                 <div className="form_group_field">
                                                     <select name='product' defaultValue='' onChange={handleChange}>
@@ -234,6 +241,8 @@ const Baseline = (props) => {
                                                     </select>
                                                 </div>
                                             </div>
+                                            </div>
+                                            <div className="inline_form">
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Procedure Type</span>
                                                 <div className="form_group_field">
@@ -503,8 +512,10 @@ const Baseline = (props) => {
                         <SaveModal show={showsavemodal.show} handleClose={handleSaveModalClose} handleSubmited={handleSaveModalConfirm} name={showsavemodal.name} />
                     </form>
                 </div>
-
             </div>
+            <footer style={{ margin: '5px 0', display: 'flex', justifyContent: 'center' }}>
+                <Typography variant="p" component="p">Powered By <span style={{ color: 'green', fontWeight: '800' }}>Ekemia</span></Typography>
+            </footer>
         </>
     )
 }

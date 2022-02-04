@@ -12,6 +12,7 @@ import BasicSpeedDial from '@/Components/SpeedDial';
 import { Tabs as Mtabs, Tab as Mtab } from '@mui/material';
 import Box from '@mui/material/Box';
 import SaveModal from '@/Components/SaveModal';
+import { Typography } from '@mui/material';
 
 function a11yProps(index) {
     return {
@@ -498,6 +499,9 @@ const Amendments = (props) => {
                 </div>
 
             </div>
+            <footer style={{ margin: '5px 0', display: 'flex', justifyContent: 'center' }}>
+                <Typography variant="p" component="p">Powered By <span style={{ color: 'green', fontWeight: '800' }}>Ekemia</span></Typography>
+            </footer>
         </>
     )
 
