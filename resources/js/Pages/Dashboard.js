@@ -7,7 +7,14 @@ import moment from 'moment';
 import FlashMessage from 'react-flash-message';
 import 'regenerator-runtime/runtime'
 import Table from '@/Components/Table';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import MuiAlert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
 
 // function GlobalFilter({
 //     preGlobalFilteredRows,
@@ -156,27 +163,33 @@ const Dashboard = (props) => {
                 Header: 'Procedure Type',
                 accessor: 'procedure_type',
             },
-            {
-                Header: 'Country / Countries',
-                // accessor: 'country',
-                accessor: function (originalRow, rowIndex) {
-                    if (originalRow.country && Array.isArray(originalRow.country)) {
+            // {
+            //     Header: 'Country / Countries',
+                
+            //     accessor: function (originalRow, rowIndex) {
+            //         if (originalRow.country && Array.isArray(originalRow.country)) {
                         
-                        return originalRow.country.map(ele => (
-                            <ul>
-                                <li>{ele}</li>
-                            </ul>
-                        ))
-                    }
-               }
-            },
+            //             return originalRow.country.map(ele => (
+            //                 <ul>
+            //                     <li>{ele}</li>
+            //                 </ul>
+            //             ))
+            //         }
+            //    }
+            // },
             {
                 Header: 'Procedure N°',
                 accessor: 'procedure_number',
             },
             {
                 Header: 'Status',
-                accessor: 'type',
+                accessor: function (originalRow, rowIndex) {
+                    if(originalRow.type == 'submit' ){
+                        return 'Submitted'
+                    }else {
+                        return 'Saved'
+                    }
+                }
             },
             {
                 Header: 'Date',
@@ -198,26 +211,32 @@ const Dashboard = (props) => {
                 Header: 'Procedure Type',
                 accessor: 'procedure_type',
             },
-            {
-                Header: 'Country / Countries',
-                accessor: function (originalRow, rowIndex) {
-                    if (originalRow.country && Array.isArray(originalRow.country)) {
+            // {
+            //     Header: 'Country / Countries',
+            //     accessor: function (originalRow, rowIndex) {
+            //         if (originalRow.country && Array.isArray(originalRow.country)) {
                         
-                        return originalRow.country.map(ele => (
-                            <ul>
-                                <li>{ele}</li>
-                            </ul>
-                        ))
-                    }
-               }
-            },
+            //             return originalRow.country.map(ele => (
+            //                 <ul>
+            //                     <li>{ele}</li>
+            //                 </ul>
+            //             ))
+            //         }
+            //    }
+            // },
             {
                 Header: 'Variation Title',
                 accessor: 'variation_title',
             },
             {
                 Header: 'Status',
-                accessor: 'type',
+                accessor: function (originalRow, rowIndex) {
+                    if(originalRow.type == 'submit' ){
+                        return 'Submitted'
+                    }else {
+                        return 'Saved'
+                    }
+                }
             },
             {
                 Header: 'Date',
@@ -239,26 +258,32 @@ const Dashboard = (props) => {
                 Header: 'Procedure Type',
                 accessor: 'procedure_type',
             },
-            {
-                Header: 'Country / Countries',
-                accessor: function (originalRow, rowIndex) {
-                    if (originalRow.country && Array.isArray(originalRow.country)) {
+            // {
+            //     Header: 'Country / Countries',
+            //     accessor: function (originalRow, rowIndex) {
+            //         if (originalRow.country && Array.isArray(originalRow.country)) {
                         
-                        return originalRow.country.map(ele => (
-                            <ul>
-                                <li>{ele}</li>
-                            </ul>
-                        ))
-                    }
-               }
-            },
+            //             return originalRow.country.map(ele => (
+            //                 <ul>
+            //                     <li>{ele}</li>
+            //                 </ul>
+            //             ))
+            //         }
+            //    }
+            // },
             {
                 Header: 'Renewal Title',
                 accessor: 'renewal_title',
             },
             {
                 Header: 'Status',
-                accessor: 'type',
+                accessor: function (originalRow, rowIndex) {
+                    if(originalRow.type == 'submit' ){
+                        return 'Submitted'
+                    }else {
+                        return 'Saved'
+                    }
+                }
             },
             {
                 Header: 'Date',
@@ -280,26 +305,32 @@ const Dashboard = (props) => {
                 Header: 'Procedure Type',
                 accessor: 'procedure_type',
             },
-            {
-                Header: 'Country / Countries',
-                accessor: function (originalRow, rowIndex) {
-                    if (originalRow.country && Array.isArray(originalRow.country)) {
+            // {
+            //     Header: 'Country / Countries',
+            //     accessor: function (originalRow, rowIndex) {
+            //         if (originalRow.country && Array.isArray(originalRow.country)) {
                         
-                        return originalRow.country.map(ele => (
-                            <ul>
-                                <li>{ele}</li>
-                            </ul>
-                        ))
-                    }
-               }
-            },
+            //             return originalRow.country.map(ele => (
+            //                 <ul>
+            //                     <li>{ele}</li>
+            //                 </ul>
+            //             ))
+            //         }
+            //    }
+            // },
             {
                 Header: 'Baseline Title',
                 accessor: 'baseline_title',
             },
             {
                 Header: 'Status',
-                accessor: 'type',
+                accessor: function (originalRow, rowIndex) {
+                    if(originalRow.type == 'submit' ){
+                        return 'Submitted'
+                    }else {
+                        return 'Saved'
+                    }
+                }
             },
             {
                 Header: 'Date',
@@ -316,6 +347,24 @@ const Dashboard = (props) => {
     const RenewalData = React.useMemo(() => props.renewal, []);
     const BaselineData = React.useMemo(() => props.baseline, []);
 
+    const [open, setOpen] = React.useState(true);
+
+    // const handleClick = () => {
+    //     setOpen(true);
+    // };
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
+
+    React.useEffect(() => {
+        props.flash.message ? setOpen(true) : setOpen(false)
+    }, [props.flash.message])
+
     return (
         // <Authenticated
         //     auth={props.auth}
@@ -323,14 +372,16 @@ const Dashboard = (props) => {
         //     header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>}
         // >
         <>
-            {props.flash.message ?
-            <FlashMessage duration={5000} persistOnHover={true} >
-                <div style={{width:'300px', height :'60px',background: 'lightgreen',position: 'absolute', top: '70px', right: '10px',zIndex:'1000',borderRadius:'5px'}}>
-                    <p style={{color:'white'}}>{props.flash.message}</p>
-                </div>
+            {/* {props.flash.message ? */}
+            {/* <FlashMessage duration={500000} persistOnHover={true}  style={{position:'absolute',top:'65px',right:'15px',zIndex:'10000'}}> */}
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'right'}}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                    {props.flash.message}
+                </Alert>
+            </Snackbar>
                 
-            </FlashMessage> 
-            : ''}
+            {/* </FlashMessage>  */}
+            {/* : ''} */}
             <Head title="Dashboard" />
             <div className="row">
                 <div className="col-md-12">

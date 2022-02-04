@@ -22,6 +22,7 @@ export default function BasicSpeedDial(props) {
         ariaLabel="SpeedDial basic example"
         sx={{ position: 'absolute', bottom: 16, right: 16 }}
         icon={<SpeedDialIcon />}
+        disabled={props.processing}
       >
         {/* {actions.map((action) => (
           <SpeedDialAction
@@ -32,7 +33,7 @@ export default function BasicSpeedDial(props) {
         ))} */}
         <SpeedDialAction
             key="Reset"
-            icon={<RestartAltIcon onClick={() => alert('hey')} />}
+            icon={<RestartAltIcon onClick={() => props.reset()} />}
             tooltipTitle="Reset"
           />
           <SpeedDialAction

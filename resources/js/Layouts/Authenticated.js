@@ -177,7 +177,7 @@ export default function Authenticated({ auth, header, children }) {
             <div className="sidebar">
                 <div className="sidebar_content">
                 <Link href={route('dashboard')} style={{margin:'auto 20px', color:"white", fontsize:'15px',}}>
-                <img src="../logo.png" alt="logo" className='logo'></img>
+                <img src="../logo.png" alt="logo" className='logo' />
                     </Link>
                     <ul className="sidebar_block">
                    

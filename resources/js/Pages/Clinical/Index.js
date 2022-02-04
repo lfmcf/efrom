@@ -11,13 +11,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import SaveModal from '@/Components/SaveModal';
 import { key_dates_list, operations, packageCondistion, product_name, procedure_type, apf, atc, SlType, indications, status } from '@/Components/List';
 import PropTypes from 'prop-types';
-import VerticalTabs from '@/Components/MuiTabs'
 import BasicSpeedDial from '@/Components/SpeedDial';
 import { Tabs as Mtabs, Tab as Mtab } from '@mui/material';
-// import from '@mui/material/Tab';
-// import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 
 
 const steps = ['General information', 'Basic information', 'Dosage Form / ATC', 'Orphan Drug Details', 'Under Intensive Monitoring Details', 'Key Dates / Alternate Numbers', 'Local Agent', 'Formulations', 'Packagings', 'Indications', 'Manufacturing & Supply Chai', 'Status Details'];
@@ -111,11 +107,6 @@ const Index = (props) => {
         
         setValue(newValue);
     };
-
-   
-    
-
-    console.log('render');
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -806,8 +797,8 @@ const Index = (props) => {
                                                     />
                                                 </div>
                                             </div>
-
-
+                                            </div>
+                                            <div className="inline_form">
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Route Of Admin (*)</span>
                                                 <div className="form_group_field">
@@ -1071,6 +1062,8 @@ const Index = (props) => {
                                                             <input type="text" name="numerator_lower_val" onChange={(e) => handleFormulationsChange(index, e)} />
                                                         </div>
                                                     </div>
+                                                    </div>
+                                                    <div className="inline_form" >
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label">Numerator Upper Val</span>
                                                         <div className="form_group_field">
@@ -1234,8 +1227,8 @@ const Index = (props) => {
                                                     </div>
 
                                                     {element.packagelif.map((ele, i) => (
-                                                        <fieldset key={i} style={{ border: '4px dotted #e6e6e6' }}>
-                                                            <legend>Package {index + 1}-{i + 1}</legend>
+                                                        <fieldset key={i} style={{ border: '1px dotted #e6e6e6' }}>
+                                                            <legend>Shelf-life {index + 1}-{i + 1}</legend>
                                                             <div style={{ padding: '20px' }}>
                                                                 {i > 0 ?
                                                                     <div style={{ display: 'flex', justifyContent: 'end' }}>
@@ -1266,6 +1259,8 @@ const Index = (props) => {
                                                                             <input name="shelf_life" onChange={(e) => handlePackagelifeChange(index, i, e)} />
                                                                         </div>
                                                                     </div>
+                                                                    </div>
+                                                                    <div className="inline_form">
                                                                     <div className="form_group_inline">
                                                                         <span className="form_group_label">Shelf-life Unit</span>
                                                                         <div className="form_group_field">
@@ -1351,9 +1346,9 @@ const Index = (props) => {
                                             </button>
                                         </div>
                                         {data.manufacturing.map((element, index) => (
-                                            <fieldset>
+                                            <fieldset key={index}>
                                                 <legend>Manufacturer {index + 1}</legend>
-                                                <div key={index}>
+                                                <div >
                                                     {index > 0 ?
                                                         <div style={{ display: 'flex', justifyContent: 'end' }}>
                                                             <button type="button" style={{ width: '14px', height: '14px', background: '000', padding: '0', margin: '0 0 20px 0' }} onClick={() => removeManufacturerFields(index)}>

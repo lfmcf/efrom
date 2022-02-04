@@ -322,12 +322,15 @@ class RcController extends Controller
             $sheet->fromArray($keyDates, NULL, 'A1');
             // $sheet->fromArray($rc->key_dates, NULL, 'A2');
             $n = 2;
-            foreach($rc->key_dates as  $kd) {
-                $sheet->setCellValue('A' . $n, $kd['date_type']);
-                $sheet->setCellValue('B' . $n, date("d-m-Y",strtotime($kd['date'])));
-                $sheet->setCellValue('C' . $n, $kd['remarks']);
-                $n+=1;
+            if(isset($rc->key_dates)) {
+                foreach($rc->key_dates as  $kd) {
+                    $sheet->setCellValue('A' . $n, $kd['date_type']);
+                    $sheet->setCellValue('B' . $n, date("d-m-Y",strtotime($kd['date'])));
+                    $sheet->setCellValue('C' . $n, $kd['remarks']);
+                    $n+=1;
+                }
             }
+            
             $sheet->setCellValue('D2', $rc->alternate_number_type);
             $sheet->setCellValue('E2', $rc->alternate_number);
             $sheet->setCellValue('F2', $rc->remarks);
@@ -436,11 +439,11 @@ class RcController extends Controller
             $writer->save($name);
             Mail::to(getenv('MAIL_TO'))->send(new RcSubmit($name));
 
-            // return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
+            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
             
         }
 
-        // return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
+        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
     }
 
 

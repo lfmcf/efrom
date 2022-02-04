@@ -10,16 +10,8 @@ const Documents = ({handleChanged,handleDocumentdate, addFormFields, formValues,
                 <div style={{ marginTop: '20px',padding:'20px',  overflowY: 'auto',height: '100%' }}>
                     <div className="row" >
                       
-                        <div className="col-6">
-                            
-                        </div>
-                        <div className="card_title col-6">
-                            <h5 className="subhead" >All fields markedd with * are required</h5>
-                        </div>
-                        <div className="col-6">
-                            
-                            </div>
-                        <div className="card_title col-6">
+                        
+                        <div className="d-flex justify-content-end">
                         <button className="add_doc_form" type="button" style={{float:'right',marginTop:'-10px',marginBottom:'-10px'}} onClick={() => addFormFields()}>
                                 <i className="bi bi-plus-lg"></i> Add Document
                             </button>

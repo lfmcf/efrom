@@ -199,7 +199,11 @@ class VariationController extends Controller
             $name = 'Variation Hq ' . $date . '.xlsx';
             $writer->save($name);
             Mail::to(getenv('MAIL_TO'))->send(new HqVariation($name));
+
+            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
         }
+
+        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
     }
 
     public function store(Request $request)
@@ -382,7 +386,11 @@ class VariationController extends Controller
 
             Mail::to(getenv('MAIL_TO'))->send(new NoHqVariation($name));
 
+            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
+
         }
+
+        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
     }
 
     /**

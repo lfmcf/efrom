@@ -20,13 +20,13 @@ const Variation = ({countries, auth}) => {
             </div>
             <div className="row">
                 <div className="col-md-12">
-                    <div className="card main-card">
-                        <div className="card-body">
+                    {/* <div className="card main-card">
+                        <div className="card-body"> */}
                             {/* <div className="card_title">
                                 <h5>First Submission</h5>
                                 <h5 className="subhead">All fields markedd with * are required</h5>
                             </div> */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '10px 0' }}>
+                            <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'center', margin: '0 0' }}>
                                 <div>
                                     <input className="form-check-input" type="checkbox" value="checked" id="flexCheckDefault" onChange={handlehqChange} />
                                     <label className="form-check-label" style={{paddingLeft:'10px'}}htmlFor="flexCheckDefault">
@@ -36,8 +36,8 @@ const Variation = ({countries, auth}) => {
                             </div>
                             {isHq ? <Hqproject countries={countries} user={auth.user} handlehqChange={handlehqChange} /> : <Nohqproject countries={countries} user={auth.user} handlehqChange={handlehqChange} />}
                         </div>
-                    </div>
-                </div>
+                    {/* </div>
+                </div> */}
             </div>
         </>
     )
