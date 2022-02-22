@@ -547,7 +547,7 @@ const Create = (props) => {
 
     return (
         <>
-            <Head title="Dashboard" />
+            <Head title="MA - Create" />
             <div className="row">
                 <div className="col-md-12">
                     <h3 className="page-title">MA - registration creation</h3>
