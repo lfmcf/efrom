@@ -15,6 +15,7 @@ import { Tabs as Mtabs, Tab as Mtab, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
+import { Head } from '@inertiajs/inertia-react';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -546,7 +547,7 @@ const Create = (props) => {
 
     return (
         <>
-
+            <Head title="Dashboard" />
             <div className="row">
                 <div className="col-md-12">
                     <h3 className="page-title">MA - registration creation</h3>
