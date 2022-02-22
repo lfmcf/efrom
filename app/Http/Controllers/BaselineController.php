@@ -22,10 +22,7 @@ class BaselineController extends Controller
      */
     public function index()
     {
-        $countries = Countries::orderBy('country_name')->get('country_name');
-        return Inertia::render('MarketingAuth/Baseline', [
-            'countries' => $countries
-        ]);
+        
     }
 
     /**
@@ -35,7 +32,10 @@ class BaselineController extends Controller
      */
     public function create()
     {
-        //
+        $countries = Countries::orderBy('country_name')->get('country_name');
+        return Inertia::render('Baseline/Create', [
+            'countries' => $countries
+        ]);
     }
 
     /**
@@ -63,7 +63,7 @@ class BaselineController extends Controller
         
         if(!empty($docs)) {
             $arr = array_map(function($doc) {
-                if ($doc['document']) {
+                if ($doc['document'] && gettype($doc['document']) != 'string') {
                     $uploadedFile = $doc['document'];
                     $filename = time() . $uploadedFile->getClientOriginalName();
                     $path = Storage::putFileAs(
@@ -202,10 +202,17 @@ class BaselineController extends Controller
             $writer = new Xlsx($spreadsheet);
             
             $date = date('d-m-y');
-            $name = 'Baseline ' . $date . '.xlsx';
+            if($request->procedure_type == 'National' || $request->procedure_type == 'Centralized') {
+                $name = 'eForm_Baseline_' .$request->product . '_' .$request->country[0] . '_' .$date . '.xlsx';
+                $subject = 'eForm_Baseline_' .$request->product . '_' .$request->country[0];
+            }else {
+                $name = 'eForm_Baseline_' .$request->product . '_' .$request->procedure_type . '_' .$date . '.xlsx';
+                $subject = 'eForm_Baseline_' .$request->product . '_' .$request->procedure_type;
+            }
+            
             $writer->save($name);
 
-            Mail::to(getenv('MAIL_TO'))->send(new MailBaseline($name));
+            Mail::to(getenv('MAIL_TO'))->send(new MailBaseline($name, $request->product, $subject));
 
         }
     }
@@ -216,9 +223,12 @@ class BaselineController extends Controller
      * @param  \App\Models\Baseline  $baseline
      * @return \Illuminate\Http\Response
      */
-    public function show(Baseline $baseline)
+    public function show($id)
     {
-        //
+        $baseline = Baseline::findOrFail($id);
+        return Inertia::render('Baseline/Show', [
+            'baseline' => $baseline
+        ]);
     }
 
     /**
@@ -227,9 +237,14 @@ class BaselineController extends Controller
      * @param  \App\Models\Baseline  $baseline
      * @return \Illuminate\Http\Response
      */
-    public function edit(Baseline $baseline)
+    public function edit($id)
     {
-        //
+        $baseline = Baseline::findOrFail($id);
+        $countries = Countries::orderBy('country_name')->get('country_name');
+        return Inertia::render('Baseline/Edit', [
+            'countries' => $countries,
+            'baseline' => $baseline
+        ]);
     }
 
     /**

@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
-import moment from 'moment';
+import React from 'react';
 import { useTable, usePagination, useGlobalFilter, useAsyncDebounce } from 'react-table';
 import BTable from 'react-bootstrap/Table';
+import { Inertia } from '@inertiajs/inertia'
+import IconButton from '@mui/material/IconButton';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import EditIcon from '@mui/icons-material/Edit';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 function GlobalFilter({
     preGlobalFilteredRows,
@@ -40,7 +44,10 @@ function GlobalFilter({
     )
 }
 
-function Table({ columns, data }) {
+function Table(props) {
+    
+    const {columns, data} = props
+    
     const {
         getTableProps,
         getTableBodyProps,
@@ -66,6 +73,31 @@ function Table({ columns, data }) {
         initialState: { pageSize: 5, pageIndex: 0 },
     }, useGlobalFilter, usePagination);
 
+    const handleShowClick = (id) => {
+        if(props.for == 'ma') {
+            Inertia.get('ma/'+id+'/show')
+        }else if(props.for == 'variation') {
+            Inertia.get('variation/'+id+'/show')
+        }
+        else if(props.for == 'renewal') {
+            Inertia.get('renewal/'+id+'/show')
+        }else if(props.for == 'baseline') {
+            Inertia.get('baseline/'+id+'/show')
+        }
+        
+    }
+    const handleDuplicateClick = (id) => {
+        if(props.for == 'ma') {
+            Inertia.get('ma/'+id+'/edit')
+        }else if(props.for == 'variation') {
+            Inertia.get('variation/'+id+'/edit')
+        }else if(props.for == 'renewal') {
+            Inertia.get('renewal/'+id+'/edit')
+        }else if(props.for == 'baseline') {
+            Inertia.get('baseline/'+id+'/edit')
+        }
+    }
+
     return (
         <>
         <GlobalFilter preGlobalFilteredRows={preGlobalFilteredRows} globalFilter={state.globalFilter} setGlobalFilter={setGlobalFilter} />
@@ -75,16 +107,10 @@ function Table({ columns, data }) {
                     <tr {...headerGroup.getHeaderGroupProps()}>
                         {headerGroup.headers.map(column => (
                             <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-                           
                         ))}
                          <th>Action</th>
                     </tr>
                 ))}
-                {/* <tr>
-                    <th>
-                        <GlobalFilter preGlobalFilteredRows={preGlobalFilteredRows} globalFilter={state.globalFilter} setGlobalFilter={setGlobalFilter} />
-                    </th>
-                </tr> */}
             </thead>
             <tbody {...getTableBodyProps()}>
                 {page.map((row, i) => {
@@ -95,8 +121,21 @@ function Table({ columns, data }) {
                                 return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                             })}
                             <td>
-                            <button className="btn_table" data-toggle="tooltip" data-placement="top" title="Accéder" ><span style={{color:'#80e4ff'}} className=" lnr lnr-pencil"  ></span></button>
-                            <button className="btn_table" data-toggle="tooltip" data-placement="top" title="Dupliquer" ><span style={{color:'#9195fd'}} className=" lnr lnr-layers"  ></span></button>
+                                {row.values.Status == "Submitted" ?
+                                    <>
+                                        <IconButton aria-label="Duplicate" size="small" style={{color:'rgb(212,101,141)'}}  onClick={() => handleDuplicateClick(row.original._id)}>
+                                            <ContentCopyIcon fontSize="inherit" />
+                                        </IconButton>
+                                        <IconButton aria-label="Show" size="small" color="primary" onClick={() => handleShowClick(row.original._id)}>
+                                            <VisibilityIcon fontSize="inherit" />
+                                        </IconButton>
+                                       
+                                    </> :
+                                   
+                                    <IconButton aria-label="Edit" size="small" style={{color:'rgb(50,187,145)'}} onClick={() => handleDuplicateClick(row.original._id)}>
+                                        <EditIcon fontSize="inherit" />
+                                    </IconButton>
+                                }
                             </td>
                         </tr>
                     )
@@ -106,15 +145,7 @@ function Table({ columns, data }) {
         <div className="pagination">
                 <span > 
                     {' '}
-                   {/* <input className='form-control'
-                        type="number"
-                        defaultValue={pageIndex + 1}
-                        onChange={e => {
-                            const page = e.target.value ? Number(e.target.value) - 1 : 0
-                            gotoPage(page)
-                        }}
-                        style={{ width: '60px'  , display:'inline' , padding:'5px' , fontSize:'0.6rem' , border: '1px solid #f2f2f2'}}
-                    />*/}
+                   
                     {'    '} Rows per page :{'    '} <select className='form-select' style={{ border: '1px solid #f2f2f2' , width:'65px' , display:'inline' , padding:'5px' , fontSize:'0.6rem' }}
                     value={pageSize}
                     onChange={e => {
@@ -149,9 +180,6 @@ function Table({ columns, data }) {
                     {'>>'}
                 </button>
                 </span>{' '}
-               
-               
-               
             </div>
         </>
     )

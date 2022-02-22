@@ -4,7 +4,7 @@ import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/inertia-react';
-import  Scrollbar from "smooth-scrollbar";
+import Scrollbar from "smooth-scrollbar";
 import MultilevelMenu from '@/Components/MultilevelMenu';
 // import 'smooth-scrollbar/dist/smooth-scrollbar.css';
 
@@ -13,23 +13,22 @@ export default function Authenticated({ auth, header, children }) {
     const [whichMenu, SetwichMenu] = useState('');
     const [dropdownnav, setDropdownnav] = useState(false);
     const [topbarnav, setTopbarnav] = useState(false)
-    const [settings, setSettings] = useState( [{ id: 1, open: false }, 
-        { id: 2, open: false }, 
-        { id: 3, open: false }, 
-        { id: 4, open: false }, 
-        { id: 5, open: false }, 
-        { id: 6, open: false }, 
-        { id: 7, open: false }, 
-        { id: 8, open: false }, 
-        { id: 9, open: false },
-        { id: 10, open: false },
-        { id: 11, open: false },
-        { id: 12, open: false },
+    const [settings, setSettings] = useState([{ id: 1, open: false },
+    { id: 2, open: false },
+    { id: 3, open: false },
+    { id: 4, open: false },
+    { id: 5, open: false },
+    { id: 6, open: false },
+    { id: 7, open: false },
+    { id: 8, open: false },
+    { id: 9, open: false },
+    { id: 10, open: false },
+    { id: 11, open: false },
+    { id: 12, open: false },
     ]);
 
     const handleClick = id => {
-        console.log(id)
-        setSettings(settings =>  settings.map(item => item.id === id ? {...item, open: !item.open } : item));
+        setSettings(settings => settings.map(item => item.id === id ? { ...item, open: !item.open } : item));
     };
 
     const options = {
@@ -52,11 +51,11 @@ export default function Authenticated({ auth, header, children }) {
             children: [
                 {
                     name: "Medicinal Product",
-                    url: "/finished"
+                    url: "ma-create"
                 },
                 {
                     name: "Company Registration",
-                    url: "/company"
+                    url: "company"
                 }
             ],
         },
@@ -65,22 +64,22 @@ export default function Authenticated({ auth, header, children }) {
             children: [
                 {
                     name: "Variation",
-                    url: "/variation"
+                    url: "variation-create"
                 },
                 {
                     name: "Renewal",
-                    url: "/renouvellement"
+                    url: "renewal-create"
                 },
                 {
                     name: "Transfer",
-                    url: "/transfer"
+                    url: "transfer-create"
                 },
                 {
                     name: "Others",
                     children: [
                         {
                             name: "Baseline",
-                            url: '/baseline'
+                            url: 'baseline-create'
                         }
                     ]
                 }
@@ -88,27 +87,27 @@ export default function Authenticated({ auth, header, children }) {
         },
         {
             name: "Registration Termination",
-            url: "/registrationtermination"
+            url: "registrationtermination-create"
         }
     ]
 
     const clinicaldata = [
         {
             name: "Registration Creation",
-            url: "/clinical",
+            url: "clinical-create",
         },
         {
             name: "Lifecycle Management ",
             children: [
                 {
                     name: "Amendments",
-                    url: "/amendments"
+                    url: "amendments-create"
                 }
             ]
         },
         {
             name: "Registration Termination",
-            url: "/cregistrationtermination"
+            url: "cregistrationtermination-create"
         }
     ];
 
@@ -127,28 +126,18 @@ export default function Authenticated({ auth, header, children }) {
         }
     ]
     
-    
     return (
         <div>
-            
+
             <div className="topbar">
                 <div className="tleft">
-                <Link href={route('dashboard')} style={{margin:'auto 20px', color:"white"}}>Logo</Link>
-                {/* <div>
-                        <button style={{width:'60px', height:'60px', display:'flex', border:'none',justifyContent:'center',alignItems:'center',background:'transparent'}}>
-                            <span className="lnr lnr-menu" style={{fontSize:'16px', color:"#3bb78f"}}></span>
-                        </button>
-                        
-                    </div>
-                    */}
+                    <Link href={route('dashboard')} style={{ margin: 'auto 20px', color: "white" }}>Logo</Link>
                 </div>
                 <div className='tmiddle' >
-                    {/* <MultilevelMenu data={menuData} /> */}
-                       
-                    {whichMenu === 'ma' ? 
-                    <MultilevelMenu data={madata} /> : whichMenu === 'clinical' ? 
-                    <MultilevelMenu data={clinicaldata} /> : whichMenu === 'devices' ? 
-                    <MultilevelMenu data={devicesdata} />: '' }
+                    {whichMenu === 'ma' ?
+                        <MultilevelMenu data={madata} /> : whichMenu === 'clinical' ?
+                            <MultilevelMenu data={clinicaldata} /> : whichMenu === 'devices' ?
+                                <MultilevelMenu data={devicesdata} /> : ''}
                 </div>
                 <div className="tright">
                     <div className="topbar_right">
@@ -158,30 +147,30 @@ export default function Authenticated({ auth, header, children }) {
                                 <p>{auth.user.name}</p>
                                 <svg className="mdi-icon topbar_icon" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"></path></svg>
                             </button>
-                            <div className="topbar_dropdown_wrap" style={{display: topbarnav ? 'flex' : 'none'}}>
+                            <div className="topbar_dropdown_wrap" style={{ display: topbarnav ? 'flex' : 'none' }}>
                                 <div className="topbar_dropdown">
                                     <Link className="topbar_link" href="#" as="a">
-                                        <p className="topbar_link_title" style={{color:'black'}}>My Profile</p>
+                                        <p className="topbar_link_title" style={{ color: 'black' }}>My Profile</p>
                                     </Link>
                                     <Link className="topbar_link" href={route('logout')} method="post" as="button">
                                         <p className="topbar_link_title">Log Out</p>
                                     </Link>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
             <div className="sidebar">
                 <div className="sidebar_content">
-                <Link href={route('dashboard')} style={{margin:'auto 20px', color:"white", fontsize:'15px',}}>
-                <img src="../logo.png" alt="logo" className='logo' />
+                    <Link href={route('dashboard')} style={{ margin: 'auto 20px', color: "white", fontsize: '15px', }}>
+                        <img src="../logo.png" alt="logo" className='logo' />
                     </Link>
                     <ul className="sidebar_block">
-                   
-                        <Link className={`topbar_link ${route().current('dashboard') ? `sidebar_link_active` : ''}`} href={route('dashboard')} onClick={() =>SetwichMenu('')}>
+
+                        <Link className={`topbar_link ${route().current('dashboard') ? `sidebar_link_active` : ''}`} href={route('dashboard')} onClick={() => SetwichMenu('')}>
                             <li className="sidebar_link" >
                                 <span className="sidebar_link_icon lnr lnr-home"></span>
                                 <p className="sidebar_link_title">Dashboard</p>
@@ -195,13 +184,13 @@ export default function Authenticated({ auth, header, children }) {
                             </button>
                             <div style={{ display: settings.find(item => item.id === 1).open ? 'block' : 'none' }}>
                                 <ul className="sidebar_submenu">
-                                    <button className="sidebar_link topbar_link" style={{background: whichMenu == 'ma' ? 'rgba(243, 243, 243, 0.3)': ''}} onClick={() => handleSelectMenu('ma')} >
+                                    <button className="sidebar_link topbar_link" style={{ background: whichMenu == 'ma' ? 'rgba(243, 243, 243, 0.3)' : '' }} onClick={() => handleSelectMenu('ma')} >
                                         <p className="sidebar_link_title">Marketing Authorization</p>
                                     </button>
-                                    <button className="sidebar_link topbar_link" style={{background: whichMenu == 'clinical' ? 'rgba(243, 243, 243, 0.3)': ''}} onClick={() => handleSelectMenu('clinical')}>
+                                    <button className="sidebar_link topbar_link" style={{ background: whichMenu == 'clinical' ? 'rgba(243, 243, 243, 0.3)' : '' }} onClick={() => handleSelectMenu('clinical')}>
                                         <p className="sidebar_link_title">Clinical</p>
                                     </button>
-                                    <button className="sidebar_link topbar_link" style={{background: whichMenu == 'devices' ? 'rgba(243, 243, 243, 0.3)': ''}} onClick={() => handleSelectMenu('devices')}>
+                                    <button className="sidebar_link topbar_link" style={{ background: whichMenu == 'devices' ? 'rgba(243, 243, 243, 0.3)' : '' }} onClick={() => handleSelectMenu('devices')}>
                                         <p className="sidebar_link_title">Devices</p>
                                     </button>
                                 </ul>
@@ -235,6 +224,6 @@ export default function Authenticated({ auth, header, children }) {
                 </div>
             </main>
         </div>
-        
+
     );
 }

@@ -18,10 +18,14 @@ class RcSubmit extends Mailable
      */
 
     private ?string $name = null;
+    private ?string $prductName = null;
+    public ?string $sujet = null;
 
-    public function __construct(?string $name)
+    public function __construct(?string $name, ?string $prductName, ?string $sujet)
     {
         $this->name = $name;
+        $this->prductName = $prductName;
+        $this->sujet = $sujet;
     }
 
     /**
@@ -31,6 +35,9 @@ class RcSubmit extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.rc')->attach(public_path($this->name));
+        return $this->view('emails.rc')
+        ->subject($this->sujet)
+        ->attach(public_path($this->name))
+        ->with(['prductName' => $this->prductName]);
     }
 }

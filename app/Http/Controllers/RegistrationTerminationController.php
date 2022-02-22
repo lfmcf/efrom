@@ -20,10 +20,7 @@ class RegistrationTerminationController extends Controller
      */
     public function index()
     {
-        $countries = Countries::orderBy('country_name')->get('country_name');
-        return Inertia::render('MarketingAuth/RegistrationTermination', [
-            'countries' => $countries
-        ]);
+       
     }
 
     /**
@@ -33,7 +30,10 @@ class RegistrationTerminationController extends Controller
      */
     public function create()
     {
-        //
+        $countries = Countries::orderBy('country_name')->get('country_name');
+        return Inertia::render('RegistrationTermination/Create', [
+            'countries' => $countries
+        ]);
     }
 
     /**
@@ -61,7 +61,7 @@ class RegistrationTerminationController extends Controller
         
         if(!empty($docs)) {
             $arr = array_map(function($doc) {
-                if ($doc['document']) {
+                if ($doc['document'] && gettype($doc['document']) != 'string') {
                     $uploadedFile = $doc['document'];
                     $filename = time() . $uploadedFile->getClientOriginalName();
                     $path = Storage::putFileAs(

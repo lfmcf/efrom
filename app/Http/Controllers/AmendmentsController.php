@@ -21,10 +21,7 @@ class AmendmentsController extends Controller
      */
     public function index()
     {
-        $countries = Countries::orderBy('country_name')->get('country_name');
-        return Inertia::render('MarketingAuth/Amendments', [
-            'countries' => $countries
-        ]);
+        
     }
 
     /**
@@ -34,7 +31,10 @@ class AmendmentsController extends Controller
      */
     public function create()
     {
-        //
+        $countries = Countries::orderBy('country_name')->get('country_name');
+        return Inertia::render('Amendment/Create', [
+            'countries' => $countries
+        ]);
     }
 
     /**
@@ -62,7 +62,7 @@ class AmendmentsController extends Controller
         
         if(!empty($docs)) {
             $arr = array_map(function($doc) {
-                if ($doc['document']) {
+                if ($doc['document'] && gettype($doc['document']) != 'string') {
                     $uploadedFile = $doc['document'];
                     $filename = time() . $uploadedFile->getClientOriginalName();
                     $path = Storage::putFileAs(
@@ -195,10 +195,17 @@ class AmendmentsController extends Controller
             $writer = new Xlsx($spreadsheet);
             
             $date = date('d-m-y');
-            $name = 'Amendment ' . $date . '.xlsx';
+            // $name = 'Amendment ' . $date . '.xlsx';
+            if($request->procedure_type == 'National' || $request->procedure_type == 'Centralized') {
+                $name = 'eForm_Amendement_' .$request->product . '_' .$request->country[0] . '_' .$date . '.xlsx';
+                $subject = 'eForm_Amendement_' .$request->product . '_' .$request->country[0];
+            }else {
+                $name = 'eForm_Amendement_' .$request->product . '_' .$request->procedure_type . '_' .$date . '.xlsx';
+                $subject = 'eForm_Amendement_' .$request->product . '_' .$request->procedure_type;
+            }
             $writer->save($name);
 
-            Mail::to(getenv('MAIL_TO'))->send(new Amendment($name));
+            Mail::to(getenv('MAIL_TO'))->send(new Amendment($name,  $request->product, $subject));
         }
         
     }

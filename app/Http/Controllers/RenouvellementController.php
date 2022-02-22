@@ -21,10 +21,7 @@ class RenouvellementController extends Controller
      */
     public function index()
     {
-        $countries = Countries::orderBy('country_name')->get('country_name');
-        return Inertia::render('MarketingAuth/Renewal', [
-            'countries' => $countries
-        ]);
+        //
     }
 
     /**
@@ -34,7 +31,10 @@ class RenouvellementController extends Controller
      */
     public function create()
     {
-        //
+        $countries = Countries::orderBy('country_name')->get('country_name');
+        return Inertia::render('Renewal/Create', [
+            'countries' => $countries
+        ]);
     }
 
     /**
@@ -64,7 +64,7 @@ class RenouvellementController extends Controller
         
         if(!empty($docs)) {
             $arr = array_map(function($doc) {
-                if ($doc['document']) {
+                if ($doc['document'] && gettype($doc['document']) != 'string') {
                     $uploadedFile = $doc['document'];
                     $filename = time() . $uploadedFile->getClientOriginalName();
                     $path = Storage::putFileAs(
@@ -210,10 +210,16 @@ class RenouvellementController extends Controller
             $writer = new Xlsx($spreadsheet);
             
             $date = date('d-m-y');
-            $name = 'Renewal ' . $date . '.xlsx';
+            if($request->procedure_type == 'National' || $request->procedure_type == 'Centralized') {
+                $name = 'eForm_Renewal_' .$request->product . '_' .$request->country[0] . '_' .$date . '.xlsx';
+                $subject = 'eForm_Renewal_' .$request->product . '_' .$request->country[0];
+            }else {
+                $name = 'eForm_Renewal_' .$request->product . '_' .$request->procedure_type . '_' .$date . '.xlsx';
+                $subject = 'eForm_Renewal_' .$request->product . '_' .$request->procedure_type;
+            }
             $writer->save($name);
 
-            Mail::to(getenv('MAIL_TO'))->send(new Renewal($name));
+            Mail::to(getenv('MAIL_TO'))->send(new Renewal($name, $request->product, $subject));
         }
 
         
@@ -225,9 +231,12 @@ class RenouvellementController extends Controller
      * @param  \App\Models\Renouvellement  $renouvellement
      * @return \Illuminate\Http\Response
      */
-    public function show(Renouvellement $renouvellement)
+    public function show($id)
     {
-        //
+        $renewal = Renouvellement::findOrFail($id);
+        return Inertia::render('Renewal/Show', [
+            'renewal' => $renewal
+        ]);
     }
 
     /**
@@ -236,9 +245,15 @@ class RenouvellementController extends Controller
      * @param  \App\Models\Renouvellement  $renouvellement
      * @return \Illuminate\Http\Response
      */
-    public function edit(Renouvellement $renouvellement)
+    public function edit($id)
     {
-        //
+        $renewal = Renouvellement::findOrFail($id);
+        $countries = Countries::orderBy('country_name')->get('country_name');
+        return Inertia::render('Renewal/Edit', [
+            'countries' => $countries,
+            'renewal' => $renewal
+        ]);
+
     }
 
     /**

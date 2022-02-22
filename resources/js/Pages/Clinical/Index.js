@@ -901,8 +901,8 @@ const Index = (props) => {
                                         </div>
 
                                         {data.key_dates.map((element, index) => (
-                                            <fieldset>
-                                                <legend key={index}>Keys {index + 1}</legend>
+                                            <fieldset  key={index}>
+                                                <legend>Keys {index + 1}</legend>
                                                 <div  style={{ marginBottom: '30px' }}>
 
                                                     {index > 0 ?
@@ -1006,8 +1006,8 @@ const Index = (props) => {
                                             </button>
                                         </div>
                                         {data.formulations.map((element, index) => (
-                                            <fieldset>
-                                                <legend key={index}>Formulation {index + 1}</legend>
+                                            <fieldset key={index}>
+                                                <legend >Formulation {index + 1}</legend>
                                             
                                             <div>
                                                 
@@ -1122,9 +1122,9 @@ const Index = (props) => {
                                         </div>
 
                                         {data.packagings.map((element, index) => (
-                                            <fieldset>
+                                            <fieldset key={index}>
                                                 <legend >Packaging {index + 1}</legend>
-                                                <div key={index} style={{ padding: "10px", marginBottom: '10px' }}>
+                                                <div style={{ padding: "10px", marginBottom: '10px' }}>
                                                     {index > 0 ?
                                                         <div style={{ display: 'flex', justifyContent: 'end' }}>
                                                             <button type="button" style={{ width: '14px', height: '14px', background: '000', padding: '0', margin: '0 0 20px 0' }} onClick={() => removePackageValues(index)}>

@@ -42,7 +42,16 @@ class RcController extends Controller
      */
     public function create()
     {
-        //
+        $compnies = Company::orderBy('name')->get();
+        $substanceActive = substanceActive::all();
+        $packagingItemTypes = packagingItemType::all();
+        $countries = Countries::orderBy('country_name')->get('country_name');
+        return Inertia::render('Medicinal/Create', [
+            'companies' => $compnies,
+            'substanceActive' => $substanceActive,
+            'packagingItemTypes' => $packagingItemTypes,
+            'countries' => $countries
+        ]);
     }
 
     /**
@@ -55,7 +64,7 @@ class RcController extends Controller
     {
         // dd($request->query('type'));
         
-        // dd($request->packagings);
+        //dd(gettype($request->doc[0]['document']));
 
         if($request->query('type') === 'submit') {
             $validator = $request->validate(
@@ -90,7 +99,7 @@ class RcController extends Controller
         
         if(!empty($docs)) {
             $arr = array_map(function($doc) {
-                if ($doc['document']) {
+                if ($doc['document'] && gettype($doc['document']) != 'string') {
                     $uploadedFile = $doc['document'];
                     $filename = time() . $uploadedFile->getClientOriginalName();
                     // $destinationPath = public_path().'/images' ;
@@ -101,7 +110,6 @@ class RcController extends Controller
                         $filename
                     );
                     $doc['document'] = asset('storage/'.$filename);
-                    
                 }
                 return $doc;
             }, $docs);
@@ -209,6 +217,7 @@ class RcController extends Controller
                 'Shelf Life',
                 'Shelf-life Unit',
                 'Package Storage Condition',
+                'Remarks'
             );
             $indications = array(
                 'Indications',
@@ -370,6 +379,7 @@ class RcController extends Controller
                         $sheet->setCellValue('J' . $c, $pl['package_shelf_life_type']);
                         $sheet->setCellValue('K' . $c, $pl['shelf_life']);
                         $sheet->setCellValue('L' . $c, $pl['shelf_life_unit']);
+                        $sheet->setCellValue('N' . $c, $pl['remarks']);
                         if (isset($pl['package_storage_condition'])) {
                             foreach ($pl['package_storage_condition'] as $psc) {
                                 $sheet->setCellValue('M' . $c, $psc);
@@ -429,15 +439,24 @@ class RcController extends Controller
             $hr = $sheet->getHighestRow();
             for($i=2; $i<=$hr; $i++) {
                 $datef = $sheet->getCell('D'.$i);
+                
                 $sheet->setCellValue('D'.$i, date("d-m-Y", strtotime($datef)));
+                //$sheet->getCell('F'.$i)->getHyperlink()->setUrl($url);
             }
 
             $writer = new Xlsx($spreadsheet);
             
             $date = date('d-m-y');
-            $name = 'Medicinal Product ' . $date . '.xlsx';
+            if($request->procedure_type == 'National' || $request->procedure_type == 'Centralized') {
+                $name = 'eForm_NewRegistration_' .$request->product_name . '_' .$request->country[0] . '_' .$date . '.xlsx';
+                $subject = 'eForm_NewRegistration_' .$request->product_name . '_' .$request->country[0];
+            }else {
+                $name = 'eForm_NewRegistration_' .$request->product_name . '_' .$request->procedure_type . '_' .$date . '.xlsx';
+                $subject = 'eForm_NewRegistration_' .$request->product_name . '_' .$request->procedure_type;
+            }
+            
             $writer->save($name);
-            Mail::to(getenv('MAIL_TO'))->send(new RcSubmit($name));
+            Mail::to(getenv('MAIL_TO'))->send(new RcSubmit($name, $request->product_name, $subject));
 
             return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
             
@@ -453,9 +472,12 @@ class RcController extends Controller
      * @param  \App\Models\Rc  $rc
      * @return \Illuminate\Http\Response
      */
-    public function show(Rc $rc)
+    public function show($id)
     {
-        //
+        $rc = Rc::findOrFail($id);
+        return Inertia::render('Medicinal/Show', [
+            'rc' => $rc
+        ]);
     }
 
     /**
@@ -464,9 +486,21 @@ class RcController extends Controller
      * @param  \App\Models\Rc  $rc
      * @return \Illuminate\Http\Response
      */
-    public function edit(Rc $rc)
+    public function edit($id)
     {
-        //
+        $rc = Rc::findOrFail($id);
+        
+        $compnies = Company::orderBy('name')->get();
+        $substanceActive = substanceActive::all();
+        $packagingItemTypes = packagingItemType::all();
+        $countries = Countries::orderBy('country_name')->get('country_name');
+        return Inertia::render('Medicinal/Edit', [
+            'companies' => $compnies,
+            'substanceActive' => $substanceActive,
+            'packagingItemTypes' => $packagingItemTypes,
+            'countries' => $countries,
+            'rc' => $rc
+        ]);
     }
 
     /**
@@ -489,7 +523,7 @@ class RcController extends Controller
      */
     public function destroy(Rc $rc)
     {
-        //
+       
     }
 
     public function messages()
