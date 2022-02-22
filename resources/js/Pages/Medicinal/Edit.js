@@ -1410,7 +1410,7 @@ const Edit = (props) => {
                                                                     classNamePrefix="basic" options={operations} 
                                                                     isMulti 
                                                                     placeholder=''
-                                                                    defaultValue={element.operation_type.map((option) => { return {label:option, value:option} })} />
+                                                                    defaultValue={element.operation_type ? element.operation_type.map((option) => { return {label:option, value:option} }) : ''} />
                                                             </div>
                                                         </div>
                                                     </div>
