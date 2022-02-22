@@ -410,11 +410,13 @@ class RcController extends Controller
             if(isset($rc->manufacturing)) {
                 foreach ($rc->manufacturing as $mnf) {
                     $sheet->setCellValue('A' . $b, $mnf['manufacturer']);
-                    if (isset($mnf['operation_type']));
-                    foreach ($mnf['operation_type'] as $opt) {
-                        $sheet->setCellValue('B' . $b, $opt);
-                        $b++;
+                    if (isset($mnf['operation_type'])){
+                        foreach ($mnf['operation_type'] as $opt) {
+                            $sheet->setCellValue('B' . $b, $opt);
+                            $b++;
+                        }
                     }
+                    
                 }
             }
             
