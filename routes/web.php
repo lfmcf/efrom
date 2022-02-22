@@ -12,7 +12,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\TransferController;
 use App\Http\Controllers\BaselineController;
 use App\Http\Controllers\RegistrationTerminationController;
-use App\Http\Controllers\cRegistrationTerminationController;
+use App\Http\Controllers\CregistrationTerminationController;
 use App\Http\Controllers\AmendmentsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ClinicalController;
