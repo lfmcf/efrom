@@ -441,7 +441,6 @@ class RcController extends Controller
             $hr = $sheet->getHighestRow();
             for($i=2; $i<=$hr; $i++) {
                 $datef = $sheet->getCell('D'.$i);
-                
                 $sheet->setCellValue('D'.$i, date("d-m-Y", strtotime($datef)));
                 //$sheet->getCell('F'.$i)->getHyperlink()->setUrl($url);
             }

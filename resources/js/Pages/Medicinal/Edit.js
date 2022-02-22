@@ -1310,7 +1310,7 @@ const Edit = (props) => {
                                                                                 className="basic" 
                                                                                 classNamePrefix="basic" 
                                                                                 placeholder='' 
-                                                                                defaultValue={ele.package_storage_condition.map((option) => {return {label:option, value: option} })}
+                                                                                defaultValue={ele.package_storage_condition ? ele.package_storage_condition.map((option) => {return {label:option, value: option} }) : ''}
                                                                             />
                                                                         </div>
                                                                     </div>
