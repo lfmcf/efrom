@@ -67,11 +67,11 @@ function Row(props) {
                                             <TableCell>{historyRow.shelf_life}</TableCell>
                                             <TableCell align="center">{historyRow.shelf_life_unit}</TableCell>
                                             <TableCell align="center">
-                                                {historyRow.package_storage_condition.map((psc,i) => (
+                                                { historyRow.package_storage_condition ? historyRow.package_storage_condition.map((psc,i) => (
                                                     <ul key={i}>
                                                         <li>{psc}</li>
                                                     </ul>
-                                                ))}
+                                                )) : ''}
                                             </TableCell>
                                         </TableRow>
                                     ))}
