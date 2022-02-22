@@ -22,12 +22,7 @@ class TransferController extends Controller
      */
     public function index()
     {
-        $compnies = Company::orderBy('name')->get();
-        $countries = Countries::orderBy('country_name')->get('country_name');
-        return Inertia::render('MarketingAuth/Transfer', [
-            'countries' => $countries,
-            'companies' => $compnies
-        ]);
+       
     }
 
     /**
@@ -37,7 +32,12 @@ class TransferController extends Controller
      */
     public function create()
     {
-        //
+        $compnies = Company::orderBy('name')->get();
+        $countries = Countries::orderBy('country_name')->get('country_name');
+        return Inertia::render('Transfer/Create', [
+            'countries' => $countries,
+            'companies' => $compnies
+        ]);
     }
 
     /**
@@ -65,7 +65,7 @@ class TransferController extends Controller
         
         if(!empty($docs)) {
             $arr = array_map(function($doc) {
-                if ($doc['document']) {
+                if ($doc['document'] && gettype($doc['document']) != 'string') {
                     $uploadedFile = $doc['document'];
                     $filename = time() . $uploadedFile->getClientOriginalName();
                     $path = Storage::putFileAs(
@@ -206,10 +206,17 @@ class TransferController extends Controller
             $writer = new Xlsx($spreadsheet);
             
             $date = date('d-m-y');
-            $name = 'Transfer ' . $date . '.xlsx';
+            if($request->procedure_type == 'National' || $request->procedure_type == 'Centralized') {
+                $name = 'eForm_MATransfer_' .$request->product . '_' .$request->country[0] . '_' .$date . '.xlsx';
+                $subject = 'eForm_MATransfer_' .$request->product . '_' .$request->country[0];
+            }else {
+                $name = 'eForm_MATransfer_' .$request->product . '_' .$request->procedure_type . '_' .$date . '.xlsx';
+                $subject = 'eForm_MATransfer_' .$request->product . '_' .$request->procedure_type;
+            }
+            // $name = 'Transfer ' . $date . '.xlsx';
             $writer->save($name);
 
-            Mail::to(getenv('MAIL_TO'))->send(new MailTransfer($name));
+            Mail::to(getenv('MAIL_TO'))->send(new MailTransfer($name, $request->product, $subject));
         }
     }
 

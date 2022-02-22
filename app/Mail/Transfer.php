@@ -12,15 +12,19 @@ class Transfer extends Mailable
     use Queueable, SerializesModels;
 
     private ?string $name = null;
+    private ?string $prductName = null;
+    public ?string $sujet = null;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(?string $name)
+    public function __construct(?string $name, $prductName, ?string $sujet)
     {
         $this->name = $name;
+        $this->prductName = $prductName;
+        $this->sujet = $sujet;
     }
 
     /**
@@ -30,6 +34,9 @@ class Transfer extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.transfer')->attach(public_path($this->name));
+        return $this->view('emails.transfer')
+        ->subject($this->sujet)
+        ->attach(public_path($this->name))
+        ->with(['prductName' => $this->prductName]);
     }
 }

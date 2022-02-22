@@ -12,10 +12,11 @@ import Button from '@mui/material/Button';
 import MuiAlert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import { Typography } from '@mui/material';
+import { usePage } from '@inertiajs/inertia-react'
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-  });
+});
 
 // function GlobalFilter({
 //     preGlobalFilteredRows,
@@ -66,7 +67,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 //         previousPage,
 //         setPageSize,
 //         state: { pageIndex, pageSize },
-        
+
 //     } = useTable({
 //         columns,
 //         data,
@@ -153,7 +154,9 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 // }
 
 const Dashboard = (props) => {
-    
+
+    const { flash } = usePage().props
+
     const Rccolumns = React.useMemo(
         () => [
             {
@@ -166,10 +169,10 @@ const Dashboard = (props) => {
             },
             // {
             //     Header: 'Country / Countries',
-                
+
             //     accessor: function (originalRow, rowIndex) {
             //         if (originalRow.country && Array.isArray(originalRow.country)) {
-                        
+
             //             return originalRow.country.map(ele => (
             //                 <ul>
             //                     <li>{ele}</li>
@@ -185,17 +188,17 @@ const Dashboard = (props) => {
             {
                 Header: 'Status',
                 accessor: function (originalRow, rowIndex) {
-                    if(originalRow.type == 'submit' ){
+                    if (originalRow.type == 'submit') {
                         return 'Submitted'
-                    }else {
+                    } else {
                         return 'Saved'
                     }
                 }
             },
             {
                 Header: 'Date',
-                accessor: function(originalRow, rowIndex) {
-                    return moment(originalRow.created_at).format('YYYY-MM-DD'); 
+                accessor: function (originalRow, rowIndex) {
+                    return moment(originalRow.created_at).format('YYYY-MM-DD');
                 },
             }
         ],
@@ -216,7 +219,7 @@ const Dashboard = (props) => {
             //     Header: 'Country / Countries',
             //     accessor: function (originalRow, rowIndex) {
             //         if (originalRow.country && Array.isArray(originalRow.country)) {
-                        
+
             //             return originalRow.country.map(ele => (
             //                 <ul>
             //                     <li>{ele}</li>
@@ -232,17 +235,17 @@ const Dashboard = (props) => {
             {
                 Header: 'Status',
                 accessor: function (originalRow, rowIndex) {
-                    if(originalRow.type == 'submit' ){
+                    if (originalRow.type == 'submit') {
                         return 'Submitted'
-                    }else {
+                    } else {
                         return 'Saved'
                     }
                 }
             },
             {
                 Header: 'Date',
-                accessor: function(originalRow, rowIndex) {
-                    return moment(originalRow.created_at).format('YYYY-MM-DD'); 
+                accessor: function (originalRow, rowIndex) {
+                    return moment(originalRow.created_at).format('YYYY-MM-DD');
                 },
             }
         ],
@@ -263,7 +266,7 @@ const Dashboard = (props) => {
             //     Header: 'Country / Countries',
             //     accessor: function (originalRow, rowIndex) {
             //         if (originalRow.country && Array.isArray(originalRow.country)) {
-                        
+
             //             return originalRow.country.map(ele => (
             //                 <ul>
             //                     <li>{ele}</li>
@@ -279,17 +282,17 @@ const Dashboard = (props) => {
             {
                 Header: 'Status',
                 accessor: function (originalRow, rowIndex) {
-                    if(originalRow.type == 'submit' ){
+                    if (originalRow.type == 'submit') {
                         return 'Submitted'
-                    }else {
+                    } else {
                         return 'Saved'
                     }
                 }
             },
             {
                 Header: 'Date',
-                accessor: function(originalRow, rowIndex) {
-                    return moment(originalRow.created_at).format('YYYY-MM-DD'); 
+                accessor: function (originalRow, rowIndex) {
+                    return moment(originalRow.created_at).format('YYYY-MM-DD');
                 },
             }
         ],
@@ -310,7 +313,7 @@ const Dashboard = (props) => {
             //     Header: 'Country / Countries',
             //     accessor: function (originalRow, rowIndex) {
             //         if (originalRow.country && Array.isArray(originalRow.country)) {
-                        
+
             //             return originalRow.country.map(ele => (
             //                 <ul>
             //                     <li>{ele}</li>
@@ -326,17 +329,17 @@ const Dashboard = (props) => {
             {
                 Header: 'Status',
                 accessor: function (originalRow, rowIndex) {
-                    if(originalRow.type == 'submit' ){
+                    if (originalRow.type == 'submit') {
                         return 'Submitted'
-                    }else {
+                    } else {
                         return 'Saved'
                     }
                 }
             },
             {
                 Header: 'Date',
-                accessor: function(originalRow, rowIndex) {
-                    return moment(originalRow.created_at).format('YYYY-MM-DD'); 
+                accessor: function (originalRow, rowIndex) {
+                    return moment(originalRow.created_at).format('YYYY-MM-DD');
                 },
             }
         ],
@@ -350,10 +353,6 @@ const Dashboard = (props) => {
 
     const [open, setOpen] = React.useState(true);
 
-    // const handleClick = () => {
-    //     setOpen(true);
-    // };
-
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -363,67 +362,61 @@ const Dashboard = (props) => {
     };
 
     React.useEffect(() => {
-        props.flash.message ? setOpen(true) : setOpen(false)
-    }, [props.flash.message])
+        flash.message ? setOpen(true) : setOpen(false)
+    }, [])
 
     return (
-        // <Authenticated
-        //     auth={props.auth}
-        //     errors={props.errors}
-        //     header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>}
-        // >
+
         <>
-            {/* {props.flash.message ? */}
-            {/* <FlashMessage duration={500000} persistOnHover={true}  style={{position:'absolute',top:'65px',right:'15px',zIndex:'10000'}}> */}
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'right'}}>
+
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
                 <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                     {props.flash.message}
                 </Alert>
             </Snackbar>
-                
-            {/* </FlashMessage>  */}
-            {/* : ''} */}
+
+
             <Head title="Dashboard" />
             <div className="row">
                 <div className="col-md-12">
-                    <h3 className="page-title"><i style={{paddingBottom:'8px'}}class="fas fa-home"></i> / Dashboard</h3>
+                    <h3 className="page-title"><i style={{ paddingBottom: '8px' }} className="fas fa-home"></i> / Dashboard</h3>
                 </div>
             </div>
-            
+
             <div className="row">
                 <div className="col-12" >
                     <div className="card main-card">
-                        <div className="card-body">
-                            <div style={{marginBottom: '50px'}}>
-                                <h5 className="mb-3 head-table" style={{float: 'left'}}>MA Registration Creation</h5>
-                                <Table columns={Rccolumns} data={Rcdata} />
+                        <div className="card-body dash-table">
+                            <div style={{ marginBottom: '50px', position:'relative' }}>
+                                <h5 className="mb-3 head-table" style={{ float: 'left' }}>MA Registration Creation</h5>
+                                <Table columns={Rccolumns} data={Rcdata} for="ma" />
                             </div>
-                            <div style={{marginBottom: '50px'}}>
-                                <h5 className="mb-3 head-table" style={{float: 'left'}}>Variation</h5>
-                                <Table columns={Variationcolumns} data={VariationData} />
+                            <div style={{ marginBottom: '50px', position:'relative' }}>
+                                <h5 className="mb-3 head-table" style={{ float: 'left' }}>Variation</h5>
+                                <Table columns={Variationcolumns} data={VariationData} for="variation" />
                             </div>
-                            <div style={{marginBottom: '50px'}}>
-                                <h5 className="mb-3 head-table" style={{float: 'left'}}>Renewal</h5>
-                                <Table columns={Renewalcolumns} data={RenewalData} />
+                            <div style={{ marginBottom: '50px', position:'relative' }}>
+                                <h5 className="mb-3 head-table" style={{ float: 'left' }}>Renewal</h5>
+                                <Table columns={Renewalcolumns} data={RenewalData} for="renewal" />
                             </div>
-                            <div style={{marginBottom: '50px'}}>
-                                <h5 className="mb-3 head-table" style={{float: 'left'}}>Baseline</h5>
-                                <Table columns={Baselinecolumns} data={BaselineData} />
+                            <div style={{ marginBottom: '50px', position:'relative' }}>
+                                <h5 className="mb-3 head-table" style={{ float: 'left' }}>Baseline</h5>
+                                <Table columns={Baselinecolumns} data={BaselineData} for="baseline" />
                             </div>
                         </div>
                     </div>
                 </div>
-               
+
             </div>
-            <footer style={{margin:'5px 0', display:'flex', justifyContent:'center'}}>
-                <Typography variant="p" component="p">Powered By <span style={{color:'rgb(44, 197,162)',fontWeight:'800'}}>Ekemia</span> &copy; 2022</Typography>
+            <footer style={{ margin: '5px 0', display: 'flex', justifyContent: 'center' }}>
+                <Typography variant="p" component="p">Powered By <span style={{ color: 'rgb(44, 197,162)', fontWeight: '800' }}>Ekemia</span> &copy; 2022</Typography>
             </footer>
 
         </>
-        // </Authenticated>
+
     );
 }
 
-Dashboard.layout = page =>  <Authenticated children={page} auth={page.props.auth} errors={page.props.errors} header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>} />
+Dashboard.layout = page => <Authenticated children={page} auth={page.props.auth} errors={page.props.errors} header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>} />
 
 export default Dashboard;

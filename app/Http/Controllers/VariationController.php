@@ -70,7 +70,7 @@ class VariationController extends Controller
 
         if (!empty($docs)) {
             $arr = array_map(function ($doc) {
-                if ($doc['document']) {
+                if ($doc['document'] && gettype($doc['document']) != 'string') {
                     $uploadedFile = $doc['document'];
                     $filename = time() . $uploadedFile->getClientOriginalName();
                     $path = Storage::putFileAs(
@@ -196,9 +196,15 @@ class VariationController extends Controller
             $writer = new Xlsx($spreadsheet);
             
             $date = date('d-m-y');
-            $name = 'Variation Hq ' . $date . '.xlsx';
+            if($request->procedure_type == 'National' || $request->procedure_type == 'Centralized') {
+                $name = 'eForm_Variation_' .$request->product . '_' .$request->country[0] . '_' .$date . '.xlsx';
+                $subject = 'eForm_Variation_' .$request->product . '_' .$request->country[0];
+            }else {
+                $name = 'eForm_Variation_' .$request->product . '_' .$request->procedure_type . '_' .$date . '.xlsx';
+                $subject = 'eForm_Variation_' .$request->product . '_' .$request->procedure_type;
+            }
             $writer->save($name);
-            Mail::to(getenv('MAIL_TO'))->send(new HqVariation($name));
+            Mail::to(getenv('MAIL_TO'))->send(new HqVariation($name, $request->product, $subject));
 
             return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
         }
@@ -228,7 +234,7 @@ class VariationController extends Controller
 
         if (!empty($docs)) {
             $arr = array_map(function ($doc) {
-                if ($doc['document']) {
+                if ($doc['document'] && gettype($doc['document']) != 'string') {
                     $uploadedFile = $doc['document'];
                     $filename = time() . $uploadedFile->getClientOriginalName();
                     $path = Storage::putFileAs(
@@ -381,10 +387,17 @@ class VariationController extends Controller
             $writer = new Xlsx($spreadsheet);
             
             $date = date('d-m-y');
-            $name = 'Variation ' . $date . '.xlsx';
+            // $name = 'Variation ' . $date . '.xlsx';
+            if($request->procedure_type == 'National' || $request->procedure_type == 'Centralized') {
+                $name = 'eForm_Variation_' .$request->product . '_' .$request->country[0] . '_' .$date . '.xlsx';
+                $subject = 'eForm_Variation_' .$request->product . '_' .$request->country[0];
+            }else {
+                $name = 'eForm_Variation_' .$request->product . '_' .$request->procedure_type . '_' .$date . '.xlsx';
+                $subject = 'eForm_Variation_' .$request->product . '_' .$request->procedure_type;
+            }
             $writer->save($name);
 
-            Mail::to(getenv('MAIL_TO'))->send(new NoHqVariation($name));
+            Mail::to(getenv('MAIL_TO'))->send(new NoHqVariation($name, $request->product, $subject));
 
             return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
 
@@ -399,9 +412,12 @@ class VariationController extends Controller
      * @param  \App\Models\Variation  $variation
      * @return \Illuminate\Http\Response
      */
-    public function show(Variation $variation)
+    public function show($id)
     {
-        //
+        $variation = Variation::findOrFail($id);
+        return Inertia::render('Variation/Show', [
+            'variation' => $variation
+        ]);
     }
 
     /**
@@ -410,9 +426,18 @@ class VariationController extends Controller
      * @param  \App\Models\Variation  $variation
      * @return \Illuminate\Http\Response
      */
-    public function edit(Variation $variation)
+    public function edit($id)
     {
-        //
+
+        $variation = Variation::findOrFail($id);
+        $countries = Countries::orderBy('country_name')->get('country_name');
+
+        return Inertia::render('Variation/Edit', [
+            'countries' => $countries,
+            'variation' => $variation
+        ]);
+
+
     }
 
     /**

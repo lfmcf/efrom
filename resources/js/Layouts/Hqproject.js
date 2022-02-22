@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { useForm } from '@inertiajs/inertia-react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
-import { Card, Accordion } from 'react-bootstrap';
 import Select from 'react-select';
 import Documents from "@/Layouts/Documents";
 import DatePicker from "react-datepicker";

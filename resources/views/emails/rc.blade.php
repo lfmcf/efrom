@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <body class="font-sans antialiased">
-        <h3>New Medicinal Product Form</h3>
+        <p>Bonjour,</p>
+        <p>Veuillez trouver ci-joint une demande de création d'une nouvelle registration pour le produit {{ $prductName }}</p>
+        <p>Cordialement.</p>
     </body>
 </html>

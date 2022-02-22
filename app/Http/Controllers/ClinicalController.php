@@ -19,16 +19,7 @@ class ClinicalController extends Controller
 {
     public function index()
     {
-        $compnies = Company::orderBy('name')->get();
-        $countries = Countries::orderBy('country_name')->get('country_name');
-        $substanceActive = substanceActive::all();
-        $packagingItemTypes = packagingItemType::all();
-        return Inertia::render('Clinical/Clinical', [
-            'companies' => $compnies,
-            'substanceActive' => $substanceActive,
-            'countries' => $countries,
-            'packagingItemTypes' => $packagingItemTypes,
-        ]);
+        //
     }
 
     public function store(Request $request) 
@@ -61,7 +52,7 @@ class ClinicalController extends Controller
         
         if(!empty($docs)) {
             $arr = array_map(function($doc) {
-                if ($doc['document']) {
+                if ($doc['document'] && gettype($doc['document']) != 'string') {
                     $uploadedFile = $doc['document'];
                     $filename = time() . $uploadedFile->getClientOriginalName();
                     $path = Storage::putFileAs(
@@ -179,6 +170,7 @@ class ClinicalController extends Controller
                 'Shelf Life',
                 'Shelf-life Unit',
                 'Package Storage Condition',
+                'Remarks'
             );
             $indications = array(
                 'Indications',
@@ -250,12 +242,24 @@ class ClinicalController extends Controller
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Dosage Form');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($dosageForm, NULL, 'A1');
-            $sheet->fromArray([
-                $clinical->authorized_pharmaceutical_form,
-                $clinical->administrable_pharmaceutical_form,
-                $clinical->route_of_admin,
-                $clinical->atc
-            ], NULL, 'A2');
+            $sheet->setCellValue('A2', $clinical->authorized_pharmaceutical_form);
+            $sheet->setCellValue('B2', $clinical->administrable_pharmaceutical_form);
+            $c= 2;
+            foreach($clinical->route_of_admin as  $roa) {
+                $sheet->setCellValue('C' . $c, $roa);
+                $c+=1;
+            }
+            $e= 2;
+            foreach($clinical->atc as  $at) {
+                $sheet->setCellValue('D' . $e, $at);
+                $e+=1;
+            }
+            // $sheet->fromArray([
+            //     $clinical->authorized_pharmaceutical_form,
+            //     $clinical->administrable_pharmaceutical_form,
+            //     $clinical->route_of_admin,
+            //     $clinical->atc
+            // ], NULL, 'A2');
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(3);
@@ -328,6 +332,7 @@ class ClinicalController extends Controller
                         $sheet->setCellValue('J' . $c, $pl['package_shelf_life_type']);
                         $sheet->setCellValue('K' . $c, $pl['shelf_life']);
                         $sheet->setCellValue('L' . $c, $pl['shelf_life_unit']);
+                        $sheet->setCellValue('N' . $c, $pl['remarks']);
                         if (isset($pl['package_storage_condition'])) {
                             foreach ($pl['package_storage_condition'] as $psc) {
                                 $sheet->setCellValue('M' . $c, $psc);
@@ -389,10 +394,43 @@ class ClinicalController extends Controller
 
             $writer = new Xlsx($spreadsheet);
             
+            // $date = date('d-m-y');
+            // $name = 'Clinical ' . $date . '.xlsx';
+            // $writer->save($name);
+            // Mail::to(getenv('MAIL_TO'))->send(new MailClinical($name));
+
             $date = date('d-m-y');
-            $name = 'Clinical ' . $date . '.xlsx';
+            if($request->procedure_type == 'National' || $request->procedure_type == 'Centralized') {
+                $name = 'eForm_NewClinical_' .$request->product_name . '_' .$request->country[0] . '_' .$date . '.xlsx';
+                $subject = 'eForm_NewClinical_' .$request->product_name . '_' .$request->country[0];
+            }else {
+                $name = 'eForm_NewClinical_' .$request->product_name . '_' .$request->procedure_type . '_' .$date . '.xlsx';
+                $subject = 'eForm_NewClinical_' .$request->product_name . '_' .$request->procedure_type;
+            }
+            
             $writer->save($name);
-            Mail::to(getenv('MAIL_TO'))->send(new MailClinical($name));
+            Mail::to(getenv('MAIL_TO'))->send(new MailClinical($name, $request->product_name, $subject));
+
+            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
         }
+    }
+
+    public function create()
+    {
+        $compnies = Company::orderBy('name')->get();
+        $countries = Countries::orderBy('country_name')->get('country_name');
+        $substanceActive = substanceActive::all();
+        $packagingItemTypes = packagingItemType::all();
+        return Inertia::render('Clinical/Create', [
+            'companies' => $compnies,
+            'substanceActive' => $substanceActive,
+            'countries' => $countries,
+            'packagingItemTypes' => $packagingItemTypes,
+        ]);
+    }
+
+    public function edit($id) 
+    {
+        
     }
 }
