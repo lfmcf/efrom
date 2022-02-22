@@ -1307,8 +1307,10 @@ const Create = (props) => {
                                                                         <div className="form_group_field">
                                                                             <Select options={packageCondistion}
                                                                                 onChange={(e, key) => handlePackageslifeSelectChange(index, i, e, key)}
-                                                                                isMulti name="package_storage_condition"
-                                                                                className="basic" classNamePrefix="basic"
+                                                                                isMulti 
+                                                                                name="package_storage_condition"
+                                                                                className="basic" 
+                                                                                classNamePrefix="basic"
                                                                                 placeholder=''
                                                                             />
                                                                         </div>

@@ -1306,7 +1306,8 @@ const Edit = (props) => {
                                                                         <div className="form_group_field">
                                                                             <Select options={packageCondistion} 
                                                                                 onChange={(e, key) => handlePackageslifeSelectChange(index, i, e, key)} 
-                                                                                isMulti name="package_storage_condition" 
+                                                                                isMulti 
+                                                                                name="package_storage_condition" 
                                                                                 className="basic" 
                                                                                 classNamePrefix="basic" 
                                                                                 placeholder='' 
