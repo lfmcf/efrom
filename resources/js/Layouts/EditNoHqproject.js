@@ -13,6 +13,7 @@ import { Tabs as Mtabs, Tab as Mtab } from '@mui/material';
 import Box from '@mui/material/Box';
 import SaveModal from '@/Components/SaveModal';
 import { Typography } from '@mui/material';
+import { Head } from '@inertiajs/inertia-react';
 
 function a11yProps(index) {
     return {
@@ -558,7 +559,7 @@ const EditNoHqproject = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Status Date (*)</span>
                                                 <div className="form_group_field">
-                                                    <DatePicker name="status_date" selected={element.status_date ? new Date(element.status_date) : new Date()} onChange={(date) => handleDateChange(index, 'status_date', date)} style={{ borderColor: errors['statuses.' + index + '.status_date'] ? 'red' : '' }} />
+                                                    <DatePicker name="status_date" selected={element.status_date ? new Date(element.status_date) : ''} onChange={(date) => handleDateChange(index, 'status_date', date)} style={{ borderColor: errors['statuses.' + index + '.status_date'] ? 'red' : '' }} />
                                                 </div>
                                                 <p className="errors_wrap" style={{ display: errors['statuses.' + index + '.status_date'] ? 'inline-block' : 'none' }}>{errors['statuses.' + index + '.status_date']}</p>
                                             </div>
@@ -593,19 +594,19 @@ const EditNoHqproject = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Planned Local implementation Date</span>
                                                 <div className="form_group_field">
-                                                    <DatePicker name="local_implementation" selected={element.local_implementation ? new Date(element.local_implementation) : new Date()} onChange={(date) => handleDateChange(index, 'local_implementation', date)} />
+                                                    <DatePicker name="local_implementation" selected={element.local_implementation ? new Date(element.local_implementation) : ''} onChange={(date) => handleDateChange(index, 'local_implementation', date)} />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">HA Implimentation Deadline</span>
                                                 <div className="form_group_field">
-                                                    <DatePicker name="implimentation_deadline" selected={element.implimentation_deadline ? new Date(element.implimentation_deadline) : new Date()} onChange={(date) => handleDateChange(index, 'implimentation_deadline', date)} />
+                                                    <DatePicker name="implimentation_deadline" selected={element.implimentation_deadline ? new Date(element.implimentation_deadline) : ''} onChange={(date) => handleDateChange(index, 'implimentation_deadline', date)} />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Actual Local Implementation</span>
                                                 <div className="form_group_field">
-                                                    <DatePicker name="actual_implementation" selected={element.actual_implementation ? new Date(element.actual_implementation) : new Date()} onChange={(date) => handleDateChange(index, 'actual_implementation', date)} />
+                                                    <DatePicker name="actual_implementation" selected={element.actual_implementation ? new Date(element.actual_implementation) : ''} onChange={(date) => handleDateChange(index, 'actual_implementation', date)} />
                                                     {/* <input type="text" name="actual_implementation" onChange={(date) => handleDateChange(index, 'actual_implementation', date)}  /> */}
                                                 </div>
                                             </div>
