@@ -129,7 +129,7 @@ const Show = (props) => {
                         {rc.key_dates.map((kd, i) => (
                             <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                 <TableCell >{kd.date_type}</TableCell>
-                                <TableCell >{moment(kd.date).format('MM-DD-YYYY')}</TableCell>
+                                <TableCell >{kd.date ? moment(kd.date).format('MM-DD-YYYY') : ''}</TableCell>
                                 <TableCell >{kd.remarks}</TableCell>
                             </TableRow>
                         ))}
@@ -223,11 +223,11 @@ const Show = (props) => {
                         {rc.manufacturing.map((man, i) => (
                             <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                 <TableCell >{man.manufacturer}</TableCell>
-                                <TableCell >{man.operation_type.map((ot,j) => (
+                                <TableCell >{man.operation_type ? man.operation_type.map((ot,j) => (
                                     <ul key={j}>
                                         <li>{ot}</li>
                                     </ul>
-                                ))}</TableCell>
+                                )): ''}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
@@ -252,7 +252,7 @@ const Show = (props) => {
                         {rc.statuses.map((status, i) => (
                             <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                 <TableCell>{status.status}</TableCell>
-                                <TableCell>{moment(status.status_date).format('MM-DD-YYYY')}</TableCell>
+                                <TableCell>{status.status_date ? moment(status.status_date).format('MM-DD-YYYY') : ''}</TableCell>
                                 <TableCell>{status.ectd_sequence}</TableCell>
                                 <TableCell>{status.change_control_ref}</TableCell>
                                 <TableCell>{status.internal_submission_reference}</TableCell>
@@ -283,7 +283,7 @@ const Show = (props) => {
                                 <TableCell>{docs.document_type}</TableCell>
                                 <TableCell>{docs.document_title}</TableCell>
                                 <TableCell>{docs.language}</TableCell>
-                                <TableCell>{moment(docs.version_date).format('MM-DD-YYYY')}</TableCell>
+                                <TableCell>{docs.version_date ? moment(docs.version_date).format('MM-DD-YYYY') : ''}</TableCell>
                                 <TableCell>{docs.dremarks}</TableCell>
                                 <TableCell>{docs.document}</TableCell>
                             </TableRow>

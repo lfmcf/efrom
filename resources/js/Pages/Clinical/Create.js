@@ -15,6 +15,7 @@ import SaveModal from '@/Components/SaveModal';
 import { Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { key_dates_list, operations, packageCondistion, product_name, procedure_type, apf, atc, SlType, indications, status } from '@/Components/List';
+import { Head } from '@inertiajs/inertia-react';
 
 function a11yProps(index) {
     return {

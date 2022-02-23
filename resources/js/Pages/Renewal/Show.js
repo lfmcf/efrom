@@ -97,15 +97,15 @@ const Show = (props) => {
                             <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
 
                                 <TableCell>{status.status}</TableCell>
-                                <TableCell>{moment(status.status_date).format('DD-MM-YYYY')}</TableCell>
+                                <TableCell>{status.status_date ? moment(status.status_date).format('DD-MM-YYYY') : ''}</TableCell>
                                 <TableCell>{status.ectd}</TableCell>
                                 <TableCell>{status.control}</TableCell>
                                 <TableCell>{status.cdds}</TableCell>
                                 <TableCell>{status.remarks}</TableCell>
-                                <TableCell>{moment(status.implimentation_deadline).format('DD-MM-YYYY')}</TableCell>
+                                <TableCell>{status.implimentation_deadline ? moment(status.implimentation_deadline).format('DD-MM-YYYY') : ''}</TableCell>
                                 <TableCell>{status.next_renewals}</TableCell>
-                                <TableCell>{moment(status.next_renewals_deadline).format('DD-MM-YYYY')}</TableCell>
-                                <TableCell>{moment(status.next_renewals_date).format('DD-MM-YYYY')}</TableCell>
+                                <TableCell>{status.next_renewals_deadline ? moment(status.next_renewals_deadline).format('DD-MM-YYYY') : ''}</TableCell>
+                                <TableCell>{status.next_renewals_date ? moment(status.next_renewals_date).format('DD-MM-YYYY') : ''}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
@@ -133,7 +133,7 @@ const Show = (props) => {
                                     <TableCell>{docs.document_type}</TableCell>
                                     <TableCell>{docs.document_title}</TableCell>
                                     <TableCell>{docs.language}</TableCell>
-                                    <TableCell>{moment(docs.version_date).format('MM-DD-YYYY')}</TableCell>
+                                    <TableCell>{docs.version_date ? moment(docs.version_date).format('MM-DD-YYYY') : ''}</TableCell>
                                     <TableCell>{docs.dremarks}</TableCell>
                                     <TableCell>{docs.document}</TableCell>
                                 </TableRow>

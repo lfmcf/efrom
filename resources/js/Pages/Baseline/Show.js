@@ -8,6 +8,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import moment from 'moment';
+import { Head } from '@inertiajs/inertia-react';
 
 const Show = (props) => {
     const {baseline} = props;
@@ -96,13 +97,13 @@ const Show = (props) => {
                             <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
 
                                 <TableCell>{status.status}</TableCell>
-                                <TableCell>{moment(status.status_date).format('DD-MM-YYYY')}</TableCell>
+                                <TableCell>{status.status_date ? moment(status.status_date).format('DD-MM-YYYY') : ''}</TableCell>
                                 <TableCell>{status.ectd}</TableCell>
                                 <TableCell>{status.control}</TableCell>
                                 <TableCell>{status.cdds}</TableCell>
                                 <TableCell>{status.remarks}</TableCell>
-                                <TableCell>{moment(status.implimentation_date).format('DD-MM-YYYY')}</TableCell>
-                                <TableCell>{moment(status.deadline_for_answer).format('DD-MM-YYYY')}</TableCell>
+                                <TableCell>{status.implimentation_date ? moment(status.implimentation_date).format('DD-MM-YYYY'): ''}</TableCell>
+                                <TableCell>{status.deadline_for_answer ? moment(status.deadline_for_answer).format('DD-MM-YYYY') : ''}</TableCell>
                                 <TableCell>{status.changes_approved}</TableCell>
                             </TableRow>
                         ))}
@@ -131,7 +132,7 @@ const Show = (props) => {
                                     <TableCell>{docs.document_type}</TableCell>
                                     <TableCell>{docs.document_title}</TableCell>
                                     <TableCell>{docs.language}</TableCell>
-                                    <TableCell>{moment(docs.version_date).format('MM-DD-YYYY')}</TableCell>
+                                    <TableCell>{docs.version_date ? moment(docs.version_date).format('MM-DD-YYYY') : ''}</TableCell>
                                     <TableCell>{docs.dremarks}</TableCell>
                                     <TableCell>{docs.document}</TableCell>
                                 </TableRow>

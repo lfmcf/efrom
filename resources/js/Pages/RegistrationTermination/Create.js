@@ -14,6 +14,7 @@ import Box from '@mui/material/Box';
 import SaveModal from '@/Components/SaveModal';
 import { Typography } from "@mui/material";
 import { product_name, procedure_type, status } from '@/Components/List';
+import { Head } from '@inertiajs/inertia-react';
 
 function a11yProps(index) {
     return {
@@ -210,6 +211,7 @@ const Create = (props) => {
 
     return (
         <>
+            <Head title="Registration Creation - Create" />
             <div className="row">
                 <div className="col-md-12">
                     <h3 className="page-title">Registration Termination</h3>

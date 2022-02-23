@@ -615,7 +615,7 @@ const Edit = (props) => {
                                                         ref={ele => countryRef.current = ele}
                                                         placeholder=''
                                                         isClearable
-                                                        defaultValue={data.country.map(function(option) { return {label:option, value: option} })}
+                                                        defaultValue={data.country ? data.country.map(function(option) { return {label:option, value: option} }) : ''}
                                                     />
                                                 </div>
                                             </div>
@@ -660,7 +660,7 @@ const Edit = (props) => {
                                                         defaultValue={{ label: data.product_type, value: data.product_type }}
                                                     />
                                                 </div>
-                                                <p className="errors_wrap" style={{ display: errors.product_type ? 'inline-block' : 'none' }}>{errors.product_type}</p>
+                                                
                                             </div>
 
                                             <div className="form_group_inline" >
@@ -681,7 +681,7 @@ const Edit = (props) => {
                                                         defaultValue={{ label: data.application_stage, value: data.application_stage }}
                                                     />
                                                 </div>
-                                                <p className="errors_wrap" style={{ display: errors.application_stage ? 'inline-block' : 'none' }}>{errors.application_stage}</p>
+                                                
                                             </div>
                                         </div>
 
@@ -708,7 +708,7 @@ const Edit = (props) => {
                                                         defaultValue={{ label: data.product_name, value: data.product_name }}
                                                     />
                                                 </div>
-                                                <p className="errors_wrap" style={{ display: errors.product_name ? 'inline-block' : 'none' }}>{errors.product_name}</p>
+                                                
                                             </div>
                                         </div>
                                         <div className='inline_form'>
@@ -717,7 +717,7 @@ const Edit = (props) => {
                                                 <div className="form_group_field">
                                                     <input type="text" name="local_tradename" onChange={handleChange} defaultValue={data.local_tradename} style={{ borderColor: errors.local_tradename ? 'red' : '' }} />
                                                 </div>
-                                                <p className="errors_wrap" style={{ display: errors.local_tradename ? 'inline-block' : 'none' }}>{errors.local_tradename}</p>
+                                                
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Registration Holder (*)</span>
@@ -739,7 +739,7 @@ const Edit = (props) => {
                                                         <AddIcon />
                                                     </IconButton>
                                                 </div>
-                                                <p className="errors_wrap" style={{ display: errors.registration_holder ? 'inline-block' : 'none' }}>{errors.registration_holder}</p>
+                                                
                                             </div>
                                         </div>
 
@@ -781,7 +781,7 @@ const Edit = (props) => {
                                                         defaultValue={{ label: data.authorized_pharmaceutical_form, value: data.authorized_pharmaceutical_form }}
                                                     />
                                                 </div>
-                                                <p className="errors_wrap" style={{ display: errors.authorized_pharmaceutical_form ? 'inline-block' : 'none' }}>{errors.authorized_pharmaceutical_form}</p>
+                                                
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Administrable pharmaceutical form</span>
@@ -823,10 +823,10 @@ const Edit = (props) => {
                                                         placeholder=''
                                                         isMulti
                                                         styles={selectStyles(errors.route_of_admin)}
-                                                        defaultValue={data.route_of_admin.map((option) => {return {label:option, value:option}})}
+                                                        defaultValue={data.route_of_admin ? data.route_of_admin.map((option) => {return {label:option, value:option}}) : ''}
                                                     />
                                                 </div>
-                                                <p className="errors_wrap" style={{ display: errors.route_of_admin ? 'inline-block' : 'none' }}>{errors.route_of_admin}</p>
+                                                
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">ATC (*)</span>
@@ -839,10 +839,10 @@ const Edit = (props) => {
                                                         placeholder=''
                                                         isMulti
                                                         styles={selectStyles(errors.atc)}
-                                                        defaultValue={data.atc.map((option) => {return {label:option, value:option}})}
+                                                        defaultValue={data.atc ? data.atc.map((option) => {return {label:option, value:option}}) : ''}
                                                     />
                                                 </div>
-                                                <p className="errors_wrap" style={{ display: errors.atc ? 'inline-block' : 'none' }}>{errors.atc}</p>
+                                               
                                             </div>
                                         </div>
                                     </div>
@@ -936,7 +936,7 @@ const Edit = (props) => {
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Date</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="date" selected={element.date ? new Date(element.date) : new Date()} onChange={(date) => handleDateChange(index, 'date', date)} />
+                                                                <DatePicker name="date" selected={element.date ? new Date(element.date) : ''} onChange={(date) => handleDateChange(index, 'date', date)} />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1168,21 +1168,21 @@ const Edit = (props) => {
                                                             <div className="form_group_field">
                                                                 <input type="text" name="packaging_name" onChange={(e) => handlePackagingsChange(index, e)} defaultValue={element.packaging_name} style={{ borderColor: errors['packagings.' + index + '.packaging_name'] ? 'red' : '' }} />
                                                             </div>
-                                                            <p className="errors_wrap" style={{ display: errors['packagings.' + index + '.packaging_name'] ? 'inline-block' : 'none' }}>{errors['packagings.' + index + '.packaging_name']}</p>
+                                                            
                                                         </div>
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Package Size (*)</span>
                                                             <div className="form_group_field">
                                                                 <input type="text" name="package_number" defaultValue={element.package_number} onChange={(e) => handlePackagingsChange(index, e)} style={{ borderColor: errors['packagings.' + index + '.package_number'] ? 'red' : '' }} />
                                                             </div>
-                                                            <p className="errors_wrap" style={{ display: errors['packagings.' + index + '.package_number'] ? 'inline-block' : 'none' }}>{errors['packagings.' + index + '.package_number']}</p>
+                                                            
                                                         </div>
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Description (*)</span>
                                                             <div className="form_group_field">
                                                                 <input type="text" name="description" defaultValue={element.description} onChange={(e) => handlePackagingsChange(index, e)} style={{ borderColor: errors['packagings.' + index + '.description'] ? 'red' : '' }} />
                                                             </div>
-                                                            <p className="errors_wrap" style={{ display: errors['packagings.' + index + '.description'] ? 'inline-block' : 'none' }}>{errors['packagings.' + index + '.description']}</p>
+                                                            
                                                         </div>
                                                     </div>
                                                     <div className="inline_form">
@@ -1203,7 +1203,7 @@ const Edit = (props) => {
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">First Launch Date</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="first_lunch_date" selected={element.first_lunch_date ? new Date(element.first_lunch_date) : new Date()} onChange={(date) => handleDateChange(index, 'first_lunch_date', date)} />
+                                                                <DatePicker name="first_lunch_date" selected={element.first_lunch_date ? new Date(element.first_lunch_date) : ''} onChange={(date) => handleDateChange(index, 'first_lunch_date', date)} />
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
@@ -1223,7 +1223,7 @@ const Edit = (props) => {
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Discontinuation Date</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="discontinuation_date" selected={element.discontinuation_date ? new Date(element.discontinuation_date) : new Date()} onChange={(date) => handleDateChange(index, 'discontinuation_date', date)} />
+                                                                <DatePicker name="discontinuation_date" selected={element.discontinuation_date ? new Date(element.discontinuation_date) : ''} onChange={(date) => handleDateChange(index, 'discontinuation_date', date)} />
                                                             </div>
                                                         </div>
 
@@ -1485,14 +1485,14 @@ const Edit = (props) => {
                                                                     defaultValue={{label: element.status, value:element.status}}
                                                                 />
                                                             </div>
-                                                            <p className="errors_wrap" style={{ display: errors['statuses.' + index + '.status'] ? 'inline-block' : 'none' }}>{errors['statuses.' + index + '.status']}</p>
+                                                            
                                                         </div>
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Status Date (*)</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="status_date" selected={element.status_date ? new Date(element.status_date) : new Date()} onChange={(date) => handleDateChange(index, 'status_date', date)} />
+                                                                <DatePicker name="status_date" selected={element.status_date ? new Date(element.status_date) : ''} onChange={(date) => handleDateChange(index, 'status_date', date)} />
                                                             </div>
-                                                            <p className="errors_wrap" style={{ display: errors['statuses.' + index + '.status_date'] ? 'inline-block' : 'none' }}>{errors['statuses.' + index + '.status_date']}</p>
+                                                            
                                                         </div>
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">eCTD Sequence</span>

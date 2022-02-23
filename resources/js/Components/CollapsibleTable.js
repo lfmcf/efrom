@@ -37,9 +37,9 @@ function Row(props) {
                 <TableCell align="center">{row.package_number}</TableCell>
                 <TableCell align="center">{row.description}</TableCell>
                 <TableCell align="center">{row.launched}</TableCell>
-                <TableCell align="center">{moment(row.first_lunch_date).format('MM-DD-YYYY')}</TableCell>
+                <TableCell align="center">{row.first_lunch_date ? moment(row.first_lunch_date).format('MM-DD-YYYY') : ''}</TableCell>
                 <TableCell align="center">{row.packaging_discontinued}</TableCell>
-                <TableCell align="center">{moment(row.discontinuation_date).format('MM-DD-YYYY')}</TableCell>
+                <TableCell align="center">{row.discontinuation_date ? moment(row.discontinuation_date).format('MM-DD-YYYY') : ''}</TableCell>
                 <TableCell align="center">{row.remarks}</TableCell>
             </TableRow>
             <TableRow>
