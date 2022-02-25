@@ -75,6 +75,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/registrationtermination/create', [RegistrationTerminationController::class, 'create'])->name('registrationtermination-create');
     Route::get('/registrationtermination/{id}/edit', [RegistrationTerminationController::class, 'edit'])->name('registrationtermination-edit');
     Route::get('/registrationtermination/{id}/show', [RegistrationTerminationController::class, 'show'])->name('registrationtermination-show');
+    Route::post('/store_registration_termination', [RegistrationTerminationController::class, 'store'])->name('store_registration_termination');
     
     Route::get('/clinical/create', [ClinicalController::class, 'create'])->name('clinical-create');
     Route::get('/clinical/{id}/edit', [ClinicalController::class, 'edit'])->name('clinical-edit');
@@ -89,12 +90,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/clinicalregistrationtermination/create', [CregistrationTerminationController::class, 'create'])->name('cregistrationtermination-create');
     Route::get('/clinicalregistrationtermination/{id}/edit', [CregistrationTerminationController::class, 'edit'])->name('cregistrationtermination-edit');
     Route::get('/clinicalregistrationtermination/{id}/show', [CregistrationTerminationController::class, 'show'])->name('cregistrationtermination-show');
+    Route::post('/storeclinical_registration_termination', [CregistrationTerminationController::class, 'store'])->name('storeclinical_registration_termination');
 
     Route::post('/addcompany', [CompanyController::class, 'store'])->name('addcompany');
     
     Route::get('/company', [CompanyController::class, 'index'])->name('company');
     
-    Route::post('/storeclinical_registration_termination', [CregistrationTerminationController::class, 'store'])->name('storeclinical_registration_termination');
+    
     
 });
 

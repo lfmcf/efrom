@@ -148,7 +148,7 @@ const Create = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         let submitType = window.event.target.name;
-        post(route("storeclinical_registration_termination", { 'type': submitType }));
+        post(route("store_registration_termination", { 'type': submitType }));
     }
 
     const showsavemodel = () => {

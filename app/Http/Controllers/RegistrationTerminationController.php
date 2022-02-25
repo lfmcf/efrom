@@ -159,7 +159,7 @@ class RegistrationTerminationController extends Controller
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(1);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Registration Termination Details');
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('RegistrationTermination Details');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($details, NULL, 'A1');
             $sheet->fromArray([
