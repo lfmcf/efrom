@@ -351,7 +351,7 @@ const Dashboard = (props) => {
     const RenewalData = React.useMemo(() => props.renewal, []);
     const BaselineData = React.useMemo(() => props.baseline, []);
 
-    const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = React.useState(false);
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -361,6 +361,8 @@ const Dashboard = (props) => {
         setOpen(false);
     };
 
+    
+
     React.useEffect(() => {
         flash.message ? setOpen(true) : setOpen(false)
     }, [])
@@ -369,7 +371,7 @@ const Dashboard = (props) => {
 
         <>
 
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+            <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
                 <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                     {props.flash.message}
                 </Alert>

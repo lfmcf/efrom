@@ -159,7 +159,6 @@ class ClinicalController extends Controller
             $packagings = array(
                 'Packaging Type',
                 'Packaging Name',
-                'Package Number',
                 'Description',
                 'Launched',
                 'First Launch Date',
@@ -320,22 +319,21 @@ class ClinicalController extends Controller
             foreach ($clinical->packagings as $package) {
                 $sheet->setCellValue('A' . $c, $package['packaging_type']);
                 $sheet->setCellValue('B' . $c, $package['packaging_name']);
-                $sheet->setCellValue('C' . $c, $package['package_number']);
-                $sheet->setCellValue('D' . $c, $package['description']);
-                $sheet->setCellValue('E' . $c, $package['launched']);
-                $sheet->setCellValue('F' . $c, date("d-m-Y",strtotime($package['first_lunch_date'])));
-                $sheet->setCellValue('G' . $c, $package['packaging_discontinued']);
-                $sheet->setCellValue('H' . $c, date("d-m-Y",strtotime($package['discontinuation_date'])));
-                $sheet->setCellValue('I' . $c, $package['remarks']);
+                $sheet->setCellValue('C' . $c, $package['description']);
+                $sheet->setCellValue('D' . $c, $package['launched']);
+                $sheet->setCellValue('E' . $c, date("d-m-Y",strtotime($package['first_lunch_date'])));
+                $sheet->setCellValue('F' . $c, $package['packaging_discontinued']);
+                $sheet->setCellValue('G' . $c, date("d-m-Y",strtotime($package['discontinuation_date'])));
+                $sheet->setCellValue('H' . $c, $package['remarks']);
                 if(isset($package['packagelif'])) {
                     foreach ($package['packagelif'] as $i => $pl) {
-                        $sheet->setCellValue('J' . $c, $pl['package_shelf_life_type']);
-                        $sheet->setCellValue('K' . $c, $pl['shelf_life']);
-                        $sheet->setCellValue('L' . $c, $pl['shelf_life_unit']);
-                        $sheet->setCellValue('N' . $c, $pl['remarks']);
+                        $sheet->setCellValue('I' . $c, $pl['package_shelf_life_type']);
+                        $sheet->setCellValue('J' . $c, $pl['shelf_life']);
+                        $sheet->setCellValue('K' . $c, $pl['shelf_life_unit']);
+                        $sheet->setCellValue('M' . $c, $pl['remarks']);
                         if (isset($pl['package_storage_condition'])) {
                             foreach ($pl['package_storage_condition'] as $psc) {
-                                $sheet->setCellValue('M' . $c, $psc);
+                                $sheet->setCellValue('L' . $c, $psc);
                                 $c += 1;
                             }
                         }
@@ -413,6 +411,8 @@ class ClinicalController extends Controller
 
             return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
         }
+
+        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
     }
 
     public function create()

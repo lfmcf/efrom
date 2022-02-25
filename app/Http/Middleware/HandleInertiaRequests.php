@@ -37,10 +37,13 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'flash' => [
-                'message' => fn () => $request->session()->get('message'),
-                // 'errors' => $this->sharedValidationErrors(),
-            ],
+            // 'flash' => [
+            //     'message' => fn () => $request->session()->get('message'),
+            //     // 'errors' => $this->sharedValidationErrors(),
+            // ],
+            'flash' => function () use ($request) {
+                return ['message' => $request->session()->get('message')];
+            }
         ]);
     }
 }

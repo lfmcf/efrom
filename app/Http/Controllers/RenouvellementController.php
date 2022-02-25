@@ -46,10 +46,10 @@ class RenouvellementController extends Controller
     public function store(Request $request)
     {
        
-        if($request->query('type') === 'submit') {
+        if($request->query('type') == 'submit') {
             $validator = $request->validate(
                 [
-                    'category' => 'required',
+                    // 'category' => 'required',
                     'statuses.*.status' => 'required',
                     'statuses.*.status_date' => 'required',
                 ],
@@ -102,7 +102,7 @@ class RenouvellementController extends Controller
         $ren->type = $request->query('type');
         $ren->save();
 
-        if ($request->query('type') === 'submit') {
+        if ($request->query('type') == 'submit') {
             $registrationIdentification = array(
                 'Product',
                 'Procedure Type',
@@ -220,9 +220,11 @@ class RenouvellementController extends Controller
             $writer->save($name);
 
             Mail::to(getenv('MAIL_TO'))->send(new Renewal($name, $request->product, $subject));
+
+            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
         }
 
-        
+        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
     }
 
     /**

@@ -79,7 +79,7 @@ class RcController extends Controller
                     'route_of_admin' => 'required',
                     'atc' => 'required',
                     'packagings.*.packaging_name' => 'required',
-                    'packagings.*.package_number' => 'required',
+                    
                     'packagings.*.description' => 'required',
                     'indication' => 'required',
                     'statuses.*.status' => 'required',
@@ -87,7 +87,7 @@ class RcController extends Controller
                 ],
                 [
                     'packagings.*.packaging_name.required' => 'A package name is required',
-                    'packagings.*.package_number.required' => 'A package number is required',
+                    
                     'packagings.*.description.required' => 'A package description is required',
                     'statuses.*.status.required' => 'A status is required',
                     'statuses.*.status_date.required' => 'A status date is required',
@@ -206,7 +206,6 @@ class RcController extends Controller
             $packagings = array(
                 'Packaging Type',
                 'Packaging Name',
-                'Package Number',
                 'Description',
                 'Launched',
                 'First Launch Date',
@@ -367,22 +366,21 @@ class RcController extends Controller
             foreach ($rc->packagings as $package) {
                 $sheet->setCellValue('A' . $c, $package['packaging_type']);
                 $sheet->setCellValue('B' . $c, $package['packaging_name']);
-                $sheet->setCellValue('C' . $c, $package['package_number']);
-                $sheet->setCellValue('D' . $c, $package['description']);
-                $sheet->setCellValue('E' . $c, $package['launched']);
-                $sheet->setCellValue('F' . $c, date("d-m-Y",strtotime($package['first_lunch_date'])));
-                $sheet->setCellValue('G' . $c, $package['packaging_discontinued']);
-                $sheet->setCellValue('H' . $c, date("d-m-Y",strtotime($package['discontinuation_date'])));
-                $sheet->setCellValue('I' . $c, $package['remarks']);
+                $sheet->setCellValue('C' . $c, $package['description']);
+                $sheet->setCellValue('D' . $c, $package['launched']);
+                $sheet->setCellValue('E' . $c, date("d-m-Y",strtotime($package['first_lunch_date'])));
+                $sheet->setCellValue('F' . $c, $package['packaging_discontinued']);
+                $sheet->setCellValue('G' . $c, date("d-m-Y",strtotime($package['discontinuation_date'])));
+                $sheet->setCellValue('H' . $c, $package['remarks']);
                 if(isset($package['packagelif']));{
                     foreach ($package['packagelif'] as $i => $pl) {
-                        $sheet->setCellValue('J' . $c, $pl['package_shelf_life_type']);
-                        $sheet->setCellValue('K' . $c, $pl['shelf_life']);
-                        $sheet->setCellValue('L' . $c, $pl['shelf_life_unit']);
-                        $sheet->setCellValue('N' . $c, $pl['remarks']);
+                        $sheet->setCellValue('I' . $c, $pl['package_shelf_life_type']);
+                        $sheet->setCellValue('J' . $c, $pl['shelf_life']);
+                        $sheet->setCellValue('K' . $c, $pl['shelf_life_unit']);
+                        $sheet->setCellValue('M' . $c, $pl['remarks']);
                         if (isset($pl['package_storage_condition'])) {
                             foreach ($pl['package_storage_condition'] as $psc) {
-                                $sheet->setCellValue('M' . $c, $psc);
+                                $sheet->setCellValue('L' . $c, $psc);
                                 $c += 1;
                             }
                         }

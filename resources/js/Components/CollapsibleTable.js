@@ -34,7 +34,7 @@ function Row(props) {
                 </TableCell>
                 <TableCell align="center">{row.packaging_type}</TableCell>
                 <TableCell align="center">{row.packaging_name}</TableCell>
-                <TableCell align="center">{row.package_number}</TableCell>
+                
                 <TableCell align="center">{row.description}</TableCell>
                 <TableCell align="center">{row.launched}</TableCell>
                 <TableCell align="center">{row.first_lunch_date ? moment(row.first_lunch_date).format('MM-DD-YYYY') : ''}</TableCell>
@@ -97,7 +97,7 @@ export default function CollapsibleTable(props) {
                         <TableCell />
                         <TableCell>Packaging Type</TableCell>
                         <TableCell align="center">Packaging Name</TableCell>
-                        <TableCell align="center">Package Size</TableCell>
+                        
                         <TableCell align="center">Description</TableCell>
                         <TableCell align="center">Launched</TableCell>
                         <TableCell align="center">First Launch Date</TableCell>
