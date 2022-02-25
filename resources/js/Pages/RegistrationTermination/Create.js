@@ -46,6 +46,7 @@ const Create = (props) => {
     const countryRef = React.useRef();
     const [value, setValue] = useState(0);
     const [showsavemodal, setSavemodal] = useState({ show: false, name: '' });
+    const formRef = React.useRef();
 
     const handleMChange = (event, newValue) => {
 
@@ -146,7 +147,7 @@ const Create = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        let submitType = window.event.submitter.name;
+        let submitType = window.event.target.name;
         post(route("storeclinical_registration_termination", { 'type': submitType }));
     }
 
@@ -220,7 +221,7 @@ const Create = (props) => {
             <div className="row">
                 <div className="col-md-12">
 
-                    <form className="form" onSubmit={handleSubmit}>
+                    <form className="form" ref={formRef} onSubmit={handleSubmit}>
                         <Tabs defaultActiveKey="first">
                             <Tab eventKey="first" title="New registration Termination" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>
                                 <Box

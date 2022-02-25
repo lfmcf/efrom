@@ -196,10 +196,13 @@ class RegistrationTerminationController extends Controller
             $writer = new Xlsx($spreadsheet);
             
             $date = date('d-m-y');
-            $name = 'Registration Termination Marketing Authorization ' . $date . '.xlsx';
+            $name = 'Registration Termination' . $date . '.xlsx';
             $writer->save($name);
 
+            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
         }
+
+        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
     }
 
     /**

@@ -44,7 +44,7 @@ class CregistrationTerminationController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->query('type') === 'submit') {
+        if($request->query('type') == 'submit') {
             $validator = $request->validate(
                 [
                     'statuses.*.status' => 'required',
@@ -95,7 +95,7 @@ class CregistrationTerminationController extends Controller
         $crt->type = $request->query('type');
         $crt->save();
 
-        if ($request->query('type') === 'submit') {
+        if ($request->query('type') == 'submit') {
             $registrationIdentification = array(
                 'Product',
                 'Procedure Type',
@@ -159,7 +159,7 @@ class CregistrationTerminationController extends Controller
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(1);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Registration Termination Details');
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('RegistrationTermination Details');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($details, NULL, 'A1');
             $sheet->fromArray([
@@ -196,7 +196,7 @@ class CregistrationTerminationController extends Controller
             $writer = new Xlsx($spreadsheet);
             
             $date = date('d-m-y');
-            $name = 'Registration Termination Marketing Authorization ' . $date . '.xlsx';
+            $name = 'Registration Termination' . $date . '.xlsx';
             $writer->save($name);
 
             return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');

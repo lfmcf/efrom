@@ -209,7 +209,7 @@ const Dashboard = (props) => {
         () => [
             {
                 Header: 'Product Family',
-                accessor: 'product_name',
+                accessor: 'product',
             },
             {
                 Header: 'Procedure Type',
@@ -256,7 +256,7 @@ const Dashboard = (props) => {
         () => [
             {
                 Header: 'Product Family',
-                accessor: 'product_name',
+                accessor: 'product',
             },
             {
                 Header: 'Procedure Type',
@@ -303,7 +303,7 @@ const Dashboard = (props) => {
         () => [
             {
                 Header: 'Product Family',
-                accessor: 'product_name',
+                accessor: 'product',
             },
             {
                 Header: 'Procedure Type',
