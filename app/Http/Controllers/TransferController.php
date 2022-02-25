@@ -217,7 +217,11 @@ class TransferController extends Controller
             $writer->save($name);
 
             Mail::to(getenv('MAIL_TO'))->send(new MailTransfer($name, $request->product, $subject));
+
+            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
         }
+
+        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
     }
 
     /**

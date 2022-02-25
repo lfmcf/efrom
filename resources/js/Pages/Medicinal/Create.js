@@ -79,7 +79,7 @@ const Create = (props) => {
         formulations: [{ ingredient: '', strength_type: '', numerator_lower_val: '', numerator_upper_val: '', numerator_unit: '', function: '' }],
         packagings: [
             {
-                packaging_type: '', packaging_name: '', package_number: '', description: '', launched: '', first_lunch_date: '', packaging_discontinued: '', discontinuation_date: '', remarks: '',
+                packaging_type: '', packaging_name: '', description: '', launched: '', first_lunch_date: '', packaging_discontinued: '', discontinuation_date: '', remarks: '',
                 packagelif: [{ package_shelf_life_type: '', shelf_life: '', shelf_life_unit: '', package_storage_condition: [], remarks: '' }]
             }
         ],
@@ -240,7 +240,7 @@ const Create = (props) => {
 
     let addPackageValues = () => {
         let arr = { ...data };
-        arr.packagings.push({ packaging_type: "", packaging_name: "", package_number: "", description: "", launched: "", first_lunch_date: '', packaging_discontinued: "", discontinuation_date: '', remarks: '', packagelif: [{ package_shelf_life_type: "", shelf_life: "", shelf_life_unit: "", package_storage_condition: [] }] })
+        arr.packagings.push({ packaging_type: "", packaging_name: "", description: "", launched: "", first_lunch_date: '', packaging_discontinued: "", discontinuation_date: '', remarks: '', packagelif: [{ package_shelf_life_type: "", shelf_life: "", shelf_life_unit: "", package_storage_condition: [] }] })
         setData(arr);
     }
 
@@ -527,7 +527,7 @@ const Create = (props) => {
     React.useEffect(() => {
         let l = data.packagings.length
         for (let i = 0; i <= l; i++) {
-            if (errors['packagings.' + i + '.packaging_name'] || errors['packagings.' + i + '.package_number'] || errors['packagings.' + i + '.description']) {
+            if (errors['packagings.' + i + '.packaging_name'] || errors['packagings.' + i + '.description']) {
                 setPackagehaserror(true);
                 break;
             } else {
@@ -1176,13 +1176,13 @@ const Create = (props) => {
                                                             </div>
                                                             {/* <p className="errors_wrap" style={{ display: errors['packagings.' + index + '.packaging_name'] ? 'inline-block' : 'none' }}>{errors['packagings.' + index + '.packaging_name']}</p> */}
                                                         </div>
-                                                        <div className="form_group_inline">
+                                                        {/* <div className="form_group_inline">
                                                             <span className="form_group_label">Package Size (*)</span>
                                                             <div className="form_group_field">
                                                                 <input type="text" name="package_number" onChange={(e) => handlePackagingsChange(index, e)} style={{ borderColor: errors['packagings.' + index + '.package_number'] ? 'red' : '' }} />
                                                             </div>
-                                                            {/* <p className="errors_wrap" style={{ display: errors['packagings.' + index + '.package_number'] ? 'inline-block' : 'none' }}>{errors['packagings.' + index + '.package_number']}</p> */}
-                                                        </div>
+                                                            
+                                                        </div> */}
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Description (*)</span>
                                                             <div className="form_group_field">

@@ -199,7 +199,11 @@ class CregistrationTerminationController extends Controller
             $name = 'Registration Termination Marketing Authorization ' . $date . '.xlsx';
             $writer->save($name);
 
+            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
+
         }
+
+        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
     }
 
     /**

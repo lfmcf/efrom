@@ -169,7 +169,7 @@ const Create = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         let submitType = window.event.target.name;
-        post(route("storerenewal", { 'type': submitType }));
+        post(route('storerenewal', { 'type': submitType }));
     }
 
     const showsavemodel = () => {
