@@ -29,19 +29,23 @@ class ClinicalController extends Controller
             $validator = $request->validate(
                 [
                     'procedure_type' => 'required',
+                    'country' => 'required',
                     'application_stage' => 'required',
                     'product_name' => 'required',
+                    'registration_title' => 'required',
                     'authorized_pharmaceutical_form' => 'required',
                     'route_of_admin' => 'required',
                     'atc' => 'required',
+                    'packagings.*.packaging_name' => 'required',
+                    'packagings.*.packaging_type' => 'required',
                     'indication' => 'required',
                     'statuses.*.status' => 'required',
                     'statuses.*.status_date' => 'required',
-                ],
-                [
-                    'statuses.*.status.required' => 'A status is required',
-                    'statuses.*.status_date.required' => 'A status date is required',
                 ]
+                // [
+                //     'statuses.*.status.required' => 'A status is required',
+                //     'statuses.*.status_date.required' => 'A status date is required',
+                // ]
                 
             );
         }

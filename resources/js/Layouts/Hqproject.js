@@ -12,6 +12,8 @@ import { Tabs as Mtabs, Tab as Mtab } from '@mui/material';
 import Box from '@mui/material/Box';
 import SaveModal from '@/Components/SaveModal';
 import { Typography } from '@mui/material';
+import { Head } from '@inertiajs/inertia-react';
+
 function a11yProps(index) {
     return {
         id: `vertical-tab-${index}`,
@@ -23,7 +25,7 @@ const Hqproject = (props) => {
 
     const { data, setData, post, processing, errors, clearErrors, reset } = useForm({
         identification: [{product: "", procedure_type: "", country: [], application_stage: "", rms: "", procedure_num: "", local_tradename: "", product_type: ""}],
-        variation: [{product: "",country:"",category: "", variation_type: "", submission_type: "", application_number: "", submission_number: "", submission_format: "", variation_reason: ""}],
+        variation: [{product: "",country:"",variation_title: "",category: "", variation_type: "", submission_type: "", application_number: "", submission_number: "", submission_format: "", variation_reason: ""}],
         statuses: [{product: "",country:"",status: "", status_date: "", ectd: "", control: "", cdds: "", remarks: "", local_implementation: "", implimentation_deadline: "", actual_implementation: ""}],
         doc: [{document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: ''}],
         isHq: true,
@@ -32,7 +34,6 @@ const Hqproject = (props) => {
 
     const [variationcountries, setVariationCountries] = useState([]);
     const [statuscountries, setStatusContries] = useState([]);
-
     const selectInputRef = React.useRef({});
     const ctrRef = React.useRef({});
     const formRef = React.useRef();
@@ -40,6 +41,7 @@ const Hqproject = (props) => {
     const [showsavemodal, setSavemodal] = useState({ show: false, name: '' });
     const [statuserror, setStatusError] = useState(false);
     const [variationhaserror, setVariationhaserror] = useState(false);
+    const [identhaserror, setIdenthaserror] = useState(false);
 
     const handleMChange = (event, newValue) => {
         
@@ -61,7 +63,7 @@ const Hqproject = (props) => {
 
     let addVariationFields = () => {
         let arr = {...data};
-        arr.variation.push({product: "",country:"",category: "", variation_type: "", submission_type: "", application_number: "", submission_number: "", submission_format: "", variation_reason: ""});
+        arr.variation.push({product: "",country:"",variation_title: "",category: "", variation_type: "", submission_type: "", application_number: "", submission_number: "", submission_format: "", variation_reason: ""});
         setData(arr);
     }
 
@@ -122,6 +124,7 @@ const Hqproject = (props) => {
         let arr = {...data}
         arr.identification[i][name] = e.value;
         setData(arr);
+        clearErrors('identification.' + i + '.' + name)
     }
 
     let handleVariationSelectChange = (i, e, name) => {
@@ -171,6 +174,7 @@ const Hqproject = (props) => {
             } 
         }
         setData(arr)
+        clearErrors('identification.' + i + '.country')
     }
 
     let handleChanged = (i, e) => {
@@ -287,9 +291,18 @@ const Hqproject = (props) => {
     }
 
     React.useEffect(() => {
+        let il = data.identification.length
+        for (let i = 0; i <= il; i++) {
+            if (errors['identification.' + i + '.product'] || errors['identification.' + i + '.procedure_type'] || errors['identification.' + i + '.country']) {
+                setIdenthaserror(true);
+                break;
+            } else {
+                setIdenthaserror(false);
+            }
+        }
         let l = data.variation.length
         for (let i = 0; i <= l; i++) {
-            if (errors['variation.' + i + '.category'] || errors['packagings.' + i + '.submission_type']) {
+            if (errors['variation.' + i + '.category'] || errors['variation.' + i + '.submission_type'] || errors['variation.' + i + '.variation_title'] || errors['variation.' + i + '.variation_type']) {
                 setVariationhaserror(true);
                 break;
             } else {
@@ -308,7 +321,6 @@ const Hqproject = (props) => {
     }, [errors]);
 
     let handleReset = () => {
-        console.log('here')
         reset()
     }
 
@@ -322,8 +334,20 @@ const Hqproject = (props) => {
         setData(arr);
     }
 
+    const handleDocumentSelectChange = (i, e, name) => {
+        if (!e) {
+            e = {
+                value: ''
+            }
+        }
+        let arr = { ...data };
+        arr.doc[i][name] = e.value;
+        setData(arr);
+    }
+
     return (
         <>
+        <Head title="Create Variation" />
         <form className="form" onSubmit={handleSubmit} ref={formRef}>
             <Tabs defaultActiveKey="first">
                 <Tab eventKey="first" title="New Variation" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>
@@ -338,7 +362,7 @@ const Hqproject = (props) => {
                             aria-label="Vertical tabs example"
                             sx={{ borderRight: 1, borderColor: 'divider' }}
                         >
-                            <Mtab label="Registration Identification" {...a11yProps(0)} />
+                            <Mtab label="Registration Identification" {...a11yProps(0)} style={{ color: identhaserror ? "red": '' }} />
                             <Mtab label="Variation Details" {...a11yProps(1)} style={{ color: variationhaserror ? "red": '' }} />
                             <Mtab label="Status Details" {...a11yProps(2)} style={{color: statuserror ? 'red' : ''}} />
                         </Mtabs>
@@ -368,7 +392,7 @@ const Hqproject = (props) => {
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Product Name</span>
+                                                <span className="form_group_label" style={{color: errors['identification.' + index + '.product'] ? 'red' : ''}}>Product Name (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={product_name}
                                                         name="product"
@@ -377,15 +401,15 @@ const Hqproject = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
+                                                        styles={selectStyles(errors['identification.' + index + '.product'])}
                                                     />
                                                 </div>
                                             </div>
                                             </div>
                                             <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Procedure Type</span>
-                                                <div className="form_group_field">
-                                                    
+                                                <span className="form_group_label" style={{color: errors['identification.' + index + '.procedure_type'] ? 'red' : ''}}>Procedure Type (*)</span>
+                                                <div className="form_group_field">    
                                                     <Select options={procedure_type}
                                                         name="procedure_type"
                                                         onChange={(e) => handleIdentificationSelectChange(index, e, 'procedure_type')}
@@ -393,11 +417,12 @@ const Hqproject = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
+                                                        styles={selectStyles(errors['identification.' + index + '.procedure_type'])}
                                                     />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Country</span>
+                                                <span className="form_group_label" style={{color: errors['identification.' + index + '.country'] ? 'red' : ''}}>Country (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={contries}
                                                         name="country"
@@ -409,6 +434,7 @@ const Hqproject = (props) => {
                                                         id={index}
                                                         placeholder=''
                                                         isClearable
+                                                        styles={selectStyles(errors['identification.' + index + '.country'])}
                                                     />
                                                 </div>
                                             </div>
@@ -442,7 +468,6 @@ const Hqproject = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Application Stage</span>
                                                 <div className="form_group_field">
-                                                   
                                                     <Select options={[
                                                         { value: 'Marketing Authorisation', label: 'Marketing Authorisation' },
                                                         { value: 'APSI / NPP', label: 'APSI / NPP' },
@@ -456,7 +481,6 @@ const Hqproject = (props) => {
                                                     />
                                                 </div>
                                             </div>
-
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Product Type</span>
                                                 <div className="form_group_field">
@@ -498,7 +522,7 @@ const Hqproject = (props) => {
                                             : ''}
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Product</span>
+                                                <span className="form_group_label">Product Name</span>
                                                 <div className="form_group_field">
                                                     <select name='product' onChange={(e) => handleVariationProductChange(index, e)} defaultValue='' >
                                                         <option defaultValue=''></option>
@@ -532,16 +556,14 @@ const Hqproject = (props) => {
                                         </div>
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Variation Title</span>
+                                                <span className="form_group_label" style={{color: errors['variation.' + index + '.variation_title'] ? 'red' : ''}}>Variation Title (*)</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name='variation_title' onChange={(e) => handleVariationChange(index, e)} />
+                                                    <input type="text" name='variation_title' onChange={(e) => handleVariationChange(index, e)} style={{borderColor : errors['variation.' + index + '.variation_title'] ? 'red' : ''}} />
                                                 </div>
-
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Variation Category (*)</span>
+                                                <span className="form_group_label" style={{color: errors['variation.' + index + '.category'] ? 'red' : ''}}>Variation Category (*)</span>
                                                 <div className="form_group_field">
-
                                                     <Select options={[
                                                         { value: 'Variation/Supplement', label: 'Variation/Supplement' },
                                                         { value: 'FUM', label: 'FUM' },
@@ -551,14 +573,13 @@ const Hqproject = (props) => {
                                                         className="basic"
                                                         classNamePrefix="basic"
                                                         placeholder=''
-                                                        styles={selectStyles(errors['variation.' + index + '.category'])}
                                                         isClearable
+                                                        styles={selectStyles(errors['variation.' + index + '.category'])}
                                                     />
                                                 </div>
-                                                <p className="errors_wrap" style={{ display: errors['variation.' + index + '.category'] ? 'inline-block' : 'none' }}>{errors['variation.' + index + '.category']}</p>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Variation Type</span>
+                                                <span className="form_group_label" style={{color: errors['variation.' + index + '.variation_type'] ? 'red' : ''}}>Variation Type (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
                                                         { value: 'Prior Authorisation (II)', label: 'Prior Authorisation (II)' },
@@ -573,14 +594,13 @@ const Hqproject = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
+                                                        styles={selectStyles(errors['variation.' + index + '.variation_type'])}
                                                     />
                                                 </div>
                                             </div>
-
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Reason for variation</span>
                                                 <div className="form_group_field">
-
                                                     <Select options={[
                                                         { value: 'Indication', label: 'Indication' },
                                                         { value: 'Paediatric Indication', label: 'Paediatric Indication' },
@@ -595,15 +615,15 @@ const Hqproject = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
+                                                        // styles={selectStyles(errors['variation.' + index + '.variation_reason'])}
                                                     />
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Submission Type (*)</span>
+                                                <span className="form_group_label" style={{color: errors['variation.' + index + '.submission_type'] ? 'red' : ''}}>Submission Type (*)</span>
                                                 <div className="form_group_field">
-
                                                     <Select options={[
                                                         { value: 'CARDEAC', label: 'CARDEAC' },
                                                         { value: 'Initial MAA', label: 'Initial MAA' },
@@ -614,11 +634,11 @@ const Hqproject = (props) => {
                                                         className="basic"
                                                         classNamePrefix="basic"
                                                         placeholder=''
-                                                        styles={selectStyles(errors['variation.' + index + '.submission_type'])}
                                                         isClearable
+                                                        styles={selectStyles(errors['variation.' + index + '.submission_type'])}
                                                     />
                                                 </div>
-                                                <p className="errors_wrap" style={{ display: errors['variation.' + index + '.submission_type'] ? 'inline-block' : 'none' }}>{errors['variation.' + index + '.submission_type']}</p>
+                                                
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Applcation N°</span>
@@ -635,7 +655,6 @@ const Hqproject = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Dossier Submission Format</span>
                                                 <div className="form_group_field" >
-
                                                     <Select options={[
                                                         { value: 'CTD', label: 'CTD' },
                                                         { value: 'Nees', label: 'Nees' },
@@ -668,7 +687,6 @@ const Hqproject = (props) => {
                             {data.statuses.map((element, index) => (
                                 <fieldset key={index}>
                                     <legend>Statut {index + 1}</legend>
-
                                     <div >
                                         {index > 0 ?
                                             <div style={{ display: 'flex', justifyContent: 'end' }}>
@@ -679,7 +697,7 @@ const Hqproject = (props) => {
                                             : ''}
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Product</span>
+                                                <span className="form_group_label">Product Name</span>
                                                 <div className="form_group_field">
                                                     <select name='product' onChange={(e) => StatusProductChange(index, e)} defaultValue='' >
                                                         <option value=''></option>
@@ -714,7 +732,7 @@ const Hqproject = (props) => {
                                         </div>
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Status (*)</span>
+                                                <span className="form_group_label" style={{color: errors['statuses.' + index + '.status'] ? 'red' : ''}}>Status</span>
                                                 <div className="form_group_field">
                                                     <Select options={status}
                                                         onChange={(e) => handleStatusSelectChange(index, e)}
@@ -726,14 +744,13 @@ const Hqproject = (props) => {
                                                         isClearable
                                                     />
                                                 </div>
-                                                <p className="errors_wrap" style={{ display: errors['statuses.' + index + '.status'] ? 'inline-block' : 'none' }}>{errors['statuses.' + index + '.status']}</p>
+                                               
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Status Date (*)</span>
+                                                <span className="form_group_label" style={{color: errors['statuses.' + index + '.status_date'] ? 'red' : ''}}>Status Date</span>
                                                 <div className="form_group_field">
                                                     <DatePicker name="status_date" selected={data.statuses[index].status_date} onChange={(date) => handleDateChange(index, 'status_date', date)} style={{ borderColor: errors['statuses.' + index + '.status_date'] ? 'red' : '' }} />
                                                 </div>
-                                                <p className="errors_wrap" style={{ display: errors['statuses.' + index + '.status_date'] ? 'inline-block' : 'none' }}>{errors['statuses.' + index + '.status_date']}</p>
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">eCTD sequence</span>
@@ -791,7 +808,7 @@ const Hqproject = (props) => {
                   
                 </Tab>
                 <Tab eventKey="second" title="Documents" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>
-                    <Documents handleChanged={handleDocumentChange} handleDocumentdate={handleDocumentdate} addFormFields={addFormFields} formValues={data.doc} removeDocumentsFields={removeDocumentsFields} />
+                    <Documents handleChanged={handleDocumentChange} handleDocumentdate={handleDocumentdate} addFormFields={addFormFields} formValues={data.doc} removeDocumentsFields={removeDocumentsFields} handleDocumentSelectChange={handleDocumentSelectChange} />
                 </Tab>
             </Tabs>
             <BasicSpeedDial processing={processing} showsavemodel={showsavemodel} showdraftmodel={showdraftmodel} reset={handleReset}  />

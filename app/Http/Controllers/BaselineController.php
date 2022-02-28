@@ -49,13 +49,17 @@ class BaselineController extends Controller
         if($request->query('type') === 'submit') {
             $validator = $request->validate(
                 [
+                    'product' => 'required',
+                    'procedure_type' => 'required',
+                    'country' => 'required',
+                    'baseline_title' => 'required',
                     'statuses.*.status' => 'required',
                     'statuses.*.status_date' => 'required',
-                ],
-                [
-                    'statuses.*.status.required' => 'A status is required',
-                    'statuses.*.status_date.required' => 'A status date is required',
                 ]
+                // [
+                //     'statuses.*.status.required' => 'A status is required',
+                //     'statuses.*.status_date.required' => 'A status date is required',
+                // ]
             );
         }
 
@@ -260,7 +264,183 @@ class BaselineController extends Controller
      */
     public function update(Request $request, Baseline $baseline)
     {
-        //
+        if($request->query('type') === 'submit') {
+            $validator = $request->validate(
+                [
+                    'product' => 'required',
+                    'procedure_type' => 'required',
+                    'country' => 'required',
+                    'baseline_title' => 'required',
+                    'statuses.*.status' => 'required',
+                    'statuses.*.status_date' => 'required',
+                ]
+                // [
+                //     'statuses.*.status.required' => 'A status is required',
+                //     'statuses.*.status_date.required' => 'A status date is required',
+                // ]
+            );
+        }
+
+        $docs = $request->doc;
+        
+        if(!empty($docs)) {
+            $arr = array_map(function($doc) {
+                if ($doc['document'] && gettype($doc['document']) != 'string') {
+                    $uploadedFile = $doc['document'];
+                    $filename = time() . $uploadedFile->getClientOriginalName();
+                    $path = Storage::putFileAs(
+                        'public',
+                        $uploadedFile,
+                        $filename
+                    );
+                    $doc['document'] = asset('storage/'.$filename);;
+                }
+                return $doc;
+            }, $docs);
+            $docs = $arr;
+        }
+
+        $baseline = Baseline::findOrFail($request->id);
+        $baseline->product = $request->product;
+        $baseline->procedure_type = $request->procedure_type;
+        $baseline->country = $request->country;
+        $baseline->rms = $request->rms;
+        $baseline->application_stage = $request->application_stage;
+        $baseline->procedure_num = $request->procedure_num;
+        $baseline->local_tradename = $request->local_tradename;
+        $baseline->product_type = $request->product_type;
+        $baseline->baseline_title = $request->baseline_title;
+        $baseline->description = $request->description;
+        $baseline->application_num = $request->application_num;
+        $baseline->reason = $request->reason;
+        $baseline->remarks = $request->remarks;
+        $baseline->statuses = $request->statuses;
+        $baseline->doc = $docs;
+        $baseline->created_by = $request->created_by;
+        $baseline->type = $request->query('type');
+        $baseline->save();
+
+        if($request->query('type') === 'submit') {
+
+            $registrationIdentification = array(
+                'Product',
+                'Procedure Type',
+                'Country',
+                'RMS',
+                'Procedure Number',
+                'Local Tradename',
+                'Application Stage',
+                'Product Type'
+            );
+            $baselineDetails = array(
+                'Baseline Title',
+                'Description of the event',
+                'Application N°',
+                'Reason for variation',
+                'Remarks'
+            );
+            $eventStatus = array(
+                'Country',
+                'Status',
+                'Status Date',
+                'eCTD sequence',
+                'Change Control or pre-assessment',
+                'CCDS/Core PIL ref n°',
+                'Remarks',
+                'Effective internal implementation date',
+                'Implementation Deadline of deadline for answer',
+                'Impacted of changes approved'
+            );
+            $document = array(
+                'Document type',
+                'Document title',
+                'Language',
+                'Version date',
+                'Remarks',
+                'Document'
+            );
+
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+            $sheet->setTitle('Registration identification');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+
+            $sheet->fromArray($registrationIdentification, NULL, 'A1');
+
+            $sheet->fromArray([
+                $baseline->product,
+                $baseline->procedure_type,
+                "",
+                $baseline->rms,
+                $baseline->procedure_num,
+                $baseline->local_tradename,
+                $baseline->application_stage,
+                $baseline->product_type
+            ], NULL, 'A2');
+
+            if(is_array($baseline->country)) {
+                foreach ($baseline->country as $cnt => $country) {
+                    $cnt += 2;
+                    $sheet->setCellValue('C' . $cnt, $country);
+                }
+            }
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(1);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Baseline Details');
+            $sheet->fromArray($baselineDetails, NULL, 'A1');
+            $sheet->fromArray([
+                $baseline->baseline_title,
+                $baseline->description,
+                $baseline->application_num,
+                $baseline->reason,
+                $baseline->remarks
+            ], NULL, 'A2');
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(2);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Events Status');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($eventStatus, NULL, 'A1');
+            $sheet->fromArray($baseline->statuses, NULL, 'A2');
+            $hr = $sheet->getHighestRow();
+            for($i=2; $i<=$hr; $i++) {
+                $datef = $sheet->getCell('C'.$i);
+                $sheet->setCellValue('C'.$i, date("d-m-Y", strtotime($datef)));
+            }
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(3);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Documents');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($document, NULL, 'A1');
+            $sheet->fromArray($baseline->doc, NULL, 'A2');
+            $hr = $sheet->getHighestRow();
+            for($i=2; $i<=$hr; $i++) {
+                $datef = $sheet->getCell('D'.$i);
+                $sheet->setCellValue('D'.$i, date("d-m-Y", strtotime($datef)));
+            }
+
+            $writer = new Xlsx($spreadsheet);
+            
+            $date = date('d-m-y');
+            if($request->procedure_type == 'National' || $request->procedure_type == 'Centralized') {
+                $name = 'eForm_Baseline_' .$request->product . '_' .$request->country[0] . '_' .$date . '.xlsx';
+                $subject = 'eForm_Baseline_' .$request->product . '_' .$request->country[0];
+            }else {
+                $name = 'eForm_Baseline_' .$request->product . '_' .$request->procedure_type . '_' .$date . '.xlsx';
+                $subject = 'eForm_Baseline_' .$request->product . '_' .$request->procedure_type;
+            }
+            
+            $writer->save($name);
+
+            Mail::to(getenv('MAIL_TO'))->send(new MailBaseline($name, $request->product, $subject));
+            
+            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
+
+        }
+
+        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
     }
 
     /**

@@ -111,8 +111,9 @@ const Create = (props) => {
         e.preventDefault();
         let submitType = window.event.target.name;
         post(route('storefinishproduct', { 'type': submitType }));
+        
     }
-
+    
     let handleProcedureTypeChange = (e) => {
         countryRef.current.setValue([]);
         setData((prev) => ({
@@ -124,7 +125,7 @@ const Create = (props) => {
     }
 
     let handleCountryChange = (e, k) => {
-        console.log(typeof (e))
+        
         let arr = { ...data }
         if (k.action) {
             if (k.action == 'select-option') {
@@ -141,8 +142,8 @@ const Create = (props) => {
             } else {
                 arr.country.length = 0
             }
-
         }
+        clearErrors("country")
         setData(arr)
     }
 
@@ -357,6 +358,7 @@ const Create = (props) => {
         let newFormValues = { ...data };
         newFormValues.packagings[i][name] = e.value;
         setData(newFormValues);
+        clearErrors('packagings.' + i + '.' + name)
     }
 
     let handlePackagingsChange = (i, e) => {
@@ -524,10 +526,21 @@ const Create = (props) => {
         formRef.current.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
     }
 
+    const handleDocumentSelectChange = (i, e, name) => {
+        if (!e) {
+            e = {
+                value: ''
+            }
+        }
+        let arr = { ...data };
+        arr.doc[i][name] = e.value;
+        setData(arr);
+    }
+
     React.useEffect(() => {
         let l = data.packagings.length
         for (let i = 0; i <= l; i++) {
-            if (errors['packagings.' + i + '.packaging_name'] || errors['packagings.' + i + '.description']) {
+            if (errors['packagings.' + i + '.packaging_name'] || errors['packagings.' + i + '.packaging_type']) {
                 setPackagehaserror(true);
                 break;
             } else {
@@ -558,7 +571,7 @@ const Create = (props) => {
 
                     <form className="form" onSubmit={handleSubmit} ref={formRef} style={{ marginBottom: '10px' }}>
                         <Tabs defaultActiveKey="first">
-                            <Tab eventKey="first" title="New Registration" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>
+                            <Tab eventKey="first" title="New Registration" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0'}}>
                                 <Box
                                     sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100%' }}
                                 >
@@ -570,9 +583,9 @@ const Create = (props) => {
                                         aria-label="Vertical tabs example"
                                         sx={{ borderRight: 1, borderColor: 'divider' }}
                                     >
-                                        <Mtab label="General information" {...a11yProps(0)} style={{ color: errors.procedure_type || errors.procedure_type || errors.application_stage ? 'red' : '' }} />
-                                        <Mtab label="Basic information" {...a11yProps(1)} style={{ color: errors.product_name || errors.local_tradename || errors.registration_holder ? 'red' : '' }} />
-                                        <Mtab label="Dosage Form / ATC" {...a11yProps(2)} style={{ color: errors.authorized_pharmaceutical_form || errors.route_of_admin || errors.atc ? 'red' : '' }} />
+                                        <Mtab label="General information" {...a11yProps(0)} style={{ color: errors.country || errors.procedure_type || errors.product_type || errors.application_stage ? 'red' : '' }} />
+                                        <Mtab label="Basic information" {...a11yProps(1)} style={{ color: errors.registration_title || errors.product_name || errors.local_tradename || errors.registration_holder ? 'red' : '' }} />
+                                        <Mtab label="Dosage Form / ATC" {...a11yProps(2)} style={{color: errors.authorized_pharmaceutical_form || errors.route_of_admin || errors.atc}} />
                                         <Mtab label="Orphan Drug Details" {...a11yProps(3)} />
                                         <Mtab label="Under Intensive Monitoring Details" {...a11yProps(4)} />
                                         <Mtab label="Key Dates / Alternate Numbers" {...a11yProps(5)} />
@@ -583,16 +596,12 @@ const Create = (props) => {
                                         <Mtab label="Manufacturing & Supply Chain" {...a11yProps(10)} />
                                         <Mtab label="Interaction / Commitment remarks" {...a11yProps(11)} />
                                         <Mtab label="Status Details" {...a11yProps(12)} style={{ color: statuserror ? 'red' : '' }} />
-                                        {/* <Mtab label="Documents" {...a11yProps(11)} /> */}
-
                                     </Mtabs>
                                     <div index={0} className="muitab" style={{ display: value != 0 ? 'none' : '' }}>
-
                                         <div className='inline_form'>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Procedure Type (*)</span>
+                                                <span className="form_group_label" style={{ color: errors.procedure_type ? 'red' : '' }}>Procedure Type (*)</span>
                                                 <div className="form_group_field">
-
                                                     <Select options={procedure_type}
                                                         name="procedure_type"
                                                         onChange={handleSelectChange}
@@ -603,10 +612,9 @@ const Create = (props) => {
                                                         styles={selectStyles(errors.procedure_type)}
                                                     />
                                                 </div>
-                                                {/* <p className="errors_wrap" style={{ display: errors.procedure_type ? 'inline-block' : 'none' }}>{errors.procedure_type}</p> */}
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Country</span>
+                                                <span className="form_group_label" style={{color : errors.country ? 'red' : ''}}>Country (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={options_4}
                                                         name="country"
@@ -617,6 +625,7 @@ const Create = (props) => {
                                                         ref={ele => countryRef.current = ele}
                                                         placeholder=''
                                                         isClearable
+                                                        styles={selectStyles(errors.country)}
                                                     />
                                                 </div>
                                             </div>
@@ -641,9 +650,8 @@ const Create = (props) => {
                                                     <input type="text" name="procedure_number" onChange={handleChange} />
                                                 </div>
                                             </div>
-
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Product Type (*)</span>
+                                                <span className="form_group_label" style={{color: errors.product_type ? 'red' : ''}}>Product Type (*)</span>
                                                 <div className="form_group_field">
 
                                                     <Select options={[
@@ -655,18 +663,14 @@ const Create = (props) => {
                                                         className="basic"
                                                         classNamePrefix="basic"
                                                         placeholder=''
-                                                        styles={selectStyles(errors.product_type)}
                                                         isClearable
-
+                                                        styles={selectStyles(errors.product_type)}
                                                     />
                                                 </div>
-                                                {/* <p className="errors_wrap" style={{ display: errors.product_type ? 'inline-block' : 'none' }}>{errors.product_type}</p> */}
                                             </div>
-
                                             <div className="form_group_inline" >
-                                                <span className="form_group_label">Application Stage (*)</span>
+                                                <span className="form_group_label" style={{color: errors.application_stage ? 'red' : ''}}>Application Stage (*)</span>
                                                 <div className="form_group_field">
-
                                                     <Select options={[
                                                         { value: 'Marketing Authorisation', label: 'Marketing Authorisation' },
                                                         { value: 'APSI / NPP', label: 'APSI / NPP' },
@@ -681,7 +685,6 @@ const Create = (props) => {
 
                                                     />
                                                 </div>
-                                                {/* <p className="errors_wrap" style={{ display: errors.application_stage ? 'inline-block' : 'none' }}>{errors.application_stage}</p> */}
                                             </div>
                                         </div>
 
@@ -689,15 +692,14 @@ const Create = (props) => {
                                     <div index={1} className="muitab" style={{ display: value != 1 ? 'none' : '' }}>
                                         <div className='inline_form'>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Registration Title</span>
+                                                <span className="form_group_label" style={{ color: errors.registration_title ? 'red' : '' }}>Registration Title (*)</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name='registration_title' onChange={handleChange} />
+                                                    <input type="text" name='registration_title' onChange={handleChange} style={{ borderColor: errors.registration_title ? 'red' : '' }} />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Product Name (*)</span>
+                                                <span className="form_group_label" style={{color : errors.product_name ? 'red' : ''}}>Product Name (*)</span>
                                                 <div className="form_group_field">
-
                                                     <Select options={product_name}
                                                         name="product_name"
                                                         onChange={handleSelectChange}
@@ -706,22 +708,19 @@ const Create = (props) => {
                                                         styles={selectStyles(errors.product_name)}
                                                         placeholder=''
                                                         isClearable
-
                                                     />
                                                 </div>
-                                                {/* <p className="errors_wrap" style={{ display: errors.product_name ? 'inline-block' : 'none' }}>{errors.product_name}</p> */}
                                             </div>
                                         </div>
                                         <div className='inline_form'>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Local Tradename (*)</span>
+                                                <span className="form_group_label" style={{color : errors.local_tradename ? 'red' : ''}}>Local Tradename (*)</span>
                                                 <div className="form_group_field">
                                                     <input type="text" name="local_tradename" onChange={handleChange} style={{ borderColor: errors.local_tradename ? 'red' : '' }} />
                                                 </div>
-                                                {/* <p className="errors_wrap" style={{ display: errors.local_tradename ? 'inline-block' : 'none' }}>{errors.local_tradename}</p> */}
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Registration Holder (*)</span>
+                                                <span className="form_group_label" style={{color : errors.registration_holder ? 'red' : ''}}>Registration Holder (*)</span>
                                                 <div className="form_group_field form_group_holder" >
                                                     <Select options={options}
                                                         name="registration_holder"
@@ -731,21 +730,13 @@ const Create = (props) => {
                                                         styles={selectStyles(errors.registration_holder)}
                                                         placeholder=''
                                                         isClearable
-
                                                     />
-                                                    {/* <button className="btn-success" type="button" onClick={(e) => handleShow(e)}>
-                                                        <span className="lnr lnr-plus-circle"></span>
-                                                    </button> */}
                                                     <IconButton color="primary" onClick={(e) => handleShow(e)} aria-label="add an company">
                                                         <AddIcon />
                                                     </IconButton>
                                                 </div>
-                                                {/* <p className="errors_wrap" style={{ display: errors.registration_holder ? 'inline-block' : 'none' }}>{errors.registration_holder}</p> */}
-                                                {/* <p className="errors_wrap" style={{display: errors.local_tradename ? 'inline-block': 'none'}}>{errors.local_tradename}</p> */}
                                             </div>
                                         </div>
-
-
                                         <div className='inline_form'>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Application Number</span>
@@ -770,7 +761,7 @@ const Create = (props) => {
                                     <div index={2} className="muitab" style={{ display: value != 2 ? 'none' : '' }}>
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Authorized Pharmaceutical Form (*)</span>
+                                                <span className="form_group_label" style={{color : errors.authorized_pharmaceutical_form ? 'red' : ''}}>Authorized Pharmaceutical Form (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={apf}
                                                         name="authorized_pharmaceutical_form"
@@ -780,13 +771,11 @@ const Create = (props) => {
                                                         styles={selectStyles(errors.authorized_pharmaceutical_form)}
                                                         placeholder=''
                                                         isClearable
-
                                                     />
                                                 </div>
-                                                {/* <p className="errors_wrap" style={{ display: errors.authorized_pharmaceutical_form ? 'inline-block' : 'none' }}>{errors.authorized_pharmaceutical_form}</p> */}
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Administrable pharmaceutical form</span>
+                                                <span className="form_group_label">Administrable pharmaceutical Form</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
                                                         { value: 'Same as authorised pharmaceutical form', label: 'Same as authorised pharmaceutical form' },
@@ -800,23 +789,21 @@ const Create = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
-
                                                     />
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Route Of Admin (*)</span>
+                                                <span className="form_group_label" style={{color : errors.route_of_admin ? 'red' : ''}} >Route Of Admin (*)</span>
                                                 <div className="form_group_field">
-
                                                     <Select options={[
                                                         { value: 'Cutaneous use', label: 'Cutaneous use' },
                                                         { value: 'Intrademal use', label: 'Intrademal use' },
                                                         { value: 'Eye drops', label: 'Eye drops' },
                                                         { value: 'Nasal use', label: 'Nasal use' },
                                                         { value: 'Ocular use', label: 'Ocular use' },
-                                                        // { value: 'Subcutaneous use', label: 'Subcutaneous use' },
+                                                        
                                                         { value: 'Subcutaneous use', label: 'Subcutaneous use' },
                                                         { value: 'Sublingual use', label: 'Sublingual use' },
                                                     ]}
@@ -827,15 +814,12 @@ const Create = (props) => {
                                                         placeholder=''
                                                         isMulti
                                                         styles={selectStyles(errors.route_of_admin)}
-
                                                     />
                                                 </div>
-                                                {/* <p className="errors_wrap" style={{ display: errors.route_of_admin ? 'inline-block' : 'none' }}>{errors.route_of_admin}</p> */}
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">ATC (*)</span>
+                                                <span className="form_group_label" style={{color : errors.atc ? 'red' : ''}}>ATC (*)</span>
                                                 <div className="form_group_field">
-
                                                     <Select options={atc}
                                                         name="atc"
                                                         onChange={(e, k) => handleAtcChange(e, k)}
@@ -844,10 +828,8 @@ const Create = (props) => {
                                                         placeholder=''
                                                         isMulti
                                                         styles={selectStyles(errors.atc)}
-
                                                     />
                                                 </div>
-                                                {/* <p className="errors_wrap" style={{ display: errors.atc ? 'inline-block' : 'none' }}>{errors.atc}</p> */}
                                             </div>
                                         </div>
                                     </div>
@@ -856,7 +838,6 @@ const Create = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Orphan Designation Status</span>
                                                 <div className="form_group_field">
-
                                                     <Select options={[{ value: 'Yes', label: 'Yes' }, { value: 'No', label: 'No' }]}
                                                         name="orphan_designation_status"
                                                         onChange={handleSelectChange}
@@ -864,15 +845,12 @@ const Create = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
-
                                                     />
                                                 </div>
                                             </div>
-
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Orphan Indication Type</span>
                                                 <div className="form_group_field">
-
                                                     <Select options={[{ value: 'Diagnostic', label: 'Diagnostic' }, { value: 'Prevention', label: 'Prevention' }, { value: 'Treatment', label: 'Treatment' }]}
                                                         name="orphan_indication_type"
                                                         onChange={handleSelectChange}
@@ -880,7 +858,6 @@ const Create = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
-
                                                     />
                                                 </div>
                                             </div>
@@ -891,7 +868,6 @@ const Create = (props) => {
                                         <div className="form_group">
                                             <span className="form_group_label">Under Intensive Monitoring</span>
                                             <div className="form_group_field">
-
                                                 <Select options={[{ value: 'Yes', label: 'Yes' }, { value: 'No', label: 'No' }]}
                                                     name="under_intensive_monitoring"
                                                     onChange={handleSelectChange}
@@ -899,7 +875,6 @@ const Create = (props) => {
                                                     classNamePrefix="basic"
                                                     placeholder=''
                                                     isClearable
-
                                                 />
                                             </div>
                                         </div>
@@ -936,7 +911,6 @@ const Create = (props) => {
                                                                     classNamePrefix="basic"
                                                                     placeholder=''
                                                                     isClearable
-
                                                                 />
                                                             </div>
                                                         </div>
@@ -1002,7 +976,7 @@ const Create = (props) => {
                                                     onChange={handleSelectChange}
                                                     className="basic"
                                                     classNamePrefix="basic"
-                                                    styles={selectStyles(errors.local_agent_company)}
+                                                    // styles={selectStyles(errors.local_agent_company)}
                                                     placeholder=''
                                                     isClearable
 
@@ -1156,7 +1130,7 @@ const Create = (props) => {
                                                         ''}
                                                     <div className="inline_form">
                                                         <div className="form_group_inline">
-                                                            <span className="form_group_label">Packaging Type</span>
+                                                            <span className="form_group_label" style={{color : errors['packagings.' + index + '.packaging_type'] ? 'red' : ''}}>Packaging Type (*)</span>
                                                             <div className="form_group_field">
                                                                 <Select options={options_2}
                                                                     name="packaging_type"
@@ -1165,16 +1139,15 @@ const Create = (props) => {
                                                                     classNamePrefix="basic"
                                                                     placeholder=''
                                                                     isClearable
-
+                                                                    styles={selectStyles(errors['packagings.' + index + '.packaging_type'])}
                                                                 />
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
-                                                            <span className="form_group_label">Packaging Name (*)</span>
+                                                            <span className="form_group_label" style={{ color: errors['packagings.' + index + '.packaging_name'] ? 'red' : '' }}>Packaging Name (*)</span>
                                                             <div className="form_group_field">
                                                                 <input type="text" name="packaging_name" onChange={(e) => handlePackagingsChange(index, e)} style={{ borderColor: errors['packagings.' + index + '.packaging_name'] ? 'red' : '' }} />
                                                             </div>
-                                                            {/* <p className="errors_wrap" style={{ display: errors['packagings.' + index + '.packaging_name'] ? 'inline-block' : 'none' }}>{errors['packagings.' + index + '.packaging_name']}</p> */}
                                                         </div>
                                                         {/* <div className="form_group_inline">
                                                             <span className="form_group_label">Package Size (*)</span>
@@ -1184,11 +1157,10 @@ const Create = (props) => {
                                                             
                                                         </div> */}
                                                         <div className="form_group_inline">
-                                                            <span className="form_group_label">Description (*)</span>
+                                                            <span className="form_group_label">Description</span>
                                                             <div className="form_group_field">
                                                                 <input type="text" name="description" onChange={(e) => handlePackagingsChange(index, e)} style={{ borderColor: errors['packagings.' + index + '.description'] ? 'red' : '' }} />
                                                             </div>
-                                                            {/* <p className="errors_wrap" style={{ display: errors['packagings.' + index + '.description'] ? 'inline-block' : 'none' }}>{errors['packagings.' + index + '.description']}</p> */}
                                                         </div>
                                                     </div>
                                                     <div className="inline_form">
@@ -1202,7 +1174,6 @@ const Create = (props) => {
                                                                     classNamePrefix="basic"
                                                                     placeholder=''
                                                                     isClearable
-
                                                                 />
                                                             </div>
                                                         </div>
@@ -1337,7 +1308,7 @@ const Create = (props) => {
                                     <div index={9} className="muitab" style={{ display: value != 9 ? 'none' : '' }}>
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Indications (*)</span>
+                                                <span className="form_group_label" style={{color : errors.indication ? 'red' : ''}}>Indications (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={indications}
                                                         name="indication"
@@ -1349,7 +1320,7 @@ const Create = (props) => {
                                                         isClearable
                                                     />
                                                 </div>
-                                                <p className="errors_wrap" style={{ display: errors.indication ? 'inline-block' : 'none' }}>{errors.indication}</p>
+                                                
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Paediatric Use</span>
@@ -1479,7 +1450,7 @@ const Create = (props) => {
                                                             </div>
                                                             : ''}
                                                         <div className="form_group_inline">
-                                                            <span className="form_group_label">Status (*)</span>
+                                                            <span className="form_group_label" style={{color : errors['statuses.' + index + '.status'] ? 'red' : ''}}>Status (*)</span>
                                                             <div className="form_group_field">
                                                                 <Select options={status}
                                                                     onChange={(e) => handleStatusSelectChange(index, e)}
@@ -1491,14 +1462,12 @@ const Create = (props) => {
                                                                     isClearable
                                                                 />
                                                             </div>
-                                                            {/* <p className="errors_wrap" style={{ display: errors['statuses.' + index + '.status'] ? 'inline-block' : 'none' }}>{errors['statuses.' + index + '.status']}</p> */}
                                                         </div>
                                                         <div className="form_group_inline">
-                                                            <span className="form_group_label">Status Date (*)</span>
+                                                            <span className="form_group_label" style={{color : errors['statuses.' + index + '.status_date'] ? 'red' : ''}}>Status Date (*)</span>
                                                             <div className="form_group_field">
                                                                 <DatePicker name="status_date" selected={data.statuses[index].status_date} onChange={(date) => handleDateChange(index, 'status_date', date)} />
                                                             </div>
-                                                            <p className="errors_wrap" style={{ display: errors['statuses.' + index + '.status_date'] ? 'inline-block' : 'none' }}>{errors['statuses.' + index + '.status_date']}</p>
                                                         </div>
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">eCTD Sequence</span>
@@ -1534,7 +1503,7 @@ const Create = (props) => {
                                 </Box>
                             </Tab>
                             <Tab eventKey="second" title="Documents" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>
-                                <Documents handleChanged={handleDocumentChange} handleDocumentdate={handleDocumentdate} addFormFields={addFormFields} formValues={data.doc} removeDocumentsFields={removeDocumentsFields} />
+                                <Documents handleChanged={handleDocumentChange} handleDocumentdate={handleDocumentdate} addFormFields={addFormFields} formValues={data.doc} removeDocumentsFields={removeDocumentsFields} handleDocumentSelectChange={handleDocumentSelectChange} />
                             </Tab>
                         </Tabs>
                         <BasicSpeedDial showsavemodel={showsavemodel} showdraftmodel={showdraftmodel} />

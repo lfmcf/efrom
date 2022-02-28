@@ -98,6 +98,18 @@ function Table(props) {
         }
     }
 
+    const handleEditClick = (id) => {
+        if(props.for == 'ma') {
+            Inertia.get('ma/'+id+'/edit', {opr: 'edit'})
+        }else if(props.for == 'variation') {
+            Inertia.get('variation/'+id+'/edit', {opr: 'edit'})
+        }else if(props.for == 'renewal') {
+            Inertia.get('renewal/'+id+'/edit', {opr: 'edit'})
+        }else if(props.for == 'baseline') {
+            Inertia.get('baseline/'+id+'/edit', {opr: 'edit'})
+        }
+    }
+
     return (
         <>
         <GlobalFilter preGlobalFilteredRows={preGlobalFilteredRows} globalFilter={state.globalFilter} setGlobalFilter={setGlobalFilter} />
@@ -132,7 +144,7 @@ function Table(props) {
                                        
                                     </> :
                                    
-                                    <IconButton aria-label="Edit" size="small" style={{color:'rgb(50,187,145)'}} onClick={() => handleDuplicateClick(row.original._id)}>
+                                    <IconButton aria-label="Edit" size="small" style={{color:'rgb(50,187,145)'}} onClick={() => handleEditClick(row.original._id)}>
                                         <EditIcon fontSize="inherit" />
                                     </IconButton>
                                 }
