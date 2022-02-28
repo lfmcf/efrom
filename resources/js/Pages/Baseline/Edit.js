@@ -24,8 +24,9 @@ function a11yProps(index) {
 
 const Create = (props) => {
     const {baseline} = props
-    console.log(baseline)
+    
     const { data, setData, post, processing, errors, clearErrors, reset } = useForm({
+        id: baseline._id,
         product: baseline.product,
         procedure_type: baseline.procedure_type,
         country: baseline.country,
@@ -47,6 +48,8 @@ const Create = (props) => {
     const countryRef = React.useRef();
     const [value, setValue] = useState(0);
     const [showsavemodal, setSavemodal] = useState({ show: false, name: '' });
+    const [statuserror, setStatusError] = useState(false);
+    const formRef = React.useRef();
 
     const handleMChange = (event, newValue) => {
 
@@ -79,6 +82,7 @@ const Create = (props) => {
             }
         }
         setData(name.name, e.value)
+        clearErrors(name.name)
     }
 
     let handleCountryChange = (e, k) => {
@@ -101,6 +105,7 @@ const Create = (props) => {
 
         }
         setData(arr)
+        clearErrors('country')
     }
 
     let addFormFields = () => {
@@ -153,8 +158,15 @@ const Create = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        let submitType = window.event.submitter.name;
-        post(route("storebaseline", { 'type': submitType }));
+        let submitType = window.event.target.name;
+        const search = window.location.search
+        const opname = new URLSearchParams(search).get('opr');
+        if(opname === 'edit') {
+            post(route("updatebaseline", { 'type': submitType }));
+        } else {
+            post(route("storebaseline", { 'type': submitType }));
+        }
+        
     }
 
     const showsavemodel = () => {
@@ -211,6 +223,29 @@ const Create = (props) => {
         }),
     });
 
+    const handleDocumentSelectChange = (i, e, name) => {
+        if (!e) {
+            e = {
+                value: ''
+            }
+        }
+        let arr = { ...data };
+        arr.doc[i][name] = e.value;
+        setData(arr);
+    }
+
+    React.useEffect(() => {
+        let s = data.statuses.length
+        for (let j = 0; j <= s; j++) {
+            if (errors['statuses.' + j + '.status'] || errors['statuses.' + j + '.status_date']) {
+                setStatusError(true);
+                break;
+            } else {
+                setStatusError(false);
+            }
+        }
+    }, [errors]);
+
     return (
         <>
             <div className="row">
@@ -221,7 +256,7 @@ const Create = (props) => {
             <div className="row">
                 <div className="col-md-12">
 
-                    <form className="form" onSubmit={handleSubmit}>
+                    <form className="form" ref={formRef} onSubmit={handleSubmit}>
                         <Tabs defaultActiveKey="first">
                             <Tab eventKey="first" title="New Baseline" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>
                                 <Box
@@ -235,9 +270,9 @@ const Create = (props) => {
                                         aria-label="Vertical tabs example"
                                         sx={{ borderRight: 1, borderColor: 'divider' }}
                                     >
-                                        <Mtab label="Registration Identification" {...a11yProps(0)} />
-                                        <Mtab label="Baseline Details" {...a11yProps(1)} />
-                                        <Mtab label="Status Details" {...a11yProps(2)} />
+                                        <Mtab label="Registration Identification" {...a11yProps(0)} style={{ color: errors.product || errors.procedure_type || errors.country ? "red": '' }} />
+                                        <Mtab label="Baseline Details" {...a11yProps(1)} style={{ color: errors.baseline_title ? 'red' : '' }} />
+                                        <Mtab label="Status Details" {...a11yProps(2)} style={{color: statuserror ? 'red' : ''}} />
                                     </Mtabs>
                                     <div value={value} index={0} className="muitab" style={{ display: value != 0 ? 'none' : '' }}>
                                         <div className="inline_form">
@@ -248,25 +283,8 @@ const Create = (props) => {
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Product</span>
+                                                <span className="form_group_label" style={{color: errors.product ? 'red' : ''}}>Product Name (*)</span>
                                                 <div className="form_group_field">
-                                                    {/* <select name='product' defaultValue='' onChange={handleChange}>
-                                                        <option value=''></option>
-                                                        <option>STG 320</option>
-                                                        <option>ALBEY</option>
-                                                        <option>ALUSTAL</option>
-                                                        <option>ALYOSTAL IDR</option>
-                                                        <option>ALYOSTAL PRICK</option>
-                                                        <option>ALYOSTAL TPC</option>
-                                                        <option>ALYOSTAL TPN</option>
-                                                        <option>ALYOSTAL VENOM</option>
-                                                        <option>DILUENT</option>
-                                                        <option>ORALAIR</option>
-                                                        <option>PHOSTAL</option>
-                                                        <option>REFERENCES</option>
-                                                        <option>STALORAL</option>
-                                                        <option>STALORAL 300</option>
-                                                    </select> */}
                                                     <Select options={product_name}
                                                         name="product"
                                                         onChange={handleSelectChange}
@@ -275,21 +293,15 @@ const Create = (props) => {
                                                         placeholder=''
                                                         isClearable
                                                         defaultValue={{ label: data.product, value: data.product }}
+                                                        styles={selectStyles(errors.product)}
                                                     />
                                                 </div>
                                             </div>
                                             </div>
                                             <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Procedure Type</span>
+                                                <span className="form_group_label" style={{color: errors.procedure_type ? 'red' : ''}}>Procedure Type (*)</span>
                                                 <div className="form_group_field">
-                                                    {/* <select name='procedure_type' defaultValue='' onChange={handleProcedureTypeChange}>
-                                                        <option value=''></option>
-                                                        <option>National</option>
-                                                        <option>Centralized</option>
-                                                        <option>Decentralized</option>
-                                                        <option>Mutual Recognition</option>
-                                                    </select> */}
                                                     <Select options={procedure_type}
                                                         name="procedure_type"
                                                         onChange={handleSelectChange}
@@ -298,11 +310,12 @@ const Create = (props) => {
                                                         placeholder=''
                                                         isClearable
                                                         defaultValue={{ label: data.procedure_type, value: data.procedure_type }}
+                                                        styles={selectStyles(errors.procedure_type)}
                                                     />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Country</span>
+                                                <span className="form_group_label" style={{color : errors.country ? 'red' : ''}}>Country (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={contries}
                                                         name="registration_holder"
@@ -314,6 +327,7 @@ const Create = (props) => {
                                                         placeholder=''
                                                         isClearable
                                                         defaultValue={data.country.map(function(option) { return {label:option, value: option} })}
+                                                        styles={selectStyles(errors.country)}
                                                     />
                                                 </div>
                                             </div>
@@ -348,11 +362,6 @@ const Create = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Application Stage</span>
                                                 <div className="form_group_field">
-                                                    {/* <select name='application_stage' defaultValue='' onChange={handleChange}>
-                                                        <option value=''></option>
-                                                        <option>Marketing Authorisation</option>
-                                                        <option>APSI / NPP</option>
-                                                    </select> */}
                                                     <Select options={[
                                                         { label: 'Marketing Authorisation', value: 'Marketing Authorisation' },
                                                         { label: 'APSI / NPP', value: 'APSI / NPP' }
@@ -370,11 +379,6 @@ const Create = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Product Type</span>
                                                 <div className="form_group_field">
-                                                    {/* <select name='product_type' defaultValue='' onChange={handleChange}>
-                                                        <option value=''></option>
-                                                        <option>Finished</option>
-                                                        <option>Reference</option>
-                                                    </select> */}
                                                     <Select options={[
                                                         { label: 'Finished', value: 'Finished' },
                                                         { label: 'Reference', value: 'Reference' }
@@ -394,9 +398,9 @@ const Create = (props) => {
                                     <div value={value} index={1} className="muitab" style={{ display: value != 1 ? 'none' : '' }}>
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Baseline Title</span>
+                                                <span className="form_group_label" style={{color: errors.baseline_title ? 'red' : ''}}>Baseline Title (*)</span>
                                                 <div className="form_group_field">
-                                                    <input type="" name="baseline_title" defaultValue={data.baseline_title} onChange={handleChange} />
+                                                    <input type="" name="baseline_title" defaultValue={data.baseline_title} onChange={handleChange} style={{borderColor: errors.baseline_title ? 'red' : ''}} />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
@@ -416,16 +420,7 @@ const Create = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Reason for variation</span>
                                                 <div className="form_group_field">
-                                                    {/* <select name="reason" defaultValue='' onChange={handleChange} >
-                                                        <option value='' ></option>
-                                                        <option>Indication</option>
-                                                        <option>Paediatric Indication</option>
-                                                        <option>Safety</option>
-                                                        <option>Following Urgent Safety Restriction</option>
-                                                        <option>Quality</option>
-                                                        <option>Others</option>
-                                                    </select> */}
-                                                     <Select options={[
+                                                    <Select options={[
                                                         { label: 'Indication', value: 'Indication' },
                                                         { label: 'Paediatric Indication', value: 'Paediatric Indication' },
                                                         { label: 'Safety', value: 'Safety' },
@@ -487,42 +482,8 @@ const Create = (props) => {
                                                         </div>
                                                         : ''}
                                                     <div className="form_group_inline">
-                                                        <span className="form_group_label">Status (*)</span>
+                                                        <span className="form_group_label" style={{color : errors['statuses.' + index + '.status'] ? 'red' : ''}}>Status (*)</span>
                                                         <div className="form_group_field">
-                                                            {/* <select name='status' defaultValue='' onChange={e => handleStatusChanged(index, e)} style={{ borderColor: errors['statuses.' + index + '.status'] ? 'red' : '' }}>
-                                                                <option value=''></option>
-                                                                <option>Application / Submitted</option>
-                                                                <option>Approval / Obtained</option>
-                                                                <option>Application / Rejected</option>
-                                                                <option>Application / Withdrawn by MAH due to Safety/Efficacy</option>
-                                                                <option>Application / Withdrawn by MAH not due Safety/Efficacy</option>
-                                                                <option>Marketing Application / Dispatched To Local RA</option>
-                                                                <option>Application / Validated (administrative / technical admissibility)</option>
-                                                                <option>Assessment report / received</option>
-                                                                <option>Dossier Update / Submitted</option>
-                                                                <option>eCTD Dossier Update / Submitted</option>
-                                                                <option>Marketing / Launched</option>
-                                                                <option>Marketing / Discontinued</option>
-                                                                <option>Application / Dispatch Planned</option>
-                                                                <option>Application / Submission Planned</option>
-                                                                <option>Application / Approval Expected</option>
-                                                                <option>Dossier Update / Submission Planned</option>
-                                                                <option>eCTD Dossier Update / Submission Planned</option>
-                                                                <option>Application / Submission of dossier update to RMS planned</option>
-                                                                <option>Application / Dossier update submitted to CMS</option>
-                                                                <option>Application / Submission to CMS Planned</option>
-                                                                <option>MRP Application / Dossier update submitted to CMS</option>
-                                                                <option>National Translations / Submitted</option>
-                                                                <option>Application / List of dispatch dates submitted</option>
-                                                                <option>Application / Start of procedure expected</option>
-                                                                <option>MRP Application / Procedure started</option>
-                                                                <option>Applicaton / CMS comments expected</option>
-                                                                <option>Application / / CMS comments received</option>
-                                                                <option>Assessment Report / Expected</option>
-                                                                <option>MRP Assessment Report / Received</option>
-                                                                <option>Positive Opinion / Obtained</option>
-                                                                <option>MRP Application / End of procedure</option>
-                                                            </select> */}
                                                             <Select options={status}
                                                                 onChange={(e) => handleStatusSelectChange(index, e, 'status')}
                                                                 name="status"
@@ -536,11 +497,11 @@ const Create = (props) => {
                                                         </div>
                                                     </div>
                                                     <div className="form_group_inline">
-                                                        <span className="form_group_label">Status Date (*)</span>
+                                                        <span className="form_group_label" style={{color : errors['statuses.' + index + '.status_date'] ? 'red' : ''}}>Status Date (*)</span>
                                                         <div className="form_group_field">
                                                             <DatePicker name="status_date" selected={element.status_date ? new Date(element.status_date) : new Date()} onChange={(date) => handleDateChange(index, 'status_date', date)} style={{ borderColor: errors['statuses.' + index + '.status_date'] ? 'red' : '' }} />
                                                         </div>
-                                                        <p className="errors_wrap" style={{ display: errors['statuses.' + index + '.status_date'] ? 'inline-block' : 'none' }}>{errors['statuses.' + index + '.status_date']}</p>
+                                                        
                                                     </div>
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label">eCTD sequence</span>
@@ -586,11 +547,6 @@ const Create = (props) => {
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label">Impacted of changes approved</span>
                                                         <div className="form_group_field">
-                                                            {/* <select name="changes_approved" defaultValue='' onChange={e => handleStatusChanged(index, e)}>
-                                                                <option value='' ></option>
-                                                                <option>Yes</option>
-                                                                <option>No</option>
-                                                            </select> */}
                                                             <Select options={[
                                                                     { label: 'Yes', value: 'Yes' },
                                                                     { label: 'No', value: 'No' }
@@ -615,7 +571,7 @@ const Create = (props) => {
 
                             </Tab>
                             <Tab eventKey="second" title="Documents" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>
-                                <Documents handleChanged={handleDocumentChange} handleDocumentdate={handleDocumentdate} addFormFields={addFormFields} formValues={data.doc} removeDocumentsFields={removeDocumentsFields} />
+                                <Documents handleChanged={handleDocumentChange} handleDocumentdate={handleDocumentdate} addFormFields={addFormFields} formValues={data.doc} removeDocumentsFields={removeDocumentsFields} handleDocumentSelectChange={handleDocumentSelectChange} />
                             </Tab>
                         </Tabs>
                         <BasicSpeedDial processing={processing} showsavemodel={showsavemodel} showdraftmodel={showdraftmodel} reset={handleReset} />

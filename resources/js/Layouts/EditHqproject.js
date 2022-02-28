@@ -24,9 +24,9 @@ function a11yProps(index) {
 const EditHqproject = (props) => {
 
     const {variation} = props;
-    console.log(variation)
 
     const { data, setData, post, processing, errors, clearErrors, reset } = useForm({
+        id: variation._id,
         identification: variation.identification,
         variation: variation.variation,
         statuses: variation.statuses,
@@ -45,6 +45,7 @@ const EditHqproject = (props) => {
     const [showsavemodal, setSavemodal] = useState({ show: false, name: '' });
     const [statuserror, setStatusError] = useState(false);
     const [variationhaserror, setVariationhaserror] = useState(false);
+    const [identhaserror, setIdenthaserror] = useState(false);
 
     const handleMChange = (event, newValue) => {
         
@@ -66,7 +67,7 @@ const EditHqproject = (props) => {
 
     let addVariationFields = () => {
         let arr = {...data};
-        arr.variation.push({product: "",country:"",category: "", variation_type: "", submission_type: "", application_number: "", submission_number: "", submission_format: "", variation_reason: ""});
+        arr.variation.push({product: "",country:"",variation_title: "",category: "", variation_type: "", submission_type: "", application_number: "", submission_number: "", submission_format: "", variation_reason: ""});
         setData(arr);
     }
 
@@ -127,6 +128,7 @@ const EditHqproject = (props) => {
         let arr = {...data}
         arr.identification[i][name] = e.value;
         setData(arr);
+        clearErrors('identification.' + i + '.' + name);
     }
 
     let handleVariationSelectChange = (i, e, name) => {
@@ -175,7 +177,8 @@ const EditHqproject = (props) => {
                 arr.identification[i].country.length = 0
             } 
         }
-        setData(arr)
+        setData(arr);
+        clearErrors('identification.' + i + '.country');
     }
 
     let handleChanged = (i, e) => {
@@ -253,7 +256,14 @@ const EditHqproject = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         let submitType = window.event.target.name;
-        post(route("storehqproject", {'type': submitType}));
+        const search = window.location.search
+        const opname = new URLSearchParams(search).get('opr');
+        if(opname === 'edit') {
+            post(route("updatehqvariation", {'type': submitType}));
+        } else {
+            post(route("storehqproject", {'type': submitType}));
+        }
+        
     }
 
     let handleStatusSelectChange = (i, e) => {
@@ -292,9 +302,18 @@ const EditHqproject = (props) => {
     }
 
     React.useEffect(() => {
+        let il = data.identification.length
+        for (let i = 0; i <= il; i++) {
+            if (errors['identification.' + i + '.product'] || errors['identification.' + i + '.procedure_type'] || errors['identification.' + i + '.country']) {
+                setIdenthaserror(true);
+                break;
+            } else {
+                setIdenthaserror(false);
+            }
+        }
         let l = data.variation.length
         for (let i = 0; i <= l; i++) {
-            if (errors['variation.' + i + '.category'] || errors['packagings.' + i + '.submission_type']) {
+            if (errors['variation.' + i + '.category'] || errors['variation.' + i + '.submission_type'] || errors['variation.' + i + '.variation_title'] || errors['variation.' + i + '.variation_type']) {
                 setVariationhaserror(true);
                 break;
             } else {
@@ -327,6 +346,17 @@ const EditHqproject = (props) => {
         setData(arr);
     }
 
+    const handleDocumentSelectChange = (i, e, name) => {
+        if (!e) {
+            e = {
+                value: ''
+            }
+        }
+        let arr = { ...data };
+        arr.doc[i][name] = e.value;
+        setData(arr);
+    }
+
     return (
         <>
         <form className="form" onSubmit={handleSubmit} ref={formRef}>
@@ -343,7 +373,7 @@ const EditHqproject = (props) => {
                             aria-label="Vertical tabs example"
                             sx={{ borderRight: 1, borderColor: 'divider' }}
                         >
-                            <Mtab label="Registration Identification" {...a11yProps(0)} />
+                            <Mtab label="Registration Identification" {...a11yProps(0)} style={{ color: identhaserror ? "red": '' }} />
                             <Mtab label="Variation Details" {...a11yProps(1)} style={{ color: variationhaserror ? "red": '' }} />
                             <Mtab label="Status Details" {...a11yProps(2)} style={{color: statuserror ? 'red' : ''}} />
                         </Mtabs>
@@ -373,7 +403,7 @@ const EditHqproject = (props) => {
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Product Name</span>
+                                                <span className="form_group_label" style={{color: errors['identification.' + index + '.product'] ? 'red' : ''}}>Product Name (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={product_name}
                                                         name="product"
@@ -383,13 +413,14 @@ const EditHqproject = (props) => {
                                                         placeholder=''
                                                         isClearable
                                                         defaultValue={{label: element.product, value: element.product}}
+                                                        styles={selectStyles(errors['identification.' + index + '.product'])}
                                                     />
                                                 </div>
                                             </div>
                                             </div>
                                             <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Procedure Type</span>
+                                                <span className="form_group_label" style={{color: errors['identification.' + index + '.procedure_type'] ? 'red' : ''}}>Procedure Type (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={procedure_type}
                                                         name="procedure_type"
@@ -399,11 +430,12 @@ const EditHqproject = (props) => {
                                                         placeholder=''
                                                         isClearable
                                                         defaultValue={{label: element.procedure_type, value: element.procedure_type}}
+                                                        styles={selectStyles(errors['identification.' + index + '.procedure_type'])}
                                                     />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Country</span>
+                                                <span className="form_group_label" style={{color: errors['identification.' + index + '.country'] ? 'red' : ''}}>Country (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={contries}
                                                         name="country"
@@ -416,6 +448,7 @@ const EditHqproject = (props) => {
                                                         placeholder=''
                                                         isClearable
                                                         defaultValue={element.country.map(function(option) { return {label:option, value: option} })}
+                                                        styles={selectStyles(errors['identification.' + index + '.country'])}
                                                     />
                                                 </div>
                                             </div>
@@ -508,7 +541,7 @@ const EditHqproject = (props) => {
                                             : ''}
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Product</span>
+                                                <span className="form_group_label">Product Name</span>
                                                 <div className="form_group_field">
                                                     <select name='product' onChange={(e) => handleVariationProductChange(index, e)} defaultValue='' >
                                                         <option defaultValue=''></option>
@@ -542,14 +575,14 @@ const EditHqproject = (props) => {
                                         </div>
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Variation Title</span>
+                                                <span className="form_group_label" style={{color: errors['variation.' + index + '.variation_title'] ? 'red' : ''}}>Variation Title (*)</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name='variation_title' defaultValue={element.variation_title} onChange={(e) => handleVariationChange(index, e)} />
+                                                    <input type="text" name='variation_title' defaultValue={element.variation_title} onChange={(e) => handleVariationChange(index, e)} style={{borderColor : errors['variation.' + index + '.variation_title'] ? 'red' : ''}} />
                                                 </div>
 
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Variation Category (*)</span>
+                                                <span className="form_group_label" style={{color: errors['variation.' + index + '.category'] ? 'red' : ''}}>Variation Category (*)</span>
                                                 <div className="form_group_field">
 
                                                     <Select options={[
@@ -566,10 +599,10 @@ const EditHqproject = (props) => {
                                                         defaultValue={{label: element.category, value: element.category}}
                                                     />
                                                 </div>
-                                                <p className="errors_wrap" style={{ display: errors['variation.' + index + '.category'] ? 'inline-block' : 'none' }}>{errors['variation.' + index + '.category']}</p>
+                                               
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Variation Type</span>
+                                                <span className="form_group_label" style={{color: errors['variation.' + index + '.variation_type'] ? 'red' : ''}}>Variation Type (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
                                                         { value: 'Prior Authorisation (II)', label: 'Prior Authorisation (II)' },
@@ -585,6 +618,7 @@ const EditHqproject = (props) => {
                                                         placeholder=''
                                                         isClearable
                                                         defaultValue={{label: element.variation_type, value: element.variation_type}}
+                                                        styles={selectStyles(errors['variation.' + index + '.variation_type'])}
                                                     />
                                                 </div>
                                             </div>
@@ -614,7 +648,7 @@ const EditHqproject = (props) => {
                                         </div>
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Submission Type (*)</span>
+                                                <span className="form_group_label"  style={{color: errors['variation.' + index + '.submission_type'] ? 'red' : ''}}>Submission Type (*)</span>
                                                 <div className="form_group_field">
 
                                                     <Select options={[
@@ -632,7 +666,7 @@ const EditHqproject = (props) => {
                                                         defaultValue={{label: element.submission_type, value: element.submission_type}}
                                                     />
                                                 </div>
-                                                <p className="errors_wrap" style={{ display: errors['variation.' + index + '.submission_type'] ? 'inline-block' : 'none' }}>{errors['variation.' + index + '.submission_type']}</p>
+                                                
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Applcation N°</span>
@@ -694,7 +728,7 @@ const EditHqproject = (props) => {
                                             : ''}
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Product</span>
+                                                <span className="form_group_label">Product Name</span>
                                                 <div className="form_group_field">
                                                     <select name='product' defaultValue={element.product} onChange={(e) => StatusProductChange(index, e)} defaultValue='' >
                                                         <option value=''></option>
@@ -729,7 +763,7 @@ const EditHqproject = (props) => {
                                         </div>
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Status (*)</span>
+                                                <span className="form_group_label" style={{color: errors['statuses.' + index + '.status'] ? 'red' : ''}}>Status (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={status}
                                                         onChange={(e) => handleStatusSelectChange(index, e)}
@@ -742,14 +776,14 @@ const EditHqproject = (props) => {
                                                         defaultValue={{label: element.status, value: element.status}}
                                                     />
                                                 </div>
-                                                <p className="errors_wrap" style={{ display: errors['statuses.' + index + '.status'] ? 'inline-block' : 'none' }}>{errors['statuses.' + index + '.status']}</p>
+                                                
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Status Date (*)</span>
+                                                <span className="form_group_label" style={{color: errors['statuses.' + index + '.status_date'] ? 'red' : ''}}>Status Date (*)</span>
                                                 <div className="form_group_field">
                                                     <DatePicker name="status_date" selected={element.status_date ? new Date(element.status_date) : ''} onChange={(date) => handleDateChange(index, 'status_date', date)} style={{ borderColor: errors['statuses.' + index + '.status_date'] ? 'red' : '' }} />
                                                 </div>
-                                                <p className="errors_wrap" style={{ display: errors['statuses.' + index + '.status_date'] ? 'inline-block' : 'none' }}>{errors['statuses.' + index + '.status_date']}</p>
+                                                
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">eCTD sequence</span>
@@ -807,7 +841,7 @@ const EditHqproject = (props) => {
                   
                 </Tab>
                 <Tab eventKey="second" title="Documents" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>
-                    <Documents handleChanged={handleDocumentChange} handleDocumentdate={handleDocumentdate} addFormFields={addFormFields} formValues={data.doc} removeDocumentsFields={removeDocumentsFields} />
+                    <Documents handleChanged={handleDocumentChange} handleDocumentdate={handleDocumentdate} addFormFields={addFormFields} formValues={data.doc} removeDocumentsFields={removeDocumentsFields} handleDocumentSelectChange={handleDocumentSelectChange} />
                 </Tab>
             </Tabs>
             <BasicSpeedDial processing={processing} showsavemodel={showsavemodel} showdraftmodel={showdraftmodel} reset={handleReset}  />

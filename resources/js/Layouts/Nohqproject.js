@@ -13,6 +13,7 @@ import { Tabs as Mtabs, Tab as Mtab } from '@mui/material';
 import Box from '@mui/material/Box';
 import SaveModal from '@/Components/SaveModal';
 import { Typography } from '@mui/material';
+import { Head } from '@inertiajs/inertia-react';
 
 function a11yProps(index) {
     return {
@@ -123,6 +124,7 @@ const Nohqproject = (props) => {
             
         }
         setData(arr)
+        clearErrors("country")
     }
 
     const handleSelectChange = (e, name) => {
@@ -227,12 +229,24 @@ const Nohqproject = (props) => {
     }
 
     let handleReset = () => {
-        console.log(document.getElementById("eform"))
+        
         document.getElementById("eform").reset();
+    }
+
+    const handleDocumentSelectChange = (i, e, name) => {
+        if (!e) {
+            e = {
+                value: ''
+            }
+        }
+        let arr = { ...data };
+        arr.doc[i][name] = e.value;
+        setData(arr);
     }
 
     return (
         <>
+        <Head title="Create Variation" />
         <form className="form" onSubmit={handleSubmit} ref={formRef} id='eform'>
             <Tabs defaultActiveKey="first">
                 <Tab eventKey="first" title="New Variation" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>
@@ -247,8 +261,8 @@ const Nohqproject = (props) => {
                             aria-label="Vertical tabs example"
                             sx={{ borderRight: 1, borderColor: 'divider' }}
                         >
-                            <Mtab label="Registration Identification" {...a11yProps(0)} />
-                            <Mtab label="Variation Details" {...a11yProps(1)} style={{ color: errors.category || errors.submission_type ? "red": '' }} />
+                            <Mtab label="Registration Identification" {...a11yProps(0)} style={{ color: errors.product || errors.procedure_type || errors.country ? "red": '' }} />
+                            <Mtab label="Variation Details" {...a11yProps(1)} style={{ color: errors.category || errors.submission_type || errors.variation_type ? "red": '' }} />
                             <Mtab label="Status Details" {...a11yProps(2)} style={{color: statuserror ? 'red' : ''}} />
 
                         </Mtabs>
@@ -261,7 +275,7 @@ const Nohqproject = (props) => {
                                     </div>
                                 </div>
                                 <div className="form_group_inline">
-                                    <span className="form_group_label">Product Name</span>
+                                    <span className="form_group_label" style={{color: errors.product ? 'red' : ''}}>Product Name (*)</span>
                                     <div className="form_group_field">
                                         <Select options={product_name}
                                             name="product"
@@ -270,13 +284,14 @@ const Nohqproject = (props) => {
                                             classNamePrefix="basic"
                                             placeholder=''
                                             isClearable
+                                            styles={selectStyles(errors.product)}
                                         />
                                     </div>
                                 </div>
                                 </div>
                                 <div className="inline_form">
                                 <div className="form_group_inline">
-                                    <span className="form_group_label">Procedure Type</span>
+                                    <span className="form_group_label" style={{color: errors.procedure_type ? 'red' : ''}}>Procedure Type (*)</span>
                                     <div className="form_group_field">
                                         <Select options={procedure_type}
                                             name="procedure_type"
@@ -285,11 +300,12 @@ const Nohqproject = (props) => {
                                             classNamePrefix="basic"
                                             placeholder=''
                                             isClearable
+                                            styles={selectStyles(errors.procedure_type)}
                                         />
                                     </div>
                                 </div>
                                 <div className="form_group_inline">
-                                    <span className="form_group_label">Country</span>
+                                    <span className="form_group_label" style={{color: errors.country ? 'red' : ''}}>Country (*)</span>
                                     <div className="form_group_field">
                                         <Select options={contries}
                                             name="country"
@@ -299,6 +315,7 @@ const Nohqproject = (props) => {
                                             isMulti={data.procedure_type === 'Mutual Recognition' || data.procedure_type === 'Decentralized' ? true : false}
                                             ref={ele => countryRef.current = ele}
                                             placeholder=''
+                                            styles={selectStyles(errors.country)}
                                         />
                                     </div>
                                 </div>
@@ -368,13 +385,13 @@ const Nohqproject = (props) => {
                         <div value={value} index={1} className="muitab" style={{ display: value != 1 ? 'none' : '' }}>
                             <div className="inline_form">
                                 <div className="form_group_inline">
-                                    <span className="form_group_label">Variation Title</span>
+                                    <span className="form_group_label" style={{color: errors.variation_title ? 'red' : ''}}>Variation Title (*)</span>
                                     <div className="form_group_field">
-                                        <input type="text" name='variation_title' onChange={handleChange} />
+                                        <input type="text" name='variation_title' onChange={handleChange} style={{borderColor: errors.variation_title ? 'red' : ''}} />
                                     </div>
                                 </div>
                                 <div className="form_group_inline">
-                                    <span className="form_group_label">Variation Category (*)</span>
+                                    <span className="form_group_label" style={{color: errors.category ? 'red' : ''}}>Variation Category (*)</span>
                                     <div className="form_group_field">
                                         <Select options={[
                                             { value: 'Variation/Supplement', label: 'Variation/Supplement' },
@@ -389,10 +406,10 @@ const Nohqproject = (props) => {
                                             isClearable
                                         />
                                     </div>
-                                    <p className="errors_wrap" style={{ display: errors.category ? 'inline-block' : 'none' }}>{errors.category}</p>
+                                    
                                 </div>
                                 <div className="form_group_inline">
-                                    <span className="form_group_label">Variation Type</span>
+                                    <span className="form_group_label" style={{color: errors.variation_type ? 'red' : ''}}>Variation Type (*)</span>
                                     <div className="form_group_field">
                                         
                                         <Select options={[
@@ -408,6 +425,7 @@ const Nohqproject = (props) => {
                                             classNamePrefix="basic"
                                             placeholder=''
                                             isClearable
+                                            styles={selectStyles(errors.variation_type)}
                                         />
                                     </div>
                                 </div>
@@ -429,7 +447,6 @@ const Nohqproject = (props) => {
                                             classNamePrefix="basic"
                                             placeholder=''
                                             isClearable
-                                        
                                         />
                                     </div>
                                 </div>
@@ -437,7 +454,7 @@ const Nohqproject = (props) => {
                             </div>
                             <div className="inline_form">
                                 <div className="form_group_inline">
-                                    <span className="form_group_label">Submission Type (*)</span>
+                                    <span className="form_group_label" style={{color: errors.submission_type ? 'red' : ''}}>Submission Type (*)</span>
                                     <div className="form_group_field">
                                         
                                         <Select options={[
@@ -453,8 +470,7 @@ const Nohqproject = (props) => {
                                             styles={selectStyles(errors.submission_type)}
                                             isClearable
                                         />
-                                    </div>
-                                    <p className="errors_wrap" style={{ display: errors.submission_type ? 'inline-block' : 'none' }}>{errors.submission_type}</p>
+                                    </div>  
                                 </div>
                                 <div className="form_group_inline">
                                     <span className="form_group_label">Applcation N°</span>
@@ -527,9 +543,8 @@ const Nohqproject = (props) => {
                                                 </div>
                                                 : ''}
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Status (*)</span>
+                                                <span className="form_group_label" style={{color: errors['statuses.' + index + '.status'] ? 'red' : ''}}>Status (*)</span>
                                                 <div className="form_group_field">
-
                                                     <Select options={status}
                                                         onChange={(e) => handleStatusSelectChange(index, e)}
                                                         name="status"
@@ -540,14 +555,14 @@ const Nohqproject = (props) => {
                                                         isClearable
                                                     />
                                                 </div>
-                                                <p className="errors_wrap" style={{ display: errors['statuses.' + index + '.status'] ? 'inline-block' : 'none' }}>{errors['statuses.' + index + '.status']}</p>
+                                                
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Status Date (*)</span>
+                                                <span className="form_group_label" style={{color: errors['statuses.' + index + '.status_date'] ? 'red' : ''}}>Status Date (*)</span>
                                                 <div className="form_group_field">
                                                     <DatePicker name="status_date" selected={data.statuses[index].status_date} onChange={(date) => handleDateChange(index, 'status_date', date)} style={{ borderColor: errors['statuses.' + index + '.status_date'] ? 'red' : '' }} />
                                                 </div>
-                                                <p className="errors_wrap" style={{ display: errors['statuses.' + index + '.status_date'] ? 'inline-block' : 'none' }}>{errors['statuses.' + index + '.status_date']}</p>
+                                               
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">eCTD sequence</span>
@@ -607,7 +622,7 @@ const Nohqproject = (props) => {
                     
                 </Tab>
                 <Tab eventKey="second" title="Documents" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>
-                    <Documents handleChanged={handleDocumentChange} handleDocumentdate={handleDocumentdate} addFormFields={addFormFields} formValues={data.doc} removeDocumentsFields={removeDocumentsFields} />
+                    <Documents handleChanged={handleDocumentChange} handleDocumentdate={handleDocumentdate} addFormFields={addFormFields} formValues={data.doc} removeDocumentsFields={removeDocumentsFields} handleDocumentSelectChange={handleDocumentSelectChange} />
                 </Tab>
             </Tabs>
             <BasicSpeedDial processing={processing} showsavemodel={showsavemodel} showdraftmodel={showdraftmodel} reset={handleReset}  />

@@ -190,7 +190,7 @@ export default function Authenticated({ auth, header, children }) {
                                     <button className="sidebar_link topbar_link" style={{ background: whichMenu == 'clinical' ? 'rgba(243, 243, 243, 0.3)' : '' }} onClick={() => handleSelectMenu('clinical')}>
                                         <p className="sidebar_link_title">Clinical</p>
                                     </button>
-                                    <button className="sidebar_link topbar_link" style={{ background: whichMenu == 'devices' ? 'rgba(243, 243, 243, 0.3)' : '' }} onClick={() => handleSelectMenu('devices')}>
+                                    <button className="sidebar_link topbar_link" style={{ background: whichMenu == 'devices' ? 'rgba(243, 243, 243, 0.3)' : '' }} onClick={() => handleSelectMenu('devices')} disabled>
                                         <p className="sidebar_link_title">Devices</p>
                                     </button>
                                 </ul>

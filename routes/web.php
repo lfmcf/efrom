@@ -50,17 +50,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/ma/{id}/edit', [RcController::class, 'edit'])->name('/ma/edit');
     Route::get('/ma/{id}/show', [RcController::class, 'show'])->name('/ma-show');
     Route::post('/storefinishproduct', [RcController::class, 'store'])->name('storefinishproduct');
+    Route::post('/updatefinishproduct', [RcController::class, 'update'])->name('updatefinishproduct');
 
     Route::get('/variation/create', [VariationController::class, 'index'])->name('variation-create');
     Route::get('/variation/{id}/edit', [VariationController::class, 'edit'])->name('variation-edit');
     Route::get('/variation/{id}/show', [VariationController::class, 'show'])->name('variation-show');
     Route::post('/storevariation', [VariationController::class, 'store'])->name('storevariation');
     Route::post('/storehqproject', [VariationController::class, 'storehq'])->name('storehqproject');
+    Route::post('/updatevariation', [VariationController::class, 'update'])->name('updatevariation');
+    Route::post('/updatehqvariation', [VariationController::class, 'updatehq'])->name('updatehqvariation');
     
     Route::get('/renewal/create', [RenouvellementController::class, 'create'])->name('renewal-create');
     Route::get('/renewal/{id}/edit', [RenouvellementController::class, 'edit'])->name('renewal-edit');
     Route::get('/renewal/{id}/show', [RenouvellementController::class, 'show'])->name('renewal-show');
     Route::post('/storerenewal', [RenouvellementController::class, 'store'])->name('storerenewal');
+    Route::post('/updaterenewal', [RenouvellementController::class, 'update'])->name('updaterenewal');
 
     Route::get('/transfer/create', [TransferController::class, 'create'])->name('transfer-create');
     Route::get('/transfer/{id}/edit', [TransferController::class, 'edit'])->name('transfer-edit');
@@ -71,6 +75,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/baseline/{id}/edit', [BaselineController::class, 'edit'])->name('baseline-edit');
     Route::get('/baseline/{id}/show', [BaselineController::class, 'show'])->name('baseline-show');
     Route::post('/storebaseline', [BaselineController::class, 'store'])->name('storebaseline');
+    Route::post('/updatebaseline', [BaselineController::class, 'update'])->name('updatebaseline');
 
     Route::get('/registrationtermination/create', [RegistrationTerminationController::class, 'create'])->name('registrationtermination-create');
     Route::get('/registrationtermination/{id}/edit', [RegistrationTerminationController::class, 'edit'])->name('registrationtermination-edit');

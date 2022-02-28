@@ -47,13 +47,16 @@ class CregistrationTerminationController extends Controller
         if($request->query('type') == 'submit') {
             $validator = $request->validate(
                 [
+                    'product' => 'required',
+                    'procedure_type' => 'required',
+                    'country' => 'required',
                     'statuses.*.status' => 'required',
                     'statuses.*.status_date' => 'required',
-                ],
-                [
-                    'statuses.*.status.required' => 'A status is required',
-                    'statuses.*.status_date.required' => 'A status date is required',
                 ]
+                // [
+                //     'statuses.*.status.required' => 'A status is required',
+                //     'statuses.*.status_date.required' => 'A status date is required',
+                // ]
             );
         }
 
