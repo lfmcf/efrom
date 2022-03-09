@@ -1037,6 +1037,11 @@ font-family: 'Open Sans' , sans-serif;
     text-transform: capitalize;
 }
 
+.dash-table-wrap {
+    margin-bottom: 50px; 
+    position: relative 
+}
+
 .head-table::before{
     position: absolute;
     top: 1px;
@@ -1045,8 +1050,33 @@ font-family: 'Open Sans' , sans-serif;
     width: 3px;
     height: 20px;
     /* background: rgb(115, 176, 242); */
+    /* background-color: #2c4166; */
+}
+.dash-table .dash-table-wrap:nth-child(1) h5::before {
     background-color: #2c4166;
 }
+.dash-table .dash-table-wrap:nth-child(2) h5::before {
+    background-color: #ff6333;
+}
+.dash-table .dash-table-wrap:nth-child(3) h5::before {
+    background-color: #2196f3;
+}
+.dash-table .dash-table-wrap:nth-child(4) h5::before {
+    background-color: #cddc39;
+}
+.dash-table .dash-table-wrap:nth-child(5) h5::before {
+    background-color: #76ff03;
+}
+.dash-table .dash-table-wrap:nth-child(6) h5::before {
+    background-color: #9c27b0;
+}
+.dash-table .dash-table-wrap:nth-child(7) h5::before {
+    background-color: #d500f9;
+}
+.dash-table .dash-table-wrap:nth-child(8) h5::before {
+    background-color: #009688;
+}
+
 
 
 /* Mui Tabs */

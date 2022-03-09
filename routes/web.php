@@ -70,6 +70,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/transfer/{id}/edit', [TransferController::class, 'edit'])->name('transfer-edit');
     Route::get('/transfer/{id}/show', [TransferController::class, 'show'])->name('transfer-show');
     Route::post('/storetransfer', [TransferController::class, 'store'])->name('storetransfer');
+    Route::post('/updatetransfer', [TransferController::class, 'update'])->name('updatetransfer');
 
     Route::get('/baseline/create', [BaselineController::class, 'create'])->name('baseline-create');
     Route::get('/baseline/{id}/edit', [BaselineController::class, 'edit'])->name('baseline-edit');
@@ -81,16 +82,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/registrationtermination/{id}/edit', [RegistrationTerminationController::class, 'edit'])->name('registrationtermination-edit');
     Route::get('/registrationtermination/{id}/show', [RegistrationTerminationController::class, 'show'])->name('registrationtermination-show');
     Route::post('/store_registration_termination', [RegistrationTerminationController::class, 'store'])->name('store_registration_termination');
+    Route::post('/update_registration_termination', [RegistrationTerminationController::class, 'update'])->name('update_registration_termination');
     
     Route::get('/clinical/create', [ClinicalController::class, 'create'])->name('clinical-create');
     Route::get('/clinical/{id}/edit', [ClinicalController::class, 'edit'])->name('clinical-edit');
     Route::get('/clinical/{id}/show', [ClinicalController::class, 'show'])->name('clinical-show');
     Route::post('/storeclinical', [ClinicalController::class, 'store'])->name('storeclinical');
+    Route::post('/updateclinical', [ClinicalController::class, 'update'])->name('updateclinical');
 
     Route::get('/amendments/create', [AmendmentsController::class, 'create'])->name('amendments-create');
     Route::get('/amendments/{id}/edit', [AmendmentsController::class, 'edit'])->name('amendments-edit');
     Route::get('/amendments/{id}/show', [AmendmentsController::class, 'show'])->name('amendments-show');
     Route::post('/storeamendment', [AmendmentsController::class, 'store'])->name('storeamendment');
+    Route::post('/updateamendment', [AmendmentsController::class, 'update'])->name('updateamendment');
 
     Route::get('/clinicalregistrationtermination/create', [CregistrationTerminationController::class, 'create'])->name('cregistrationtermination-create');
     Route::get('/clinicalregistrationtermination/{id}/edit', [CregistrationTerminationController::class, 'edit'])->name('cregistrationtermination-edit');

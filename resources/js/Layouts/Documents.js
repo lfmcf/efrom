@@ -51,11 +51,11 @@ const Documents = ({ handleChanged, handleDocumentdate, addFormFields, formValue
                                                 {label: 'Questions', value: 'Questions'},
                                                 {label: 'SMPC', value: 'SMPC'},
                                             ]}
-                                                onChange={e => handleDocumentSelectChange(index, e, 'document_type')}
+                                                onChange={(selectedOption, name) => handleDocumentSelectChange(selectedOption, name, index)}
                                                 name="document_type"
                                                 className="basic"
                                                 classNamePrefix="basic"
-                                                defaultValue={{label: element.document_type, value: element.document_type}}
+                                                value={element.document_type}
                                                 placeholder=''
                                                 isClearable
                                             />
@@ -64,7 +64,7 @@ const Documents = ({ handleChanged, handleDocumentdate, addFormFields, formValue
                                     <div className="form_group_inline">
                                         <span className="form_group_label">Document title</span>
                                         <div className="form_group_field">
-                                            <input type="text" name="document_title" onChange={e => handleChanged(index, e)} defaultValue={element.document_title || ""} />
+                                            <input type="text" name="document_title" onChange={e => handleChanged(index, e)} value={element.document_title} />
                                         </div>
                                     </div>
                                 </div>
@@ -76,11 +76,11 @@ const Documents = ({ handleChanged, handleDocumentdate, addFormFields, formValue
                                                 { label: 'English', value: 'English' },
                                                 { label: 'Frensh', value: 'Frensh' },
                                             ]}
-                                                onChange={e => handleDocumentSelectChange(index, e, 'language')}
+                                               onChange={(selectedOption, name) => handleDocumentSelectChange(selectedOption, name, index)}
                                                 name="language"
                                                 className="basic"
                                                 classNamePrefix="basic"
-                                                defaultValue={{label: element.language, value: element.language}}
+                                                value={element.language}
                                                 placeholder=''
                                                 isClearable
                                             />
@@ -89,7 +89,7 @@ const Documents = ({ handleChanged, handleDocumentdate, addFormFields, formValue
                                     <div className="form_group_inline">
                                         <span className="form_group_label">Version date</span>
                                         <div className="form_group_field">
-                                            <DatePicker name="version_date" selected={element.version_date ? new Date(element.version_date) : ''} onChange={(date) => handleDocumentdate(index, date)} />
+                                            <DatePicker name="version_date" selected={element.version_date ? new Date(element.version_date) : ''} onChange={(date) => handleDocumentdate(index, date)} value={element.version_date} />
                                         </div>
                                     </div>
                                 </div>
@@ -97,7 +97,7 @@ const Documents = ({ handleChanged, handleDocumentdate, addFormFields, formValue
                                     <div className="form_group_inline">
                                         <span className="form_group_label">Remarks</span>
                                         <div className="form_group_field">
-                                            <input type="text" name="dremarks" onChange={e => handleChanged(index, e)} defaultValue={element.dremarks || ""} />
+                                            <input type="text" name="dremarks" onChange={e => handleChanged(index, e)} value={element.dremarks} />
                                         </div>
                                     </div>
                                     <div className="form_group_inline">

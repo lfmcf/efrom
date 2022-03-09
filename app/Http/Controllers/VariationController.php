@@ -48,7 +48,7 @@ class VariationController extends Controller
      */
     public function storehq(Request $request)
     {
-        
+        //dd($request->statuses);
         if ($request->query('type') === 'submit') {
             $validator = $request->validate(
                 [
@@ -154,17 +154,26 @@ class VariationController extends Controller
             $sheet->fromArray($registrationIdentification, NULL, 'A1');
             $c = 2;
             foreach($var->identification as $iden) {
-                $sheet->setCellValue('A' . $c, $iden['product']);
-                $sheet->setCellValue('B' . $c, $iden['procedure_type']);
-                $sheet->setCellValue('D' . $c, $iden['rms']);
-                $sheet->setCellValue('E' . $c, $iden['application_stage']);
-                $sheet->setCellValue('F' . $c, $iden['procedure_num']);
-                $sheet->setCellValue('G' . $c, $iden['local_tradename']);
-                $sheet->setCellValue('H' . $c, $iden['product_type']);
-                foreach($iden['country'] as $country) {
-                    $sheet->setCellValue('C' . $c, $country);
-                    $c++;
+                $sheet->setCellValue('A' . $c, $iden['product']['value']);
+                $sheet->setCellValue('B' . $c, $iden['procedure_type']['value']);
+                $sheet->setCellValue('C' . $c, $iden['rms'] ? $iden['rms']['value'] : '');
+                $sheet->setCellValue('D' . $c, $iden['application_stage'] ? $iden['application_stage']['value'] : '');
+                $sheet->setCellValue('E' . $c, $iden['procedure_num']);
+                $sheet->setCellValue('F' . $c, $iden['local_tradename']);
+                $sheet->setCellValue('G' . $c, $iden['product_type'] ? $iden['product_type']['value'] : '');
+                // foreach($iden['country'] as $country) {
+                //     $sheet->setCellValue('C' . $c, $country['value']);
+                //     $c++;
+                // }
+                if(array_key_exists('value', $iden['country'])) {
+                    $sheet->setCellValue('C' . $c, $iden['country']['value']);
+                }else {
+                    foreach ($iden['country'] as $cnt => $country) {        
+                        $sheet->setCellValue('C' . $c, $country['value']);
+                       
+                    }
                 }
+                $c++;
             }
 
             $spreadsheet->createSheet();
@@ -172,18 +181,47 @@ class VariationController extends Controller
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Variation Details');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($variationDetail, NULL, 'A1');
-            $sheet->fromArray($var->variation, NULL, 'A2');
+            // $sheet->fromArray($var->variation, NULL, 'A2');
+            $d = 2;
+            foreach($var->variation as $vari) {
+                $sheet->setCellValue('A' . $d, $vari['product'] ? $vari['product']['value'] : '');
+                $sheet->setCellValue('B' . $d, $vari['country'] ? $vari['country']['value'] : '');
+                $sheet->setCellValue('C' . $d, $vari['variation_title']);
+                $sheet->setCellValue('D' . $d, $vari['category']['value']);
+                $sheet->setCellValue('E' . $d, $vari['variation_type']['value']);
+                $sheet->setCellValue('F' . $d, $vari['variation_reason'] ? $vari['variation_reason']['value']: '');
+                $sheet->setCellValue('G' . $d, $vari['submission_type'] ? $vari['submission_type']['value']: '');
+                $sheet->setCellValue('H' . $d, $vari['application_number']);
+                $sheet->setCellValue('I' . $d, $vari['submission_number']);
+                $sheet->setCellValue('J' . $d, $vari['submission_format'] ? $vari['variation_reason']['value']: '');
+                $d++;
+            }
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(2);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Event Status');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($eventStatus, NULL, 'A1');
-            $sheet->fromArray($var->statuses, NULL, 'A2');
-            $hr = $sheet->getHighestRow();
-            for($i=2; $i<=$hr; $i++) {
-                $datef = $sheet->getCell('B'.$i);
-                $sheet->setCellValue('B'.$i, date("d-m-Y", strtotime($datef)));
+            // $sheet->fromArray($var->statuses, NULL, 'A2');
+            // $hr = $sheet->getHighestRow();
+            // for($i=2; $i<=$hr; $i++) {
+            //     $datef = $sheet->getCell('B'.$i);
+            //     $sheet->setCellValue('B'.$i, date("d-m-Y", strtotime($datef)));
+            // }
+            $s = 2;
+            foreach($var->statuses as $st) {
+                $sheet->setCellValue('A' . $s, $st['product'] ? $st['product']['value'] : '');
+                $sheet->setCellValue('B' . $s, $st['country'] ? $st['country']['value'] : '');
+                $sheet->setCellValue('C' . $s, $st['status'] ? $st['status']['value'] : '');
+                $sheet->setCellValue('D' . $s, date("d-m-Y", strtotime($st['status_date'])));
+                $sheet->setCellValue('E' . $s, $st['ectd']);
+                $sheet->setCellValue('F' . $s, $st['control']);
+                $sheet->setCellValue('G' . $s, $st['cdds']);
+                $sheet->setCellValue('H' . $s, $st['remarks']);
+                $sheet->setCellValue('I' . $s, date("d-m-Y", strtotime($st['local_implementation'])));
+                $sheet->setCellValue('J' . $s, date("d-m-Y", strtotime($st['implimentation_deadline'])));
+                $sheet->setCellValue('K' . $s, date("d-m-Y", strtotime($st['actual_implementation'])));
+                $s++;
             }
 
             $spreadsheet->createSheet();
@@ -191,11 +229,21 @@ class VariationController extends Controller
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Documents');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($document, NULL, 'A1');
-            $sheet->fromArray($var->doc, NULL, 'A2');
-            $hr = $sheet->getHighestRow();
-            for($i=2; $i<=$hr; $i++) {
-                $datef = $sheet->getCell('D'.$i);
-                $sheet->setCellValue('D'.$i, date("d-m-Y", strtotime($datef)));
+            // $sheet->fromArray($var->doc, NULL, 'A2');
+            // $hr = $sheet->getHighestRow();
+            // for($i=2; $i<=$hr; $i++) {
+            //     $datef = $sheet->getCell('D'.$i);
+            //     $sheet->setCellValue('D'.$i, date("d-m-Y", strtotime($datef)));
+            // }
+            $dc = 2;
+            foreach($var->doc as $docu) {
+                $sheet->setCellValue('A' . $dc, is_array($docu['document_type']) ? $docu['document_type']['value'] : '');
+                $sheet->setCellValue('B' . $dc, $docu['document_title']);
+                $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
+                $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
+                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $dc++;
             }
 
             $writer = new Xlsx($spreadsheet);
@@ -335,20 +383,22 @@ class VariationController extends Controller
 
             $sheet->fromArray($registrationIdentification, NULL, 'A1');
             $sheet->fromArray([
-                $var->product,
-                $var->procedure_type,
+                $var->product['value'],
+                $var->procedure_type['value'],
                 "",
-                $var->rms,
+                is_array($var->rms) ? $var->rms['value'] : '',
                 $var->procedure_num,
                 $var->local_tradename,
-                $var->application_stage,
-                $var->product_type
+                is_array($var->application_stage) ? $var->application_stage['value'] : '',
+                is_array($var->product_type) ? $var->product_type['value'] : '',
             ], NULL, 'A2');
 
-            if(is_array($var->country)) {
+            if(array_key_exists('value', $var->country)) {
+                $sheet->setCellValue('C2', $var->country['value']);
+            }else {
                 foreach ($var->country as $cnt => $country) {
                     $cnt += 2;
-                    $sheet->setCellValue('C' . $cnt, $country);
+                    $sheet->setCellValue('C' . $cnt, $country['value']);
                 }
             }
             
@@ -361,13 +411,13 @@ class VariationController extends Controller
 
             $sheet->fromArray([
                 $var->variation_title,
-                $var->category,
-                $var->variation_type,
-                $var->variation_reason,
-                $var->submission_type,
+                $var->category['value'],
+                $var->variation_type['value'],
+                is_array($var->variation_reason) ? $var->variation_reason['value'] : '',
+                is_array($var->submission_type) ? $var->submission_type['value'] : '',
                 $var->application_number,
                 $var->submission_number,
-                $var->submission_format,
+                is_array($var->submission_format) ? $var->submission_format['value'] : '',
             ], NULL, 'A2');
 
             $spreadsheet->createSheet();
@@ -375,39 +425,62 @@ class VariationController extends Controller
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Status');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($eventStatus, NULL, 'A1');
-            $sheet->fromArray($var->statuses, NULL, 'A2');
-            $hr = $sheet->getHighestRow();
-            for($i=2; $i<=$hr; $i++) {
-                $datef = $sheet->getCell('C'.$i);
-                $sheet->setCellValue('C'.$i, date("d-m-Y", strtotime($datef)));
+            $st = 2;
+            foreach($var->statuses as $stt) {
+                $sheet->setCellValue('A' . $st, is_array($stt['status']) ? $stt['status']['value'] : '');
+                $sheet->setCellValue('B' . $st, date("d-m-Y", strtotime($stt['status_date'])));
+                $sheet->setCellValue('C' . $st, $stt['ectd']);
+                $sheet->setCellValue('D' . $st, $stt['control']);
+                $sheet->setCellValue('E' . $st, $stt['cdds']);
+                $sheet->setCellValue('F' . $st, $stt['remarks']);
+                $sheet->setCellValue('G' . $st, date("d-m-Y", strtotime($stt['local_implementation'])));
+                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_deadline'])));
+                $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['actual_implementation'])));
+                $st++;
             }
+            // $sheet->fromArray($var->statuses, NULL, 'A2');
+            // $hr = $sheet->getHighestRow();
+            // for($i=2; $i<=$hr; $i++) {
+            //     $datef = $sheet->getCell('C'.$i);
+            //     $sheet->setCellValue('C'.$i, date("d-m-Y", strtotime($datef)));
+            // }
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(3);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Documents');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($document, NULL, 'A1');
-            $sheet->fromArray($var->doc, NULL, 'A2');
-            $hr = $sheet->getHighestRow();
-            for($i=2; $i<=$hr; $i++) {
-                $datef = $sheet->getCell('D'.$i);
-                $sheet->setCellValue('D'.$i, date("d-m-Y", strtotime($datef)));
+            $dc = 2;
+            foreach($var->doc as $docu) {
+                $sheet->setCellValue('A' . $dc, is_array($docu['document_type']) ? $docu['document_type']['value'] : '');
+                $sheet->setCellValue('B' . $dc, $docu['document_title']);
+                $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
+                $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
+                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $dc++;
             }
+            // $sheet->fromArray($var->doc, NULL, 'A2');
+            // $hr = $sheet->getHighestRow();
+            // for($i=2; $i<=$hr; $i++) {
+            //     $datef = $sheet->getCell('D'.$i);
+            //     $sheet->setCellValue('D'.$i, date("d-m-Y", strtotime($datef)));
+            // }
 
             $writer = new Xlsx($spreadsheet);
             
             $date = date('d-m-y');
             // $name = 'Variation ' . $date . '.xlsx';
             if($request->procedure_type == 'National' || $request->procedure_type == 'Centralized') {
-                $name = 'eForm_Variation_' .$request->product . '_' .$request->country[0] . '_' .$date . '.xlsx';
-                $subject = 'eForm_Variation_' .$request->product . '_' .$request->country[0];
+                $name = 'eForm_Variation_' .$request->product['value'] . '_' .$request->country['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_Variation_' .$request->product['value'] . '_' .$request->country['value'];
             }else {
-                $name = 'eForm_Variation_' .$request->product . '_' .$request->procedure_type . '_' .$date . '.xlsx';
-                $subject = 'eForm_Variation_' .$request->product . '_' .$request->procedure_type;
+                $name = 'eForm_Variation_' .$request->product['value'] . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_Variation_' .$request->product['value'] . '_' .$request->procedure_type['value'];
             }
             $writer->save($name);
 
-            Mail::to(getenv('MAIL_TO'))->send(new NoHqVariation($name, $request->product, $subject));
+            Mail::to(getenv('MAIL_TO'))->send(new NoHqVariation($name, $request->product['value'], $subject));
 
             return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
 
@@ -762,17 +835,26 @@ class VariationController extends Controller
             $sheet->fromArray($registrationIdentification, NULL, 'A1');
             $c = 2;
             foreach($var->identification as $iden) {
-                $sheet->setCellValue('A' . $c, $iden['product']);
-                $sheet->setCellValue('B' . $c, $iden['procedure_type']);
-                $sheet->setCellValue('D' . $c, $iden['rms']);
-                $sheet->setCellValue('E' . $c, $iden['application_stage']);
-                $sheet->setCellValue('F' . $c, $iden['procedure_num']);
-                $sheet->setCellValue('G' . $c, $iden['local_tradename']);
-                $sheet->setCellValue('H' . $c, $iden['product_type']);
-                foreach($iden['country'] as $country) {
-                    $sheet->setCellValue('C' . $c, $country);
-                    $c++;
+                $sheet->setCellValue('A' . $c, $iden['product']['value']);
+                $sheet->setCellValue('B' . $c, $iden['procedure_type']['value']);
+                $sheet->setCellValue('C' . $c, $iden['rms'] ? $iden['rms']['value'] : '');
+                $sheet->setCellValue('D' . $c, $iden['application_stage'] ? $iden['application_stage']['value'] : '');
+                $sheet->setCellValue('E' . $c, $iden['procedure_num']);
+                $sheet->setCellValue('F' . $c, $iden['local_tradename']);
+                $sheet->setCellValue('G' . $c, $iden['product_type'] ? $iden['product_type']['value'] : '');
+                // foreach($iden['country'] as $country) {
+                //     $sheet->setCellValue('C' . $c, $country['value']);
+                //     $c++;
+                // }
+                if(array_key_exists('value', $iden['country'])) {
+                    $sheet->setCellValue('C' . $c, $iden['country']['value']);
+                }else {
+                    foreach ($iden['country'] as $cnt => $country) {        
+                        $sheet->setCellValue('C' . $c, $country['value']);
+                       
+                    }
                 }
+                $c++;
             }
 
             $spreadsheet->createSheet();
@@ -780,18 +862,47 @@ class VariationController extends Controller
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Variation Details');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($variationDetail, NULL, 'A1');
-            $sheet->fromArray($var->variation, NULL, 'A2');
+            // $sheet->fromArray($var->variation, NULL, 'A2');
+            $d = 2;
+            foreach($var->variation as $vari) {
+                $sheet->setCellValue('A' . $d, $vari['product'] ? $vari['product']['value'] : '');
+                $sheet->setCellValue('B' . $d, $vari['country'] ? $vari['country']['value'] : '');
+                $sheet->setCellValue('C' . $d, $vari['variation_title']);
+                $sheet->setCellValue('D' . $d, $vari['category']['value']);
+                $sheet->setCellValue('E' . $d, $vari['variation_type']['value']);
+                $sheet->setCellValue('F' . $d, $vari['variation_reason'] ? $vari['variation_reason']['value']: '');
+                $sheet->setCellValue('G' . $d, $vari['submission_type'] ? $vari['submission_type']['value']: '');
+                $sheet->setCellValue('H' . $d, $vari['application_number']);
+                $sheet->setCellValue('I' . $d, $vari['submission_number']);
+                $sheet->setCellValue('J' . $d, $vari['submission_format'] ? $vari['variation_reason']['value']: '');
+                $d++;
+            }
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(2);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Event Status');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($eventStatus, NULL, 'A1');
-            $sheet->fromArray($var->statuses, NULL, 'A2');
-            $hr = $sheet->getHighestRow();
-            for($i=2; $i<=$hr; $i++) {
-                $datef = $sheet->getCell('B'.$i);
-                $sheet->setCellValue('B'.$i, date("d-m-Y", strtotime($datef)));
+            // $sheet->fromArray($var->statuses, NULL, 'A2');
+            // $hr = $sheet->getHighestRow();
+            // for($i=2; $i<=$hr; $i++) {
+            //     $datef = $sheet->getCell('B'.$i);
+            //     $sheet->setCellValue('B'.$i, date("d-m-Y", strtotime($datef)));
+            // }
+            $s = 2;
+            foreach($var->statuses as $st) {
+                $sheet->setCellValue('A' . $s, $st['product'] ? $st['product']['value'] : '');
+                $sheet->setCellValue('B' . $s, $st['country'] ? $st['country']['value'] : '');
+                $sheet->setCellValue('C' . $s, $st['status'] ? $st['status']['value'] : '');
+                $sheet->setCellValue('D' . $s, date("d-m-Y", strtotime($st['status_date'])));
+                $sheet->setCellValue('E' . $s, $st['ectd']);
+                $sheet->setCellValue('F' . $s, $st['control']);
+                $sheet->setCellValue('G' . $s, $st['cdds']);
+                $sheet->setCellValue('H' . $s, $st['remarks']);
+                $sheet->setCellValue('I' . $s, date("d-m-Y", strtotime($st['local_implementation'])));
+                $sheet->setCellValue('J' . $s, date("d-m-Y", strtotime($st['implimentation_deadline'])));
+                $sheet->setCellValue('K' . $s, date("d-m-Y", strtotime($st['actual_implementation'])));
+                $s++;
             }
 
             $spreadsheet->createSheet();
@@ -799,11 +910,21 @@ class VariationController extends Controller
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Documents');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($document, NULL, 'A1');
-            $sheet->fromArray($var->doc, NULL, 'A2');
-            $hr = $sheet->getHighestRow();
-            for($i=2; $i<=$hr; $i++) {
-                $datef = $sheet->getCell('D'.$i);
-                $sheet->setCellValue('D'.$i, date("d-m-Y", strtotime($datef)));
+            // $sheet->fromArray($var->doc, NULL, 'A2');
+            // $hr = $sheet->getHighestRow();
+            // for($i=2; $i<=$hr; $i++) {
+            //     $datef = $sheet->getCell('D'.$i);
+            //     $sheet->setCellValue('D'.$i, date("d-m-Y", strtotime($datef)));
+            // }
+            $dc = 2;
+            foreach($var->doc as $docu) {
+                $sheet->setCellValue('A' . $dc, is_array($docu['document_type']) ? $docu['document_type']['value'] : '');
+                $sheet->setCellValue('B' . $dc, $docu['document_title']);
+                $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
+                $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
+                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $dc++;
             }
 
             $writer = new Xlsx($spreadsheet);

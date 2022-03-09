@@ -33,7 +33,7 @@ export default function BasicSpeedDial(props) {
         ))} */}
         <SpeedDialAction
             key="Reset"
-            icon={<RestartAltIcon onClick={() => props.reset()} />}
+            icon={<RestartAltIcon onClick={props.reset} />}
             tooltipTitle="Reset"
             className="ResetD"
           />

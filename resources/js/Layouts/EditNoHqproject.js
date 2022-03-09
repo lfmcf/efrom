@@ -50,16 +50,50 @@ const EditNoHqproject = (props) => {
         created_by: props.user.id,
     });
 
+    const handleReset = () => {
+        reset()
+     }
+
     const countryRef = React.useRef();
     const formRef = React.useRef();
     const [value, setValue] = useState(0);
     const [showsavemodal, setSavemodal] = useState({ show: false, name: '' });
     const [statuserror, setStatusError] = useState(false);
+    const [statusCountry, setStatusCountry] = useState([{label: 'All', value: 'All'}])
+    const firstTimeRender = React.useRef(true);
 
     const handleMChange = (event, newValue) => {
-        
         setValue(newValue);
     };
+
+    React.useEffect(() => {
+        if(data.procedure_type && data.procedure_type.value == "Decentralized" || data.procedure_type && data.procedure_type.value == "Mutual Recognition" ) {
+            if(data.country.length !== 0) {
+                setStatusCountry(statusCountry => [{label: 'All', value: 'All'}, ...data.country])
+            }else {
+                setStatusCountry([{label: 'All', value: 'All'}])
+            }
+        }
+    }, [data.country]);
+
+    React.useEffect(() => {
+        if(data.rms) {
+            if(statusCountry.filter(item => item.value == data.rms.value) == 0) {
+                setStatusCountry(statusCountry => [...statusCountry, data.rms])
+            }
+        }
+    }, [data.rms])
+
+    React.useEffect(() => {
+        if (!firstTimeRender.current) {
+            setData('country', [])
+        }
+       
+    }, [data.procedure_type]);
+
+    React.useEffect(() => { 
+        firstTimeRender.current = false 
+    }, [])
 
 
     const selectStyles = (hasErrors) => ({
@@ -96,47 +130,8 @@ const EditNoHqproject = (props) => {
         clearErrors(e.target.name);
     }
 
-    let handleProcedureTypeChange = (e) => {
-        countryRef.current.setValue([]);
-        setData((prev) => ({
-            ...prev,
-            [e.target.name]: e.target.value,
-            country: []
-        }));
-        clearErrors(e.target.name);
-    }
-
-    let handleCountryChange = (e, k) => {
-        let arr = {...data}
-        if (k.action) {
-            if(k.action == 'select-option')
-            {
-                if (e.length > 0) {
-                    arr.country.push(k.option.value)
-                } else {
-                    arr.country.push(e.value)
-                }
-            }else if (k.action == 'remove-value') {
-                let newarr = arr.country.filter((ele) => {
-                    return ele != k.removedValue.value
-                });
-                arr.country = newarr;
-            }else {
-                arr.country.length = 0
-            }
-            
-        }
-        setData(arr)
-        clearErrors("country")
-    }
-
     const handleSelectChange = (e, name) => {
-        if(!e) {
-            e = {
-                value: ''
-            }
-        }
-        setData(name.name, e.value)
+        setData(name.name, e)
         clearErrors(name.name)
     }
 
@@ -147,16 +142,11 @@ const EditNoHqproject = (props) => {
         clearErrors('statuses.'+i+'.'+e.target.name);
     }
 
-    let handleStatusSelectChange = (i, e) => {
-        if(!e) {
-            e = {
-                value: ''
-            }
-        }
+    let handleStatusSelectChange = (selectedOption, name, i) => {
         let newFormValues = {...data};
-        newFormValues.statuses[i]['status'] = e.value;
+        newFormValues.statuses[i][name.name] = selectedOption;
         setData(newFormValues);
-        clearErrors('statuses.'+i+'.status')
+        clearErrors('statuses.'+i+'.'+name.name)
     }
 
 
@@ -186,14 +176,7 @@ const EditNoHqproject = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         let submitType = window.event.target.name;
-        const search = window.location.search
-        const opname = new URLSearchParams(search).get('opr');
-        if(opname === 'edit') {
-            post(route("updatevariation", {'type': submitType}));
-        } else {
-            post(route("storevariation", {'type': submitType}));
-        }
-        
+        post(route("storevariation", {'type': submitType}));
     }
 
     const handleSaveModalClose = () => {
@@ -220,7 +203,6 @@ const EditNoHqproject = (props) => {
     }
 
     React.useEffect(() => {
-        
         let s = data.statuses.length
         for (let j = 0; j <= s; j++) {
             if (errors['statuses.' + j + '.status'] || errors['statuses.' + j + '.status_date']) {
@@ -238,24 +220,15 @@ const EditNoHqproject = (props) => {
         setData(newArr);
     }
 
-    let handleReset = () => {
-        console.log(document.getElementById("eform"))
-        document.getElementById("eform").reset();
-    }
-
-    const handleDocumentSelectChange = (i, e, name) => {
-        if (!e) {
-            e = {
-                value: ''
-            }
-        }
+    const handleDocumentSelectChange = (selectedOption, name, i) => {
         let arr = { ...data };
-        arr.doc[i][name] = e.value;
+        arr.doc[i][name.name] = selectedOption;
         setData(arr);
     }
 
     return (
         <>
+        <Head title="Create Variation" />
         <form className="form" onSubmit={handleSubmit} ref={formRef} id='eform'>
             <Tabs defaultActiveKey="first">
                 <Tab eventKey="first" title="New Variation" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>
@@ -293,8 +266,8 @@ const EditNoHqproject = (props) => {
                                             classNamePrefix="basic"
                                             placeholder=''
                                             isClearable
-                                            defaultValue={{ label: data.product, value: data.product }}
                                             styles={selectStyles(errors.product)}
+                                            value={data.product}
                                         />
                                     </div>
                                 </div>
@@ -310,30 +283,29 @@ const EditNoHqproject = (props) => {
                                             classNamePrefix="basic"
                                             placeholder=''
                                             isClearable
-                                            defaultValue={{ label: data.procedure_type, value: data.procedure_type }}
                                             styles={selectStyles(errors.procedure_type)}
+                                            value={data.procedure_type}
                                         />
                                     </div>
                                 </div>
                                 <div className="form_group_inline">
-                                    <span className="form_group_label" style={{color: errors.country ? 'red' : ''}}>Country</span>
+                                    <span className="form_group_label" style={{color: errors.country ? 'red' : ''}}>Country (*)</span>
                                     <div className="form_group_field">
                                         <Select options={contries}
                                             name="country"
-                                            onChange={(e, k) => handleCountryChange(e, k)}
+                                            onChange={handleSelectChange}
                                             className="basic"
                                             classNamePrefix="basic"
-                                            isMulti={data.procedure_type === 'Mutual Recognition' || data.procedure_type === 'Decentralized' ? true : false}
+                                            isMulti={data.procedure_type && data.procedure_type.value === 'Mutual Recognition' || data.procedure_type && data.procedure_type.value === 'Decentralized' ? true : false}
                                             ref={ele => countryRef.current = ele}
                                             placeholder=''
-                                            defaultValue={data.country.map(function(option) { return {label:option, value: option} })}
                                             styles={selectStyles(errors.country)}
-                                            isClearable
+                                            value={data.country}
                                         />
                                     </div>
                                 </div>
 
-                                <div className="form_group_inline" style={{ display: data.procedure_type === 'Mutual Recognition' || data.procedure_type === 'Decentralized' ? '' : 'none' }}>
+                                <div className="form_group_inline" style={{ display: data.procedure_type && data.procedure_type.value === 'Mutual Recognition' || data.procedure_type && data.procedure_type.value === 'Decentralized' ? '' : 'none' }}>
                                     <span className="form_group_label">RMS</span>
                                     <div className="form_group_field" >
                                         <Select options={contries}
@@ -343,7 +315,7 @@ const EditNoHqproject = (props) => {
                                             classNamePrefix="basic"
                                             placeholder=''
                                             isClearable
-                                            defaultValue={{label:data.rms, value:data.rms}}
+                                            value={data.rms}
                                         />
                                     </div>
                                 </div>
@@ -352,13 +324,13 @@ const EditNoHqproject = (props) => {
                                 <div className="form_group_inline">
                                     <span className="form_group_label">Procedure Number</span>
                                     <div className="form_group_field">
-                                        <input type="text" name="procedure_num" defaultValue={data.procedure_num} onChange={handleChange} />
+                                        <input type="text" name="procedure_num" onChange={handleChange} value={data.procedure_num} />
                                     </div>
                                 </div>
                                 <div className="form_group_inline">
                                     <span className="form_group_label">Local Tradename</span>
                                     <div className="form_group_field">
-                                        <input type="text" name="local_tradename" defaultValue={data.local_tradename} onChange={handleChange} />
+                                        <input type="text" name="local_tradename" onChange={handleChange} value={data.local_tradename} />
                                     </div>
                                 </div>
                                 <div className="form_group_inline">
@@ -374,7 +346,7 @@ const EditNoHqproject = (props) => {
                                             classNamePrefix="basic"
                                             placeholder=''
                                             isClearable
-                                            defaultValue={{ label: data.application_stage, value: data.application_stage }}
+                                            value={data.application_stage}
                                         />
                                     </div>
                                 </div>
@@ -392,7 +364,7 @@ const EditNoHqproject = (props) => {
                                             classNamePrefix="basic"
                                             placeholder=''
                                             isClearable
-                                            defaultValue={{ label: data.product_type, value: data.product_type }}
+                                            value={data.product_type}
                                         />
                                     </div>
                                 </div>
@@ -403,7 +375,7 @@ const EditNoHqproject = (props) => {
                                 <div className="form_group_inline">
                                     <span className="form_group_label" style={{color: errors.variation_title ? 'red' : ''}}>Variation Title (*)</span>
                                     <div className="form_group_field">
-                                        <input type="text" name='variation_title' defaultValue={data.variation_title} onChange={handleChange} style={{borderColor: errors.variation_title ? 'red' : ''}} />
+                                        <input type="text" name='variation_title' onChange={handleChange} style={{borderColor: errors.variation_title ? 'red' : ''}} value={data.variation_title} />
                                     </div>
                                 </div>
                                 <div className="form_group_inline">
@@ -420,8 +392,7 @@ const EditNoHqproject = (props) => {
                                             placeholder=''
                                             styles={selectStyles(errors.category)}
                                             isClearable
-                                            defaultValue={{ label: data.category, value: data.category }}
-                                            styles={selectStyles(errors.category)}
+                                            value={data.category}
                                         />
                                     </div>
                                     
@@ -443,8 +414,8 @@ const EditNoHqproject = (props) => {
                                             classNamePrefix="basic"
                                             placeholder=''
                                             isClearable
-                                            defaultValue={{ label: data.variation_type, value: data.variation_type }}
                                             styles={selectStyles(errors.variation_type)}
+                                            value={data.variation_type}
                                         />
                                     </div>
                                 </div>
@@ -466,7 +437,7 @@ const EditNoHqproject = (props) => {
                                             classNamePrefix="basic"
                                             placeholder=''
                                             isClearable
-                                            defaultValue={{ label: data.variation_reason, value: data.variation_reason }}
+                                            value={data.variation_reason}
                                         />
                                     </div>
                                 </div>
@@ -489,28 +460,25 @@ const EditNoHqproject = (props) => {
                                             placeholder=''
                                             styles={selectStyles(errors.submission_type)}
                                             isClearable
-                                            defaultValue={{ label: data.submission_type, value: data.submission_type }}
-                                            
+                                            value={data.submission_type}
                                         />
-                                    </div>
-                                    
+                                    </div>  
                                 </div>
                                 <div className="form_group_inline">
                                     <span className="form_group_label">Applcation N°</span>
                                     <div className="form_group_field">
-                                        <input type="text" name="application_number" defaultValue={data.application_number} onChange={handleChange} />
+                                        <input type="text" name="application_number" onChange={handleChange} value={data.application_number} />
                                     </div>
                                 </div>
                                 <div className="form_group_inline">
                                     <span className="form_group_label">Submission/Procedure N°</span>
                                     <div className="form_group_field">
-                                        <input type="text" name="submission_number" defaultValue={data.submission_number} onChange={handleChange} />
+                                        <input type="text" name="submission_number" onChange={handleChange} value={data.submission_number} />
                                     </div>
                                 </div>
                                 <div className="form_group_inline">
                                     <span className="form_group_label">Dossier Submission Format</span>
                                     <div className="form_group_field">
-                                        
                                         <Select options={[
                                             { value: 'CTD', label: 'CTD' },
                                             { value: 'Nees', label: 'Nees' },
@@ -524,7 +492,7 @@ const EditNoHqproject = (props) => {
                                             classNamePrefix="basic"
                                             placeholder=''
                                             isClearable
-                                            defaultValue={{ label: data.submission_format, value: data.submission_format }}
+                                            value={data.submission_format}
                                         />
                                     </div>
                                 </div>
@@ -552,33 +520,41 @@ const EditNoHqproject = (props) => {
                                             : ''
                                         }
                                         <div className="inline_form">
-                                            {data.procedure_type == 'Decentralized' || data.procedure_type == 'Mutual Recognition' ?
+                                            {data.procedure_type && data.procedure_type.value == 'Decentralized' || data.procedure_type && data.procedure_type.value == 'Mutual Recognition' ?
                                                 <div className="form_group_inline">
                                                     <span className="form_group_label">Country</span>
                                                     <div className="form_group_field">
-                                                        <select defaultValue="" name='country' onChange={(e) => handleStatusesChange(index, e)}>
+                                                        {/* <select defaultValue="" name='country' onChange={(e) => handleStatusesChange(index, e)}>
                                                             <option value=""></option>
                                                             <option value="All">All</option>
                                                             {data.country.map(c => (
                                                                 <option key={c}>{c}</option>
                                                             ))}
-                                                        </select>
+                                                        </select> */}
+                                                        <Select options={statusCountry}
+                                                            className="basic"
+                                                            classNamePrefix="basic"
+                                                            name='country'
+                                                            onChange={(selectedOption, name) => handleStatusSelectChange(selectedOption, name, index)}
+                                                            placeholder=''
+                                                            isClearable
+                                                            value={element.country}
+                                                        />
                                                     </div>
                                                 </div>
                                                 : ''}
                                             <div className="form_group_inline">
                                                 <span className="form_group_label" style={{color: errors['statuses.' + index + '.status'] ? 'red' : ''}}>Status (*)</span>
                                                 <div className="form_group_field">
-
                                                     <Select options={status}
-                                                        onChange={(e) => handleStatusSelectChange(index, e)}
+                                                        onChange={(selectedOption, name) => handleStatusSelectChange(selectedOption, name, index)}
                                                         name="status"
                                                         className="basic"
                                                         classNamePrefix="basic"
                                                         styles={selectStyles(errors['statuses.' + index + '.status'])}
                                                         placeholder=''
                                                         isClearable
-                                                        defaultValue={{label: element.status, value:element.status}}
+                                                        value={element.status}
                                                     />
                                                 </div>
                                                 
@@ -588,12 +564,12 @@ const EditNoHqproject = (props) => {
                                                 <div className="form_group_field">
                                                     <DatePicker name="status_date" selected={element.status_date ? new Date(element.status_date) : ''} onChange={(date) => handleDateChange(index, 'status_date', date)} style={{ borderColor: errors['statuses.' + index + '.status_date'] ? 'red' : '' }} />
                                                 </div>
-                                                
+                                               
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">eCTD sequence</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name="ectd" defaultValue={element.ectd} onChange={e => handleStatusChanged(index, e)} />
+                                                    <input type="text" name="ectd" onChange={e => handleStatusChanged(index, e)} value={element.ectd} />
                                                 </div>
                                             </div>
                                         </div>
@@ -601,19 +577,19 @@ const EditNoHqproject = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Change Control or pre-assessment</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name="control" defaultValue={element.control} onChange={e => handleStatusChanged(index, e)} />
+                                                    <input type="text" name="control" onChange={e => handleStatusChanged(index, e)} value={element.control} />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">CCDS/Core PIL ref n°</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name="cdds" defaultValue={element.cdds} onChange={e => handleStatusChanged(index, e)} />
+                                                    <input type="text" name="cdds" onChange={e => handleStatusChanged(index, e)} value={element.cdds} />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Remarks</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name="reamrks" defaultValue={element.reamrks} onChange={e => handleStatusChanged(index, e)} />
+                                                    <input type="text" name="remarks" onChange={e => handleStatusChanged(index, e)} value={element.remarks} />
                                                 </div>
                                             </div>
                                         </div>
@@ -627,13 +603,13 @@ const EditNoHqproject = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">HA Implimentation Deadline</span>
                                                 <div className="form_group_field">
-                                                    <DatePicker name="implimentation_deadline" selected={element.implimentation_deadline ? new Date(element.implimentation_deadline) : ''} onChange={(date) => handleDateChange(index, 'implimentation_deadline', date)} />
+                                                    <DatePicker name="implimentation_deadline" selected={element.implimentation_deadline ? new Date(element.implimentation_deadline) : ''} onChange={(date) => handleDateChange(index, 'implimentation_deadline', date)}  />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Actual Local Implementation</span>
                                                 <div className="form_group_field">
-                                                    <DatePicker name="actual_implementation" selected={element.actual_implementation ? new Date(element.actual_implementation) : ''} onChange={(date) => handleDateChange(index, 'actual_implementation', date)} />
+                                                    <DatePicker name="actual_implementation" selected={element.actual_implementation ? new Date(element.actual_implementation) : ''} onChange={(date) => handleDateChange(index, 'actual_implementation', date)}  />
                                                     {/* <input type="text" name="actual_implementation" onChange={(date) => handleDateChange(index, 'actual_implementation', date)}  /> */}
                                                 </div>
                                             </div>

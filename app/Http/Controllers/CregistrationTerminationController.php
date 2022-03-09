@@ -143,20 +143,22 @@ class CregistrationTerminationController extends Controller
 
             $sheet->fromArray($registrationIdentification, NULL, 'A1');
             $sheet->fromArray([
-                $crt->product,
-                $crt->procedure_type,
+                $crt->product['value'],
+                $crt->procedure_type['value'],
                 "",
-                $crt->rms,
+                $crt->rms ? $crt->rms['value'] : '',
                 $crt->procedure_num,
                 $crt->local_tradename,
-                $crt->application_stage,
-                $crt->product_type
+                $crt->application_stage ? $crt->application_stage['value'] : '',
+                $crt->product_type ? $crt->product_type['value'] : ''
             ], NULL, 'A2');
 
-            if(is_array($crt->country)) {
+            if(array_key_exists('value', $crt->country)) {
+                $sheet->setCellValue('C2', $crt->country['value']);
+            }else {
                 foreach ($crt->country as $cnt => $country) {
                     $cnt += 2;
-                    $sheet->setCellValue('C' . $cnt, $country);
+                    $sheet->setCellValue('C' . $cnt, $country['value']);
                 }
             }
 
@@ -167,8 +169,8 @@ class CregistrationTerminationController extends Controller
             $sheet->fromArray($details, NULL, 'A1');
             $sheet->fromArray([
                 $crt->description,
-                $crt->type,
-                $crt->reason,
+                $crt->type ? $crt->type['value'] : '',
+                $crt->reason ? $crt->reason['value'] : '',
                 $crt->remarks
             ], NULL, 'A2');
 
@@ -178,10 +180,20 @@ class CregistrationTerminationController extends Controller
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($status, NULL, 'A1');
             $sheet->fromArray($crt->statuses, NULL, 'A2');
-            $hr = $sheet->getHighestRow();
-            for($i=2; $i<=$hr; $i++) {
-                $datef = $sheet->getCell('C'.$i);
-                $sheet->setCellValue('C'.$i, date("d-m-Y", strtotime($datef)));
+
+            $st = 2;
+            foreach($crt->statuses as $stt) {
+                $sheet->setCellValue('A' . $st, is_array($stt['country']) ? $stt['country']['value'] : '');
+                $sheet->setCellValue('B' . $st, $stt['status']['value']);
+                $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
+                $sheet->setCellValue('D' . $st, $stt['ectd']);
+                $sheet->setCellValue('E' . $st, $stt['control']);
+                $sheet->setCellValue('F' . $st, $stt['cdds']);
+                $sheet->setCellValue('G' . $st, $stt['remarks']);
+                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_deadline'])));
+                $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
+                $sheet->setCellValue('J' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
+                $st++;
             }
 
             $spreadsheet->createSheet();
@@ -189,13 +201,18 @@ class CregistrationTerminationController extends Controller
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Documents');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($document, NULL, 'A1');
-            $sheet->fromArray($crt->doc, NULL, 'A2');
-            $hr = $sheet->getHighestRow();
-            for($i=2; $i<=$hr; $i++) {
-                $datef = $sheet->getCell('D'.$i);
-                $sheet->setCellValue('D'.$i, date("d-m-Y", strtotime($datef)));
+            
+            $dc = 2;
+            foreach($crt->doc as $docu) {
+                $sheet->setCellValue('A' . $dc, is_array($docu['document_type']) ? $docu['document_type']['value'] : '');
+                $sheet->setCellValue('B' . $dc, $docu['document_title']);
+                $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
+                $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
+                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $dc++;
             }
-
+            
             $writer = new Xlsx($spreadsheet);
             
             $date = date('d-m-y');

@@ -161,11 +161,26 @@ const Dashboard = (props) => {
         () => [
             {
                 Header: 'Product Family',
-                accessor: 'product_name',
+                accessor: function (originalRow, rowIndex) {
+                    
+                    if(typeof originalRow.product_name == 'object' && originalRow.product_name !== null) {
+                        return originalRow.product_name.value
+                    }else {
+                        return originalRow.product_name
+                    }
+                    
+                }
             },
             {
                 Header: 'Procedure Type',
-                accessor: 'procedure_type',
+                accessor: function (originalRow, rowIndex) {
+                    if(typeof originalRow.procedure_type == 'object' && originalRow.procedure_type !== null) {
+                        return originalRow.procedure_type.value
+                    }else {
+                        return originalRow.procedure_type
+                    }
+                    
+                }
             },
             // {
             //     Header: 'Country / Countries',
@@ -209,11 +224,29 @@ const Dashboard = (props) => {
         () => [
             {
                 Header: 'Product Family',
-                accessor: 'product',
+                // accessor: 'product',
+                accessor: function (originalRow, rowIndex) {
+                    
+                    if(typeof originalRow.product == 'object' && originalRow.product !== null) {
+                        return originalRow.product.value
+                    }else {
+                        return originalRow.product
+                    }
+                    
+                }
             },
             {
                 Header: 'Procedure Type',
-                accessor: 'procedure_type',
+                // accessor: 'procedure_type',
+                accessor: function (originalRow, rowIndex) {
+                    
+                    if(typeof originalRow.procedure_type == 'object' && originalRow.procedure_type !== null) {
+                        return originalRow.procedure_type.value
+                    }else {
+                        return originalRow.procedure_type
+                    }
+                    
+                }
             },
             // {
             //     Header: 'Country / Countries',
@@ -256,11 +289,29 @@ const Dashboard = (props) => {
         () => [
             {
                 Header: 'Product Family',
-                accessor: 'product',
+                // accessor: 'product',
+                accessor: function (originalRow, rowIndex) {
+                    
+                    if(typeof originalRow.product == 'object' && originalRow.product !== null) {
+                        return originalRow.product.value
+                    }else {
+                        return originalRow.product
+                    }
+                    
+                }
             },
             {
                 Header: 'Procedure Type',
-                accessor: 'procedure_type',
+                // accessor: 'procedure_type',
+                accessor: function (originalRow, rowIndex) {
+                    
+                    if(typeof originalRow.procedure_type == 'object' && originalRow.procedure_type !== null) {
+                        return originalRow.procedure_type.value
+                    }else {
+                        return originalRow.procedure_type
+                    }
+                    
+                }
             },
             // {
             //     Header: 'Country / Countries',
@@ -309,19 +360,6 @@ const Dashboard = (props) => {
                 Header: 'Procedure Type',
                 accessor: 'procedure_type',
             },
-            // {
-            //     Header: 'Country / Countries',
-            //     accessor: function (originalRow, rowIndex) {
-            //         if (originalRow.country && Array.isArray(originalRow.country)) {
-
-            //             return originalRow.country.map(ele => (
-            //                 <ul>
-            //                     <li>{ele}</li>
-            //                 </ul>
-            //             ))
-            //         }
-            //    }
-            // },
             {
                 Header: 'Baseline Title',
                 accessor: 'baseline_title',
@@ -346,10 +384,210 @@ const Dashboard = (props) => {
         []
     )
 
+    const Clinicalrtcolumns = React.useMemo(
+        () => [
+            {
+                Header: 'Product Family',
+                accessor: function (originalRow, rowIndex) {
+                    
+                    if(typeof originalRow.product_name == 'object' && originalRow.product_name !== null) {
+                        return originalRow.product_name.value
+                    }else {
+                        return originalRow.product_name
+                    }
+                }
+            },
+            {
+                Header: 'Procedure Type',
+                // accessor: 'procedure_type',
+                accessor: function (originalRow, rowIndex) {
+                    
+                    if(typeof originalRow.procedure_type == 'object' && originalRow.procedure_type !== null) {
+                        return originalRow.procedure_type.value
+                    }else {
+                        return originalRow.procedure_type
+                    }
+                }
+            },
+            {
+                Header: 'Protocol Number',
+                accessor: 'protocol_number',
+            },
+            {
+                Header: 'Status',
+                accessor: function (originalRow, rowIndex) {
+                    if (originalRow.type == 'submit') {
+                        return 'Submitted'
+                    } else {
+                        return 'Saved'
+                    }
+                }
+            },
+            {
+                Header: 'Date',
+                accessor: function (originalRow, rowIndex) {
+                    return moment(originalRow.created_at).format('YYYY-MM-DD');
+                },
+            }
+        ], 
+        []
+    )
+
+    const Amendmentcolumns = React.useMemo(
+        () => [
+            {
+                Header: 'Product Family',
+                accessor: function (originalRow, rowIndex) {
+                    
+                    if(typeof originalRow.product == 'object' && originalRow.product !== null) {
+                        return originalRow.product.value
+                    }else {
+                        return originalRow.product
+                    }
+                }
+            },
+            {
+                Header: 'Procedure Type',
+                // accessor: 'procedure_type',
+                accessor: function (originalRow, rowIndex) {
+                    
+                    if(typeof originalRow.procedure_type == 'object' && originalRow.procedure_type !== null) {
+                        return originalRow.procedure_type.value
+                    }else {
+                        return originalRow.procedure_type
+                    }
+                }
+            },
+            {
+                Header: 'Amendment Title',
+                accessor: 'amendment_title',
+            },
+            {
+                Header: 'Status',
+                accessor: function (originalRow, rowIndex) {
+                    if (originalRow.type == 'submit') {
+                        return 'Submitted'
+                    } else {
+                        return 'Saved'
+                    }
+                }
+            },
+            {
+                Header: 'Date',
+                accessor: function (originalRow, rowIndex) {
+                    return moment(originalRow.created_at).format('YYYY-MM-DD');
+                },
+            }
+        ], 
+        []
+    )
+
+    const Transfercolumns = React.useMemo(
+        () => [
+            {
+                Header: 'Product Family',
+                accessor: function (originalRow, rowIndex) {
+                    
+                    if(typeof originalRow.product == 'object' && originalRow.product !== null) {
+                        return originalRow.product.value
+                    }else {
+                        return originalRow.product
+                    }
+                }
+            },
+            {
+                Header: 'Procedure Type',
+                // accessor: 'procedure_type',
+                accessor: function (originalRow, rowIndex) {
+                    
+                    if(typeof originalRow.procedure_type == 'object' && originalRow.procedure_type !== null) {
+                        return originalRow.procedure_type.value
+                    }else {
+                        return originalRow.procedure_type
+                    }
+                }
+            },
+            {
+                Header: 'Transfer Title',
+                accessor: 'transfer_title',
+            },
+            {
+                Header: 'Status',
+                accessor: function (originalRow, rowIndex) {
+                    if (originalRow.type == 'submit') {
+                        return 'Submitted'
+                    } else {
+                        return 'Saved'
+                    }
+                }
+            },
+            {
+                Header: 'Date',
+                accessor: function (originalRow, rowIndex) {
+                    return moment(originalRow.created_at).format('YYYY-MM-DD');
+                },
+            }
+        ], 
+        []
+    )
+
+    const Rtcolumns = React.useMemo(
+        () => [
+            {
+                Header: 'Product Family',
+                accessor: function (originalRow, rowIndex) {
+                    
+                    if(typeof originalRow.product == 'object' && originalRow.product !== null) {
+                        return originalRow.product.value
+                    }else {
+                        return originalRow.product
+                    }
+                }
+            },
+            {
+                Header: 'Procedure Type',
+                // accessor: 'procedure_type',
+                accessor: function (originalRow, rowIndex) {
+                    
+                    if(typeof originalRow.procedure_type == 'object' && originalRow.procedure_type !== null) {
+                        return originalRow.procedure_type.value
+                    }else {
+                        return originalRow.procedure_type
+                    }
+                }
+            },
+            {
+                Header: 'Termination Title',
+                accessor: 'termination_title',
+            },
+            {
+                Header: 'Status',
+                accessor: function (originalRow, rowIndex) {
+                    if (originalRow.type == 'submit') {
+                        return 'Submitted'
+                    } else {
+                        return 'Saved'
+                    }
+                }
+            },
+            {
+                Header: 'Date',
+                accessor: function (originalRow, rowIndex) {
+                    return moment(originalRow.created_at).format('YYYY-MM-DD');
+                },
+            }
+        ], 
+        []
+    )
+
     const Rcdata = React.useMemo(() => props.rc, []);
     const VariationData = React.useMemo(() => props.variation, []);
     const RenewalData = React.useMemo(() => props.renewal, []);
     const BaselineData = React.useMemo(() => props.baseline, []);
+    const Clinical = React.useMemo(() => props.clinical, []);
+    const Amendment = React.useMemo(() => props.amendment, []);
+    const Transfer = React.useMemo(() => props.transfer, []);
+    const Rt = React.useMemo(() => props.rt, []);
 
     const [open, setOpen] = React.useState(false);
 
@@ -357,7 +595,6 @@ const Dashboard = (props) => {
         if (reason === 'clickaway') {
             return;
         }
-
         setOpen(false);
     };
 
@@ -389,21 +626,37 @@ const Dashboard = (props) => {
                 <div className="col-12" >
                     <div className="card main-card">
                         <div className="card-body dash-table">
-                            <div style={{ marginBottom: '50px', position:'relative' }}>
+                            <div className='dash-table-wrap'>
                                 <h5 className="mb-3 head-table" style={{ float: 'left' }}>MA Registration Creation</h5>
                                 <Table columns={Rccolumns} data={Rcdata} for="ma" />
                             </div>
-                            <div style={{ marginBottom: '50px', position:'relative' }}>
+                            <div className='dash-table-wrap'>
                                 <h5 className="mb-3 head-table" style={{ float: 'left' }}>Variation</h5>
                                 <Table columns={Variationcolumns} data={VariationData} for="variation" />
                             </div>
-                            <div style={{ marginBottom: '50px', position:'relative' }}>
+                            <div className='dash-table-wrap'>
                                 <h5 className="mb-3 head-table" style={{ float: 'left' }}>Renewal</h5>
                                 <Table columns={Renewalcolumns} data={RenewalData} for="renewal" />
                             </div>
-                            <div style={{ marginBottom: '50px', position:'relative' }}>
+                            <div className='dash-table-wrap'>
                                 <h5 className="mb-3 head-table" style={{ float: 'left' }}>Baseline</h5>
                                 <Table columns={Baselinecolumns} data={BaselineData} for="baseline" />
+                            </div>
+                            <div className='dash-table-wrap'>
+                                <h5 className="mb-3 head-table" style={{ float: 'left' }}>Clinical Registration Creation</h5>
+                                <Table columns={Clinicalrtcolumns} data={Clinical} for="crc" />
+                            </div>
+                            <div className='dash-table-wrap'>
+                                <h5 className="mb-3 head-table" style={{ float: 'left' }}>Amendment</h5>
+                                <Table columns={Amendmentcolumns} data={Amendment} for="amendment" />
+                            </div>
+                            <div className='dash-table-wrap'>
+                                <h5 className="mb-3 head-table" style={{ float: 'left' }}>MA Transfer</h5>
+                                <Table columns={Transfercolumns} data={Transfer} for="transfer" />
+                            </div>
+                            <div className='dash-table-wrap'>
+                                <h5 className="mb-3 head-table" style={{ float: 'left' }}>Registration Termination</h5>
+                                <Table columns={Rtcolumns} data={Rt} for="rt" />
                             </div>
                         </div>
                     </div>
