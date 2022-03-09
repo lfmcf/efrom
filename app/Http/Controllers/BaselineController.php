@@ -56,10 +56,6 @@ class BaselineController extends Controller
                     'statuses.*.status' => 'required',
                     'statuses.*.status_date' => 'required',
                 ]
-                // [
-                //     'statuses.*.status.required' => 'A status is required',
-                //     'statuses.*.status_date.required' => 'A status date is required',
-                // ]
             );
         }
 
@@ -150,20 +146,22 @@ class BaselineController extends Controller
             $sheet->fromArray($registrationIdentification, NULL, 'A1');
 
             $sheet->fromArray([
-                $baseline->product,
-                $baseline->procedure_type,
+                $baseline->product['value'],
+                $baseline->procedure_type['value'],
                 "",
-                $baseline->rms,
+                $baseline->rms ? $baseline->rms['value'] : '',
                 $baseline->procedure_num,
                 $baseline->local_tradename,
-                $baseline->application_stage,
-                $baseline->product_type
+                $baseline->application_stage ? $baseline->application_stage['value'] : '',
+                $baseline->product_type ? $baseline->product_type['value'] : ''
             ], NULL, 'A2');
 
-            if(is_array($baseline->country)) {
+            if(array_key_exists('value', $baseline->country)) {
+                $sheet->setCellValue('C2', $baseline->country['value']);
+            }else {
                 foreach ($baseline->country as $cnt => $country) {
                     $cnt += 2;
-                    $sheet->setCellValue('C' . $cnt, $country);
+                    $sheet->setCellValue('C' . $cnt, $country['value']);
                 }
             }
 
@@ -175,7 +173,7 @@ class BaselineController extends Controller
                 $baseline->baseline_title,
                 $baseline->description,
                 $baseline->application_num,
-                $baseline->reason,
+                $baseline->reason ? $baseline->reason['value'] : '',
                 $baseline->remarks
             ], NULL, 'A2');
 
@@ -184,11 +182,20 @@ class BaselineController extends Controller
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Events Status');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($eventStatus, NULL, 'A1');
-            $sheet->fromArray($baseline->statuses, NULL, 'A2');
-            $hr = $sheet->getHighestRow();
-            for($i=2; $i<=$hr; $i++) {
-                $datef = $sheet->getCell('C'.$i);
-                $sheet->setCellValue('C'.$i, date("d-m-Y", strtotime($datef)));
+
+            $st = 2;
+            foreach($baseline->statuses as $stt) {
+                $sheet->setCellValue('A' . $st, is_array($stt['country']) ? $stt['country']['value'] : '');
+                $sheet->setCellValue('B' . $st, $stt['status']['value']);
+                $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
+                $sheet->setCellValue('D' . $st, $stt['ectd']);
+                $sheet->setCellValue('E' . $st, $stt['control']);
+                $sheet->setCellValue('F' . $st, $stt['cdds']);
+                $sheet->setCellValue('G' . $st, $stt['remarks']);
+                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_deadline'])));
+                $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
+                $sheet->setCellValue('J' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
+                $st++;
             }
 
             $spreadsheet->createSheet();
@@ -197,26 +204,32 @@ class BaselineController extends Controller
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($document, NULL, 'A1');
             $sheet->fromArray($baseline->doc, NULL, 'A2');
-            $hr = $sheet->getHighestRow();
-            for($i=2; $i<=$hr; $i++) {
-                $datef = $sheet->getCell('D'.$i);
-                $sheet->setCellValue('D'.$i, date("d-m-Y", strtotime($datef)));
+
+            $dc = 2;
+            foreach($baseline->doc as $docu) {
+                $sheet->setCellValue('A' . $dc, is_array($docu['document_type']) ? $docu['document_type']['value'] : '');
+                $sheet->setCellValue('B' . $dc, $docu['document_title']);
+                $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
+                $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
+                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $dc++;
             }
 
             $writer = new Xlsx($spreadsheet);
             
             $date = date('d-m-y');
-            if($request->procedure_type == 'National' || $request->procedure_type == 'Centralized') {
-                $name = 'eForm_Baseline_' .$request->product . '_' .$request->country[0] . '_' .$date . '.xlsx';
-                $subject = 'eForm_Baseline_' .$request->product . '_' .$request->country[0];
+            if($request->procedure_type['value'] == 'National' || $request->procedure_type['value'] == 'Centralized') {
+                $name = 'eForm_Baseline_' .$request->product['value'] . '_' .$request->country['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_Baseline_' .$request->product['value'] . '_' .$request->country['value'];
             }else {
-                $name = 'eForm_Baseline_' .$request->product . '_' .$request->procedure_type . '_' .$date . '.xlsx';
-                $subject = 'eForm_Baseline_' .$request->product . '_' .$request->procedure_type;
+                $name = 'eForm_Baseline_' .$request->product['value'] . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_Baseline_' .$request->product['value'] . '_' .$request->procedure_type['value'];
             }
             
             $writer->save($name);
 
-            Mail::to(getenv('MAIL_TO'))->send(new MailBaseline($name, $request->product, $subject));
+            Mail::to(getenv('MAIL_TO'))->send(new MailBaseline($name, $request->product['value'], $subject));
             
             return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
 
@@ -368,20 +381,22 @@ class BaselineController extends Controller
             $sheet->fromArray($registrationIdentification, NULL, 'A1');
 
             $sheet->fromArray([
-                $baseline->product,
-                $baseline->procedure_type,
+                $baseline->product['value'],
+                $baseline->procedure_type['value'],
                 "",
-                $baseline->rms,
+                $baseline->rms ? $baseline->rms['value'] : '',
                 $baseline->procedure_num,
                 $baseline->local_tradename,
-                $baseline->application_stage,
-                $baseline->product_type
+                $baseline->application_stage ? $baseline->application_stage['value'] : '',
+                $baseline->product_type ? $baseline->product_type['value'] : ''
             ], NULL, 'A2');
 
-            if(is_array($baseline->country)) {
+            if(array_key_exists('value', $baseline->country)) {
+                $sheet->setCellValue('C2', $baseline->country['value']);
+            }else {
                 foreach ($baseline->country as $cnt => $country) {
                     $cnt += 2;
-                    $sheet->setCellValue('C' . $cnt, $country);
+                    $sheet->setCellValue('C' . $cnt, $country['value']);
                 }
             }
 
@@ -393,7 +408,7 @@ class BaselineController extends Controller
                 $baseline->baseline_title,
                 $baseline->description,
                 $baseline->application_num,
-                $baseline->reason,
+                $baseline->reason ? $baseline->reason['value'] : '',
                 $baseline->remarks
             ], NULL, 'A2');
 
@@ -402,11 +417,20 @@ class BaselineController extends Controller
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Events Status');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($eventStatus, NULL, 'A1');
-            $sheet->fromArray($baseline->statuses, NULL, 'A2');
-            $hr = $sheet->getHighestRow();
-            for($i=2; $i<=$hr; $i++) {
-                $datef = $sheet->getCell('C'.$i);
-                $sheet->setCellValue('C'.$i, date("d-m-Y", strtotime($datef)));
+
+            $st = 2;
+            foreach($baseline->statuses as $stt) {
+                $sheet->setCellValue('A' . $st, is_array($stt['country']) ? $stt['country']['value'] : '');
+                $sheet->setCellValue('B' . $st, $stt['status']['value']);
+                $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
+                $sheet->setCellValue('D' . $st, $stt['ectd']);
+                $sheet->setCellValue('E' . $st, $stt['control']);
+                $sheet->setCellValue('F' . $st, $stt['cdds']);
+                $sheet->setCellValue('G' . $st, $stt['remarks']);
+                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_deadline'])));
+                $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
+                $sheet->setCellValue('J' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
+                $st++;
             }
 
             $spreadsheet->createSheet();
@@ -415,26 +439,32 @@ class BaselineController extends Controller
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($document, NULL, 'A1');
             $sheet->fromArray($baseline->doc, NULL, 'A2');
-            $hr = $sheet->getHighestRow();
-            for($i=2; $i<=$hr; $i++) {
-                $datef = $sheet->getCell('D'.$i);
-                $sheet->setCellValue('D'.$i, date("d-m-Y", strtotime($datef)));
-            }
 
+            $dc = 2;
+            foreach($baseline->doc as $docu) {
+                $sheet->setCellValue('A' . $dc, is_array($docu['document_type']) ? $docu['document_type']['value'] : '');
+                $sheet->setCellValue('B' . $dc, $docu['document_title']);
+                $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
+                $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
+                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $dc++;
+            }
+            
             $writer = new Xlsx($spreadsheet);
             
             $date = date('d-m-y');
-            if($request->procedure_type == 'National' || $request->procedure_type == 'Centralized') {
-                $name = 'eForm_Baseline_' .$request->product . '_' .$request->country[0] . '_' .$date . '.xlsx';
-                $subject = 'eForm_Baseline_' .$request->product . '_' .$request->country[0];
+            if($request->procedure_type['value'] == 'National' || $request->procedure_type['value'] == 'Centralized') {
+                $name = 'eForm_Baseline_' .$request->product['value'] . '_' .$request->country['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_Baseline_' .$request->product['value'] . '_' .$request->country['value'];
             }else {
-                $name = 'eForm_Baseline_' .$request->product . '_' .$request->procedure_type . '_' .$date . '.xlsx';
-                $subject = 'eForm_Baseline_' .$request->product . '_' .$request->procedure_type;
+                $name = 'eForm_Baseline_' .$request->product['value'] . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_Baseline_' .$request->product['value'] . '_' .$request->procedure_type['value'];
             }
             
             $writer->save($name);
 
-            Mail::to(getenv('MAIL_TO'))->send(new MailBaseline($name, $request->product, $subject));
+            Mail::to(getenv('MAIL_TO'))->send(new MailBaseline($name, $request->product['value'], $subject));
             
             return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
 

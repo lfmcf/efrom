@@ -51,7 +51,7 @@ const Create = (props) => {
         key_dates: [{ date_type: "", date: '', remarks: "" }],
         alternate_number_type: '',
         alternate_number: '',
-        remarks: '',
+        atcremarks: '',
         local_agent_company: '',
         formulations: [{ ingredient: '', strength_type: '', numerator_lower_val: '', numerator_upper_val: '', numerator_unit: '', function: '' }],
         packagings: [
@@ -76,6 +76,7 @@ const Create = (props) => {
     const [packagehaserror, setPackagehaserror] = useState(false);
     const [statuserror, setStatusError] = useState(false);
     const formRef = React.useRef();
+    const [statusCountry, setStatusCountry] = useState([{label: 'All', value: 'All'}])
 
     const handleMChange = (event, newValue) => {
 
@@ -192,19 +193,14 @@ const Create = (props) => {
     }
 
 
-    const handleSelectChange = (e, name) => {
-        if (!e) {
-            e = {
-                value: ''
-            }
-        }
-        setData(name.name, e.value)
+    const handleSelectChange = (selectedOption, name) => {
+        setData(name.name, selectedOption);
         clearErrors(name.name)
     }
 
-    const handleStudySponsorChange = (e, name) => {
-        setData(name.name, e.value)
-    }
+    // const handleStudySponsorChange = (e, name) => {
+    //     setData(name.name, e.value)
+    // }
 
     let handleProcedureTypeChange = (e) => {
         countryRef.current.setValue([]);
@@ -250,9 +246,9 @@ const Create = (props) => {
         clearErrors('country')
     }
 
-    let handleManufacturerSelectChange = (index, e) => {
+    let handleManufacturerSelectChange = (selectedOption, name, i) => {
         let newFormValues = { ...data };
-        newFormValues.manufacturing[index]['manufacturer'] = e.value;
+        newFormValues.manufacturing[i][name.name] = selectedOption;
         setData(newFormValues);
     }
 
@@ -325,17 +321,6 @@ const Create = (props) => {
         setData(newFormValues);
     }
 
-    let handleFormulationSelectChange = (i, e, name) => {
-        if (!e) {
-            e = {
-                value: ''
-            }
-        }
-        let newFormValues = { ...data };
-        newFormValues.formulations[i][name] = e.value;
-        setData(newFormValues);
-    }
-
     let handlePackagingsChange = (i, e) => {
         let newFormValues = { ...data };
         newFormValues.packagings[i][e.target.name] = e.target.value;
@@ -361,34 +346,17 @@ const Create = (props) => {
         setData(newArr)
     }
 
-    let handlePackagelifeSelectChange = (index, i, e, key) => {
+    let handlePackagelifeSelectChange = (selectedOption, name, i, j) => {
         let newFormValues = { ...data };
-        switch (key.action) {
-            case "select-option":
-                newFormValues.packagings[index].packagelif[i]['package_storage_condition'].push(key.option.value);
-                break;
-            case "remove-value":
-                let newarr = newFormValues.packagings[index].packagelif[i]['package_storage_condition'].filter((ele) => {
-                    return ele != key.removedValue.value
-                });
-                newFormValues.packagings[index].packagelif[i]['package_storage_condition'] = newarr;
-                break;
-            case "clear":
-                newFormValues.packagings[index].packagelif[i]['package_storage_condition'].length = 0;
-                break;
-        }
+        newFormValues.packagings[i].packagelif[j][name.name] = selectedOption;
         setData(newFormValues);
     }
 
-    let handlePackageSelectChange = (i, e, name) => {
-        if (!e) {
-            e = {
-                value: ''
-            }
-        }
+    let handlePackageSelectChange = (selectedOption, name, i) => {
         let newFormValues = { ...data };
-        newFormValues.packagings[i][name] = e.value;
+        newFormValues.packagings[i][name.name] = selectedOption;
         setData(newFormValues);
+        clearErrors('packagings.' + i + '.' + name.name)
     }
 
     let handleDocumentChange = (i, e) => {
@@ -563,27 +531,30 @@ const Create = (props) => {
         setData(newArr);
     }
 
-    let handleStatusSelectChange = (i, e) => {
-        if (!e) {
-            e = {
-                value: ''
-            }
-        }
+    let handleStatusSelectChange = (selectedOption, name, i) => {
         let newFormValues = { ...data };
-        newFormValues.statuses[i]['status'] = e.value;
+        newFormValues.statuses[i][name.name] = selectedOption;
         setData(newFormValues);
-        clearErrors('statuses.' + i + '.status')
+        clearErrors('statuses.' + i + '.' + name.name)
     }
 
-    const handleDocumentSelectChange = (i, e, name) => {
-        if (!e) {
-            e = {
-                value: ''
-            }
-        }
+    const handleDocumentSelectChange = (selectedOption, name, i) => {
         let arr = { ...data };
-        arr.doc[i][name] = e.value;
+        arr.doc[i][name.name] = selectedOption;
         setData(arr);
+    }
+
+    let handleKeyDateSelectChange = (selectedOption, name, i) => {
+        let newFormValues = { ...data };
+        newFormValues.key_dates[i][name.name] = selectedOption;
+        setData(newFormValues);
+    }
+
+    let handleFormulationSelectChange = (selectedOption, name, i) => {
+       
+        let newFormValues = { ...data };
+        newFormValues.formulations[i][name.name] = selectedOption;
+        setData(newFormValues);
     }
 
     React.useEffect(() => {
@@ -606,6 +577,28 @@ const Create = (props) => {
             }
         }
     }, [errors]);
+
+    React.useEffect(() => {
+        if(data.procedure_type && data.procedure_type.value == "Decentralized" || data.procedure_type && data.procedure_type.value == "Mutual Recognition" ) {
+            if(data.country.length !== 0) {
+                setStatusCountry(statusCountry => [{label: 'All', value: 'All'}, ...data.country])
+            }else {
+                setStatusCountry([{label: 'All', value: 'All'}])
+            }
+        }
+    }, [data.country]);
+
+    React.useEffect(() => {
+        if(data.rms) {
+            if(statusCountry.filter(item => item.value == data.rms.value) == 0) {
+                setStatusCountry(statusCountry => [...statusCountry, data.rms])
+            }
+        }
+    }, [data.rms])
+
+    React.useEffect(() => {
+        setData('country', [])
+    }, [data.procedure_type]);
 
 
     return (
@@ -658,6 +651,7 @@ const Create = (props) => {
                                                         placeholder=''
                                                         isClearable
                                                         styles={selectStyles(errors.procedure_type)}
+                                                        value={data.procedure_type}
                                                     />
                                                 </div>
                                                 
@@ -667,18 +661,19 @@ const Create = (props) => {
                                                 <div className="form_group_field">
                                                     <Select options={options_4}
                                                         name="country"
-                                                        onChange={(e, k) => handleCountryChange(e, k)}
+                                                        onChange={handleSelectChange}
                                                         className="basic"
                                                         classNamePrefix="basic"
-                                                        isMulti={data.procedure_type === 'Decentralized' || data.procedure_type === 'Mutual Recognition' ? true : false}
+                                                        isMulti={data.procedure_type && data.procedure_type.value === 'Decentralized' || data.procedure_type && data.procedure_type.value === 'Mutual Recognition' ? true : false}
                                                         ref={ele => countryRef.current = ele}
                                                         placeholder=''
                                                         isClearable
                                                         styles={selectStyles(errors.country)}
+                                                        value={data.country}
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="form_group_inline" style={{ display: data.procedure_type === 'Decentralized' || data.procedure_type === 'Mutual Recognition' ? '' : 'none' }}>
+                                            <div className="form_group_inline" style={{display: data.procedure_type && data.procedure_type.value === 'Decentralized' || data.procedure_type && data.procedure_type.value === 'Mutual Recognition' ? '' : 'none'}}>
                                                 <span className="form_group_label">RMS</span>
                                                 <div className="form_group_field">
                                                     <Select options={options_4}
@@ -688,6 +683,7 @@ const Create = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
+                                                        value={data.rms}
                                                     />
                                                 </div>
                                             </div>
@@ -696,7 +692,7 @@ const Create = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Procedure Number</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name="procedure_number" onChange={handleChange} />
+                                                    <input type="text" name="procedure_number" onChange={handleChange} value={data.procedure_number} />
                                                 </div>
                                             </div>
 
@@ -716,6 +712,7 @@ const Create = (props) => {
                                                         placeholder=''
                                                         isClearable
                                                         styles={selectStyles(errors.application_stage)}
+                                                        value={data.application_stage}
                                                     />
                                                 </div>
                                             </div>
@@ -726,7 +723,7 @@ const Create = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label" style={{color: errors.registration_title ? 'red' : ''}}>Registration Title (*)</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name='registration_title' onChange={handleChange} style={{borderColor: errors.registration_title ? 'red' : ''}} />
+                                                    <input type="text" name='registration_title' onChange={handleChange} style={{borderColor: errors.registration_title ? 'red' : ''}} value={data.registration_title} />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
@@ -740,6 +737,7 @@ const Create = (props) => {
                                                         styles={selectStyles(errors.product_name)}
                                                         placeholder=''
                                                         isClearable
+                                                        value={data.product_name}
                                                     />
                                                 </div>
                                             </div>
@@ -747,7 +745,7 @@ const Create = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Protocol Number</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name="protocol_number" onChange={handleChange} />
+                                                    <input type="text" name="protocol_number" onChange={handleChange} value={data.protocol_number} />
                                                 </div>
                                             </div>
                                         </div>
@@ -760,15 +758,16 @@ const Create = (props) => {
                                                         className="basic" 
                                                         classNamePrefix="basic" 
                                                         placeholder='' 
-                                                        onChange={handleStudySponsorChange}
+                                                        onChange={handleSelectChange}
                                                         isClearable
+                                                        value={data.study_sponsor}
                                                     />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Full Study Title</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name="full_study_title" onChange={handleChange} />
+                                                    <input type="text" name="full_study_title" onChange={handleChange} value={data.full_study_title} />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
@@ -789,6 +788,7 @@ const Create = (props) => {
                                                             classNamePrefix="basic"
                                                             placeholder=''
                                                             isClearable
+                                                            value={data.clinical_phase}
                                                         />
                                                     </div>
                                                 </div>
@@ -809,6 +809,7 @@ const Create = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
+                                                        value={data.protocol_type}
                                                     />
                                                 </div>
                                             </div>
@@ -826,13 +827,14 @@ const Create = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
+                                                        value={data.paediatric_indication}
                                                     />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Remarks</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name="remarks" onChange={handleChange} />
+                                                    <input type="text" name="remarks" onChange={handleChange} value={data.remarks} />
                                                 </div>
                                             </div>
                                         </div>
@@ -850,6 +852,7 @@ const Create = (props) => {
                                                         styles={selectStyles(errors.authorized_pharmaceutical_form)}
                                                         placeholder=''
                                                         isClearable
+                                                        value={data.authorized_pharmaceutical_form}
                                                     />
                                                 </div>
                                             </div>
@@ -868,6 +871,7 @@ const Create = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
+                                                        value={data.administrable_pharmaceutical_form}
                                                     />
                                                 </div>
                                             </div>
@@ -883,12 +887,13 @@ const Create = (props) => {
                                                         { value: 'Sublingual use', label: 'Sublingual use' },
                                                     ]}
                                                         name="route_of_admin"
-                                                        onChange={(e, k) => handleRoutOfAdminChange(e, k)}
+                                                        onChange={handleSelectChange}
                                                         className="basic"
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isMulti
                                                         styles={selectStyles(errors.route_of_admin)}
+                                                        value={data.route_of_admin}
                                                     />
                                                 </div>
                                                 
@@ -898,12 +903,13 @@ const Create = (props) => {
                                                 <div className="form_group_field">
                                                     <Select options={atc}
                                                         name="atc"
-                                                        onChange={(e, k) => handleAtcChange(e, k)}
+                                                        onChange={handleSelectChange}
                                                         className="basic"
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isMulti
                                                         styles={selectStyles(errors.atc)}
+                                                        value={data.atc}
                                                     />
                                                 </div>
                                             </div>
@@ -921,6 +927,7 @@ const Create = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
+                                                        value={data.orphan_designation}
                                                     />
                                                 </div>
                                             </div>
@@ -935,6 +942,7 @@ const Create = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
+                                                        value={data.orphan_indication}
                                                     />
                                                 </div>
                                             </div>
@@ -951,6 +959,7 @@ const Create = (props) => {
                                                     classNamePrefix="basic"
                                                     placeholder=''
                                                     isClearable
+                                                    value={data.under_intensive_monitoring}
                                                 />
                                             </div>
                                         </div>
@@ -979,25 +988,26 @@ const Create = (props) => {
                                                             <div className="form_group_field">
                                                                 <Select options={options_3}
                                                                     name="date_type"
-                                                                    onChange={(e) => handleKyDateTypeChange(index, e)}
+                                                                    onChange={(selectedOption, name) => handleKeyDateSelectChange(selectedOption, name,index)}
                                                                     className="basic"
                                                                     classNamePrefix="basic"
                                                                     placeholder=''
                                                                     isClearable
+                                                                    value={element.date_type}
                                                                 />
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Date</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="date" selected={data.key_dates[index].date} onChange={(date) => handleDateChange(index, 'date', date)} />
+                                                                <DatePicker name="date" selected={data.key_dates[index].date} onChange={(date) => handleDateChange(index, 'date', date)} value={element.date} />
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label">Remarks</span>
                                                         <div className="form_group_field">
-                                                            <input type="text" name="remarks" onChange={e => handleKyDateChange(index, e)} />
+                                                            <input type="text" name="remarks" onChange={e => handleKyDateChange(index, e)} value={element.remarks} />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1019,20 +1029,21 @@ const Create = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
+                                                        value={data.alternate_number_type}
                                                     />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Alternate Number</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name="alternate_number" onChange={handleChange} />
+                                                    <input type="text" name="alternate_number" onChange={handleChange} value={data.alternate_number} />
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="form_group_inline">
                                             <span className="form_group_label">Remarks</span>
                                             <div className="form_group_field">
-                                                <input type="text" name="remarks" onChange={handleChange} />
+                                                <input type="text" name="atcremarks" onChange={handleChange} value={data.atcremarks} />
                                             </div>
                                         </div>
                                     </div>
@@ -1048,6 +1059,7 @@ const Create = (props) => {
                                                     styles={selectStyles(errors.local_agent_company)}
                                                     placeholder=''
                                                     isClearable
+                                                    value={data.local_agent_company}
                                                 />
                                                 <IconButton color="primary" onClick={(e) => handleShow(e)} aria-label="add an company">
                                                     <AddIcon />
@@ -1080,11 +1092,12 @@ const Create = (props) => {
                                                             <div className="form_group_field">
                                                                 <Select options={options_1}
                                                                     name="ingredient"
-                                                                    onChange={(e) => handleSelectIngredientChange(index, e)}
+                                                                    onChange={(selectedOption, name) => handleFormulationSelectChange(selectedOption, name,index)}
                                                                     className="basic"
                                                                     classNamePrefix="basic"
                                                                     placeholder=''
                                                                     isClearable
+                                                                    value={element.ingredient}
                                                                 />
                                                             </div>
                                                         </div>
@@ -1096,11 +1109,12 @@ const Create = (props) => {
                                                                     { value: 'Excipient', label: 'Excipient' },
                                                                 ]}
                                                                     name="function"
-                                                                    onChange={(e) => handleFormulationSelectChange(index, e, 'function')}
+                                                                    onChange={(selectedOption, name) => handleFormulationSelectChange(selectedOption, name,index)}
                                                                     className="basic"
                                                                     classNamePrefix="basic"
                                                                     placeholder=''
                                                                     isClearable
+                                                                    value={element.function}
                                                                 />
                                                             </div>
                                                         </div>
@@ -1122,24 +1136,25 @@ const Create = (props) => {
                                                                     { value: 'Up To', label: 'Up To' },
                                                                 ]}
                                                                     name="strength_type"
-                                                                    onChange={(e) => handleFormulationSelectChange(index, e, 'strength_type')}
+                                                                    onChange={(selectedOption, name) => handleFormulationSelectChange(selectedOption, name,index)}
                                                                     className="basic"
                                                                     classNamePrefix="basic"
                                                                     placeholder=''
                                                                     isClearable
+                                                                    value={element.strength_type}
                                                                 />
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Numerator Lower Val</span>
                                                             <div className="form_group_field">
-                                                                <input type="text" name="numerator_lower_val" onChange={(e) => handleFormulationsChange(index, e)} />
+                                                                <input type="text" name="numerator_lower_val" onChange={(e) => handleFormulationsChange(index, e)} value={element.numerator_lower_val} />
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Numerator Upper Val</span>
                                                             <div className="form_group_field">
-                                                                <input type="text" name="numerator_upper_val" onChange={(e) => handleFormulationsChange(index, e)} />
+                                                                <input type="text" name="numerator_upper_val" onChange={(e) => handleFormulationsChange(index, e)} value={element.numerator_upper_val} />
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
@@ -1154,12 +1169,12 @@ const Create = (props) => {
                                                                     { value: 'ug', label: 'ug' },
                                                                 ]}
                                                                     name="numerator_unit"
-                                                                    onChange={(e) => handleFormulationSelectChange(index, e, 'numerator_unit')}
+                                                                    onChange={(selectedOption, name) => handleFormulationSelectChange(selectedOption, name,index)}
                                                                     className="basic"
                                                                     classNamePrefix="basic"
                                                                     placeholder=''
                                                                     isClearable
-
+                                                                    value={element.numerator_unit}
                                                                 />
                                                             </div>
                                                         </div>
@@ -1196,26 +1211,27 @@ const Create = (props) => {
                                                             <div className="form_group_field">
                                                                 <Select options={options_2}
                                                                     name="packaging_type"
-                                                                    onChange={(e) => handlePackageTypeSelectChange(index, e)}
+                                                                    onChange={(selectedOption, name) => handlePackageSelectChange(selectedOption, name,index)}
                                                                     className="basic"
                                                                     classNamePrefix="basic"
                                                                     placeholder=''
                                                                     isClearable
                                                                     styles={selectStyles(errors['packagings.' + index + '.packaging_type'] ? 'red' : '' )}
+                                                                    value={element.packaging_type}
                                                                 />
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label" style={{ color: errors['packagings.' + index + '.packaging_name'] ? 'red' : '' }}>Packaging Name (*)</span>
                                                             <div className="form_group_field">
-                                                                <input type="text" name="packaging_name" onChange={(e) => handlePackagingsChange(index, e)} style={{ borderColor: errors['packagings.' + index + '.packaging_name'] ? 'red' : '' }} />
+                                                                <input type="text" name="packaging_name" onChange={(e) => handlePackagingsChange(index, e)} style={{ borderColor: errors['packagings.' + index + '.packaging_name'] ? 'red' : '' }} value={element.packaging_name} />
                                                             </div>
                                                             
                                                         </div>
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Description</span>
                                                             <div className="form_group_field">
-                                                                <input type="text" name="description" onChange={(e) => handlePackagingsChange(index, e)}  />
+                                                                <input type="text" name="description" onChange={(e) => handlePackagingsChange(index, e)} value={element.description} />
                                                             </div>
                                                             
                                                         </div>
@@ -1226,11 +1242,12 @@ const Create = (props) => {
                                                             <div className="form_group_field">
                                                                 <Select options={[{ value: 'Yes', label: 'Yes' }, { value: 'No', label: 'No' }, { value: 'Not Applicable', label: 'Not Applicable' }]}
                                                                     name="launched"
-                                                                    onChange={(e) => handlePackageSelectChange(index, e, 'launched')}
+                                                                    onChange={(selectedOption, name) => handlePackageSelectChange(selectedOption, name,index)}
                                                                     className="basic"
                                                                     classNamePrefix="basic"
                                                                     placeholder=''
                                                                     isClearable
+                                                                    value={element.launched}
                                                                 />
                                                             </div>
                                                         </div>
@@ -1238,7 +1255,7 @@ const Create = (props) => {
                                                             <span className="form_group_label">First Launch Date</span>
                                                             <div className="form_group_field">
                                                                 {/* <input type="text" name="first_lunch_date" onChange={(e) => handlePackagingsChange(index, e)} /> */}
-                                                                <DatePicker name="first_lunch_date" selected={data.packagings[index].first_lunch_date} onChange={(date) => handleDateChange(index, 'first_lunch_date', date)} />
+                                                                <DatePicker name="first_lunch_date" selected={data.packagings[index].first_lunch_date} onChange={(date) => handleDateChange(index, 'first_lunch_date', date)} value={element.first_lunch_date} />
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
@@ -1246,11 +1263,12 @@ const Create = (props) => {
                                                             <div className="form_group_field">
                                                                 <Select options={[{ value: 'Yes', label: 'Yes' }, { value: 'No', label: 'No' }, { value: '', label: 'Not Applicable' }]}
                                                                     name="packaging_discontinued"
-                                                                    onChange={(e) => handlePackageSelectChange(index, e, 'packaging_discontinued')}
+                                                                    onChange={(selectedOption, name) => handlePackageSelectChange(selectedOption, name,index)}
                                                                     className="basic"
                                                                     classNamePrefix="basic"
                                                                     placeholder=''
                                                                     isClearable
+                                                                    value={element.packaging_discontinued}
                                                                 />
                                                             </div>
                                                         </div>
@@ -1258,7 +1276,7 @@ const Create = (props) => {
                                                             <span className="form_group_label">Discontinuation Date</span>
                                                             <div className="form_group_field">
                                                                 {/* <input type="text" name="discontinuation_date" onChange={(e) => handlePackagingsChange(index, e)} /> */}
-                                                                <DatePicker name="discontinuation_date" selected={data.packagings[index].discontinuation_date} onChange={(date) => handleDateChange(index, 'discontinuation_date', date)} />
+                                                                <DatePicker name="discontinuation_date" selected={data.packagings[index].discontinuation_date} onChange={(date) => handleDateChange(index, 'discontinuation_date', date)} value={element.discontinuation_date} />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1266,7 +1284,7 @@ const Create = (props) => {
                                                         <div className='form_group_inline'>
                                                             <span className='form_group_label'>Remarks</span>
                                                             <div className='form_group_field'>
-                                                                <input type="text" name='remarks' onChange={(e) => handlePackagingsChange(index, e)} />
+                                                                <input type="text" name='remarks' onChange={(e) => handlePackagingsChange(index, e)} value={element.remarks} />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1294,7 +1312,7 @@ const Create = (props) => {
                                                                     <div className="form_group_inline">
                                                                         <span className="form_group_label">Shelf Life</span>
                                                                         <div className="form_group_field">
-                                                                            <input name="shelf_life" onChange={(e) => handlePackagelifeChange(index, i, e)} />
+                                                                            <input name="shelf_life" onChange={(e) => handlePackagelifeChange(index, i, e)} value={ele.shelf_life} />
                                                                         </div>
                                                                     </div>
                                                                     <div className="form_group_inline">
@@ -1308,13 +1326,13 @@ const Create = (props) => {
                                                                                 { value: 'Weeks', label: 'Weeks' },
                                                                                 { value: 'Years', label: 'Years' },
                                                                             ]}
-                                                                                onChange={(e) => handlePackagelifeSelectChange(index, i, e, 'shelf_life_unit')}
+                                                                                onChange={(selectedOption, name) => handlePackagelifeSelectChange(selectedOption, name, index, i)}
                                                                                 name='shelf_life_unit'
                                                                                 className="basic"
                                                                                 classNamePrefix="basic"
                                                                                 placeholder=''
                                                                                 isClearable
-
+                                                                                value={ele.shelf_life_unit}
                                                                             />
                                                                         </div>
                                                                     </div>
@@ -1325,11 +1343,12 @@ const Create = (props) => {
                                                                         <div className="form_group_field">
                                                                             <Select options={SlType}
                                                                                 name='package_shelf_life_type'
-                                                                                onChange={(e) => handlePackagelifeSelectChange(index, i, e, 'package_shelf_life_type')}
+                                                                                onChange={(selectedOption, name) => handlePackagelifeSelectChange(selectedOption, name, index, i)}
                                                                                 className="basic"
                                                                                 classNamePrefix="basic"
                                                                                 placeholder=''
                                                                                 isClearable
+                                                                                value={ele.package_shelf_life_type}
                                                                             />
                                                                         </div>
                                                                     </div>
@@ -1337,12 +1356,13 @@ const Create = (props) => {
                                                                         <span className="form_group_label">Package Storage Condition</span>
                                                                         <div className="form_group_field">
                                                                             <Select options={packageCondistion}
-                                                                                onChange={(e, key) => handlePackagelifeSelectChange(index, i, e, key)}
+                                                                                onChange={(selectedOption, name) => handlePackagelifeSelectChange(selectedOption, name, index, i)}
                                                                                 isMulti
                                                                                 name="package_storage_condition"
                                                                                 className="basic"
                                                                                 classNamePrefix="basic"
                                                                                 placeholder=''
+                                                                                value={ele.package_storage_condition}
                                                                             />
                                                                         </div>
                                                                     </div>
@@ -1351,7 +1371,7 @@ const Create = (props) => {
                                                                     <div className="form_group_inline">
                                                                         <span className="form_group_label">Remarks</span>
                                                                         <div className="form_group_field">
-                                                                            <input type="text" name="remarks" onChange={(e) => handlePackagelifeChange(index, i, e)} />
+                                                                            <input type="text" name="remarks" onChange={(e) => handlePackagelifeChange(index, i, e)} value={ele.remarks} />
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1377,6 +1397,7 @@ const Create = (props) => {
                                                         placeholder=''
                                                         styles={selectStyles(errors.indication)}
                                                         isClearable
+                                                        value={data.indication}
                                                     />
                                                 </div>
                                                 
@@ -1392,6 +1413,7 @@ const Create = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
+                                                        value={data.paediatric_use}
                                                     />
                                                 </div>
                                             </div>
@@ -1424,18 +1446,27 @@ const Create = (props) => {
                                                             <div className="form_group_field">
                                                                 <Select options={options}
                                                                     name="manufacturer"
-                                                                    onChange={(e) => handleManufacturerSelectChange(index, e)}
+                                                                    onChange={(selectedOption, name) => handleManufacturerSelectChange(selectedOption, name,index)}
                                                                     className="basic"
                                                                     classNamePrefix="basic"
                                                                     styles={selectStyles(errors.manufacturer)}
                                                                     placeholder=''
+                                                                    value={element.manufacturer}
                                                                 />
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Operation Type</span>
                                                             <div className="form_group_field">
-                                                                <Select className="basic" name="operation_type" onChange={(e, key) => handleOperationTypeChange(index, e, key)} classNamePrefix="basic" options={operations} isMulti placeholder='' />
+                                                                <Select className="basic"
+                                                                    name="operation_type"
+                                                                    onChange={(selectedOption, name) => handleManufacturerSelectChange(selectedOption, name,index)}
+                                                                    classNamePrefix="basic"
+                                                                    options={operations}
+                                                                    isMulti
+                                                                    placeholder=''
+                                                                    value={element.operation_type}
+                                                                />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1468,17 +1499,25 @@ const Create = (props) => {
                                                     :
                                                     ''}
                                                 <div className="inline_form">
-                                                    {data.procedure_type == 'Decentralized' || data.procedure_type == 'Mutual Recognition' ?
+                                                    {data.procedure_type && data.procedure_type.value == 'Decentralized' || data.procedure_type && data.procedure_type.value == 'Mutual Recognition' ?
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Country</span>
                                                             <div className="form_group_field">
-                                                                <select defaultValue="" name='country' onChange={(e) => handleStatusesChange(index, e)}>
+                                                                {/* <select defaultValue="" name='country' onChange={(e) => handleStatusesChange(index, e)}>
                                                                     <option value=""></option>
                                                                     <option value="All">All</option>
                                                                     {data.country.map(c => (
                                                                         <option key={c}>{c}</option>
                                                                     ))}
-                                                                </select>
+                                                                </select> */}
+                                                                <Select options={statusCountry}
+                                                                    className="basic"
+                                                                    classNamePrefix="basic"
+                                                                    name='country'
+                                                                    onChange={(selectedOption, name) => handleStatusSelectChange(selectedOption, name, index)}
+                                                                    placeholder=''
+                                                                    isClearable
+                                                                />
                                                             </div>
                                                         </div>
                                                         : ''}
@@ -1502,12 +1541,14 @@ const Create = (props) => {
                                                                 { label: 'Application / Approval Expected', value: 'Application / Approval Expected' },
                                                                 { label: 'Application/ End of Procedure', value: 'Application/ End of Procedure' },
                                                             ]}
-                                                                onChange={(e) => handleStatusSelectChange(index, e)}
+                                                                name='status'
+                                                                onChange={(selectedOption, name) => handleStatusSelectChange(selectedOption, name, index)}
                                                                 className="basic"
                                                                 classNamePrefix="basic"
                                                                 placeholder=''
                                                                 isClearable
                                                                 styles={selectStyles(errors['statuses.' + index + '.status'])}
+                                                                value={element.status}
                                                             />
                                                         </div>
                                                         
@@ -1515,14 +1556,14 @@ const Create = (props) => {
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label" style={{color: errors['statuses.' + index + '.status_date'] ? 'red' : ''}}>Status Date (*)</span>
                                                         <div className="form_group_field">
-                                                            <DatePicker name="status_date" selected={data.statuses[index].status_date} onChange={(date) => handleDateChange(index, 'status_date', date)} />
+                                                            <DatePicker name="status_date" selected={data.statuses[index].status_date} onChange={(date) => handleDateChange(index, 'status_date', date)} value={element.status_date} />
                                                         </div>
                                                         
                                                     </div>
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label">eCTD Sequence</span>
                                                         <div className="form_group_field">
-                                                            <input type="text" name="ectd_sequence" onChange={(e) => handleStatusesChange(index, e)} />
+                                                            <input type="text" name="ectd_sequence" onChange={(e) => handleStatusesChange(index, e)} value={element.ectd_sequence} />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1530,20 +1571,20 @@ const Create = (props) => {
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label">Change Control Ref</span>
                                                         <div className="form_group_field">
-                                                            <input type="text" name="change_control_ref" onChange={(e) => handleStatusesChange(index, e)} />
+                                                            <input type="text" name="change_control_ref" onChange={(e) => handleStatusesChange(index, e)} value={element.change_control_ref} />
                                                         </div>
                                                     </div>
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label">Internal Submission Reference</span>
                                                         <div className="form_group_field">
-                                                            <input type="text" name="internal_submission_reference" onChange={(e) => handleStatusesChange(index, e)} />
+                                                            <input type="text" name="internal_submission_reference" onChange={(e) => handleStatusesChange(index, e)} value={element.internal_submission_reference} />
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="form_group_inline">
                                                     <span className="form_group_label">Remarks</span>
                                                     <div className="form_group_field">
-                                                        <input type="text" name="remarks" onChange={(e) => handleStatusesChange(index, e)} />
+                                                        <input type="text" name="remarks" onChange={(e) => handleStatusesChange(index, e)} value={element.remarks} />
                                                     </div>
                                                 </div>
                                             </div>

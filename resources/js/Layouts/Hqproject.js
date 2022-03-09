@@ -33,7 +33,7 @@ const Hqproject = (props) => {
     });
 
     const [variationcountries, setVariationCountries] = useState([]);
-    const [statuscountries, setStatusContries] = useState([]);
+    const [statusCountry, setStatusCountry] = useState([])
     const selectInputRef = React.useRef({});
     const ctrRef = React.useRef({});
     const formRef = React.useRef();
@@ -42,9 +42,41 @@ const Hqproject = (props) => {
     const [statuserror, setStatusError] = useState(false);
     const [variationhaserror, setVariationhaserror] = useState(false);
     const [identhaserror, setIdenthaserror] = useState(false);
+    const indexRef = React.useRef(0);
+    const firstTimeRender = React.useRef(true);
+
+    // React.useEffect(() => {
+        
+    //     if(data.identification[indexRef.current].procedure_type && data.identification[indexRef.current].procedure_type.value == "Decentralized" || data.identification[indexRef.current].procedure_type && data.identification[indexRef.current].procedure_type.value == "Mutual Recognition" ) {
+    //         //console.log(data.identification[indexRef.current].country)
+    //         if(data.identification[indexRef.current].country.length !== 0) {
+    //             setStatusCountry(...statusCountry => [{label: 'All', value: 'All'}, ...data.identification[indexRef.current].country])
+    //             let arr = {...statusCountry}
+    //             arr[indexRef.current] = data.identification[indexRef.current].country
+    //             setStatusCountry(arr);
+            
+    //         }else {
+    //             setStatusCountry([{label: 'All', value: 'All'}])
+    //         }
+    //     }
+    // }, [data.identification[indexRef.current].country]);
+
+    // React.useEffect(() => {
+    //     if(data.rms) {
+    //         if(statusCountry.filter(item => item.value == data.rms.value) == 0) {
+    //             setStatusCountry(statusCountry => [...statusCountry, data.rms])
+    //         }
+    //     }
+    // }, [data.identification[indexRef.current].rms]);
+
+    // React.useEffect(() => {
+    //     let arr = { ...data}
+    //     arr.identification[indexRef.current].country = []
+    //     setData(arr)
+        
+    // }, [data.identification[indexRef.current].procedure_type]);
 
     const handleMChange = (event, newValue) => {
-        
         setValue(newValue);
     };
 
@@ -108,33 +140,18 @@ const Hqproject = (props) => {
         
     }
 
-    // const handleIdentificationProductChange = (i, e) => {
-    //     let arr = {...data}
-    //     arr.identification[i][e.target.name] = e.target.value
-    //     setData(arr);
-        
-    // }
-
     let handleIdentificationSelectChange = (i, e, name) => {
-        if(!e) {
-            e = {
-                value :''
-            }
-        }
-        let arr = {...data}
-        arr.identification[i][name] = e.value;
-        setData(arr);
+        // indexRef.current = i;
+        let arri = {...data}
+        arri.identification[i][name] = e;
+        setData(arri);
         clearErrors('identification.' + i + '.' + name)
     }
 
     let handleVariationSelectChange = (i, e, name) => {
-        if(!e) {
-            e = {
-                value: ''
-            }
-        }
+       
         let arr = {...data}
-        arr.variation[i][name] = e.value;
+        arr.variation[i][name] = e;
         setData(arr);
         clearErrors('variation.' + i + '.' + name)
     }
@@ -153,88 +170,11 @@ const Hqproject = (props) => {
         clearErrors('statuses.'+i+'.'+e.target.name);
     }
 
-   
-    let handleCountryChange = (i, e, k) => {
-        let arr = {...data}
-        if (k.action) {
-            if(k.action == 'select-option')
-            {
-                if (e.length > 0) {
-                    arr.identification[i].country.push(k.option.value)
-                } else {
-                    arr.identification[i].country.push(e.value)
-                }
-            }else if (k.action == 'remove-value') {
-                let newarr = arr.identification[i].country.filter((ele) => {
-                    return ele != k.removedValue.value
-                });
-                arr.identification[i].country = newarr;
-            }else {
-                arr.identification[i].country.length = 0
-            } 
-        }
-        setData(arr)
-        clearErrors('identification.' + i + '.country')
-    }
-
-    let handleChanged = (i, e) => {
-        let newFormValues = [...prductValues];
-        newFormValues[i][e.target.name] = e.target.value;
-        setData("identification", newFormValues);
-    }
-
     let handleDateChange = (i,name, e) => {
         let arr = {...data};
         arr.statuses[i][name] = e;
         setData(arr);
         clearErrors('statuses.'+i+'.'+name)
-    }
-
-    const handleprocedureChange = (i, e) => {
-        let newFormValues = {...data};
-        selectInputRef.current[i].setValue([]);
-        newFormValues.identification[i]["country"] = [];
-        newFormValues.identification[i]["procedure_type"] = e.target.value;
-        setData(newFormValues);
-    }
-
-    const handleSelectChange = (i, name) => {
-        let newFormValues = {...data};
-        if (name.length > 0 && name) {
-            newFormValues.identification[i]["rms"] = name;
-        } else {
-            newFormValues.identification[i]["rms"] = name.value;
-        }
-        setData(newFormValues);
-    }
-
-    const handleVariationProductChange = (i, e) => {
-        let arr = {...data}
-        arr.variation[i][e.target.name] = e.target.value
-        setData(arr);
-        data.identification.map(ele => {
-            if (ele.product === e.target.value) {
-                setVariationCountries([{id: i, country:ele.country}])
-            }
-        })
-        
-    }
-    
-    const StatusProductChange = (i, e) => {
-        let arr = {...data}
-        arr.statuses[i][e.target.name] = e.target.value
-        setData(arr);
-        data.identification.map(ele => {
-            if (ele.product === e.target.value) {
-                setStatusContries([{id: i, country:ele.country}])
-            }
-        })
-    }
-
-    const CountryStatusEventChange = (i, e) => {
-        let arr = {...data}
-        arr.statuses[i][e.target.name] = e.target.value
-        setData(arr);
     }
 
     const handleDocumentdate = (i, date) => {
@@ -255,16 +195,11 @@ const Hqproject = (props) => {
         post(route("storehqproject", {'type': submitType}));
     }
 
-    let handleStatusSelectChange = (i, e) => {
-        if(!e) {
-            e = {
-                value: ''
-            }
-        }
+    let handleStatusSelectChange = (i, e, name) => {
         let newFormValues = {...data};
-        newFormValues.statuses[i]['status'] = e.value;
+        newFormValues.statuses[i][name] = e;
         setData(newFormValues);
-        clearErrors('statuses.'+i+'.status')
+        clearErrors('statuses.'+i+name)
     }
 
     const showsavemodel = () => {
@@ -335,15 +270,72 @@ const Hqproject = (props) => {
     }
 
     const handleDocumentSelectChange = (i, e, name) => {
-        if (!e) {
-            e = {
-                value: ''
-            }
-        }
         let arr = { ...data };
-        arr.doc[i][name] = e.value;
+        arr.doc[i][name] = e;
         setData(arr);
     }
+
+    const handleVariationProductChange = (i, e) => {
+        let varr = {...data}
+        varr.variation[i]['product'] = e
+        setData(varr);
+        data.identification.map(ele => {
+            if (ele.product === e) {
+                let arr = {...variationcountries}
+                if(data.identification[i].procedure_type && data.identification[i].procedure_type.value == "Decentralized" || data.identification[i].procedure_type && data.identification[i].procedure_type.value == "Mutual Recognition") {
+                    arr[i] = [...ele.country]
+                    if(data.identification[i].rms.value && ele.country.filter(item => item.value == data.identification[i].rms.value) == 0) {
+                        arr[i].push(data.identification[i].rms)
+                    }
+                    if(ele.country.filter(item => item.value == 'All' == 0)) {
+                        arr[i].push({label: 'All', value: 'All'})
+                    }
+                    setVariationCountries(arr)
+                }else {
+                    arr[i] = [ele.country]
+                    setVariationCountries(arr)
+                } 
+                // setVariationCountries([{id: i, country:ele.country}])
+            }
+        })
+    }
+
+    const StatusProductChange = (i, e) => {
+        let arr = {...data}
+        arr.statuses[i]['product'] = e
+        setData(arr);
+        let pr = e.value.split(' - ');        
+        data.identification.map(ele => {
+            if (ele.product.value == pr[0]) {
+                
+                let arr = {...statusCountry}
+                if(data.identification[i].procedure_type && data.identification[i].procedure_type.value == "Decentralized" || data.identification[i].procedure_type && data.identification[i].procedure_type.value == "Mutual Recognition") {
+                    arr[i] = [...ele.country]
+                    if(data.identification[i].rms.value && ele.country.filter(item => item.value == data.identification[i].rms.value) == 0) {
+                        arr[i].push(data.identification[i].rms)
+                    }
+                    if(data.identification[i].rms.value && ele.country.filter(item => item.value == 'All' == 0)) {
+                        arr[i].push({label: 'All', value: 'All'})
+                    }
+                    setStatusCountry(arr)
+                }else {
+                    arr[i] = [ele.country]
+                    setStatusCountry(arr)
+                } 
+                // setVariationCountries([{id: i, country:ele.country}])
+            }
+        })
+    }
+
+    // React.useEffect(() => {
+    //     if (!firstTimeRender.current) {
+    //         let arr = { ...data}
+    //         arr.identification[indexRef.current].country = []
+    //         setData(arr)
+    //     }
+    // }, [data.identification[indexRef.current].product]);
+
+
 
     return (
         <>
@@ -402,6 +394,7 @@ const Hqproject = (props) => {
                                                         placeholder=''
                                                         isClearable
                                                         styles={selectStyles(errors['identification.' + index + '.product'])}
+                                                        value={element.product}
                                                     />
                                                 </div>
                                             </div>
@@ -418,6 +411,7 @@ const Hqproject = (props) => {
                                                         placeholder=''
                                                         isClearable
                                                         styles={selectStyles(errors['identification.' + index + '.procedure_type'])}
+                                                        value={element.procedure_type}
                                                     />
                                                 </div>
                                             </div>
@@ -426,28 +420,30 @@ const Hqproject = (props) => {
                                                 <div className="form_group_field">
                                                     <Select options={contries}
                                                         name="country"
-                                                        onChange={(e, k) => handleCountryChange(index, e, k)}
+                                                        onChange={(e) => handleIdentificationSelectChange(index, e, 'country')}
                                                         className="basic"
-                                                        isMulti={data.identification[index].procedure_type === "Decentralized" || data.identification[index].procedure_type === "Mutual Recognition" ? true : false}
+                                                        isMulti={element.procedure_type && element.procedure_type.value === "Decentralized" || element.procedure_type && element.procedure_type.value === "Mutual Recognition" ? true : false}
                                                         classNamePrefix="basic"
                                                         ref={ele => selectInputRef.current[index] = ele}
                                                         id={index}
                                                         placeholder=''
                                                         isClearable
                                                         styles={selectStyles(errors['identification.' + index + '.country'])}
+                                                        value={data.identification[index].country}
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="form_group_inline" style={{ display: data.identification[index].procedure_type === "Decentralized" || data.identification[index].procedure_type === "Mutual Recognition" ? '' : 'none' }}>
+                                            <div className="form_group_inline" style={{ display: element.procedure_type && element.procedure_type.value === "Decentralized" || element.procedure_type && element.procedure_type.value === "Mutual Recognition" ? '' : 'none' }}>
                                                 <span className="form_group_label">RMS</span>
                                                 <div className="form_group_field">
                                                     <Select options={contries}
                                                         name="rms"
-                                                        onChange={e => handleSelectChange(index, e)}
+                                                        onChange={(e) => handleIdentificationSelectChange(index, e, 'rms')}
                                                         className="basic"
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
+                                                        value={element.rms}
                                                     />
                                                 </div>
                                             </div>
@@ -456,13 +452,13 @@ const Hqproject = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Procedure Number</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name='procedure_num' onChange={(e) => handlIdentificationeChange(index, e)} />
+                                                    <input type="text" name='procedure_num' onChange={(e) => handlIdentificationeChange(index, e)} value={element.procedure_num} />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Local Tradename</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name='local_tradename' onChange={(e) => handlIdentificationeChange(index, e)} />
+                                                    <input type="text" name='local_tradename' onChange={(e) => handlIdentificationeChange(index, e)} value={element.local_tradename} />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
@@ -478,6 +474,7 @@ const Hqproject = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
+                                                        value={element.application_stage}
                                                     />
                                                 </div>
                                             </div>
@@ -494,6 +491,7 @@ const Hqproject = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
+                                                        value={element.product_type}
                                                     />
                                                 </div>
                                             </div>
@@ -524,33 +522,37 @@ const Hqproject = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Product Name</span>
                                                 <div className="form_group_field">
-                                                    <select name='product' onChange={(e) => handleVariationProductChange(index, e)} defaultValue='' >
+                                                    {/* <select name='product' onChange={(e) => handleVariationProductChange(index, e)} defaultValue='' >
                                                         <option defaultValue=''></option>
                                                         {data.identification.map((ele, i) => {
                                                             if (ele.product) {
                                                                 return <option value={ele.product} key={i}>{ele.product}</option>
                                                             }
                                                         })}
-                                                    </select>
+                                                    </select> */}
+                                                    <Select options={data.identification.map((ele) => ele.product)}
+                                                        name="product"
+                                                        onChange={(e) => handleVariationProductChange(index, e)}
+                                                        className="basic"
+                                                        classNamePrefix="basic"
+                                                        placeholder=''
+                                                        isClearable
+                                                        value={element.product}
+                                                    />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Country</span>
                                                 <div className="form_group_field">
-                                                    <select defaultValue='' name='country' onChange={(e) => handleVariationChange(index, e)} >
-                                                        <option defaultValue=''></option>
-                                                        {variationcountries.map(s => (
-                                                            s.id == index ?
-                                                                <React.Fragment key={s.id}>
-                                                                    <option value="All">All</option>
-
-                                                                    {s.country.map(country => (
-                                                                        <option value={country} key={country}>{country}</option>
-                                                                    ))}
-                                                                </React.Fragment>
-                                                                : ""
-                                                        ))}
-                                                    </select>
+                                                    <Select options={variationcountries[index]}
+                                                        className="basic"
+                                                        classNamePrefix="basic"
+                                                        name='country'
+                                                        onChange={(e) => handleVariationSelectChange(index, e, 'country')}
+                                                        placeholder=''
+                                                        isClearable
+                                                        value={element.country}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -558,7 +560,7 @@ const Hqproject = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label" style={{color: errors['variation.' + index + '.variation_title'] ? 'red' : ''}}>Variation Title (*)</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name='variation_title' onChange={(e) => handleVariationChange(index, e)} style={{borderColor : errors['variation.' + index + '.variation_title'] ? 'red' : ''}} />
+                                                    <input type="text" name='variation_title' onChange={(e) => handleVariationChange(index, e)} style={{borderColor : errors['variation.' + index + '.variation_title'] ? 'red' : ''}} value={element.variation_title} />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
@@ -575,6 +577,7 @@ const Hqproject = (props) => {
                                                         placeholder=''
                                                         isClearable
                                                         styles={selectStyles(errors['variation.' + index + '.category'])}
+                                                        value={element.category}
                                                     />
                                                 </div>
                                             </div>
@@ -595,6 +598,7 @@ const Hqproject = (props) => {
                                                         placeholder=''
                                                         isClearable
                                                         styles={selectStyles(errors['variation.' + index + '.variation_type'])}
+                                                        value={element.variation_type}
                                                     />
                                                 </div>
                                             </div>
@@ -615,6 +619,7 @@ const Hqproject = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
+                                                        value={element.variation_reason}
                                                         // styles={selectStyles(errors['variation.' + index + '.variation_reason'])}
                                                     />
                                                 </div>
@@ -636,6 +641,7 @@ const Hqproject = (props) => {
                                                         placeholder=''
                                                         isClearable
                                                         styles={selectStyles(errors['variation.' + index + '.submission_type'])}
+                                                        value={element.submission_type}
                                                     />
                                                 </div>
                                                 
@@ -643,13 +649,13 @@ const Hqproject = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Applcation N°</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name='application_number' onChange={(e) => handleVariationChange(index, e)} />
+                                                    <input type="text" name='application_number' onChange={(e) => handleVariationChange(index, e)} value={element.application_number} />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Submission/Procedure N°</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name='submission_number' onChange={(e) => handleVariationChange(index, e)} />
+                                                    <input type="text" name='submission_number' onChange={(e) => handleVariationChange(index, e)} value={element.submission_number} />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
@@ -668,6 +674,7 @@ const Hqproject = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
+                                                        value={element.submission_format}
                                                     />
                                                 </div>
                                             </div>
@@ -699,21 +706,24 @@ const Hqproject = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Product Name</span>
                                                 <div className="form_group_field">
-                                                    <select name='product' onChange={(e) => StatusProductChange(index, e)} defaultValue='' >
-                                                        <option value=''></option>
-                                                        {data.identification.map((ele, i) => {
-                                                            if (ele.product) {
-                                                                return <option value={ele.product} key={i}>{ele.product} - {ele.procedure_type}</option>
-                                                            }
-
-                                                        })}
-                                                    </select>
+                                                    <Select options={data.identification.map((ele) => (
+                                                        { label: ele.product.label + ' - ' + ele.procedure_type.label, value: ele.product.value + ' - ' + ele.procedure_type.value }
+                                                    )
+                                                    )}
+                                                        name="product"
+                                                        onChange={(e) => StatusProductChange(index, e)}
+                                                        className="basic"
+                                                        classNamePrefix="basic"
+                                                        placeholder=''
+                                                        isClearable
+                                                        value={element.product}
+                                                    />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Country</span>
                                                 <div className="form_group_field">
-                                                    <select defaultValue='' name='country' onChange={(e) => CountryStatusEventChange(index, e)}>
+                                                    {/* <select defaultValue='' name='country' onChange={(e) => CountryStatusEventChange(index, e)}>
                                                         <option value=''></option>
                                                         {statuscountries.map(s => (
                                                             s.id == index ?
@@ -726,7 +736,16 @@ const Hqproject = (props) => {
                                                                 </React.Fragment>
                                                                 : ""
                                                         ))}
-                                                    </select>
+                                                    </select> */}
+                                                    <Select options={statusCountry[index]}
+                                                        className="basic"
+                                                        classNamePrefix="basic"
+                                                        name='country'
+                                                        onChange={(e) => handleStatusSelectChange(index, e, 'country')}
+                                                        placeholder=''
+                                                        isClearable
+                                                        value={element.country}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -735,13 +754,14 @@ const Hqproject = (props) => {
                                                 <span className="form_group_label" style={{color: errors['statuses.' + index + '.status'] ? 'red' : ''}}>Status</span>
                                                 <div className="form_group_field">
                                                     <Select options={status}
-                                                        onChange={(e) => handleStatusSelectChange(index, e)}
+                                                        onChange={(e) => handleStatusSelectChange(index, e, 'status')}
                                                         name="status"
                                                         className="basic"
                                                         classNamePrefix="basic"
                                                         styles={selectStyles(errors['statuses.' + index + '.status'])}
                                                         placeholder=''
                                                         isClearable
+                                                        value={element.status}
                                                     />
                                                 </div>
                                                
@@ -755,7 +775,7 @@ const Hqproject = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">eCTD sequence</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name="ectd" onChange={e => handleStatusChange(index, e)} />
+                                                    <input type="text" name="ectd" onChange={e => handleStatusChange(index, e)} value={element.ectd} />
                                                 </div>
                                             </div>
                                         </div>
@@ -763,19 +783,19 @@ const Hqproject = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Change Control or pre-assessment</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name="control" onChange={e => handleStatusChange(index, e)} />
+                                                    <input type="text" name="control" onChange={e => handleStatusChange(index, e)} value={element.control} />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">CCDS/Core PIL ref n°</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name="cdds" onChange={e => handleStatusChange(index, e)} />
+                                                    <input type="text" name="cdds" onChange={e => handleStatusChange(index, e)} value={element.cdds} />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Remarks</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name="remarks" onChange={e => handleStatusChange(index, e)} />
+                                                    <input type="text" name="remarks" onChange={e => handleStatusChange(index, e)} value={element.remarks} />
                                                 </div>
                                             </div>
                                         </div>

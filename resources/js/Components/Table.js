@@ -83,6 +83,15 @@ function Table(props) {
             Inertia.get('renewal/'+id+'/show')
         }else if(props.for == 'baseline') {
             Inertia.get('baseline/'+id+'/show')
+        }else if(props.for == 'crc') {
+            Inertia.get('clinical/'+id+'/show')
+        }
+        else if(props.for == 'amendment') {
+            Inertia.get('amendments/'+id+'/show')
+        }else if(props.for == 'transfer') {
+            Inertia.get('transfer/'+id+'/show')
+        }else if(props.for == 'rt') {
+            Inertia.get('registrationtermination/'+id+'/show')
         }
         
     }
@@ -95,6 +104,14 @@ function Table(props) {
             Inertia.get('renewal/'+id+'/edit')
         }else if(props.for == 'baseline') {
             Inertia.get('baseline/'+id+'/edit')
+        }else if(props.for == 'crc') {
+            Inertia.get('clinical/'+id+'/edit')
+        }else if(props.for == 'amendment') {
+            Inertia.get('amendments/'+id+'/edit')
+        }else if(props.for == 'transfer') {
+            Inertia.get('transfer/'+id+'/edit')
+        }else if(props.for == 'rt') {
+            Inertia.get('registrationtermination/'+id+'/edit')
         }
     }
 
@@ -107,6 +124,14 @@ function Table(props) {
             Inertia.get('renewal/'+id+'/edit', {opr: 'edit'})
         }else if(props.for == 'baseline') {
             Inertia.get('baseline/'+id+'/edit', {opr: 'edit'})
+        }else if(props.for == 'crc') {
+            Inertia.get('clinical/'+id+'/edit', {opr: 'edit'})
+        }else if(props.for == 'amendment') {
+            Inertia.get('amendments/'+id+'/edit', {opr: 'edit'})
+        }else if(props.for == 'transfer') {
+            Inertia.get('transfer/'+id+'/edit', {opr: 'edit'})
+        }else if(props.for == 'rt') {
+            Inertia.get('registrationtermination/'+id+'/edit', {opr: 'edit'})
         }
     }
 
