@@ -251,7 +251,7 @@ class RcController extends Controller
             $sheet->fromArray([
                 $rc->procedure_type['value'],
                 "",
-                $rc->rms['value'],
+                $rc->rms ? $rc->rms['value'] : '',
                 $rc->procedure_number,
                 $rc->product_type['value'],
                 $rc->application_stage['value'],
@@ -740,7 +740,7 @@ class RcController extends Controller
             $sheet->fromArray([
                 $rc->procedure_type['value'],
                 "",
-                $rc->rms['value'],
+                $rc->rms ? $rc->rms['value'] : '',
                 $rc->procedure_number,
                 $rc->product_type['value'],
                 $rc->application_stage['value'],
@@ -981,14 +981,14 @@ class RcController extends Controller
                 $subject = 'eForm_NewRegistration_' .$request->product_name['value'] . '_' .$request->procedure_type['value'];
             }
             
-            $writer->save($name);
-            Mail::to(getenv('MAIL_TO'))->send(new RcSubmit($name, $request->product_name['value'], $subject));
+            // $writer->save($name);
+            // Mail::to(getenv('MAIL_TO'))->send(new RcSubmit($name, $request->product_name['value'], $subject));
 
-            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
+            // return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
             
         }
 
-        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
+        //return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
     }
 
     /**
