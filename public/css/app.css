@@ -13028,6 +13028,14 @@ box-shadow: inset 0px 1px 12px 1px rgba(0,0,0,0.15); */
   background-color: #009688;
 }
 
+.dashpaper {
+  height: 50px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 /* Mui Tabs */
 
 

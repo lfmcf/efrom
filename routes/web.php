@@ -44,6 +44,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashbordkpi', [DashboardController::class, 'dashboard_kpi'])->name('dashboardkpi');
     Route::get('/interaction', [InteractionController::class, 'index'])->name('interaction');
 
     Route::get('/ma/create', [RcController::class, 'create'])->name('ma-create');
