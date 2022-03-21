@@ -45,7 +45,7 @@ class RenouvellementController extends Controller
      */
     public function store(Request $request)
     {
-       dd($request->statuses);
+       
         if($request->query('type') == 'submit') {
             $validator = $request->validate(
                 [
