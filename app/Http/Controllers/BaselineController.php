@@ -192,7 +192,7 @@ class BaselineController extends Controller
                 $sheet->setCellValue('E' . $st, $stt['control']);
                 $sheet->setCellValue('F' . $st, $stt['cdds']);
                 $sheet->setCellValue('G' . $st, $stt['remarks']);
-                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_deadline'])));
+                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_date'])));
                 $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
                 $sheet->setCellValue('J' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
                 $st++;
@@ -427,7 +427,7 @@ class BaselineController extends Controller
                 $sheet->setCellValue('E' . $st, $stt['control']);
                 $sheet->setCellValue('F' . $st, $stt['cdds']);
                 $sheet->setCellValue('G' . $st, $stt['remarks']);
-                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_deadline'])));
+                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_date'])));
                 $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
                 $sheet->setCellValue('J' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
                 $st++;

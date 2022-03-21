@@ -199,7 +199,7 @@ const Hqproject = (props) => {
         let newFormValues = {...data};
         newFormValues.statuses[i][name] = e;
         setData(newFormValues);
-        clearErrors('statuses.'+i+name)
+        clearErrors('statuses.'+i +'.'+name)
     }
 
     const showsavemodel = () => {

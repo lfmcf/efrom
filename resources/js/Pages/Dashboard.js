@@ -354,11 +354,25 @@ const Dashboard = (props) => {
         () => [
             {
                 Header: 'Product Family',
-                accessor: 'product',
+                accessor: function (originalRow, rowIndex) {
+                    
+                    if(typeof originalRow.product == 'object' && originalRow.product !== null) {
+                        return originalRow.product.value
+                    }else {
+                        return originalRow.product
+                    }
+                }
             },
             {
                 Header: 'Procedure Type',
-                accessor: 'procedure_type',
+                // accessor: 'procedure_type',
+                accessor: function (originalRow, rowIndex) {
+                    if(typeof originalRow.procedure_type == 'object' && originalRow.procedure_type !== null) {
+                        return originalRow.procedure_type.value
+                    }else {
+                        return originalRow.procedure_type
+                    }
+                }
             },
             {
                 Header: 'Baseline Title',

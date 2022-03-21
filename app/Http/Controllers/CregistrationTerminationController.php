@@ -169,7 +169,7 @@ class CregistrationTerminationController extends Controller
             $sheet->fromArray($details, NULL, 'A1');
             $sheet->fromArray([
                 $crt->description,
-                $crt->type ? $crt->type['value'] : '',
+                is_array($crt->type) ? $crt->type['value'] : '',
                 $crt->reason ? $crt->reason['value'] : '',
                 $crt->remarks
             ], NULL, 'A2');
@@ -179,7 +179,7 @@ class CregistrationTerminationController extends Controller
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Events Status');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($status, NULL, 'A1');
-            $sheet->fromArray($crt->statuses, NULL, 'A2');
+            //$sheet->fromArray($crt->statuses, NULL, 'A2');
 
             $st = 2;
             foreach($crt->statuses as $stt) {
@@ -190,7 +190,7 @@ class CregistrationTerminationController extends Controller
                 $sheet->setCellValue('E' . $st, $stt['control']);
                 $sheet->setCellValue('F' . $st, $stt['cdds']);
                 $sheet->setCellValue('G' . $st, $stt['remarks']);
-                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_deadline'])));
+                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_date'])));
                 $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
                 $sheet->setCellValue('J' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
                 $st++;
