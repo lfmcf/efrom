@@ -175,7 +175,7 @@ class TransferController extends Controller
             $sheet->fromArray($maTransferDetail, NULL, 'A1');
             $sheet->fromArray([
                 $transfer->description,
-                $transfer->reason,
+                $transfer->reason ? $transfer->reason['value'] : '',
                 $transfer->previous_mah ? $transfer->previous_mah['value'] : '',
                 $transfer->new_mah ? $transfer->new_mah['value'] : '',
                 $transfer->remarks
@@ -258,9 +258,13 @@ class TransferController extends Controller
      * @param  \App\Models\Transfer  $transfer
      * @return \Illuminate\Http\Response
      */
-    public function show(Transfer $transfer)
+    public function show($id)
     {
-        //
+        $transfer = Transfer::findOrFail($id);
+       
+        return Inertia::render('Transfer/Show', [
+            'transfer' => $transfer,
+        ]);
     }
 
     /**
@@ -417,7 +421,7 @@ class TransferController extends Controller
             $sheet->fromArray($maTransferDetail, NULL, 'A1');
             $sheet->fromArray([
                 $transfer->description,
-                $transfer->reason,
+                $transfer->reason ? $transfer->reason['value'] : '',
                 $transfer->previous_mah ? $transfer->previous_mah['value'] : '',
                 $transfer->new_mah ? $transfer->new_mah['value'] : '',
                 $transfer->remarks

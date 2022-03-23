@@ -471,6 +471,14 @@ class ClinicalController extends Controller
         ]);
     }
 
+    public function show($id) 
+    {
+        $clinical = Clinical::findOrFail($id);
+        return Inertia::render('Clinical/Show', [
+            'clinical' => $clinical,
+        ]);
+    }
+
     public function update(Request $request) 
     {
         if($request->query('type') === 'submit') {

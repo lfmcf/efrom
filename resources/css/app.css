@@ -1085,6 +1085,54 @@ font-family: 'Open Sans' , sans-serif;
    justify-content: space-between;
 }
 
+.heading-show {
+    font-size: 1.3rem;
+    line-height: 1.3;
+    letter-spacing: 0.1px;
+    color: #1A2027;
+    font-weight: 700;
+    margin: 20px 0;
+    padding: 0 12px;
+}
+
+.showTable {
+    width: 100%;
+    margin-top: 20px;
+}
+.showTable th {
+    padding: 12px;
+    color: #1A2027;
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    font-family: "IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    width: 50%;
+}
+.showTable td {
+    border-bottom: 1px solid #E7EBF0;
+    padding: 12px;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    color: #3E5060;
+    font-weight: 400;
+    font-family: "IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    width: 50%;
+}
+
+.sous-heading-show {
+    font-size: 1.1rem;
+    line-height: 1.1;
+    letter-spacing: 0.1px;
+    color: #2196f3;
+    font-weight: 500;
+    /* padding: 0 12px; */
+    margin: 20px 0 20px;
+}
+
+.sous-container {
+    padding: 0 20px;
+}
+
 
 /* Mui Tabs */
 

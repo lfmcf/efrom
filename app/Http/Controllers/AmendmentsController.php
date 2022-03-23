@@ -240,9 +240,13 @@ class AmendmentsController extends Controller
      * @param  \App\Models\Amendments  $amendments
      * @return \Illuminate\Http\Response
      */
-    public function show(Amendments $amendments)
+    public function show($id)
     {
-        //
+        $amendments = Amendments::findOrFail($id);
+        
+        return Inertia::render('Amendment/Show', [
+            'amendment' => $amendments
+        ]);
     }
 
     /**

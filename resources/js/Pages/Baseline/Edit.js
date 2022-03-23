@@ -292,7 +292,7 @@ const Create = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
-                                                        defaultValue={{ label: data.product, value: data.product }}
+                                                        defaultValue={data.product}
                                                         styles={selectStyles(errors.product)}
                                                     />
                                                 </div>
@@ -309,7 +309,7 @@ const Create = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
-                                                        defaultValue={{ label: data.procedure_type, value: data.procedure_type }}
+                                                        defaultValue={data.procedure_type}
                                                         styles={selectStyles(errors.procedure_type)}
                                                     />
                                                 </div>
@@ -326,7 +326,7 @@ const Create = (props) => {
                                                         ref={ele => countryRef.current = ele}
                                                         placeholder=''
                                                         isClearable
-                                                        defaultValue={data.country.map(function(option) { return {label:option, value: option} })}
+                                                        defaultValue={data.country}
                                                         styles={selectStyles(errors.country)}
                                                     />
                                                 </div>
@@ -341,7 +341,7 @@ const Create = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
-                                                        defaultValue={{ label: data.rms, value: data.rms }}
+                                                        defaultValue={data.rms}
                                                     />
                                                 </div>
                                             </div>
@@ -372,7 +372,7 @@ const Create = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
-                                                        defaultValue={{ label: data.application_stage, value: data.application_stage }}
+                                                        defaultValue={data.application_stage}
                                                     />
                                                 </div>
                                             </div>
@@ -389,7 +389,7 @@ const Create = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
-                                                        defaultValue={{ label: data.product_type, value: data.product_type }}
+                                                        defaultValue={data.product_type}
                                                     />
                                                 </div>
                                             </div>
@@ -434,7 +434,7 @@ const Create = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
-                                                        defaultValue={{ label: data.reason, value: data.reason }}
+                                                        defaultValue={data.reason}
                                                     />
                                                 </div>
                                             </div>
@@ -492,7 +492,7 @@ const Create = (props) => {
                                                                 styles={selectStyles(errors['statuses.' + index + '.status'])}
                                                                 placeholder=''
                                                                 isClearable
-                                                                defaultValue={{ label: element.status, value: element.status }}
+                                                                defaultValue={element.status}
                                                             />
                                                         </div>
                                                     </div>
@@ -557,7 +557,7 @@ const Create = (props) => {
                                                                 classNamePrefix="basic"
                                                                 placeholder=''
                                                                 isClearable
-                                                                defaultValue={{ label: element.changes_approved, value: element.changes_approved }}
+                                                                defaultValue={element.changes_approved}
                                                             />
                                                         </div>
                                                     </div>

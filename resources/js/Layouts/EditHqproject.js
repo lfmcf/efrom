@@ -195,7 +195,14 @@ const EditHqproject = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         let submitType = window.event.target.name;
-        post(route("storehqproject", {'type': submitType}));
+        const search = window.location.search
+        const opname = new URLSearchParams(search).get('opr');
+        if (opname === 'edit') {
+            post(route("updatehqvariation", {'type': submitType}));
+        }else {
+            post(route("storehqproject", {'type': submitType}));
+        }
+        
     }
 
     let handleStatusSelectChange = (i, e, name) => {

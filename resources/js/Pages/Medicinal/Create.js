@@ -443,9 +443,7 @@ const Create = (props) => {
                     <form className="form" onSubmit={handleSubmit} ref={formRef} id="ccform" style={{ marginBottom: '10px' }}>
                         <Tabs defaultActiveKey="first">
                             <Tab eventKey="first" title="New Registration" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0'}}>
-                                <Box
-                                    sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100%' }}
-                                >
+                                <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100%' }}>
                                     <Mtabs
                                         orientation="vertical"
                                         variant="scrollable"

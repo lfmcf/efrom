@@ -176,7 +176,14 @@ const EditNoHqproject = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         let submitType = window.event.target.name;
-        post(route("storevariation", {'type': submitType}));
+        const search = window.location.search
+        const opname = new URLSearchParams(search).get('opr');
+        if (opname === 'edit') {
+            post(route("updatevariation", {'type': submitType}));
+        }else {
+            post(route("storevariation", {'type': submitType}));
+        }
+        
     }
 
     const handleSaveModalClose = () => {
