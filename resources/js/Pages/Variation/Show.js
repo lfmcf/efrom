@@ -1,303 +1,478 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Authenticated from '@/Layouts/Authenticated';
+import { Tabs as Mtabs, Tab as Mtab, IconButton } from '@mui/material';
+import PropTypes from 'prop-types';
+import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
-import Divider from '@mui/material/Divider';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import moment from 'moment';
 import { Head } from '@inertiajs/inertia-react';
 
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`vertical-tabpanel-${index}`}
+            aria-labelledby={`vertical-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box sx={{ p: 3 }}>
+                    <div>{children}</div>
+                </Box>
+            )}
+        </div>
+    );
+}
+
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+    return {
+        id: `vertical-tab-${index}`,
+        'aria-controls': `vertical-tabpanel-${index}`,
+    };
+}
+
 const Show = (props) => {
     const { variation } = props;
+
+    const [value, setValue] = useState(0);
+
+
+    const handleMChange = (event, newValue) => {
+
+        setValue(newValue);
+    };
     if (variation.isHq) {
         return (
             <div>
-                <Typography variant='h6' gutterBottom >Registrations</Typography>
-                <TableContainer >
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Product Name</TableCell>
-                                <TableCell>Procedure Type</TableCell>
-                                <TableCell>Country</TableCell>
-                                <TableCell>RMS</TableCell>
-                                <TableCell>Procedure Number</TableCell>
-                                <TableCell>Local Tradename</TableCell>
-                                <TableCell>Application Stage</TableCell>
-                                <TableCell>Product Type</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {variation.identification.map((iden, i) => (
-                                <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                    <TableCell>{iden.product}</TableCell>
-                                    <TableCell>{iden.procedure_type}</TableCell>
-                                    <TableCell>{iden.country}</TableCell>
-                                    <TableCell>{iden.rms}</TableCell>
-                                    <TableCell>{iden.application_stage}</TableCell>
-                                    <TableCell>{iden.procedure_num}</TableCell>
-                                    <TableCell>{iden.local_tradename}</TableCell>
-                                    <TableCell>{iden.product_type}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                <div className="row">
+                    <div className="col-md-12">
+                        <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100%' }}>
+                            <Mtabs
+                                orientation="vertical"
+                                variant="scrollable"
+                                value={value}
+                                onChange={handleMChange}
+                                aria-label="Vertical tabs example"
+                                sx={{ borderRight: 1, borderColor: 'divider' }}
+                            >
+                                <Mtab label="Registration Identification" {...a11yProps(0)} />
+                                <Mtab label="Variation Details" {...a11yProps(1)} />
+                                <Mtab label="Status Details" {...a11yProps(2)} />
+                                <Mtab label="Documents" {...a11yProps(3)} />
+                            </Mtabs>
+                            <div value={value} index={0} className="muitab" style={{ display: value != 0 ? 'none' : '' }}>
+                                {variation.identification.map((element, index) => (
+                                    <div key={index}>
+                                        <h2 className='sous-heading-show'>Identification - {index + 1}</h2>
+                                        <div>
+                                            <table className='showTable'>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Value</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Product Name</td>
+                                                        <td>{element.product.value}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Procedure Type</td>
+                                                        <td>{element.procedure_type.value}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Country(s)</td>
+                                                        <td>{element.procedure_type.value === 'Decentralized' || element.procedure_type.value === 'Mutual Recognition' ? element.country.map((ele, i) => <ul key={i}><li>{ele.value}</li></ul>) : element.country.value}</td>
+                                                    </tr>
+                                                    {element.procedure_type.value === 'Decentralized' || element.procedure_type.value === 'Mutual Recognition' ?
+                                                    <tr>
+                                                        <td>RMS</td>
+                                                        <td>{element.rms ? element.rms.value : ''}</td>
+                                                    </tr> : ''}
+                                                    <tr>
+                                                        <td>Procedure Number</td>
+                                                        <td>{element.procedure_num}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Local Tradename</td>
+                                                        <td>{element.local_tradename}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Application Stage</td>
+                                                        <td>{element.application_stage ? element.application_stage.value : ''}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Product Type</td>
+                                                        <td>{element.product_type ? element.product_type.value : ''}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div value={value} index={1} className="muitab" style={{ display: value != 1 ? 'none' : '' }}>
+                                {variation.variation.map((element, index) => (
+                                    <div key={index}>
+                                        <h2 className='sous-heading-show'>Variation - {index + 1}</h2>
+                                        <div>
+                                            <table className='showTable'>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Value</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Variation Title</td>
+                                                        <td>{element.variation_title}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Variation Category</td>
+                                                        <td>{element.category.value}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Variation Type</td>
+                                                        <td>{element.variation_type.value}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Reason for variation</td>
+                                                        <td>{element.variation_reason ?  element.variation_reason.value : ''}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Submission Type</td>
+                                                        <td>{element.submission_type.value}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Applcation N°</td>
+                                                        <td>{element.application_number}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Submission/Procedure N°</td>
+                                                        <td>{element.submission_number}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Dossier Submission Format</td>
+                                                        <td>{element.submission_format ?  element.submission_format.value : ''}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div value={value} index={2} className="muitab" style={{ display: value != 2 ? 'none' : '' }}>
+                                {variation.statuses.map((element, index) => (
+                                    <div key={index}>
+                                        <h2 className='sous-heading-show'>Statut - {index + 1}</h2>
+                                        <div>
+                                            <table className='showTable'>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Value</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Status</td>
+                                                        <td>{element.status ? element.status.value : ''}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Status Date</td>
+                                                        <td>{moment(element.status_date).format('YYYY-MM-DD')}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>eCTD sequence</td>
+                                                        <td>{element.ectd}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Change Control or pre-assessment</td>
+                                                        <td>{element.control}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>CCDS/Core PIL ref n°</td>
+                                                        <td>{element.cdds}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Remarks</td>
+                                                        <td>{element.remarks}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Planned Local implementation Date</td>
+                                                        <td>{element.local_implementation ? moment(element.local_implementation).format('YYYY-MM-DD') : ''}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>HA Implimentation Deadline</td>
+                                                        <td>{element.implimentation_deadline ? moment(element.implimentation_deadline).format('YYYY-MM-DD') : ''}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Actual Local Implementation</td>
+                                                        <td>{element.actual_implementation ? moment(element.actual_implementation).format('YYYY-MM-DD') : ''}</td>
+                                                    </tr>
 
-                <Divider style={{ margin: '10px 0' }} />
-                <Typography variant='h6' gutterBottom >Variations</Typography>
-
-                <TableContainer >
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Product Name</TableCell>
-                                <TableCell>Country</TableCell>
-                                <TableCell>Variation Title</TableCell>
-                                <TableCell>Variation Category</TableCell>
-                                <TableCell>Variation Type</TableCell>
-                                <TableCell>Reason for variation</TableCell>
-                                <TableCell>Submission Type</TableCell>
-                                <TableCell>Applcation N°</TableCell>
-                                <TableCell>Submission/Procedure N°</TableCell>
-                                <TableCell>Dossier Submission Format</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {variation.variation.map((vari, i) => (
-                                <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                    <TableCell>{vari.product}</TableCell>
-                                    <TableCell>{vari.country}</TableCell>
-                                    <TableCell>{vari.category}</TableCell>
-                                    <TableCell>{vari.variation_type}</TableCell>
-                                    <TableCell>{vari.submission_type}</TableCell>
-                                    <TableCell>{vari.application_number}</TableCell>
-                                    <TableCell>{vari.submission_number}</TableCell>
-                                    <TableCell>{vari.submission_format}</TableCell>
-                                    <TableCell>{vari.variation_reason}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-
-                <Divider style={{ margin: '10px 0' }} />
-                <Typography variant='h6' gutterBottom >Status Details</Typography>
-
-                <TableContainer>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Product Name</TableCell>
-                                <TableCell>Country</TableCell>
-                                <TableCell>Status</TableCell>
-                                <TableCell>Status Date </TableCell>
-                                <TableCell>eCTD sequence</TableCell>
-                                <TableCell>Change Control or pre-assessment</TableCell>
-                                <TableCell>CCDS/Core PIL ref n°</TableCell>
-                                <TableCell>Remarks</TableCell>
-                                <TableCell>Planned Local implementation Date</TableCell>
-                                <TableCell>HA Implimentation Deadline</TableCell>
-                                <TableCell>Actual Local Implementation</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {variation.variation.map((status, i) => (
-                                <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                    <TableCell>{status.product}</TableCell>
-                                    <TableCell>{status.country}</TableCell>
-                                    <TableCell>{status.status}</TableCell>
-                                    <TableCell>{status.status_date ? moment(status.status_date).format('DD-MM-YYYY') : ''}</TableCell>
-                                    <TableCell>{status.ectd}</TableCell>
-                                    <TableCell>{status.control}</TableCell>
-                                    <TableCell>{status.cdds}</TableCell>
-                                    <TableCell>{status.remarks}</TableCell>
-                                    <TableCell>{status.local_implementation}</TableCell>
-                                    <TableCell>{status.implimentation_deadline}</TableCell>
-                                    <TableCell>{status.actual_implementation}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-
-                <Divider style={{ margin: '10px 0' }} />
-                <Typography variant='h6' gutterBottom >Documents</Typography>
-
-                <TableContainer >
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Document type</TableCell>
-                                <TableCell>Document title</TableCell>
-                                <TableCell>Language</TableCell>
-                                <TableCell>Version date</TableCell>
-                                <TableCell>Remarks</TableCell>
-                                <TableCell>Document</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {variation.doc.map((docs, i) => (
-                                <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                    <TableCell>{docs.document_type}</TableCell>
-                                    <TableCell>{docs.document_title}</TableCell>
-                                    <TableCell>{docs.language}</TableCell>
-                                    <TableCell>{docs.version_date ? moment(docs.version_date).format('MM-DD-YYYY') : ''}</TableCell>
-                                    <TableCell>{docs.dremarks}</TableCell>
-                                    <TableCell>{docs.document}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div value={value} index={3} className="muitab" style={{ display: value != 3 ? 'none' : '' }}>
+                                {variation.doc.map((element, index) => (
+                                    <div key={index}>
+                                        <h2 className='sous-heading-show'>Document - {index + 1}</h2>
+                                        <div>
+                                            <table className='showTable'>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Value</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Document type</td>
+                                                        <td>{element.document_type ? element.document_type.value : ''}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Document title</td>
+                                                        <td>{element.document_title}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Language</td>
+                                                        <td>{element.language ? element.language.value : ''}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Version date</td>
+                                                        <td>{element.version_date ? moment(element.version_date).format('YYYY-MM-DD') : ''}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Remarks</td>
+                                                        <td>{element.dremarks}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </Box>
+                    </div>
+                </div>
             </div>
         )
     } else {
         return (
             <div>
-                <Typography variant='h6' gutterBottom >Registration</Typography>
+                <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100%' }}>
+                    <Mtabs
+                        orientation="vertical"
+                        variant="scrollable"
+                        value={value}
+                        onChange={handleMChange}
+                        aria-label="Vertical tabs example"
+                        sx={{ borderRight: 1, borderColor: 'divider' }}
+                    >
+                        <Mtab label="Registration Identification" {...a11yProps(0)} />
+                        <Mtab label="Variation Details" {...a11yProps(1)} />
+                        <Mtab label="Status Details" {...a11yProps(2)} />
+                        <Mtab label="Documents" {...a11yProps(3)} />
+                    </Mtabs>
+                    <div value={value} index={0} className="muitab" style={{ display: value != 0 ? 'none' : '' }}>
+                        <table className='showTable'>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Product Name</td>
+                                    <td>{variation.product.value}</td>
+                                </tr>
+                                <tr>
+                                    <td>Procedure Type</td>
+                                    <td>{variation.procedure_type.value}</td>
+                                </tr>
+                                <tr>
+                                    <td>Country(s)</td>
+                                    <td>{variation.procedure_type.value === 'Decentralized' || variation.procedure_type.value === 'Mutual Recognition' ? variation.country.map((ele, i) => <ul key={i}><li>{ele.value}</li></ul>) : variation.country.value}</td>
+                                </tr>
+                                {variation.procedure_type.value === 'Decentralized' || variation.procedure_type.value === 'Mutual Recognition' ?
+                                    <tr>
+                                        <td>RMS</td>
+                                        <td>{variation.rms ? variation.rms.value : ''}</td>
+                                    </tr> : ''}
+                                <tr>
+                                    <td>Procedure Number</td>
+                                    <td>{variation.procedure_num}</td>
+                                </tr>
+                                <tr>
+                                    <td>Local Tradename</td>
+                                    <td>{variation.local_tradename}</td>
+                                </tr>
+                                <tr>
+                                    <td>Application Stage</td>
+                                    <td>{variation.application_stage ? variation.application_stage.value : ''}</td>
+                                </tr>
+                                <tr>
+                                    <td>Product Type</td>
+                                    <td>{variation.product_type ? variation.product_type.value : ''}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div value={value} index={1} className="muitab" style={{ display: value != 1 ? 'none' : '' }}>
+                        <table className='showTable'>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Variation Title</td>
+                                    <td>{variation.variation_title}</td>
+                                </tr>
+                                <tr>
+                                    <td>Variation Category</td>
+                                    <td>{variation.category.value}</td>
+                                </tr>
+                                <tr>
+                                    <td>Variation Type</td>
+                                    <td>{variation.variation_type.value}</td>
+                                </tr>
+                                <tr>
+                                    <td>Reason for variation</td>
+                                    <td>{variation.variation_reason ? variation.variation_reason.value : ''}</td>
+                                </tr>
+                                <tr>
+                                    <td>Submission Type</td>
+                                    <td>{variation.submission_type.value}</td>
+                                </tr>
+                                <tr>
+                                    <td>Applcation N°</td>
+                                    <td>{variation.application_number}</td>
+                                </tr>
+                                <tr>
+                                    <td>Submission/Procedure N°</td>
+                                    <td>{variation.submission_number}</td>
+                                </tr>
+                                <tr>
+                                    <td>Dossier Submission Format</td>
+                                    <td>{variation.submission_format ? variation.submission_format.value : ''}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div value={value} index={2} className="muitab" style={{ display: value != 2 ? 'none' : '' }}>
+                        {variation.statuses.map((element, index) => (
+                            <div key={index}>
+                                <h2 className='sous-heading-show'>Statut - {index + 1}</h2>
+                                <div>
+                                    <table className='showTable'>
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Value</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Status</td>
+                                                <td>{element.status ? element.status.value : ''}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Status Date</td>
+                                                <td>{moment(element.status_date).format('YYYY-MM-DD')}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>eCTD sequence</td>
+                                                <td>{element.ectd}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Change Control or pre-assessment</td>
+                                                <td>{element.control}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>CCDS/Core PIL ref n°</td>
+                                                <td>{element.cdds}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Remarks</td>
+                                                <td>{element.remarks}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Planned Local implementation Date</td>
+                                                <td>{element.local_implementation ? moment(element.local_implementation).format('YYYY-MM-DD') : ''}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>HA Implimentation Deadline</td>
+                                                <td>{element.implimentation_deadline ? moment(element.implimentation_deadline).format('YYYY-MM-DD') : ''}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Actual Local Implementation</td>
+                                                <td>{element.actual_implementation ? moment(element.actual_implementation).format('YYYY-MM-DD') : ''}</td>
+                                            </tr>
 
-                <div style={{ display: 'flex', alignItems: 'center', height: '20px' }}>
-                    <Typography variant='p' gutterBottom color='success' component="div" >Product Name : </Typography>
-                    <Typography variant='p' gutterBottom component="div" style={{ marginLeft: '5px' }}> {variation.product} </Typography>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', height: '20px' }}>
-                    <Typography variant='p' gutterBottom color='success' component="div" >Procedure Type : </Typography>
-                    <Typography variant='p' gutterBottom component="div" style={{ marginLeft: '5px' }}> {variation.procedure_type} </Typography>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', height: '20px' }}>
-                    <Typography variant='p' gutterBottom color='success' component="div" >Country : </Typography>
-                    <Typography variant='p' gutterBottom component="div" style={{ marginLeft: '5px' }}> {variation.country} </Typography>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', height: '20px' }}>
-                    <Typography variant='p' gutterBottom color='success' component="div" >RMS : </Typography>
-                    <Typography variant='p' gutterBottom component="div" style={{ marginLeft: '5px' }}> {variation.rms} </Typography>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', height: '20px' }}>
-                    <Typography variant='p' gutterBottom color='success' component="div" >Procedure Number : </Typography>
-                    <Typography variant='p' gutterBottom component="div" style={{ marginLeft: '5px' }}> {variation.procedure_num} </Typography>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', height: '20px' }}>
-                    <Typography variant='p' gutterBottom color='success' component="div" >Local Tradename : </Typography>
-                    <Typography variant='p' gutterBottom component="div" style={{ marginLeft: '5px' }}> {variation.local_tradename} </Typography>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', height: '20px' }}>
-                    <Typography variant='p' gutterBottom color='success' component="div" >Application Stage : </Typography>
-                    <Typography variant='p' gutterBottom component="div" style={{ marginLeft: '5px' }}> {variation.application_stage} </Typography>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', height: '20px' }}>
-                    <Typography variant='p' gutterBottom color='success' component="div" >Product Type : </Typography>
-                    <Typography variant='p' gutterBottom component="div" style={{ marginLeft: '5px' }}> {variation.product_type} </Typography>
-                </div>
-
-                <Divider style={{margin:'10px 0'}} />
-                <Typography variant='h6' gutterBottom >Variation Details</Typography>
-
-                <div style={{ display: 'flex', alignItems: 'center', height: '20px' }}>
-                    <Typography variant='p' gutterBottom color='success' component="div" >Variation Title : </Typography>
-                    <Typography variant='p' gutterBottom component="div" style={{ marginLeft: '5px' }}> {variation.variation_title} </Typography>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', height: '20px' }}>
-                    <Typography variant='p' gutterBottom color='success' component="div" >Variation Category : </Typography>
-                    <Typography variant='p' gutterBottom component="div" style={{ marginLeft: '5px' }}> {variation.category} </Typography>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', height: '20px' }}>
-                    <Typography variant='p' gutterBottom color='success' component="div" >Variation Type : </Typography>
-                    <Typography variant='p' gutterBottom component="div" style={{ marginLeft: '5px' }}> {variation.variation_type} </Typography>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', height: '20px' }}>
-                    <Typography variant='p' gutterBottom color='success' component="div" >Reason for variation : </Typography>
-                    <Typography variant='p' gutterBottom component="div" style={{ marginLeft: '5px' }}> {variation.variation_reason} </Typography>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', height: '20px' }}>
-                    <Typography variant='p' gutterBottom color='success' component="div" >Submission Type : </Typography>
-                    <Typography variant='p' gutterBottom component="div" style={{ marginLeft: '5px' }}> {variation.submission_type} </Typography>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', height: '20px' }}>
-                    <Typography variant='p' gutterBottom color='success' component="div" >Applcation N° : </Typography>
-                    <Typography variant='p' gutterBottom component="div" style={{ marginLeft: '5px' }}> {variation.application_number} </Typography>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', height: '20px' }}>
-                    <Typography variant='p' gutterBottom color='success' component="div" >Submission/Procedure N° : </Typography>
-                    <Typography variant='p' gutterBottom component="div" style={{ marginLeft: '5px' }}> {variation.submission_number} </Typography>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', height: '20px' }}>
-                    <Typography variant='p' gutterBottom color='success' component="div" >Dossier Submission Format : </Typography>
-                    <Typography variant='p' gutterBottom component="div" style={{ marginLeft: '5px' }}> {variation.submission_format} </Typography>
-                </div>
-
-                <Divider style={{margin:'10px 0'}} />
-                <Typography variant='h6' gutterBottom >Status Details</Typography>
-
-                <TableContainer>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                               
-                                <TableCell>Status</TableCell>
-                                <TableCell>Status Date </TableCell>
-                                <TableCell>eCTD sequence</TableCell>
-                                <TableCell>Change Control or pre-assessment</TableCell>
-                                <TableCell>CCDS/Core PIL ref n°</TableCell>
-                                <TableCell>Remarks</TableCell>
-                                <TableCell>Planned Local implementation Date</TableCell>
-                                <TableCell>HA Implimentation Deadline</TableCell>
-                                <TableCell>Actual Local Implementation</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {variation.statuses.map((status, i) => (
-                                <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                   
-                                    <TableCell>{status.status}</TableCell>
-                                    <TableCell>{status.status_date ? moment(status.status_date).format('DD-MM-YYYY') : ''}</TableCell>
-                                    <TableCell>{status.ectd}</TableCell>
-                                    <TableCell>{status.control}</TableCell>
-                                    <TableCell>{status.cdds}</TableCell>
-                                    <TableCell>{status.remarks}</TableCell>
-                                    <TableCell>{status.local_implementation}</TableCell>
-                                    <TableCell>{status.implimentation_deadline}</TableCell>
-                                    <TableCell>{status.actual_implementation}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-
-                <Divider style={{ margin: '10px 0' }} />
-                <Typography variant='h6' gutterBottom >Documents</Typography>
-
-                <TableContainer >
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Document type</TableCell>
-                                <TableCell>Document title</TableCell>
-                                <TableCell>Language</TableCell>
-                                <TableCell>Version date</TableCell>
-                                <TableCell>Remarks</TableCell>
-                                <TableCell>Document</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {variation.doc.map((docs, i) => (
-                                <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                    <TableCell>{docs.document_type}</TableCell>
-                                    <TableCell>{docs.document_title}</TableCell>
-                                    <TableCell>{docs.language}</TableCell>
-                                    <TableCell>{docs.version_date ? moment(docs.version_date).format('MM-DD-YYYY') : ''}</TableCell>
-                                    <TableCell>{docs.dremarks}</TableCell>
-                                    <TableCell>{docs.document}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div value={value} index={3} className="muitab" style={{ display: value != 3 ? 'none' : '' }}>
+                        {variation.doc.map((element, index) => (
+                            <div key={index}>
+                                <h2 className='sous-heading-show'>Document - {index + 1}</h2>
+                                <div>
+                                    <table className='showTable'>
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Value</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Document type</td>
+                                                <td>{element.document_type ? element.document_type.value : ''}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Document title</td>
+                                                <td>{element.document_title}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Language</td>
+                                                <td>{element.language ? element.language.value : ''}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Version date</td>
+                                                <td>{element.version_date ? moment(element.version_date).format('YYYY-MM-DD') : ''}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Remarks</td>
+                                                <td>{element.dremarks}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </Box>
             </div>
         )
     }
