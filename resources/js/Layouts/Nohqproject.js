@@ -94,7 +94,7 @@ const Nohqproject = (props) => {
 
     let addStatusFields = () => {
         let newArr = {...data};
-        newArr.statuses.push({country:'',status:'',status_date:'',ectd_sequence:'',change_control_ref:'',internal_submission_reference:'',remarks:''});
+        newArr.statuses.push({country:'',status: '',status_date: '',ectd: '',control: '',cdds: '',remarks: '',local_implementation: '',implimentation_deadline: '',actual_implementation: ''});
         setData(newArr);
     }
 
