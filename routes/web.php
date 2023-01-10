@@ -44,7 +44,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/dashbordkpi', [DashboardController::class, 'dashboard_kpi'])->name('dashboardkpi');
+    // Route::get('/dashbordkpi', [DashboardController::class, 'dashboard_kpi'])->name('dashboardkpi');
     Route::get('/interaction', [InteractionController::class, 'index'])->name('interaction');
 
     Route::get('/ma/create', [RcController::class, 'create'])->name('ma-create');
@@ -103,6 +103,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/storeclinical_registration_termination', [CregistrationTerminationController::class, 'store'])->name('storeclinical_registration_termination');
 
     Route::post('/addcompany', [CompanyController::class, 'store'])->name('addcompany');
+    Route::post('/formsByDate', [DashboardController::class, 'getformsnumber'])->name('formsByDate');
     
     Route::get('/company', [CompanyController::class, 'index'])->name('company');
     

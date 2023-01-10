@@ -7,20 +7,6 @@ import { Grid, Paper, Typography } from '@mui/material';
 import {Chart,BarSeries,Title,ArgumentAxis,ValueAxis,Tooltip} from '@devexpress/dx-react-chart-material-ui';
 import { EventTracker } from '@devexpress/dx-react-chart';
 
-
-// const data = [
-//     { form: 'MA Registration Creatio', population: 20 },
-//     { form: 'Variation', population: 3 },
-//     { form: 'Renewal', population: 7 },
-//     { form: 'Transfer', population: 4 },
-//     { form: 'Baseline', population: 5 },
-//     { form: 'Registration Termination', population: 6 },
-//     { form: 'Clinical Registration Creation', population: 8 },
-//     { form: 'Amendments', population: 11 },
-//     { form: 'Clinical Registration Termination', population: 15 },
-// ];
-
-
 const DashboardKpi = (props) => {
 
     const [data, setData] = useState([]);
