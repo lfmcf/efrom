@@ -57,7 +57,7 @@ class ClinicalController extends Controller
                         $uploadedFile,
                         $filename
                     );
-                    $doc['document'] = asset('storage/'.$filename);;
+                    $doc['document'] = asset('storage/'.$filename);
                 }
                 return $doc;
             }, $docs);

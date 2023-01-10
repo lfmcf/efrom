@@ -12443,7 +12443,7 @@ h5.subhead {
     margin: unset;
 } */
 
-fieldset {
+.form fieldset {
   border: 1px solid #e6e6e6;
   padding: 0 1.4em 1.4em 1.4em !important;
   margin: 0 0 1.5em 0 !important;
@@ -12451,7 +12451,7 @@ fieldset {
   border-radius: 5px;
 }
 
-legend {
+.form legend {
   font-size: 1.2em !important;
   font-weight: bold !important;
   text-align: left !important;
@@ -13029,11 +13029,12 @@ box-shadow: inset 0px 1px 12px 1px rgba(0,0,0,0.15); */
 }
 
 .dashpaper {
-  height: 50px;
+  height: 70px;
   padding: 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  color: white !important;
 }
 
 .heading-show {
@@ -13084,6 +13085,14 @@ box-shadow: inset 0px 1px 12px 1px rgba(0,0,0,0.15); */
 
 .sous-container {
   padding: 0 20px;
+}
+
+.css-17zcy27.Target-root {
+  font-size: 7.5px !important;
+}
+
+.css-4dretl {
+  height: 328px !important;
 }
 
 /* Mui Tabs */
