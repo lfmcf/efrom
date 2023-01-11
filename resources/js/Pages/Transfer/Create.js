@@ -8,13 +8,15 @@ import Select from 'react-select';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import BasicSpeedDial from '@/Components/SpeedDial';
-import { Tabs as Mtabs, Tab as Mtab } from '@mui/material';
+import { Tabs as Mtabs, Tab as Mtab, IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
 import SaveModal from '@/Components/SaveModal';
 import { Typography } from "@mui/material";
 import { product_name, procedure_type, status } from '@/Components/List';
 import { Head } from '@inertiajs/inertia-react';
 import moment from "moment";
+import ModalP from '@/Components/Modalp';
+import AddIcon from '@mui/icons-material/Add';
 
 function a11yProps(index) {
     return {
@@ -46,6 +48,7 @@ const Create = (props) => {
     });
 
     const countryRef = React.useRef();
+    const [showMP, setShowMP] = useState(false);
     const [value, setValue] = useState(0);
     const [showsavemodal, setSavemodal] = useState({ show: false, name: '' });
     const formRef = React.useRef();
@@ -56,6 +59,10 @@ const Create = (props) => {
 
         setValue(newValue);
     };
+
+    const handleCloseMP = () => {
+        setShowMP(false)
+    }
 
     let contries = props.countries.map(function (country) {
         return { value: country.country_name, label: country.country_name };
@@ -311,6 +318,9 @@ const Create = (props) => {
                                                         styles={selectStyles(errors.product)}
                                                         value={data.product}
                                                     />
+                                                    <IconButton color="primary" onClick={(e) => setShowMP(true)} aria-label="add product">
+                                                        <AddIcon />
+                                                    </IconButton>
                                                 </div>
                                             </div>
                                             </div>
@@ -617,6 +627,7 @@ const Create = (props) => {
                                 <Documents handleChanged={handleDocumentChange} handleDocumentdate={handleDocumentdate} addFormFields={addFormFields} formValues={data.doc} removeDocumentsFields={removeDocumentsFields} handleDocumentSelectChange={handleDocumentSelectChange} />
                             </Tab>
                         </Tabs>
+                        <ModalP show={showMP} handleClose={handleCloseMP} />
                         <BasicSpeedDial processing={processing} showsavemodel={showsavemodel} showdraftmodel={showdraftmodel} reset={handleReset} />
                         <SaveModal show={showsavemodal.show} handleClose={handleSaveModalClose} handleSubmited={handleSaveModalConfirm} name={showsavemodal.name} />
                     </form>
