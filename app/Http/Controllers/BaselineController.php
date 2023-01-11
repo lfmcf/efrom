@@ -86,7 +86,7 @@ class BaselineController extends Controller
         $baseline->application_stage = $request->application_stage;
         $baseline->procedure_num = $request->procedure_num;
         $baseline->local_tradename = $request->local_tradename;
-        $baseline->product_type = $request->product_type;
+        // $baseline->product_type = $request->product_type;
         $baseline->baseline_title = $request->baseline_title;
         $baseline->description = $request->description;
         $baseline->application_num = $request->application_num;
@@ -107,8 +107,8 @@ class BaselineController extends Controller
                 'RMS',
                 'Procedure Number',
                 'Local Tradename',
-                'Application Stage',
-                'Product Type'
+                'Submission Type',
+                // 'Product Type'
             );
             $baselineDetails = array(
                 'Baseline Title',
@@ -153,7 +153,7 @@ class BaselineController extends Controller
                 $baseline->procedure_num,
                 $baseline->local_tradename,
                 $baseline->application_stage ? $baseline->application_stage['value'] : '',
-                $baseline->product_type ? $baseline->product_type['value'] : ''
+                // $baseline->product_type ? $baseline->product_type['value'] : ''
             ], NULL, 'A2');
 
             if(array_key_exists('value', $baseline->country)) {
@@ -321,7 +321,7 @@ class BaselineController extends Controller
         $baseline->application_stage = $request->application_stage;
         $baseline->procedure_num = $request->procedure_num;
         $baseline->local_tradename = $request->local_tradename;
-        $baseline->product_type = $request->product_type;
+        // $baseline->product_type = $request->product_type;
         $baseline->baseline_title = $request->baseline_title;
         $baseline->description = $request->description;
         $baseline->application_num = $request->application_num;
@@ -342,8 +342,8 @@ class BaselineController extends Controller
                 'RMS',
                 'Procedure Number',
                 'Local Tradename',
-                'Application Stage',
-                'Product Type'
+                'Submission Type',
+                // 'Product Type'
             );
             $baselineDetails = array(
                 'Baseline Title',
@@ -388,7 +388,7 @@ class BaselineController extends Controller
                 $baseline->procedure_num,
                 $baseline->local_tradename,
                 $baseline->application_stage ? $baseline->application_stage['value'] : '',
-                $baseline->product_type ? $baseline->product_type['value'] : ''
+                // $baseline->product_type ? $baseline->product_type['value'] : ''
             ], NULL, 'A2');
 
             if(array_key_exists('value', $baseline->country)) {

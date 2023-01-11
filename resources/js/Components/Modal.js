@@ -18,11 +18,13 @@ const ModalS = ({ show, handleClose }) => {
 
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
-        adress: '',
+        adressone: '',
+        adresstwo: '',
         city: '',
         postalcode: '',
         countryname: '',
         organizationrole: '',
+        boxnumber: '',
         status: 1,
 
     });
@@ -47,7 +49,7 @@ const ModalS = ({ show, handleClose }) => {
 
             <Dialog open={show} onClose={handleClose} TransitionComponent={Transition}>
                 <form onSubmit={submit}>
-                    <DialogTitle>Add New Compnay</DialogTitle>
+                    <DialogTitle>Add New Organization</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
                             {/* To subscribe to this website, please enter your email address here. We
@@ -57,15 +59,31 @@ const ModalS = ({ show, handleClose }) => {
                             autoFocus
                             margin="dense"
                             name='name'
-                            label="name"
+                            label="Name"
                             type="text"
                             fullWidth
                             variant="standard"
                         />
                         <TextField
-                            name='adress'
+                            name='adressone'
                             margin="dense"
-                            label="Address"
+                            label="Adress (Line 1)"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                        />
+                        <TextField
+                            name='adresstwo'
+                            margin="dense"
+                            label="Adress (Line 2)"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                        />
+                        <TextField
+                            name='postalcode'
+                            margin="dense"
+                            label="Postal Code"
                             type="text"
                             fullWidth
                             variant="standard"
@@ -82,6 +100,14 @@ const ModalS = ({ show, handleClose }) => {
                             name='countryname'
                             margin="dense"
                             label="Country Name"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                        />
+                        <TextField
+                            name='boxnumber'
+                            margin="dense"
+                            label="PO Box Number"
                             type="text"
                             fullWidth
                             variant="standard"

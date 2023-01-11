@@ -68,10 +68,10 @@ class RcController extends Controller
                 [
                     'country' => 'required',
                     'procedure_type' => 'required',
-                    'product_type' => 'required',
                     'application_stage' => 'required',
                     'product_name' => 'required',
-                    'registration_title' => 'required',
+                    'packagings.*.sellable_unit_determined_by' => 'required',
+                    'packagings.*.product_legal_status_of_supply' => 'required',
                     'packagings.*.packaging_name' => 'required',
                     'packagings.*.packaging_type' => 'required',
                     'local_tradename' => 'required',
@@ -120,9 +120,9 @@ class RcController extends Controller
         $rc->country = $request->country;
         $rc->rms = $request->rms;
         $rc->procedure_number = $request->procedure_number;
-        $rc->product_type = $request->product_type;
+        // $rc->product_type = $request->product_type;
         $rc->application_stage = $request->application_stage;
-        $rc->registration_title = $request->registration_title;
+        // $rc->registration_title = $request->registration_title;
         $rc->product_name = $request->product_name;
         $rc->local_tradename = $request->local_tradename;
         $rc->registration_holder = $request->registration_holder;
@@ -146,6 +146,9 @@ class RcController extends Controller
         $rc->age = $request->age;
         $rc->manufacturing = $request->manufacturing;
         $rc->statuses = $request->statuses;
+        $rc->next_renewals = $request->next_renewals;
+        $rc->nr_submission_deadline = $request->nr_submission_deadline;
+        $rc->nr_date = $request->nr_date;
         $rc->doc = $docs;
         $rc->created_by = $request->created_by;
         $rc->type = $request->query('type');
@@ -157,7 +160,6 @@ class RcController extends Controller
                 'Country',
                 'RMS',
                 'Procedure Number',
-                'Product Type',
                 'Applcation Stage'
             );
             $basicInfo = array(
@@ -202,7 +204,10 @@ class RcController extends Controller
                 'Function'
             );
             $packagings = array(
+                'Sellable Unit Determined By',
+                'Product Legal Status of Supply',
                 'Packaging Type',
+                'Packaging Registration number',
                 'Packaging Name',
                 'Description',
                 'Launched',
@@ -234,6 +239,11 @@ class RcController extends Controller
                 'Internal Submission Reference',
                 'Remarks',
             );
+            $next_renewals = array(
+                'Next Renewals',
+                'Next Renewal Submission Deadline',
+                'Next Renewal Date',
+            );
             $document = array(
                 'Document type',
                 'Document title',
@@ -253,7 +263,6 @@ class RcController extends Controller
                 "",
                 $rc->rms ? $rc->rms['value'] : '',
                 $rc->procedure_number,
-                $rc->product_type['value'],
                 $rc->application_stage['value'],
             ], NULL, 'A2');
            
@@ -272,7 +281,6 @@ class RcController extends Controller
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($basicInfo, NULL, 'A1');
             $sheet->fromArray([
-                $rc->registration_title,
                 $rc->product_name['value'],
                 $rc->local_tradename,
                 $rc->registration_holder['value'],
@@ -383,23 +391,26 @@ class RcController extends Controller
             $sheet->fromArray($packagings, NULL, 'A1');
             $c = 2;
             foreach ($rc->packagings as $package) {
-                $sheet->setCellValue('A' . $c, is_array($package['packaging_type']) ? $package['packaging_type']['value'] : '');
-                $sheet->setCellValue('B' . $c, $package['packaging_name']);
-                $sheet->setCellValue('C' . $c, $package['description']);
-                $sheet->setCellValue('D' . $c, is_array($package['launched']) ? $package['launched']['value'] : '');
-                $sheet->setCellValue('E' . $c, date("d-m-Y",strtotime($package['first_lunch_date'])));
-                $sheet->setCellValue('F' . $c, is_array($package['packaging_discontinued']) ? $package['packaging_discontinued']['value'] : '');
-                $sheet->setCellValue('G' . $c, date("d-m-Y",strtotime($package['discontinuation_date'])));
-                $sheet->setCellValue('H' . $c, $package['remarks']);
+                $sheet->setCellValue('A' . $c, $package['sellable_unit_determined_by']);
+                $sheet->setCellValue('B' . $c, $package['product_legal_status_of_supply']);
+                $sheet->setCellValue('C' . $c, is_array($package['packaging_type']) ? $package['packaging_type']['value'] : '');
+                $sheet->setCellValue('D' . $c, $package['packaging_registration_number']);
+                $sheet->setCellValue('E' . $c, $package['packaging_name']);
+                $sheet->setCellValue('F' . $c, $package['description']);
+                $sheet->setCellValue('G' . $c, is_array($package['launched']) ? $package['launched']['value'] : '');
+                $sheet->setCellValue('H' . $c, date("d-m-Y",strtotime($package['first_lunch_date'])));
+                $sheet->setCellValue('I' . $c, is_array($package['packaging_discontinued']) ? $package['packaging_discontinued']['value'] : '');
+                $sheet->setCellValue('J' . $c, date("d-m-Y",strtotime($package['discontinuation_date'])));
+                $sheet->setCellValue('K' . $c, $package['remarks']);
                 if(isset($package['packagelif']));{
                     foreach ($package['packagelif'] as $i => $pl) {
-                        $sheet->setCellValue('I' . $c, is_array($pl['package_shelf_life_type']) ? $pl['package_shelf_life_type']['value'] : '');
-                        $sheet->setCellValue('J' . $c, $pl['shelf_life']);
-                        $sheet->setCellValue('K' . $c, is_array($pl['shelf_life_unit']) ? $pl['shelf_life_unit']['value'] : '');
-                        $sheet->setCellValue('M' . $c, $pl['remarks']);
+                        $sheet->setCellValue('L' . $c, is_array($pl['package_shelf_life_type']) ? $pl['package_shelf_life_type']['value'] : '');
+                        $sheet->setCellValue('M' . $c, $pl['shelf_life']);
+                        $sheet->setCellValue('N' . $c, is_array($pl['shelf_life_unit']) ? $pl['shelf_life_unit']['value'] : '');
+                        $sheet->setCellValue('P' . $c, $pl['remarks']);
                         if (isset($pl['package_storage_condition'])) {
                             foreach ($pl['package_storage_condition'] as $psc) {
-                                $sheet->setCellValue('L' . $c, $psc['value']);
+                                $sheet->setCellValue('O' . $c, $psc['value']);
                                 $c += 1;
                             }
                         }
@@ -462,6 +473,12 @@ class RcController extends Controller
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(12);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Next Renewals');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($next_renewals, NULL, 'A1');
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(13);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Documents');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($document, NULL, 'A1');
@@ -557,10 +574,8 @@ class RcController extends Controller
                 [
                     'country' => 'required',
                     'procedure_type' => 'required',
-                    'product_type' => 'required',
                     'application_stage' => 'required',
                     'product_name' => 'required',
-                    'registration_title' => 'required',
                     'packagings.*.packaging_name' => 'required',
                     'packagings.*.packaging_type' => 'required',
                     'local_tradename' => 'required',
@@ -609,9 +624,9 @@ class RcController extends Controller
         $rc->country = $request->country;
         $rc->rms = $request->rms;
         $rc->procedure_number = $request->procedure_number;
-        $rc->product_type = $request->product_type;
+        // $rc->product_type = $request->product_type;
         $rc->application_stage = $request->application_stage;
-        $rc->registration_title = $request->registration_title;
+        // $rc->registration_title = $request->registration_title;
         $rc->product_name = $request->product_name;
         $rc->local_tradename = $request->local_tradename;
         $rc->registration_holder = $request->registration_holder;
@@ -635,6 +650,9 @@ class RcController extends Controller
         $rc->age = $request->age;
         $rc->manufacturing = $request->manufacturing;
         $rc->statuses = $request->statuses;
+        $rc->next_renewals = $request->next_renewals;
+        $rc->nr_submission_deadline = $request->nr_submission_deadline;
+        $rc->nr_date = $request->nr_date;
         $rc->doc = $docs;
         $rc->created_by = $request->created_by;
         $rc->type = $request->query('type');
@@ -723,6 +741,11 @@ class RcController extends Controller
                 'Internal Submission Reference',
                 'Remarks',
             );
+            $next_renewals = array(
+                'Next Renewals',
+                'Next Renewal Submission Deadline',
+                'Next Renewal Date',
+            );
             $document = array(
                 'Document type',
                 'Document title',
@@ -742,7 +765,6 @@ class RcController extends Controller
                 "",
                 $rc->rms ? $rc->rms['value'] : '',
                 $rc->procedure_number,
-                $rc->product_type['value'],
                 $rc->application_stage['value'],
             ], NULL, 'A2');
             if(array_key_exists('value', $rc->country)) {
@@ -760,7 +782,6 @@ class RcController extends Controller
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($basicInfo, NULL, 'A1');
             $sheet->fromArray([
-                $rc->registration_title,
                 $rc->product_name['value'],
                 $rc->local_tradename,
                 $rc->registration_holder['value'],
@@ -949,6 +970,12 @@ class RcController extends Controller
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(12);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Next Renewals');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($next_renewals, NULL, 'A1');
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(13);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Documents');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($document, NULL, 'A1');

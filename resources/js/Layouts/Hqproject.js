@@ -13,6 +13,7 @@ import Box from '@mui/material/Box';
 import SaveModal from '@/Components/SaveModal';
 import { Typography } from '@mui/material';
 import { Head } from '@inertiajs/inertia-react';
+import moment from 'moment';
 
 function a11yProps(index) {
     return {
@@ -24,9 +25,9 @@ function a11yProps(index) {
 const Hqproject = (props) => {
 
     const { data, setData, post, processing, errors, clearErrors, reset } = useForm({
-        identification: [{product: "", procedure_type: "", country: [], application_stage: "", rms: "", procedure_num: "", local_tradename: "", product_type: ""}],
+        identification: [{product: "", procedure_type: "", country: [], application_stage: "", rms: "", procedure_num: "", local_tradename: ""}],
         variation: [{product: "",country:"",variation_title: "",category: "", variation_type: "", submission_type: "", application_number: "", submission_number: "", submission_format: "", variation_reason: ""}],
-        statuses: [{product: "",country:"",status: "", status_date: "", ectd: "", control: "", cdds: "", remarks: "", local_implementation: "", implimentation_deadline: "", actual_implementation: ""}],
+        statuses: [{product: "",country:"",status: "", status_date: '', ectd: "", control: "", cdds: "", remarks: "", local_implementation: '', implimentation_deadline: '', actual_implementation: ''}],
         doc: [{document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: ''}],
         isHq: true,
         created_by: props.user.id,
@@ -89,7 +90,7 @@ const Hqproject = (props) => {
 
     let addProductFields = () => {
         let arr = {...data};
-        arr.identification.push({product: "", procedure_type: "", country: [], application_stage: "", rms: "", procedure_num: "", local_tradename: "", product_type: ""});
+        arr.identification.push({product: "", procedure_type: "", country: [], application_stage: "", rms: "", procedure_num: "", local_tradename: ""});
         setData(arr);
     }
 
@@ -101,7 +102,7 @@ const Hqproject = (props) => {
 
     let addStatusFields = () => {
         let arr = {...data};
-        arr.statuses.push({product: "",country:"",status: "", status_date: "", ectd: "", control: "", cdds: "", remarks: "", local_implementation: "", implimentation_deadline: "", actual_implementation: ""});
+        arr.statuses.push({product: "",country:"",status: "", status_date: '', ectd: "", control: "", cdds: "", remarks: "", local_implementation: '', implimentation_deadline: '', actual_implementation: ''});
         setData(arr);
     }
 
@@ -384,7 +385,7 @@ const Hqproject = (props) => {
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label" style={{color: errors['identification.' + index + '.product'] ? 'red' : ''}}>Product Name (*)</span>
+                                                <span className="form_group_label" style={{color: errors['identification.' + index + '.product'] ? 'red' : ''}}>Product (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={product_name}
                                                         name="product"
@@ -462,7 +463,7 @@ const Hqproject = (props) => {
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Application Stage</span>
+                                                <span className="form_group_label">Submission Type</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
                                                         { value: 'Marketing Authorisation', label: 'Marketing Authorisation' },
@@ -478,7 +479,7 @@ const Hqproject = (props) => {
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="form_group_inline">
+                                            {/* <div className="form_group_inline">
                                                 <span className="form_group_label">Product Type</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
@@ -494,7 +495,7 @@ const Hqproject = (props) => {
                                                         value={element.product_type}
                                                     />
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 </fieldset>
@@ -769,7 +770,7 @@ const Hqproject = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label" style={{color: errors['statuses.' + index + '.status_date'] ? 'red' : ''}}>Status Date</span>
                                                 <div className="form_group_field">
-                                                    <DatePicker name="status_date" selected={data.statuses[index].status_date} onChange={(date) => handleDateChange(index, 'status_date', date)} style={{ borderColor: errors['statuses.' + index + '.status_date'] ? 'red' : '' }} />
+                                                    <DatePicker name="status_date" selected={data.statuses[index].status_date} onChange={(date) => handleDateChange(index, 'status_date', date)} style={{ borderColor: errors['statuses.' + index + '.status_date'] ? 'red' : '' }} value={element.status_date ? moment(element.status_date).format('DD-MMM-yy') : ''} />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
@@ -803,19 +804,19 @@ const Hqproject = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Planned Local implementation Date</span>
                                                 <div className="form_group_field">
-                                                    <DatePicker name="local_implementation" selected={data.statuses[index].local_implementation} onChange={(date) => handleDateChange(index, 'local_implementation', date)} />
+                                                    <DatePicker name="local_implementation" selected={data.statuses[index].local_implementation} onChange={(date) => handleDateChange(index, 'local_implementation', date)} value={element.local_implementation ? moment(element.local_implementation).format('DD-MMM-yy') : ''} />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">HA Implimentation Deadline</span>
                                                 <div className="form_group_field">
-                                                    <DatePicker name="implimentation_deadline" selected={data.statuses[index].implimentation_deadline} onChange={(date) => handleDateChange(index, 'implimentation_deadline', date)} />
+                                                    <DatePicker name="implimentation_deadline" selected={data.statuses[index].implimentation_deadline} onChange={(date) => handleDateChange(index, 'implimentation_deadline', date)} value={element.implimentation_deadline ? moment(element.implimentation_deadline).format('DD-MMM-yy') : ''} />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Actual Local Implementation</span>
                                                 <div className="form_group_field">
-                                                    <DatePicker name="actual_implementation" selected={data.statuses[index].actual_implementation} onChange={(date) => handleDateChange(index, 'actual_implementation', date)} />
+                                                    <DatePicker name="actual_implementation" selected={data.statuses[index].actual_implementation} onChange={(date) => handleDateChange(index, 'actual_implementation', date)} value={element.actual_implementation ? moment(element.actual_implementation).format('DD-MMM-yy') : ''} />
                                                     {/* <input type="text" name="actual_implementation" onChange={e => handleStatusChange(index, e)} /> */}
                                                 </div>
                                             </div>

@@ -92,7 +92,7 @@ class RenouvellementController extends Controller
         $ren->application_stage = $request->application_stage;
         $ren->procedure_num = $request->procedure_num;
         $ren->local_tradename = $request->local_tradename;
-        $ren->product_type = $request->product_type;
+        //$ren->product_type = $request->product_type;
         $ren->renewal_title = $request->renewal_title;
         // $ren->category = $request->category;
         // $ren->description = $request->description;
@@ -114,8 +114,8 @@ class RenouvellementController extends Controller
                 'RMS',
                 'Procedure Number',
                 'Local Tradename',
-                'Application Stage',
-                'Product Type'
+                'Submission Type',
+                // 'Product Type'
             );
             $renewalDetail = array(
                 'Renewal Title',
@@ -162,7 +162,7 @@ class RenouvellementController extends Controller
                 $ren->procedure_num,
                 $ren->local_tradename,
                 $ren->application_stage ? $ren->application_stage['value'] : '',
-                $ren->product_type ? $ren->product_type['value'] : ''
+                // $ren->product_type ? $ren->product_type['value'] : ''
             ], NULL, 'A2');
 
             if(array_key_exists('value', $ren->country)) {
@@ -336,7 +336,7 @@ class RenouvellementController extends Controller
         $ren->application_stage = $request->application_stage;
         $ren->procedure_num = $request->procedure_num;
         $ren->local_tradename = $request->local_tradename;
-        $ren->product_type = $request->product_type;
+        //$ren->product_type = $request->product_type;
         $ren->renewal_title = $request->renewal_title;
         // $ren->category = $request->category;
         // $ren->description = $request->description;
@@ -358,8 +358,8 @@ class RenouvellementController extends Controller
                 'RMS',
                 'Procedure Number',
                 'Local Tradename',
-                'Application Stage',
-                'Product Type'
+                'Submission Type',
+                // 'Product Type'
             );
             $renewalDetail = array(
                 'Renewal Title',
@@ -406,7 +406,7 @@ class RenouvellementController extends Controller
                 $ren->procedure_num,
                 $ren->local_tradename,
                 $ren->application_stage ? $ren->application_stage['value'] : '',
-                $ren->product_type ? $ren->product_type['value'] : ''
+                //$ren->product_type ? $ren->product_type['value'] : ''
             ], NULL, 'A2');
 
             if(array_key_exists('value', $ren->country)) {

@@ -32,7 +32,6 @@ class ClinicalController extends Controller
                     'country' => 'required',
                     'application_stage' => 'required',
                     'product_name' => 'required',
-                    'registration_title' => 'required',
                     'authorized_pharmaceutical_form' => 'required',
                     'route_of_admin' => 'required',
                     'atc' => 'required',
@@ -68,9 +67,9 @@ class ClinicalController extends Controller
         $clinical->procedure_type = $request->procedure_type;
         $clinical->country = $request->country;
         $clinical->rms = $request->rms;
-        $clinical->procedure_number = $request->procedure_number;
+        
         $clinical->application_stage = $request->application_stage;
-        $clinical->registration_title = $request->registration_title;
+        // $clinical->registration_title = $request->registration_title;
         $clinical->product_name = $request->product_name;
         $clinical->protocol_number = $request->protocol_number;
         $clinical->study_sponsor = $request->study_sponsor;
@@ -78,6 +77,13 @@ class ClinicalController extends Controller
         $clinical->clinical_phase = $request->clinical_phase;
         $clinical->protocol_type = $request->protocol_type;
         $clinical->paediatric_indication = $request->paediatric_indication;
+        $clinical->procedure_number = $request->procedure_number;
+        $clinical->investigationnal_code = $request->investigationnal_code;
+        $clinical->application_number = $request->application_number;
+        $clinical->registration_alternate_number = $request->registration_alternate_number;
+        $clinical->registration_number = $request->registration_number;
+        $clinical->registration_date = $request->registration_date;
+        $clinical->medicines_regulatory_authority = $request->medicines_regulatory_authority;
         $clinical->remarks = $request->remarks;
         $clinical->authorized_pharmaceutical_form = $request->authorized_pharmaceutical_form;
         $clinical->administrable_pharmaceutical_form = $request->administrable_pharmaceutical_form;
@@ -87,14 +93,14 @@ class ClinicalController extends Controller
         $clinical->orphan_indication = $request->orphan_indication;
         $clinical->under_intensive_monitoring = $request->under_intensive_monitoring;
         $clinical->key_dates = $request->key_dates;
-        $clinical->alternate_number_type = $request->alternate_number_type;
+        // $clinical->alternate_number_type = $request->alternate_number_type;
         $clinical->alternate_number = $request->alternate_number;
         $clinical->remarks = $request->remarks;
         $clinical->local_agent_company = $request->local_agent_company;
         $clinical->formulations = $request->formulations;
         $clinical->packagings = $request->packagings;
         $clinical->indication = $request->indication;
-        $clinical->paediatric_use = $request->paediatric_use;
+        // $clinical->paediatric_use = $request->paediatric_use;
         $clinical->manufacturing = $request->manufacturing;
         $clinical->statuses = $request->statuses;
         $clinical->doc = $docs;
@@ -107,18 +113,23 @@ class ClinicalController extends Controller
                 'Procedure Type',
                 'Country',
                 'RMS',
-                'Procedure Number',
                 'Applcation Stage',
             );
             $basicInfo = array(
-                'Registration Title',
-                'Product name',
+                'Product',
                 'Protocol Number',
                 'Study Sponsor',
                 'Full Study Title',
                 'Clinical Phase',
                 'Protocol Type',
                 'Peadiatric indication',
+                'Procedure Number',
+                'Investigationnal Code',
+                'Application Number',
+                'Registration alternate number',
+                'Registration number',
+                'Registration Date',
+                'Medicines Regulatory Authority',
                 'Remarks',
             );
             $dosageForm = array(
@@ -138,7 +149,6 @@ class ClinicalController extends Controller
                 'Key Date Type',
                 'Date',
                 'Remarks',
-                'Alternate Number Type',
                 'Alternate Number',
                 'Remarks',
             );
@@ -170,7 +180,7 @@ class ClinicalController extends Controller
             );
             $indications = array(
                 'Indications',
-                'Paediatric use'
+                //'Paediatric use'
             );
             $manufacturing = array(
                 'Manufacturer',
@@ -204,7 +214,7 @@ class ClinicalController extends Controller
                 $clinical->procedure_type['value'],
                 "",
                 $clinical->rms ? $clinical->rms['value'] : '',
-                $clinical->procedure_number,
+                
                 $clinical->application_stage['value'],
             ], NULL, 'A2');
 
@@ -224,7 +234,7 @@ class ClinicalController extends Controller
             $sheet->fromArray($basicInfo, NULL, 'A1');
 
             $sheet->fromArray([
-                $clinical->registration_title,
+                // $clinical->registration_title,
                 $clinical->product_name['value'],
                 $clinical->protocol_number,
                 $clinical->study_sponsor ? $clinical->study_sponsor['value'] : '',
@@ -232,6 +242,13 @@ class ClinicalController extends Controller
                 $clinical->clinical_phase ? $clinical->clinical_phase['value'] : '',
                 $clinical->protocol_type ? $clinical->protocol_type['value'] : '',
                 $clinical->paediatric_indication ? $clinical->paediatric_indication['value'] : '',
+                $clinical->procedure_number,
+                $clinical->investigationnal_code,
+                $clinical->application_number,
+                $clinical->registration_alternate_number,
+                $clinical->registration_number,
+                $clinical->registration_date,
+                $clinical->medicines_regulatory_authority,
                 $clinical->remarks,
             ], NULL, 'A2');
 
@@ -285,9 +302,9 @@ class ClinicalController extends Controller
                 $sheet->setCellValue('C' . $n, $kd['remarks']);
                 $n+1;
             }
-            $sheet->setCellValue('D2', $clinical->alternate_number_type ? $clinical->alternate_number_type['value'] : '');
-            $sheet->setCellValue('E2', $clinical->alternate_number);
-            $sheet->setCellValue('F2', $clinical->remarks);
+            //$sheet->setCellValue('D2', $clinical->alternate_number_type ? $clinical->alternate_number_type['value'] : '');
+            $sheet->setCellValue('D2', $clinical->alternate_number);
+            $sheet->setCellValue('E2', $clinical->remarks);
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(6);
@@ -351,7 +368,7 @@ class ClinicalController extends Controller
             $sheet->fromArray($indications, NULL, 'A1');
             $sheet->fromArray([
                 $clinical->indication['value'],
-                is_array($clinical->paediatric_use) ? $clinical->paediatric_use['value'] : '',
+                // is_array($clinical->paediatric_use) ? $clinical->paediatric_use['value'] : '',
                 // $clinical->age,
             ], NULL, 'A2');
 
@@ -488,7 +505,6 @@ class ClinicalController extends Controller
                     'country' => 'required',
                     'application_stage' => 'required',
                     'product_name' => 'required',
-                    'registration_title' => 'required',
                     'authorized_pharmaceutical_form' => 'required',
                     'route_of_admin' => 'required',
                     'atc' => 'required',
@@ -524,9 +540,9 @@ class ClinicalController extends Controller
         $clinical->procedure_type = $request->procedure_type;
         $clinical->country = $request->country;
         $clinical->rms = $request->rms;
-        $clinical->procedure_number = $request->procedure_number;
+        
         $clinical->application_stage = $request->application_stage;
-        $clinical->registration_title = $request->registration_title;
+        // $clinical->registration_title = $request->registration_title;
         $clinical->product_name = $request->product_name;
         $clinical->protocol_number = $request->protocol_number;
         $clinical->study_sponsor = $request->study_sponsor;
@@ -534,6 +550,13 @@ class ClinicalController extends Controller
         $clinical->clinical_phase = $request->clinical_phase;
         $clinical->protocol_type = $request->protocol_type;
         $clinical->paediatric_indication = $request->paediatric_indication;
+        $clinical->procedure_number = $request->procedure_number;
+        $clinical->investigationnal_code = $request->investigationnal_code;
+        $clinical->application_number = $request->application_number;
+        $clinical->registration_alternate_number = $request->registration_alternate_number;
+        $clinical->registration_number = $request->registration_number;
+        $clinical->registration_date = $request->registration_date;
+        $clinical->medicines_regulatory_authority = $request->medicines_regulatory_authority;
         $clinical->remarks = $request->remarks;
         $clinical->authorized_pharmaceutical_form = $request->authorized_pharmaceutical_form;
         $clinical->administrable_pharmaceutical_form = $request->administrable_pharmaceutical_form;
@@ -543,14 +566,14 @@ class ClinicalController extends Controller
         $clinical->orphan_indication = $request->orphan_indication;
         $clinical->under_intensive_monitoring = $request->under_intensive_monitoring;
         $clinical->key_dates = $request->key_dates;
-        $clinical->alternate_number_type = $request->alternate_number_type;
+        // $clinical->alternate_number_type = $request->alternate_number_type;
         $clinical->alternate_number = $request->alternate_number;
         $clinical->remarks = $request->remarks;
         $clinical->local_agent_company = $request->local_agent_company;
         $clinical->formulations = $request->formulations;
         $clinical->packagings = $request->packagings;
         $clinical->indication = $request->indication;
-        $clinical->paediatric_use = $request->paediatric_use;
+        // $clinical->paediatric_use = $request->paediatric_use;
         $clinical->manufacturing = $request->manufacturing;
         $clinical->statuses = $request->statuses;
         $clinical->doc = $docs;
@@ -563,7 +586,6 @@ class ClinicalController extends Controller
                 'Procedure Type',
                 'Country',
                 'RMS',
-                'Procedure Number',
                 'Applcation Stage',
             );
             $basicInfo = array(
@@ -575,6 +597,13 @@ class ClinicalController extends Controller
                 'Clinical Phase',
                 'Protocol Type',
                 'Peadiatric indication',
+                'Procedure Number',
+                'Investigationnal Code',
+                'Application Number',
+                'Registration alternate number',
+                'Registration number',
+                'Registration Date',
+                'Medicines Regulatory Authority',
                 'Remarks',
             );
             $dosageForm = array(
@@ -594,7 +623,6 @@ class ClinicalController extends Controller
                 'Key Date Type',
                 'Date',
                 'Remarks',
-                'Alternate Number Type',
                 'Alternate Number',
                 'Remarks',
             );
@@ -626,7 +654,7 @@ class ClinicalController extends Controller
             );
             $indications = array(
                 'Indications',
-                'Paediatric use'
+                // 'Paediatric use'
             );
             $manufacturing = array(
                 'Manufacturer',
@@ -680,7 +708,7 @@ class ClinicalController extends Controller
             $sheet->fromArray($basicInfo, NULL, 'A1');
 
             $sheet->fromArray([
-                $clinical->registration_title,
+                // $clinical->registration_title,
                 $clinical->product_name['value'],
                 $clinical->protocol_number,
                 $clinical->study_sponsor ? $clinical->study_sponsor['value'] : '',
@@ -688,6 +716,13 @@ class ClinicalController extends Controller
                 $clinical->clinical_phase ? $clinical->clinical_phase['value'] : '',
                 $clinical->protocol_type ? $clinical->protocol_type['value'] : '',
                 $clinical->paediatric_indication ? $clinical->paediatric_indication['value'] : '',
+                $clinical->procedure_number,
+                $clinical->investigationnal_code,
+                $clinical->application_number,
+                $clinical->registration_alternate_number,
+                $clinical->registration_number,
+                $clinical->registration_date,
+                $clinical->medicines_regulatory_authority,
                 $clinical->remarks,
             ], NULL, 'A2');
 
@@ -741,9 +776,9 @@ class ClinicalController extends Controller
                 $sheet->setCellValue('C' . $n, $kd['remarks']);
                 $n+1;
             }
-            $sheet->setCellValue('D2', $clinical->alternate_number_type ? $clinical->alternate_number_type['value'] : '');
-            $sheet->setCellValue('E2', $clinical->alternate_number);
-            $sheet->setCellValue('F2', $clinical->remarks);
+            //$sheet->setCellValue('D2', $clinical->alternate_number_type ? $clinical->alternate_number_type['value'] : '');
+            $sheet->setCellValue('D2', $clinical->alternate_number);
+            $sheet->setCellValue('E2', $clinical->remarks);
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(6);
@@ -807,7 +842,7 @@ class ClinicalController extends Controller
             $sheet->fromArray($indications, NULL, 'A1');
             $sheet->fromArray([
                 $clinical->indication['value'],
-                is_array($clinical->paediatric_use) ? $clinical->paediatric_use['value'] : '',
+                //is_array($clinical->paediatric_use) ? $clinical->paediatric_use['value'] : '',
                 // $clinical->age,
             ], NULL, 'A2');
 

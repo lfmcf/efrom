@@ -110,8 +110,7 @@ class VariationController extends Controller
                 'RMS',
                 'Procedure Number',
                 'Local Tradename',
-                'Application Stage',
-                'Product Type'
+                'Submission Type',
             );
             $variationDetail = array(
                 'Product',
@@ -160,7 +159,7 @@ class VariationController extends Controller
                 $sheet->setCellValue('D' . $c, $iden['application_stage'] ? $iden['application_stage']['value'] : '');
                 $sheet->setCellValue('E' . $c, $iden['procedure_num']);
                 $sheet->setCellValue('F' . $c, $iden['local_tradename']);
-                $sheet->setCellValue('G' . $c, $iden['product_type'] ? $iden['product_type']['value'] : '');
+                // $sheet->setCellValue('G' . $c, $iden['product_type'] ? $iden['product_type']['value'] : '');
                 // foreach($iden['country'] as $country) {
                 //     $sheet->setCellValue('C' . $c, $country['value']);
                 //     $c++;
@@ -316,7 +315,7 @@ class VariationController extends Controller
         $var->application_stage = $request->application_stage;
         $var->procedure_num = $request->procedure_num;
         $var->local_tradename = $request->local_tradename;
-        $var->product_type = $request->product_type;
+        // $var->product_type = $request->product_type;
 
         $var->variation_title = $request->variation_title;
         $var->category = $request->category;
@@ -342,8 +341,7 @@ class VariationController extends Controller
                 'Country',
                 'Procedure Number',
                 'Local Tradename',
-                'Application Stage',
-                'Product Type'
+                'Submission Type',
             );
             $variationDetail = array(
                 'Variation Title',
@@ -390,7 +388,7 @@ class VariationController extends Controller
                 $var->procedure_num,
                 $var->local_tradename,
                 is_array($var->application_stage) ? $var->application_stage['value'] : '',
-                is_array($var->product_type) ? $var->product_type['value'] : '',
+                // is_array($var->product_type) ? $var->product_type['value'] : '',
             ], NULL, 'A2');
 
             if(array_key_exists('value', $var->country)) {
@@ -580,7 +578,7 @@ class VariationController extends Controller
         $var->application_stage = $request->application_stage;
         $var->procedure_num = $request->procedure_num;
         $var->local_tradename = $request->local_tradename;
-        $var->product_type = $request->product_type;
+        // $var->product_type = $request->product_type;
 
         $var->variation_title = $request->variation_title;
         $var->category = $request->category;
@@ -606,8 +604,7 @@ class VariationController extends Controller
                 'Country',
                 'Procedure Number',
                 'Local Tradename',
-                'Application Stage',
-                'Product Type'
+                'Submission Type',
             );
             $variationDetail = array(
                 'Variation Title',
@@ -654,7 +651,7 @@ class VariationController extends Controller
                 $var->procedure_num,
                 $var->local_tradename,
                 is_array($var->application_stage) ? $var->application_stage['value'] : '',
-                is_array($var->product_type) ? $var->product_type['value'] : '',
+                // is_array($var->product_type) ? $var->product_type['value'] : '',
             ], NULL, 'A2');
 
             if(array_key_exists('value', $var->country)) {
@@ -817,8 +814,7 @@ class VariationController extends Controller
                 'RMS',
                 'Procedure Number',
                 'Local Tradename',
-                'Application Stage',
-                'Product Type'
+                'Submission Type',
             );
             $variationDetail = array(
                 'Product',
@@ -867,7 +863,7 @@ class VariationController extends Controller
                 $sheet->setCellValue('D' . $c, $iden['application_stage'] ? $iden['application_stage']['value'] : '');
                 $sheet->setCellValue('E' . $c, $iden['procedure_num']);
                 $sheet->setCellValue('F' . $c, $iden['local_tradename']);
-                $sheet->setCellValue('G' . $c, $iden['product_type'] ? $iden['product_type']['value'] : '');
+                // $sheet->setCellValue('G' . $c, $iden['product_type'] ? $iden['product_type']['value'] : '');
                 // foreach($iden['country'] as $country) {
                 //     $sheet->setCellValue('C' . $c, $country['value']);
                 //     $c++;

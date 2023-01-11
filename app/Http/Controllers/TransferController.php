@@ -89,7 +89,7 @@ class TransferController extends Controller
         $transfer->application_stage = $request->application_stage;
         $transfer->procedure_num = $request->procedure_num;
         $transfer->local_tradename = $request->local_tradename;
-        $transfer->product_type = $request->product_type;
+        // $transfer->product_type = $request->product_type;
         $transfer->description = $request->description;
         $transfer->reason = $request->reason;
         $transfer->previous_mah = $request->previous_mah;
@@ -109,8 +109,8 @@ class TransferController extends Controller
                 'RMS',
                 'Procedure Number',
                 'Local Tradename',
-                'Application Stage',
-                'Product Type'
+                'Submission Type',
+                // 'Product Type'
             );
             $maTransferDetail = array(
                 'Transfer Description',
@@ -156,7 +156,7 @@ class TransferController extends Controller
                 $transfer->procedure_num,
                 $transfer->local_tradename,
                 $transfer->application_stage ? $transfer->application_stage['value'] : '',
-                $transfer->product_type ? $transfer->product_type['value'] : ''
+                // $transfer->product_type ? $transfer->product_type['value'] : ''
             ], NULL, 'A2');
 
             if(array_key_exists('value', $transfer->country)) {
@@ -335,7 +335,7 @@ class TransferController extends Controller
         $transfer->application_stage = $request->application_stage;
         $transfer->procedure_num = $request->procedure_num;
         $transfer->local_tradename = $request->local_tradename;
-        $transfer->product_type = $request->product_type;
+        // $transfer->product_type = $request->product_type;
         $transfer->description = $request->description;
         $transfer->reason = $request->reason;
         $transfer->previous_mah = $request->previous_mah;
@@ -355,8 +355,8 @@ class TransferController extends Controller
                 'RMS',
                 'Procedure Number',
                 'Local Tradename',
-                'Application Stage',
-                'Product Type'
+                'Submission Type',
+                // 'Product Type'
             );
             $maTransferDetail = array(
                 'Transfer Description',
@@ -402,7 +402,7 @@ class TransferController extends Controller
                 $transfer->procedure_num,
                 $transfer->local_tradename,
                 $transfer->application_stage ? $transfer->application_stage['value'] : '',
-                $transfer->product_type ? $transfer->product_type['value'] : ''
+                // $transfer->product_type ? $transfer->product_type['value'] : ''
             ], NULL, 'A2');
 
             if(array_key_exists('value', $transfer->country)) {

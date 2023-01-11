@@ -14,6 +14,7 @@ import SaveModal from '@/Components/SaveModal';
 import { Typography } from "@mui/material";
 import { product_name, procedure_type, status } from '@/Components/List';
 import { Head } from '@inertiajs/inertia-react';
+import moment from "moment";
 
 function a11yProps(index) {
     return {
@@ -32,11 +33,14 @@ const Create = (props) => {
         application_stage: '',
         procedure_num: '',
         local_tradename: '',
-        product_type: '',
+        //product_type: '',
         description: '',
         type: '',
         reason: '',
         remarks: '',
+        reason_for_passive: '',
+        passive_date: '',
+        passive_comment: '',
         statuses: [{ country: '', status: '', status_date: '', ectd: '', control: '', cdds: '', remarks: '', implimentation_date: '', deadline_for_answer: '', changes_approved: '' }],
         doc: [{ document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: '' }],
         created_by: props.auth.user.id,
@@ -61,6 +65,10 @@ const Create = (props) => {
     const handleChange = (e) => {
         setData(e.target.name, e.target.value);
         clearErrors(e.target.name);
+    }
+
+    const handlePassiveDateChange = (date) => {
+        setData('passive_date', date)
     }
 
     let handleProcedureTypeChange = (e) => {
@@ -264,13 +272,14 @@ const Create = (props) => {
                                         sx={{ borderRight: 1, borderColor: 'divider' }}
                                     >
                                         <Mtab label="Registration Identification" {...a11yProps(0)} style={{ color: errors.product || errors.procedure_type || errors.country ? "red": '' }} />
-                                        <Mtab label="Amendments Details" {...a11yProps(1)} />
-                                        <Mtab label="Status Details" {...a11yProps(2)} style={{ color: statuserror ? 'red' : '' }} />
+                                        <Mtab label="Registration Termination Details" {...a11yProps(1)} />
+                                        <Mtab label="Passive Details" {...a11yProps(2)} />
+                                        <Mtab label="Event Status" {...a11yProps(3)} style={{ color: statuserror ? 'red' : '' }} />
                                     </Mtabs>
                                     <div value={value} index={0} className="muitab" style={{ display: value != 0 ? 'none' : '' }}>
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label" style={{color: errors.product ? 'red' : ''}}>Product Name (*)</span>
+                                                <span className="form_group_label" style={{color: errors.product ? 'red' : ''}}>Product (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={product_name}
                                                         name="product"
@@ -345,7 +354,7 @@ const Create = (props) => {
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Application Stage</span>
+                                                <span className="form_group_label">Submission Type</span>
                                                 <div className="form_group_field">
                                                     {/* <select name='application_stage' defaultValue='' onChange={handleChange}>
                                                         <option value='' disabled></option>
@@ -368,14 +377,10 @@ const Create = (props) => {
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="form_group_inline">
+                                            {/* <div className="form_group_inline">
                                                 <span className="form_group_label">Product Type</span>
                                                 <div className="form_group_field">
-                                                    {/* <select name='product_type' defaultValue='' onChange={handleChange}>
-                                                        <option value='' disabled></option>
-                                                        <option>Finished</option>
-                                                        <option>Reference</option>
-                                                    </select> */}
+                                                    
                                                     <Select options={[
                                                         { label: 'Finished', value: 'Finished' },
                                                         { label: 'Reference', value: 'Reference' }
@@ -389,7 +394,7 @@ const Create = (props) => {
                                                         value={data.product_type}
                                                     />
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                     <div value={value} index={1} className="muitab" style={{ display: value != 1 ? 'none' : '' }}>
@@ -418,8 +423,6 @@ const Create = (props) => {
                                                     />
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="inline_form">
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Reason of the event</span>
                                                 <div className="form_group_field">
@@ -431,6 +434,8 @@ const Create = (props) => {
                                                         { label: 'Following Urgent Safety Restriction', value: 'Following Urgent Safety Restriction' },
                                                         { label: 'Quality', value: 'Quality' },
                                                         { label: 'Others', value: 'Others' },
+                                                        { label: 'Sunset clause', value: 'Sunset clause' },
+                                                        
                                                     ]}
                                                         name="reason"
                                                         onChange={handleSelectChange}
@@ -442,6 +447,9 @@ const Create = (props) => {
                                                     />
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div className="inline_form">
+                                            
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Remarks</span>
                                                 <div className="form_group_field">
@@ -451,6 +459,43 @@ const Create = (props) => {
                                         </div>
                                     </div>
                                     <div value={value} index={2} className="muitab" style={{ display: value != 2 ? 'none' : '' }}>
+                                        <div className="inline_form">
+                                            <div className="form_group_inline">
+                                                <span className="form_group_label">Reason for Passive</span>
+                                                <div className="form_group_field">
+                                                    <Select options={[
+                                                        {label: 'Application Rejected', value: 'Application Rejected'},
+                                                        {label: 'Application Withdrawn Due to S/E', value: 'Application Withdrawn Due to S/E'},
+                                                        {label: 'Application Withdrawn NOT Due to S/E', value: 'Application Withdrawn NOT Due to S/E'},
+                                                        {label: 'Registration Revoked by HA', value: 'Registration Revoked by HA'},
+                                                        {label: 'Registration Terminated by MAH', value: 'Registration Terminated by MAH'},
+                                                    ]}
+                                                        name="reason_for_passive"
+                                                        className="basic"
+                                                        classNamePrefix="basic"
+                                                        isClearable
+                                                        placeholder=''
+                                                        onChange={handleSelectChange}
+                                                     />
+                                                </div>
+                                            </div>
+                                            <div className="form_group_inline">
+                                                <span className="form_group_label">Passive Date</span>
+                                                <div className="form_group_field">
+                                                    <DatePicker name="passve_date" selected={data.passive_date} onChange={(date) => handlePassiveDateChange(date)} value={data.passive_date} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="inline_form">
+                                            <div className="form_group_inline">
+                                                <span className="form_group_label">Passive Comment</span>
+                                                <div className="form_group_field">
+                                                    <input type='text' name='passive_comment' onChange={handleChange} value={data.passive_comment} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div value={value} index={3} className="muitab" style={{ display: value != 3 ? 'none' : '' }}>
                                         <div style={{ display: 'flex', justifyContent: 'end' }}>
                                             <button type="button" className="add_doc_form" onClick={addStatusFields}>
                                                 <i className="bi bi-plus-lg"></i> Add Status
@@ -511,7 +556,7 @@ const Create = (props) => {
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label" style={{color: errors['statuses.' + index + '.status_date'] ? 'red' : ''}}>Status Date (*)</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="status_date" selected={data.statuses[index].status_date} onChange={(date) => handleDateChange(index, 'status_date', date)} value={element.status_date} />
+                                                                <DatePicker name="status_date" selected={data.statuses[index].status_date} onChange={(date) => handleDateChange(index, 'status_date', date)} value={element.status_date ? moment(element.status_date).format('DD-MMM-yy') : ''} />
                                                             </div>
                                                             
                                                         </div>
@@ -547,13 +592,13 @@ const Create = (props) => {
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Effective internal implementation date</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="implimentation_date" selected={data.statuses[index].implimentation_date} onChange={(date) => handleDateChange(index, 'implimentation_date', date)} value={element.implimentation_date} />
+                                                                <DatePicker name="implimentation_date" selected={data.statuses[index].implimentation_date} onChange={(date) => handleDateChange(index, 'implimentation_date', date)} value={element.implimentation_date ? moment(element.implimentation_date).format('DD-MMM-yy') : ''} />
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Implementation Deadline of deadline for answer</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="deadline_for_answer" selected={data.statuses[index].deadline_for_answer} onChange={(date) => handleDateChange(index, 'deadline_for_answer', date)} value={element.deadline_for_answer} />
+                                                                <DatePicker name="deadline_for_answer" selected={data.statuses[index].deadline_for_answer} onChange={(date) => handleDateChange(index, 'deadline_for_answer', date)} value={element.deadline_for_answer ? moment(element.deadline_for_answer).format('DD-MMM-yy') : ''} />
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">

@@ -14,6 +14,7 @@ import SaveModal from '@/Components/SaveModal';
 import { Typography } from "@mui/material";
 import { product_name, procedure_type, status } from '@/Components/List';
 import { Head } from '@inertiajs/inertia-react';
+import moment from "moment";
 
 function a11yProps(index) {
     return {
@@ -32,7 +33,7 @@ const Create = (props) => {
         application_stage: '',
         procedure_num: '',
         local_tradename: '',
-        product_type: '',
+        // product_type: '',
         baseline_title: '',
         description: '',
         application_num: '',
@@ -355,7 +356,7 @@ const Create = (props) => {
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Application Stage</span>
+                                                <span className="form_group_label">Submission Type</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
                                                         { label: 'Marketing Authorisation', value: 'Marketing Authorisation' },
@@ -371,7 +372,7 @@ const Create = (props) => {
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="form_group_inline">
+                                            {/* <div className="form_group_inline">
                                                 <span className="form_group_label">Product Type</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
@@ -387,7 +388,7 @@ const Create = (props) => {
                                                         value={data.product_type}
                                                     />
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                     <div value={value} index={1} className="muitab" style={{ display: value != 1 ? 'none' : '' }}>
@@ -502,7 +503,7 @@ const Create = (props) => {
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label" style={{color : errors['statuses.' + index + '.status_date'] ? 'red' : ''}}>Status Date (*)</span>
                                                         <div className="form_group_field">
-                                                            <DatePicker name="status_date" selected={data.statuses[index].status_date} onChange={(date) => handleDateChange(index, 'status_date', date)} value={element.status_date} />
+                                                            <DatePicker name="status_date" selected={data.statuses[index].status_date} onChange={(date) => handleDateChange(index, 'status_date', date)} value={element.status_date ? moment(element.status_date).format('DD-MMM-yy') : ''} />
                                                         </div>
                                                     </div>
                                                     <div className="form_group_inline">
@@ -537,13 +538,13 @@ const Create = (props) => {
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label">Effective internal implementation date</span>
                                                         <div className="form_group_field">
-                                                            <DatePicker name="implimentation_date" selected={data.statuses[index].implimentation_date} onChange={(date) => handleDateChange(index, 'implimentation_date', date)} value={element.implimentation_date} />
+                                                            <DatePicker name="implimentation_date" selected={data.statuses[index].implimentation_date} onChange={(date) => handleDateChange(index, 'implimentation_date', date)} value={element.implimentation_date ? moment(element.implimentation_date).format('DD-MMM-yy') : ''} />
                                                         </div>
                                                     </div>
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label">Implementation Deadline of deadline for answer</span>
                                                         <div className="form_group_field">
-                                                            <DatePicker name="deadline_for_answer" selected={data.statuses[index].deadline_for_answer} onChange={(date) => handleDateChange(index, 'deadline_for_answer', date)} value={element.deadline_for_answer} />
+                                                            <DatePicker name="deadline_for_answer" selected={data.statuses[index].deadline_for_answer} onChange={(date) => handleDateChange(index, 'deadline_for_answer', date)} value={element.deadline_for_answer ? moment(element.deadline_for_answer).format('DD-MMM-yy') : ''} />
                                                         </div>
                                                     </div>
                                                     <div className="form_group_inline">

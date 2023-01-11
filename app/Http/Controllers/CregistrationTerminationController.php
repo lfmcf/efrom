@@ -87,11 +87,14 @@ class CregistrationTerminationController extends Controller
         $crt->application_stage = $request->application_stage;
         $crt->procedure_num = $request->procedure_num;
         $crt->local_tradename = $request->local_tradename;
-        $crt->product_type = $request->product_type;
+        //$crt->product_type = $request->product_type;
         $crt->description = $request->description;
         $crt->type = $request->type;
         $crt->reason = $request->reason;
         $crt->remarks = $request->remarks;
+        $crt->reason_for_passive = $request->reason_for_passive;
+        $crt->passive_date = $request->passive_date;
+        $crt->passive_comment = $request->passive_comment;
         $crt->statuses = $request->statuses;
         $crt->doc = $docs;
         $crt->created_by = $request->created_by;
@@ -106,14 +109,19 @@ class CregistrationTerminationController extends Controller
                 'RMS',
                 'Procedure Number',
                 'Local Tradename',
-                'Application Stage',
-                'Product Type'
+                'Submission Type',
+                // 'Product Type'
             );
             $details = array(
                 'Description of the event',
                 'Registration Termination Type',
                 'Reason of the event',
                 'Remarks'
+            );
+            $passive = array(
+                'Reason for Passive',
+                'Passive Date',
+                'Passive comment',
             );
             $status = array(
                 'Country',
@@ -150,7 +158,7 @@ class CregistrationTerminationController extends Controller
                 $crt->procedure_num,
                 $crt->local_tradename,
                 $crt->application_stage ? $crt->application_stage['value'] : '',
-                $crt->product_type ? $crt->product_type['value'] : ''
+                // $crt->product_type ? $crt->product_type['value'] : ''
             ], NULL, 'A2');
 
             if(array_key_exists('value', $crt->country)) {
@@ -176,6 +184,12 @@ class CregistrationTerminationController extends Controller
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(2);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Passive Details');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($passive, NULL, 'A1');
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(3);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Events Status');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($status, NULL, 'A1');
@@ -197,7 +211,7 @@ class CregistrationTerminationController extends Controller
             }
 
             $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(3);
+            $spreadsheet->setActiveSheetIndex(4);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Documents');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($document, NULL, 'A1');

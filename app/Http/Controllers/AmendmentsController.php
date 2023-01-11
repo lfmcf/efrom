@@ -107,7 +107,7 @@ class AmendmentsController extends Controller
                 'RMS',
                 'Procedure Number',
                 'Local Tradename',
-                'Application Stage',
+                'Submission Type',
                 // 'Product Type'
             );
             $amendmentsDetails = array(
@@ -336,7 +336,7 @@ class AmendmentsController extends Controller
                 'RMS',
                 'Procedure Number',
                 'Local Tradename',
-                'Application Stage',
+                'Submission Type',
                 // 'Product Type'
             );
             $amendmentsDetails = array(
