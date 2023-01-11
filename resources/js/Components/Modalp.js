@@ -23,7 +23,7 @@ const ModalP = ({ show, handleClose }) => {
 
     return (
         <div>
-            <Dialog open={show} onClose={handleClose} TransitionComponent={Transition}>
+            <Dialog fullWidth maxWidth="sm" open={show} onClose={handleClose} TransitionComponent={Transition}>
                 <form onSubmit={handleSubmit}>
                     <DialogTitle>Add New Product</DialogTitle>
                     <DialogContent>
