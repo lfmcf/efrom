@@ -14,6 +14,7 @@ import SaveModal from '@/Components/SaveModal';
 import { Typography } from '@mui/material';
 import { product_name, procedure_type, status } from '@/Components/List';
 import { Head } from '@inertiajs/inertia-react';
+import moment from 'moment';
 
 function a11yProps(index) {
     return {
@@ -32,13 +33,13 @@ const Create = (props) => {
         application_stage: '',
         procedure_num: '',
         local_tradename: '',
-        product_type: '',
+        //product_type: '',
         renewal_title: '',
         application_num: '',
         submission_format: '',
         validation_reason: '',
         remarks: '',
-        statuses: [{ country: '', status: '', status_date: '', ectd: '', control: '', cdds: '', remarks: '', implimentation_deadline: '', next_renewals: '', next_renewals_deadline: '', next_renewals_date: '' }],
+        statuses: [{ country: '', status: '', status_date: '', ectd: '', control: '', cdds: '', remarks: '', implimentation_deadline: '', next_renewals: '', next_renewals_deadline: '', next_renewals_date: ''}],
         doc: [{ document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: '' }],
         created_by: props.auth.user.id,
     });
@@ -253,7 +254,7 @@ const Create = (props) => {
 
                     <form className="form" ref={formRef} onSubmit={handleSubmit}>
                         <Tabs defaultActiveKey="first">
-                            <Tab eventKey="first" title="New Renewal" title="New Registration" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>
+                            <Tab eventKey="first" title="New Renewal" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>
                                 <Box
                                     sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100%' }}
                                 >
@@ -355,7 +356,7 @@ const Create = (props) => {
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Application Stage</span>
+                                                <span className="form_group_label">Submission Type</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
                                                         { label: 'Marketing Authorisation', value: 'Marketing Authorisation' },
@@ -371,7 +372,7 @@ const Create = (props) => {
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="form_group_inline">
+                                            {/* <div className="form_group_inline">
                                                 <span className="form_group_label">Product Type</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
@@ -387,7 +388,7 @@ const Create = (props) => {
                                                         value={data.product_type}
                                                     />
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                     <div value={value} index={1} className="muitab" style={{ display: value != 1 ? 'none' : '' }}>
@@ -518,7 +519,7 @@ const Create = (props) => {
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label" style={{color: errors['statuses.' + index + '.status_date'] ? 'red' : ''}}>Status Date (*)</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="status_date" selected={data.statuses[index].status_date} onChange={(date) => handleDateChange(index, 'status_date', date)} value={element.status_date} />
+                                                                <DatePicker name="status_date" selected={data.statuses[index].status_date} onChange={(date) => handleDateChange(index, 'status_date', date)} value={element.status_date ? moment(element.status_date).format('DD-MMM-yy') : ''} />
                                                             </div>
                                                             
                                                         </div>
@@ -553,7 +554,7 @@ const Create = (props) => {
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Implementation Deadline</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="implimentation_deadline" selected={data.statuses[index].implimentation_deadline} onChange={(date) => handleDateChange(index, 'implimentation_deadline', date)} value={element.implimentation_deadline} />
+                                                                <DatePicker name="implimentation_deadline" selected={data.statuses[index].implimentation_deadline} onChange={(date) => handleDateChange(index, 'implimentation_deadline', date)} value={element.implimentation_deadline ? moment(element.implimentation_deadline).format('DD-MMM-yy') : ''} />
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
@@ -577,13 +578,13 @@ const Create = (props) => {
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Next Renewals Submission Deadline</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="next_renewals_deadline" selected={data.statuses[index].next_renewals_deadline} onChange={(date) => handleDateChange(index, 'next_renewals_deadline', date)} value={element.next_renewals_deadline} />
+                                                                <DatePicker name="next_renewals_deadline" selected={data.statuses[index].next_renewals_deadline} onChange={(date) => handleDateChange(index, 'next_renewals_deadline', date)} value={element.next_renewals_deadline ? moment(element.next_renewals_deadline).format('DD-MMM-yy') : ''} />
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Next Renewal Date</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="next_renewals_date" selected={data.statuses[index].next_renewals_date} onChange={(date) => handleDateChange(index, 'next_renewals_date', date)} value={element.next_renewals_date} />
+                                                                <DatePicker name="next_renewals_date" selected={data.statuses[index].next_renewals_date} onChange={(date) => handleDateChange(index, 'next_renewals_date', date)} value={element.next_renewals_date ? moment(element.next_renewals_date).format('DD-MMM-yy') : ''} />
                                                             </div>
                                                         </div>
                                                     </div>

@@ -11,11 +11,21 @@ import SaveModal from '@/Components/SaveModal';
 import { key_dates_list, operations, packageCondistion, product_name, procedure_type, apf, atc, SlType, indications, status } from '@/Components/List';
 import PropTypes from 'prop-types';
 import BasicSpeedDial from '@/Components/SpeedDial';
-import { Tabs as Mtabs, Tab as Mtab, IconButton } from '@mui/material';
+import { Tabs as Mtabs, Tab as Mtab, IconButton, Tooltip, Radio } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 import { Head } from '@inertiajs/inertia-react';
+import moment from 'moment';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import { CheckBox } from '@mui/icons-material';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import ModalP from '@/Components/Modalp';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormLabel from '@mui/material/FormLabel';
+import FormControl from '@mui/material/FormControl';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -55,9 +65,9 @@ const Create = (props) => {
         country: [],
         rms: '',
         procedure_number: '',
-        product_type: '',
+        // product_type: '',
         application_stage: '',
-        registration_title: '',
+        // registration_title: '',
         product_name: '',
         local_tradename: '',
         registration_holder: '',
@@ -79,7 +89,7 @@ const Create = (props) => {
         formulations: [{ ingredient: '', strength_type: '', numerator_lower_val: '', numerator_upper_val: '', numerator_unit: '', function: '' }],
         packagings: [
             {
-                packaging_type: '', packaging_name: '', description: '', launched: '', first_lunch_date: '', packaging_discontinued: '', discontinuation_date: '', remarks: '',
+                sellable_unit_determined_by: '',product_legal_status_of_supply: '',packaging_type: '',packaging_registration_number: '', packaging_name: '', description: '', launched: '', first_lunch_date: '', packaging_discontinued: '', discontinuation_date: '', remarks: '',
                 packagelif: [{ package_shelf_life_type: '', shelf_life: '', shelf_life_unit: '', package_storage_condition: [], remarks: '' }]
             }
         ],
@@ -90,6 +100,9 @@ const Create = (props) => {
         interaction_remarks: '',
         commitment_remarks: '',
         statuses: [{ country: '', status: '', status_date: '', ectd_sequence: '', change_control_ref: '', internal_submission_reference: '', remarks: '' }],
+        next_renewals: '',
+        nr_submission_deadline :'',
+        nr_date: '',
         doc: [{ document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: '' }],
         created_by: props.auth.user.id,
     });
@@ -99,6 +112,7 @@ const Create = (props) => {
     }
 
     const [show, setShow] = useState(false);
+    const [showMP, setShowMP] = useState(false);
     const [packagehaserror, setPackagehaserror] = useState(false);
     const [statuserror, setStatusError] = useState(false);
     const [showsavemodal, setSavemodal] = useState({ show: false, name: '' });
@@ -119,7 +133,8 @@ const Create = (props) => {
     }
 
     const handleChange = (e) => {
-        setData(e.target.name, e.target.value);
+        
+        e.target.name == "next_renewals" ? setData(e.target.name, e.target.checked) : setData(e.target.name, e.target.value);
         clearErrors(e.target.name);
     }
 
@@ -189,7 +204,7 @@ const Create = (props) => {
 
     let addPackageValues = () => {
         let arr = { ...data };
-        arr.packagings.push({ packaging_type: "", packaging_name: "", description: "", launched: "", first_lunch_date: '', packaging_discontinued: "", discontinuation_date: '', remarks: '', packagelif: [{ package_shelf_life_type: "", shelf_life: "", shelf_life_unit: "", package_storage_condition: [] }] })
+        arr.packagings.push({ sellable_unit_determined_by: '',product_legal_status_of_supply: '', packaging_type: "", packaging_registration_number: '' , packaging_name: "", description: "", launched: "", first_lunch_date: '', packaging_discontinued: "", discontinuation_date: '', remarks: '', packagelif: [{ package_shelf_life_type: "", shelf_life: "", shelf_life_unit: "", package_storage_condition: [] }] })
         setData(arr);
     }
 
@@ -268,6 +283,10 @@ const Create = (props) => {
         setData(arr);
     }
 
+    let handleNrDateChange = (name, date) => {
+        setData(name, date)
+    }
+ 
     let handleFormulationSelectChange = (selectedOption, name, i) => {
        
         let newFormValues = { ...data };
@@ -378,6 +397,10 @@ const Create = (props) => {
         setShow(false)
     }
 
+    const handleCloseMP = () => {
+        setShowMP(false)
+    }
+
     const handleSaveModalClose = () => {
         setSavemodal(prev => ({
             ...prev,
@@ -452,8 +475,8 @@ const Create = (props) => {
                                         aria-label="Vertical tabs example"
                                         sx={{ borderRight: 1, borderColor: 'divider' }}
                                     >
-                                        <Mtab label="General information" {...a11yProps(0)} style={{ color: errors.country || errors.procedure_type || errors.product_type || errors.application_stage ? 'red' : '' }} />
-                                        <Mtab label="Basic information" {...a11yProps(1)} style={{ color: errors.registration_title || errors.product_name || errors.local_tradename || errors.registration_holder ? 'red' : '' }} />
+                                        <Mtab label="General information" {...a11yProps(0)} style={{ color: errors.country || errors.procedure_type || errors.application_stage ? 'red' : '' }} />
+                                        <Mtab label="Basic information" {...a11yProps(1)} style={{ color: errors.product_name || errors.local_tradename || errors.registration_holder ? 'red' : '' }} />
                                         <Mtab label="Dosage Form / ATC" {...a11yProps(2)} style={{color: errors.authorized_pharmaceutical_form || errors.route_of_admin || errors.atc}} />
                                         <Mtab label="Orphan Drug Details" {...a11yProps(3)} />
                                         <Mtab label="Under Intensive Monitoring Details" {...a11yProps(4)} />
@@ -465,6 +488,7 @@ const Create = (props) => {
                                         <Mtab label="Manufacturing & Supply Chain" {...a11yProps(10)} />
                                         <Mtab label="Interaction / Commitment remarks" {...a11yProps(11)} />
                                         <Mtab label="Status Details" {...a11yProps(12)} style={{ color: statuserror ? 'red' : '' }} />
+                                        <Mtab label="Next Renewals" {...a11yProps(13)} />
                                     </Mtabs>
                                     <div index={0} className="muitab" style={{ display: value != 0 ? 'none' : '' }}>
                                         <div className='inline_form'>
@@ -523,7 +547,7 @@ const Create = (props) => {
                                                     <input type="text" name="procedure_number" onChange={handleChange} value={data.procedure_number} />
                                                 </div>
                                             </div>
-                                            <div className="form_group_inline">
+                                            {/* <div className="form_group_inline">
                                                 <span className="form_group_label" style={{color: errors.product_type ? 'red' : ''}}>Product Type (*)</span>
                                                 <div className="form_group_field">
 
@@ -541,9 +565,9 @@ const Create = (props) => {
                                                         value={data.product_type}
                                                     />
                                                 </div>
-                                            </div>
+                                            </div> */}
                                             <div className="form_group_inline" >
-                                                <span className="form_group_label" style={{color: errors.application_stage ? 'red' : ''}}>Application Stage (*)</span>
+                                                <span className="form_group_label" style={{color: errors.application_stage ? 'red' : ''}}>Submission Type (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
                                                         { value: 'Marketing Authorisation', label: 'Marketing Authorisation' },
@@ -565,14 +589,14 @@ const Create = (props) => {
                                     </div>
                                     <div index={1} className="muitab" style={{ display: value != 1 ? 'none' : '' }}>
                                         <div className='inline_form'>
-                                            <div className="form_group_inline">
+                                            {/* <div className="form_group_inline">
                                                 <span className="form_group_label" style={{ color: errors.registration_title ? 'red' : '' }}>Registration Title (*)</span>
                                                 <div className="form_group_field">
                                                     <input type="text" name='registration_title' onChange={handleChange} style={{ borderColor: errors.registration_title ? 'red' : '' }} value={data.registration_title} />
                                                 </div>
-                                            </div>
+                                            </div> */}
                                             <div className="form_group_inline">
-                                                <span className="form_group_label" style={{color : errors.product_name ? 'red' : ''}}>Product Name (*)</span>
+                                                <span className="form_group_label" style={{color : errors.product_name ? 'red' : ''}}>Product (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={product_name}
                                                         name="product_name"
@@ -584,12 +608,17 @@ const Create = (props) => {
                                                         isClearable
                                                         value={data.product_name}
                                                     />
+                                                    <IconButton color="primary" onClick={(e) => setShowMP(true)} aria-label="add product">
+                                                        <AddIcon />
+                                                    </IconButton>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className='inline_form'>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label" style={{color : errors.local_tradename ? 'red' : ''}}>Local Tradename (*)</span>
+                                                <Tooltip arrow title="Section 1 of the SmPC or equivalent outside the European Union">
+                                                    <span className="form_group_label" style={{color : errors.local_tradename ? 'red' : ''}}>Local Tradename (*)</span>
+                                                </Tooltip>
                                                 <div className="form_group_field">
                                                     <input type="text" name="local_tradename" onChange={handleChange} style={{ borderColor: errors.local_tradename ? 'red' : ''}} value={data.local_tradename} />
                                                 </div>
@@ -621,15 +650,19 @@ const Create = (props) => {
                                                 </div>
                                             </div>
                                             <div className="form_group_inline" >
-                                                <span className="form_group_label">Dossier Reference Number</span>
+                                                <Tooltip arrow title="Required for French Specialities: NL Number">
+                                                    <span className="form_group_label">Dossier Reference Number</span>
+                                                </Tooltip>
                                                 <div className="form_group_field">
                                                     <input type="text" name="dossier_reference" onChange={handleChange} value={data.dossier_reference} />
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div className='inline_form'>
                                             <div className="form_group_inline" >
                                                 <span className="form_group_label">Remarks</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name="bremarks" onChange={handleChange} value={data.bremarks} />
+                                                    <textarea rows="3" type="text" name="bremarks" onChange={handleChange} value={data.bremarks} />
                                                 </div>
                                             </div>
                                         </div>
@@ -800,7 +833,7 @@ const Create = (props) => {
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Date</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="date" selected={data.key_dates[index].date} onChange={(date) => handleDateChange(index, 'date', date)} value={data.key_dates[index].date} />
+                                                                <DatePicker name="date" selected={data.key_dates[index].date} onChange={(date) => handleDateChange(index, 'date', date)} value={data.key_dates[index].date ? moment(data.key_dates[index].date).format('DD-MMMM-yy') : ''} />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -911,6 +944,7 @@ const Create = (props) => {
                                                                 <Select options={[
                                                                     { value: 'Active', label: 'Active' },
                                                                     { value: 'Excipient', label: 'Excipient' },
+                                                                    { value: 'Adjuvant', label: 'Adjuvant' },
                                                                 ]}
                                                                     name="function"
                                                                     onChange={(selectedOption, name) => handleFormulationSelectChange(selectedOption, name,index)}
@@ -1009,6 +1043,55 @@ const Create = (props) => {
                                                         ''}
                                                     <div className="inline_form">
                                                         <div className="form_group_inline">
+                                                            <span className="form_group_label" style={{color : errors['packagings.' + index + '.sellable_unit_determined_by'] ? 'red' : ''}}>Sellable Unit Determined By (*)</span>
+                                                            <div className="form_group_field">
+                                                                <Select options={[
+                                                                    {label: 'Product', value: 'Product'},
+                                                                    {label: 'Packaging', value: 'Packaging'}
+                                                                ]}
+                                                                    name="sellable_unit_determined_by"
+                                                                    onChange={(selectedOption, name) => handlePackageSelectChange(selectedOption, name,index)}
+                                                                    className="basic"
+                                                                    classNamePrefix="basic"
+                                                                    placeholder=''
+                                                                    isClearable
+                                                                    styles={selectStyles(errors['packagings.' + index + '.sellable_unit_determined_by'])}
+                                                                    value={data.packagings[index].sellable_unit_determined_by}
+                                                                />
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="form_group_inline">
+                                                            <span className="form_group_label" style={{color : errors['packagings.' + index + '.product_legal_status_of_supply'] ? 'red' : ''}}>Product Legal Status of Supply (*)</span>
+                                                            <div className="form_group_field">
+                                                                <Select options={[
+                                                                    {label: 'Medicinal product subject to medical prescription exempt for some presentations', value: 'Medicinal product subject to medical prescription exempt for some presentations'},
+                                                                    {label: 'Subject to veterinary prescription except for some pack sizes', value: 'Subject to veterinary prescription except for some pack sizes'},
+                                                                    {label: 'Subject to veterinary prescription', value: 'Subject to veterinary prescription'},
+                                                                    {label: 'Not subject to veterinary prescription', value: 'Not subject to veterinary prescription'},
+                                                                    {label: 'Legacy - as applicable', value: 'Legacy - as applicable'},
+                                                                    {label: 'Subject to medical prescription', value: 'Subject to medical prescription'},
+                                                                    {label: 'Not subject to medical prescription', value: 'Not subject to medical prescription'},
+                                                                    {label: 'On medical prescription for renewable or non-renewable delivery', value: 'On medical prescription for renewable or non-renewable delivery'},
+                                                                    {label: 'Subject to special and restricted medical prescription', value: 'Subject to special and restricted medical prescription'},
+                                                                    {label: 'Subject to special medical prescription', value: 'Subject to special medical prescription'},
+                                                                    {label: 'Subject to restricted medical prescription', value: 'Subject to restricted medical prescription'},
+                                                                    {label: 'On medical prescription for renewable delivery', value: 'On medical prescription for renewable delivery'},
+                                                                    {label: 'On medical prescription for non-renewable delivery', value: 'On medical prescription for non-renewable delivery'},
+                                                                ]}
+                                                                    name="product_legal_status_of_supply"
+                                                                    onChange={(selectedOption, name) => handlePackageSelectChange(selectedOption, name,index)}
+                                                                    className="basic"
+                                                                    classNamePrefix="basic"
+                                                                    placeholder=''
+                                                                    isClearable
+                                                                    styles={selectStyles(errors['packagings.' + index + '.product_legal_status_of_supply'])}
+                                                                    value={data.packagings[index].product_legal_status_of_supply}
+                                                                />
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="form_group_inline">
                                                             <span className="form_group_label" style={{color : errors['packagings.' + index + '.packaging_type'] ? 'red' : ''}}>Packaging Type (*)</span>
                                                             <div className="form_group_field">
                                                                 <Select options={options_2}
@@ -1023,12 +1106,29 @@ const Create = (props) => {
                                                                 />
                                                             </div>
                                                         </div>
+                                                        
+                                                    </div>
+                                                    <div className="inline_form">
                                                         <div className="form_group_inline">
-                                                            <span className="form_group_label" style={{ color: errors['packagings.' + index + '.packaging_name'] ? 'red' : '' }}>Packaging Name (*)</span>
+                                                            <span className="form_group_label" style={{ color: errors['packagings.' + index + '.packaging_registration_number'] ? 'red' : '' }}>Packaging Registration number</span>
+                                                            <div className="form_group_field">
+                                                                <input type="text" name="packaging_registration_number" onChange={(e) => handlePackagingsChange(index, e)} value={data.packagings[index].packaging_registration_number} />
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div className="form_group_inline">
+                                                            
+                                                            <Tooltip arrow title='Concerned part of the Localtradenames of section 1 of SmPC, if not available, name in the Marketing Authorization document applicable to this packaging'>
+                                                                <span className="form_group_label" style={{ color: errors['packagings.' + index + '.packaging_name'] ? 'red' : '' }}>
+                                                                    Packaging Name (*)
+                                                                </span> 
+                                                            </Tooltip>
+                                                            
                                                             <div className="form_group_field">
                                                                 <input type="text" name="packaging_name" onChange={(e) => handlePackagingsChange(index, e)} style={{ borderColor: errors['packagings.' + index + '.packaging_name'] ? 'red' : '' }} value={data.packagings[index].packaging_name} />
                                                             </div>
                                                         </div>
+                                                       
                                                         {/* <div className="form_group_inline">
                                                             <span className="form_group_label">Package Size (*)</span>
                                                             <div className="form_group_field">
@@ -1037,7 +1137,9 @@ const Create = (props) => {
                                                             
                                                         </div> */}
                                                         <div className="form_group_inline">
-                                                            <span className="form_group_label">Description</span>
+                                                            <Tooltip arrow title='Description of sellable unit like "Concerned part of the section 6.5 Nature and contents of container of SmPC"'>
+                                                                <span className="form_group_label">Description</span>
+                                                            </Tooltip>
                                                             <div className="form_group_field">
                                                                 <input type="text" name="description" onChange={(e) => handlePackagingsChange(index, e)} style={{ borderColor: errors['packagings.' + index + '.description'] ? 'red' : '' }} value={data.packagings[index].description} />
                                                             </div>
@@ -1061,7 +1163,7 @@ const Create = (props) => {
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">First Launch Date</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="first_lunch_date" selected={data.packagings[index].first_lunch_date} onChange={(date) => handleDateChange(index, 'first_lunch_date', date)} value={data.packagings[index].first_lunch_date} />
+                                                                <DatePicker name="first_lunch_date" selected={data.packagings[index].first_lunch_date} onChange={(date) => handleDateChange(index, 'first_lunch_date', date)} value={element.first_lunch_date ? moment(element.first_lunch_date).format('DD-MMM-yy') : ''} />
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
@@ -1081,7 +1183,7 @@ const Create = (props) => {
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Discontinuation Date</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="discontinuation_date" selected={data.packagings[index].discontinuation_date} onChange={(date) => handleDateChange(index, 'discontinuation_date', date)} value={data.packagings[index].discontinuation_date} />
+                                                                <DatePicker name="discontinuation_date" selected={data.packagings[index].discontinuation_date} onChange={(date) => handleDateChange(index, 'discontinuation_date', date)} value={element.discontinuation_date ? moment(element.discontinuation_date).format('DD-MMM-yy') : ''} />
                                                             </div>
                                                         </div>
 
@@ -1174,7 +1276,9 @@ const Create = (props) => {
                                                                 </div>
                                                                 <div className="inline_form">
                                                                     <div className="form_group_inline">
-                                                                        <span className='form_group_label'>Remarks</span>
+                                                                        <Tooltip arrow title="Any specific information about shelflife ie. SmPC 6.4 Special precautions for storage">
+                                                                            <span className='form_group_label'>Shelf-life Remarks</span>
+                                                                        </Tooltip>
                                                                         <div className="form_group_field">
                                                                             <input type="text" name='remarks' onChange={(e) => handlePackagelifeChange(index, i, e)} value={data.packagings[index].packagelif[i].remarks}  />
                                                                         </div>
@@ -1354,7 +1458,7 @@ const Create = (props) => {
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label" style={{color : errors['statuses.' + index + '.status_date'] ? 'red' : ''}}>Status Date (*)</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="status_date" selected={data.statuses[index].status_date} onChange={(date) => handleDateChange(index, 'status_date', date)} value={data.statuses[index].status_date} />
+                                                                <DatePicker name="status_date" selected={data.statuses[index].status_date} onChange={(date) => handleDateChange(index, 'status_date', date)} value={element.status_date ? moment(element.status_date).format('DD-MMM-yy') : ''} />
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
@@ -1388,6 +1492,47 @@ const Create = (props) => {
                                             </fieldset>
                                         ))}
                                     </div>
+                                    <div index={13} className="muitab" style={{ display: value != 13 ? 'none' : '' }}>
+                                        <div className="inline_form">
+                                            <div className="form_group_inline">
+                                                {/* <span className="form_group_label">Next Renewals ?</span> */}
+                                                <div className="form_group_field">
+                                                    <FormControl>
+                                                        <FormLabel id="demo-row-radio-buttons-group-label">Next Renewals ?</FormLabel>
+                                                        <RadioGroup
+                                                            row
+                                                            aria-labelledby="demo-row-radio-buttons-group-label"
+                                                            name="row-radio-buttons-group"
+                                                        >
+                                                            <FormControlLabel value="required" control={<Radio onChange={() => setData('next_renewals', true)} />} label="Required" />
+                                                            <FormControlLabel value="notrequired" control={<Radio onChange={() => setData('next_renewals', false)}  />} label="Not Required" />
+                                                        </RadioGroup>
+                                                    </FormControl>
+                                                    {/* <input type="checkbox" name="next_renewals" /> */}
+                                                    {/* <FormGroup>
+                                                        <FormControlLabel control={<Radio name='next_renewals' onChange={() => setData('next_renewals', true)} />} label="Required" />
+                                                        <FormControlLabel control={<Radio name='next_renewals' onChange={() => setData('next_renewals', false)} />} label="Not Required" />
+                                                    </FormGroup> */}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {data.next_renewals ? 
+                                        <div className="inline_form">
+                                            <div className="form_group_inline">
+                                                <span className="form_group_label">Next Renewal Submission Deadline</span>
+                                                <div className="form_group_field">
+                                                    <DatePicker name='nr_submission_deadline' selected={data.nr_submission_deadline} onChange={(date) => handleNrDateChange('nr_submission_deadline', date)} value={data.nr_submission_deadline ? moment(data.nr_submission_deadline).format('DD-MMM-yy') : ''} />
+                                                </div>
+                                            </div>
+                                            <div className="form_group_inline">
+                                                <span className="form_group_label">Next Renewal Date</span>
+                                                <div className="form_group_field">
+                                                    <DatePicker name='nr_date' selected={data.nr_date} onChange={(date) => handleNrDateChange('nr_date', date)} value={data.nr_date ? moment(data.nr_date).format('DD-MMM-yy') : ''} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        : '' }
+                                    </div>
                                 </Box>
                             </Tab>
                             <Tab eventKey="second" title="Documents" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>
@@ -1398,7 +1543,7 @@ const Create = (props) => {
 
                     </form>
                 </div>
-
+                <ModalP show={showMP} handleClose={handleCloseMP} />
                 <ModalS show={show} handleClose={handleClose} />
                 <SaveModal show={showsavemodal.show} handleClose={handleSaveModalClose} handleSubmited={handleSaveModalConfirm} name={showsavemodal.name} />
             </div>

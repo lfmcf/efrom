@@ -94,7 +94,7 @@ const Dashboard = (props) => {
             {
                 Header: 'Date',
                 accessor: function (originalRow, rowIndex) {
-                    return moment(originalRow.created_at).format('YYYY-MM-DD');
+                    return moment(originalRow.created_at).format('DD-MMM-yy');
                 },
             }
         ],
@@ -159,7 +159,7 @@ const Dashboard = (props) => {
             {
                 Header: 'Date',
                 accessor: function (originalRow, rowIndex) {
-                    return moment(originalRow.created_at).format('YYYY-MM-DD');
+                    return moment(originalRow.created_at).format('DD-MMM-yy');
                 },
             }
         ],
@@ -224,7 +224,7 @@ const Dashboard = (props) => {
             {
                 Header: 'Date',
                 accessor: function (originalRow, rowIndex) {
-                    return moment(originalRow.created_at).format('YYYY-MM-DD');
+                    return moment(originalRow.created_at).format('DD-MMM-yy');
                 },
             }
         ],
@@ -272,7 +272,7 @@ const Dashboard = (props) => {
             {
                 Header: 'Date',
                 accessor: function (originalRow, rowIndex) {
-                    return moment(originalRow.created_at).format('YYYY-MM-DD');
+                    return moment(originalRow.created_at).format('DD-MMM-yy');
                 },
             }
         ],
@@ -321,7 +321,7 @@ const Dashboard = (props) => {
             {
                 Header: 'Date',
                 accessor: function (originalRow, rowIndex) {
-                    return moment(originalRow.created_at).format('YYYY-MM-DD');
+                    return moment(originalRow.created_at).format('DD-MMM-yy');
                 },
             }
         ],
@@ -370,7 +370,7 @@ const Dashboard = (props) => {
             {
                 Header: 'Date',
                 accessor: function (originalRow, rowIndex) {
-                    return moment(originalRow.created_at).format('YYYY-MM-DD');
+                    return moment(originalRow.created_at).format('DD-MMM-yy');
                 },
             }
         ],
@@ -419,7 +419,7 @@ const Dashboard = (props) => {
             {
                 Header: 'Date',
                 accessor: function (originalRow, rowIndex) {
-                    return moment(originalRow.created_at).format('YYYY-MM-DD');
+                    return moment(originalRow.created_at).format('DD-MMM-yy');
                 },
             }
         ],
@@ -468,7 +468,7 @@ const Dashboard = (props) => {
             {
                 Header: 'Date',
                 accessor: function (originalRow, rowIndex) {
-                    return moment(originalRow.created_at).format('YYYY-MM-DD');
+                    return moment(originalRow.created_at).format('DD-MMM-yy');
                 },
             }
         ],

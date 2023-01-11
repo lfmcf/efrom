@@ -6,11 +6,13 @@ const Index = (props) => {
     
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
-        adress: '',
+        adressone: '',
+        adresstwo: '',
         city: '',
         postalcode: '',
         countryname: '',
         organizationrole: '',
+        boxnumber: '',
         status: 1,
     
     });
@@ -30,7 +32,7 @@ const Index = (props) => {
         <>
             <div className="row">
                 <div className="col-md-12">
-                    <h3 className="page-title">New Compnay</h3>
+                    <h3 className="page-title">New Company</h3>
                 </div>
             </div>
             <div className="row">
@@ -45,9 +47,15 @@ const Index = (props) => {
                                     </div>
                                 </div>
                                 <div className="form_group">
-                                    <span className="form_group_label">Adresse</span>
+                                    <span className="form_group_label">Adress (Line 1)</span>
                                     <div className="form_group_field">
-                                        <input type="text" name="adress" onChange={onHandleChange} />
+                                        <input type="text" name="adressone" onChange={onHandleChange} />
+                                    </div>
+                                </div>
+                                <div className="form_group">
+                                    <span className="form_group_label">Adress (Line 2)</span>
+                                    <div className="form_group_field">
+                                        <input type="text" name="adresstwo" onChange={onHandleChange} />
                                     </div>
                                 </div>
                                 <div className="form_group">
@@ -66,6 +74,12 @@ const Index = (props) => {
                                     <span className="form_group_label">Country Name</span>
                                     <div className="form_group_field">
                                         <input type="text" name="countryname" onChange={onHandleChange} />
+                                    </div>
+                                </div>
+                                <div className="form_group">
+                                    <span className="form_group_label">PO Box Number</span>
+                                    <div className="form_group_field">
+                                        <input type="text" name="boxnumber" onChange={onHandleChange} />
                                     </div>
                                 </div>
                                 <div className="form-button">

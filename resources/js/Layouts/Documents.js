@@ -3,6 +3,8 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
+import { Tooltip } from '@mui/material';
+import moment from 'moment';
 
 const Documents = ({ handleChanged, handleDocumentdate, addFormFields, formValues, removeDocumentsFields, handleDocumentSelectChange }) => {
 
@@ -89,13 +91,16 @@ const Documents = ({ handleChanged, handleDocumentdate, addFormFields, formValue
                                     <div className="form_group_inline">
                                         <span className="form_group_label">Version date</span>
                                         <div className="form_group_field">
-                                            <DatePicker name="version_date" selected={element.version_date ? new Date(element.version_date) : ''} onChange={(date) => handleDocumentdate(index, date)} value={element.version_date} />
+                                            <DatePicker name="version_date" selected={element.version_date ? new Date(element.version_date) : ''} onChange={(date) => handleDocumentdate(index, date)} value={element.version_date ? moment(element.version_date).format('DD-MMM-yy') : ''} />
                                         </div>
                                     </div>
                                 </div>
                                 <div className="inline_form">
                                     <div className="form_group_inline">
-                                        <span className="form_group_label">Remarks</span>
+                                        <Tooltip arrow title="for product Information like SmPC, PIL, Mock-up please provide internal reference">
+                                            <span className="form_group_label">Remarks</span>
+                                        </Tooltip>
+                                        
                                         <div className="form_group_field">
                                             <input type="text" name="dremarks" onChange={e => handleChanged(index, e)} value={element.dremarks} />
                                         </div>
