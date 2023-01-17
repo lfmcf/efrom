@@ -372,8 +372,8 @@ const Create = (props) => {
 
     let options = props.companies.map(function (companie) {
         return {
-            value: companie.name + " - " + companie.adressone + " - " + companie.city + " - " + companie.countryname,
-            label: companie.name + " - " + companie.adressone + " - " + companie.city + " - " + companie.countryname,
+            value: companie.name + " - " + companie.adress + " - " + companie.city + " - " + companie.countryname,
+            label: companie.name + " - " + companie.adress + " - " + companie.city + " - " + companie.countryname,
         };
     })
 
