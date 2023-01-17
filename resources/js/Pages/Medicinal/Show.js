@@ -80,7 +80,8 @@ const Show = (props) => {
                             <Mtab label="Manufacturing & Supply Chain" {...a11yProps(10)} />
                             <Mtab label="Interaction / Commitment remarks" {...a11yProps(11)} />
                             <Mtab label="Status Details" {...a11yProps(12)} />
-                            <Mtab label="Documents" {...a11yProps(13)} />
+                            <Mtab label="Next Renewals" {...a11yProps(13)} />
+                            <Mtab label="Documents" {...a11yProps(14)} />
                         </Mtabs>
                         <div index={0} className="muitab" style={{ display: value != 0 ? 'none' : '' }}>
                             <table className='showTable'>
@@ -109,12 +110,12 @@ const Show = (props) => {
                                         <td>Procedure Number</td>
                                         <td>{rc.procedure_number}</td>
                                     </tr>
-                                    <tr>
+                                    {/* <tr>
                                         <td>Product Type</td>
                                         <td>{rc.product_type.value}</td>
-                                    </tr>
+                                    </tr> */}
                                     <tr>
-                                        <td>Application Stage</td>
+                                        <td>Submission Type</td>
                                         <td>{rc.application_stage.value}</td>
                                     </tr>
                                 </tbody>
@@ -129,10 +130,10 @@ const Show = (props) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    {/* <tr>
                                         <td>Registration Title </td>
                                         <td>{rc.registration_title}</td>
-                                    </tr>
+                                    </tr> */}
                                     <tr>
                                         <td>Product Name </td>
                                         <td>{rc.product_name.value}</td>
@@ -291,42 +292,47 @@ const Show = (props) => {
                            {rc.formulations.map((element, index) => (
                                 <div key={index}>
                                     <h2 className='sous-heading-show'>Formulation - {index + 1}</h2>
-                                    <div>
-                                        <table className='showTable'>
-                                            <thead>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>Value</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>Ingredient</td>
-                                                    <td>{element.ingredient ? element.ingredient.value : ''}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Function</td>
-                                                    <td>{element.function ? element.function.value : ''}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Strength Type</td>
-                                                    <td>{element.strength_type ? element.strength_type.value : ''}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Numerator Lower Val</td>
-                                                    <td>{element.numerator_lower_val}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Numerator Upper Val</td>
-                                                    <td>{element.numerator_upper_val}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Numerator Unit</td>
-                                                    <td>{element.numerator_unit ? element.numerator_unit.value : ''}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    
+                                    {element.ingredient.map((ele, i) => (
+                                        <div key={i}>
+                                            <h2 className='sous-heading-show'>Ingredient - {i + 1}</h2>
+                                            <table className='showTable'>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Value</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Ingredient</td>
+                                                        <td>{ele.ingredient ? ele.ingredient.value : ''}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Function</td>
+                                                        <td>{ele.function ? ele.function.value : ''}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Strength Type</td>
+                                                        <td>{ele.strength_type ? ele.strength_type.value : ''}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Numerator Lower Val</td>
+                                                        <td>{ele.numerator_lower_val}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Numerator Upper Val</td>
+                                                        <td>{ele.numerator_upper_val}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Numerator Unit</td>
+                                                        <td>{ele.numerator_unit ? ele.numerator_unit.value : ''}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    ))}
+                                    
                                 </div>
                             ))}
                         </div>
@@ -531,6 +537,32 @@ const Show = (props) => {
                             ))}
                         </div>
                         <div index={13} className="muitab" style={{ display: value != 13 ? 'none' : '' }}>
+                            <div>
+                                <table className='showTable'>
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Next Renewals</td>
+                                            <td>{rc.next_renewals}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Next Renewal Submission Deadline</td>
+                                            <td>{rc.nr_submission_deadline}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Next Renewal Date</td>
+                                            <td>{rc.nr_date}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div index={14} className="muitab" style={{ display: value != 14 ? 'none' : '' }}>
                             {rc.doc.map((element, index) => (
                                 <div key={index}>
                                     <h2 className='sous-heading-show'>Document - {index + 1}</h2>

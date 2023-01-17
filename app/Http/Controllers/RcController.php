@@ -152,6 +152,7 @@ class RcController extends Controller
         $rc->doc = $docs;
         $rc->created_by = $request->created_by;
         $rc->type = $request->query('type');
+
         $rc->save();
 
         if ($request->query('type') === 'submit') {
@@ -160,11 +161,10 @@ class RcController extends Controller
                 'Country',
                 'RMS',
                 'Procedure Number',
-                'Applcation Stage'
+                'Submission Type'
             );
             $basicInfo = array(
-                'Registration Title',
-                'Product Name',
+                'Product',
                 'Local Tradename',
                 'Registration Holder',
                 'Application Number',
@@ -289,6 +289,8 @@ class RcController extends Controller
                 $rc->bremarks
             ], NULL, 'A2');
 
+            
+
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(2);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Dosage Form');
@@ -312,6 +314,8 @@ class RcController extends Controller
                 $sheet->setCellValue('D' . $e, $at['value']);
                 $e+=1;
             }
+
+            
             // $sheet->fromArray([
             //     $rc->authorized_pharmaceutical_form,
             //     $rc->administrable_pharmaceutical_form,
@@ -372,17 +376,24 @@ class RcController extends Controller
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($formulations, NULL, 'A1');
             $f = 2;
+           
             foreach($rc->formulations as $fr) {
-                $sheet->setCellValue('A' . $f, is_array($fr['ingredient']) ? $fr['ingredient']['value'] : '');
-                $sheet->setCellValue('B' . $f, is_array($fr['function']) ? $fr['function']['value'] : '');
-                $sheet->setCellValue('C' . $f, is_array($fr['strength_type']) ? $fr['strength_type']['value'] : '');
-                $sheet->setCellValue('D' . $f, $fr['numerator_lower_val']);
-                $sheet->setCellValue('E' . $f, $fr['numerator_upper_val']);
-                $sheet->setCellValue('F' . $f, is_array($fr['numerator_unit']) ? $fr['numerator_unit']['value'] : '');
+                foreach($fr['ingredient'] as $ing) {
+                    
+                    $sheet->setCellValue('A' . $f, is_array($ing['ingredient']) ? $ing['ingredient']['value'] : '');
+                    $sheet->setCellValue('B' . $f, is_array($ing['function']) ? $ing['function']['value'] : '');
+                    $sheet->setCellValue('C' . $f, is_array($ing['strength_type']) ? $ing['strength_type']['value'] : '');
+                    $sheet->setCellValue('D' . $f, $ing['numerator_lower_val']);
+                    $sheet->setCellValue('E' . $f, $ing['numerator_upper_val']);
+                    $sheet->setCellValue('F' . $f, is_array($ing['numerator_unit']) ? $ing['numerator_unit']['value'] : '');
+                    $f += 1;
+                }
                 $f += 1;
             }
             // $sheet->fromArray($rc->formulations
             // , NULL, 'A2');
+
+            
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(8);
@@ -391,8 +402,8 @@ class RcController extends Controller
             $sheet->fromArray($packagings, NULL, 'A1');
             $c = 2;
             foreach ($rc->packagings as $package) {
-                $sheet->setCellValue('A' . $c, $package['sellable_unit_determined_by']);
-                $sheet->setCellValue('B' . $c, $package['product_legal_status_of_supply']);
+                $sheet->setCellValue('A' . $c, is_array($package['sellable_unit_determined_by']) ? $package['sellable_unit_determined_by']['value']: '');
+                $sheet->setCellValue('B' . $c, is_array($package['product_legal_status_of_supply']) ? $package['product_legal_status_of_supply']['value'] : '');
                 $sheet->setCellValue('C' . $c, is_array($package['packaging_type']) ? $package['packaging_type']['value'] : '');
                 $sheet->setCellValue('D' . $c, $package['packaging_registration_number']);
                 $sheet->setCellValue('E' . $c, $package['packaging_name']);
@@ -402,7 +413,7 @@ class RcController extends Controller
                 $sheet->setCellValue('I' . $c, is_array($package['packaging_discontinued']) ? $package['packaging_discontinued']['value'] : '');
                 $sheet->setCellValue('J' . $c, date("d-m-Y",strtotime($package['discontinuation_date'])));
                 $sheet->setCellValue('K' . $c, $package['remarks']);
-                if(isset($package['packagelif']));{
+                if(isset($package['packagelif'])){
                     foreach ($package['packagelif'] as $i => $pl) {
                         $sheet->setCellValue('L' . $c, is_array($pl['package_shelf_life_type']) ? $pl['package_shelf_life_type']['value'] : '');
                         $sheet->setCellValue('M' . $c, $pl['shelf_life']);
@@ -429,6 +440,8 @@ class RcController extends Controller
                 $rc->age,
             ], NULL, 'A2');
 
+            
+
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(10);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Manufacturing');
@@ -447,6 +460,8 @@ class RcController extends Controller
                     
                 }
             }
+
+            
             
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(11);
@@ -471,11 +486,18 @@ class RcController extends Controller
             //     $sheet->setCellValue('C'.$i, date("d-m-Y", strtotime($datef)));
             // }
 
+            
+
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(12);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Next Renewals');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($next_renewals, NULL, 'A1');
+            $sheet->fromArray([
+                $rc->next_renewals,
+                $rc->nr_submission_deadline,
+                $rc->nr_date,
+            ], NULL, 'A2');
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(13);
@@ -665,11 +687,10 @@ class RcController extends Controller
                 'RMS',
                 'Procedure Number',
                 'Product Type',
-                'Applcation Stage'
+                'Submission Type'
             );
             $basicInfo = array(
-                'Registration Title',
-                'Product Name',
+                'Product',
                 'Local Tradename',
                 'Registration Holder',
                 'Application Number',
@@ -709,7 +730,10 @@ class RcController extends Controller
                 'Function'
             );
             $packagings = array(
+                'Sellable Unit Determined By',
+                'Product Legal Status of Supply',
                 'Packaging Type',
+                'Packaging Registration number',
                 'Packaging Name',
                 'Description',
                 'Launched',
@@ -873,13 +897,18 @@ class RcController extends Controller
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($formulations, NULL, 'A1');
             $f = 2;
+           
             foreach($rc->formulations as $fr) {
-                $sheet->setCellValue('A' . $f, is_array($fr['ingredient']) ? $fr['ingredient']['value'] : '');
-                $sheet->setCellValue('B' . $f, is_array($fr['function']) ? $fr['function']['value'] : '');
-                $sheet->setCellValue('C' . $f, is_array($fr['strength_type']) ? $fr['strength_type']['value'] : '');
-                $sheet->setCellValue('D' . $f, $fr['numerator_lower_val']);
-                $sheet->setCellValue('E' . $f, $fr['numerator_upper_val']);
-                $sheet->setCellValue('F' . $f, is_array($fr['numerator_unit']) ? $fr['numerator_unit']['value'] : '');
+                foreach($fr['ingredient'] as $ing) {
+                    
+                    $sheet->setCellValue('A' . $f, is_array($ing['ingredient']) ? $ing['ingredient']['value'] : '');
+                    $sheet->setCellValue('B' . $f, is_array($ing['function']) ? $ing['function']['value'] : '');
+                    $sheet->setCellValue('C' . $f, is_array($ing['strength_type']) ? $ing['strength_type']['value'] : '');
+                    $sheet->setCellValue('D' . $f, $ing['numerator_lower_val']);
+                    $sheet->setCellValue('E' . $f, $ing['numerator_upper_val']);
+                    $sheet->setCellValue('F' . $f, is_array($ing['numerator_unit']) ? $ing['numerator_unit']['value'] : '');
+                    $f += 1;
+                }
                 $f += 1;
             }
             // $sheet->fromArray($rc->formulations
@@ -892,23 +921,26 @@ class RcController extends Controller
             $sheet->fromArray($packagings, NULL, 'A1');
             $c = 2;
             foreach ($rc->packagings as $package) {
-                $sheet->setCellValue('A' . $c, is_array($package['packaging_type']) ? $package['packaging_type']['value'] : '');
-                $sheet->setCellValue('B' . $c, $package['packaging_name']);
-                $sheet->setCellValue('C' . $c, $package['description']);
-                $sheet->setCellValue('D' . $c, is_array($package['launched']) ? $package['launched']['value'] : '');
-                $sheet->setCellValue('E' . $c, date("d-m-Y",strtotime($package['first_lunch_date'])));
-                $sheet->setCellValue('F' . $c, is_array($package['packaging_discontinued']) ? $package['packaging_discontinued']['value'] : '');
-                $sheet->setCellValue('G' . $c, date("d-m-Y",strtotime($package['discontinuation_date'])));
-                $sheet->setCellValue('H' . $c, $package['remarks']);
-                if(isset($package['packagelif']));{
+                $sheet->setCellValue('A' . $c, is_array($package['sellable_unit_determined_by']) ? $package['sellable_unit_determined_by']['value']: '');
+                $sheet->setCellValue('B' . $c, is_array($package['product_legal_status_of_supply']) ? $package['product_legal_status_of_supply']['value'] : '');
+                $sheet->setCellValue('C' . $c, is_array($package['packaging_type']) ? $package['packaging_type']['value'] : '');
+                $sheet->setCellValue('D' . $c, $package['packaging_registration_number']);
+                $sheet->setCellValue('E' . $c, $package['packaging_name']);
+                $sheet->setCellValue('F' . $c, $package['description']);
+                $sheet->setCellValue('G' . $c, is_array($package['launched']) ? $package['launched']['value'] : '');
+                $sheet->setCellValue('H' . $c, date("d-m-Y",strtotime($package['first_lunch_date'])));
+                $sheet->setCellValue('I' . $c, is_array($package['packaging_discontinued']) ? $package['packaging_discontinued']['value'] : '');
+                $sheet->setCellValue('J' . $c, date("d-m-Y",strtotime($package['discontinuation_date'])));
+                $sheet->setCellValue('K' . $c, $package['remarks']);
+                if(isset($package['packagelif'])){
                     foreach ($package['packagelif'] as $i => $pl) {
-                        $sheet->setCellValue('I' . $c, is_array($pl['package_shelf_life_type']) ? $pl['package_shelf_life_type']['value'] : '');
-                        $sheet->setCellValue('J' . $c, $pl['shelf_life']);
-                        $sheet->setCellValue('K' . $c, is_array($pl['shelf_life_unit']) ? $pl['shelf_life_unit']['value'] : '');
-                        $sheet->setCellValue('M' . $c, $pl['remarks']);
+                        $sheet->setCellValue('L' . $c, is_array($pl['package_shelf_life_type']) ? $pl['package_shelf_life_type']['value'] : '');
+                        $sheet->setCellValue('M' . $c, $pl['shelf_life']);
+                        $sheet->setCellValue('N' . $c, is_array($pl['shelf_life_unit']) ? $pl['shelf_life_unit']['value'] : '');
+                        $sheet->setCellValue('P' . $c, $pl['remarks']);
                         if (isset($pl['package_storage_condition'])) {
                             foreach ($pl['package_storage_condition'] as $psc) {
-                                $sheet->setCellValue('L' . $c, $psc['value']);
+                                $sheet->setCellValue('O' . $c, $psc['value']);
                                 $c += 1;
                             }
                         }
@@ -973,6 +1005,11 @@ class RcController extends Controller
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Next Renewals');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($next_renewals, NULL, 'A1');
+            $sheet->fromArray([
+                $rc->next_renewals,
+                $rc->nr_submission_deadline,
+                $rc->nr_date,
+            ], NULL, 'A2');
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(13);

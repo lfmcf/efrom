@@ -97,12 +97,12 @@ const Show = (props) => {
                                         <td>RMS</td>
                                         <td>{clinical.rms ? clinical.rms.value : ''}</td>
                                     </tr> : ''}
-                                    <tr>
+                                    {/* <tr>
                                         <td>Procedure Number</td>
                                         <td>{clinical.procedure_number}</td>
-                                    </tr>
+                                    </tr> */}
                                     <tr>
-                                        <td>Applcation Stage</td>
+                                        <td>Submission Type</td>
                                         <td>{clinical.application_stage.value}</td>
                                     </tr>
                                 </tbody>
@@ -117,12 +117,12 @@ const Show = (props) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    {/* <tr>
                                         <td>Registration Title</td>
                                         <td>{clinical.registration_title}</td>
-                                    </tr>
+                                    </tr> */}
                                     <tr>
-                                        <td>Product Name</td>
+                                        <td>Product</td>
                                         <td>{clinical.product_name.value}</td>
                                     </tr>
                                     <tr>
@@ -148,6 +148,34 @@ const Show = (props) => {
                                     <tr>
                                         <td>Peadiatric indication</td>
                                         <td>{clinical.paediatric_indication ? clinical.paediatric_indication.value : ''}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Procedure Number</td>
+                                        <td>{clinical.procedure_number}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Investigationnal Code</td>
+                                        <td>{clinical.investigationnal_code}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Application Number</td>
+                                        <td>{clinical.application_number}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Medicines Regulatory Authority</td>
+                                        <td>{clinical.medicines_regulatory_authority ? clinical.medicines_regulatory_authority.value : ''}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Registration alternate number</td>
+                                        <td>{clinical.registration_alternate_number}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Registration number</td>
+                                        <td>{clinical.registration_number}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Registration Date</td>
+                                        <td>{clinical.registration_date}</td>
                                     </tr>
                                     <tr>
                                         <td>Remarks</td>
@@ -287,42 +315,47 @@ const Show = (props) => {
                             {clinical.formulations.map((element, index) => (
                                 <div key={index}>
                                     <h2 className='sous-heading-show'>Formulation - {index + 1}</h2>
-                                    <div>
-                                        <table className='showTable'>
-                                            <thead>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>Value</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>Ingredient</td>
-                                                    <td>{element.ingredient ? element.ingredient.value : ''}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Function</td>
-                                                    <td>{element.function ? element.function.value : ''}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Strength Type</td>
-                                                    <td>{element.strength_type ? element.strength_type.value : ''}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Numerator Lower Val</td>
-                                                    <td>{element.numerator_lower_val}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Numerator Upper Val</td>
-                                                    <td>{element.numerator_upper_val}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Numerator Unit</td>
-                                                    <td>{element.numerator_unit ? element.numerator_unit.value : ''}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    
+                                    {element.ingredient.map((ele, i) => (
+                                        <div key={i}>
+                                            <h2 className='sous-heading-show'>Ingredient - {i + 1}</h2>
+                                            <table className='showTable'>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Value</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Ingredient</td>
+                                                        <td>{ele.ingredient ? ele.ingredient.value : ''}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Function</td>
+                                                        <td>{ele.function ? ele.function.value : ''}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Strength Type</td>
+                                                        <td>{ele.strength_type ? ele.strength_type.value : ''}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Numerator Lower Val</td>
+                                                        <td>{ele.numerator_lower_val}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Numerator Upper Val</td>
+                                                        <td>{ele.numerator_upper_val}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Numerator Unit</td>
+                                                        <td>{ele.numerator_unit ? ele.numerator_unit.value : ''}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    ))}
+                                    
                                 </div>
                             ))}
                         </div>

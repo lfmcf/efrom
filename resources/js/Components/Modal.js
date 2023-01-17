@@ -23,7 +23,7 @@ const ModalS = ({ show, handleClose }) => {
         city: '',
         postalcode: '',
         countryname: '',
-        organizationrole: '',
+        // organizationrole: '',
         boxnumber: '',
         status: 1,
 
@@ -32,6 +32,10 @@ const ModalS = ({ show, handleClose }) => {
     // const handleClose = () => {
     //     setOpen(false);
     // };
+
+    const handleChange = (e) => {
+        setData(e.target.name, e.target.value)
+    }
 
     const onHandleChange = (event) => {
         setData(event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
@@ -63,6 +67,7 @@ const ModalS = ({ show, handleClose }) => {
                             type="text"
                             fullWidth
                             variant="standard"
+                            onChange={handleChange}
                         />
                         <TextField
                             name='adressone'
@@ -71,6 +76,7 @@ const ModalS = ({ show, handleClose }) => {
                             type="text"
                             fullWidth
                             variant="standard"
+                            onChange={handleChange}
                         />
                         <TextField
                             name='adresstwo'
@@ -79,6 +85,7 @@ const ModalS = ({ show, handleClose }) => {
                             type="text"
                             fullWidth
                             variant="standard"
+                            onChange={handleChange}
                         />
                         <TextField
                             name='postalcode'
@@ -87,6 +94,7 @@ const ModalS = ({ show, handleClose }) => {
                             type="text"
                             fullWidth
                             variant="standard"
+                            onChange={handleChange}
                         />
                         <TextField
                             name='city'
@@ -95,6 +103,7 @@ const ModalS = ({ show, handleClose }) => {
                             type="text"
                             fullWidth
                             variant="standard"
+                            onChange={handleChange}
                         />
                         <TextField
                             name='countryname'
@@ -103,6 +112,7 @@ const ModalS = ({ show, handleClose }) => {
                             type="text"
                             fullWidth
                             variant="standard"
+                            onChange={handleChange}
                         />
                         <TextField
                             name='boxnumber'
@@ -111,6 +121,7 @@ const ModalS = ({ show, handleClose }) => {
                             type="text"
                             fullWidth
                             variant="standard"
+                            onChange={handleChange}
                         />
                     </DialogContent>
                     <DialogActions>
