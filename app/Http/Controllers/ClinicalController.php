@@ -321,12 +321,16 @@ class ClinicalController extends Controller
             // $sheet->fromArray($clinical->formulations, NULL, 'A2');
             $f = 2;
             foreach($clinical->formulations as $fr) {
-                $sheet->setCellValue('A' . $f, is_array($fr['ingredient']) ? $fr['ingredient']['value'] : '');
-                $sheet->setCellValue('B' . $f, is_array($fr['function']) ? $fr['function']['value'] : '');
-                $sheet->setCellValue('C' . $f, is_array($fr['strength_type']) ? $fr['strength_type']['value'] : '');
-                $sheet->setCellValue('D' . $f, $fr['numerator_lower_val']);
-                $sheet->setCellValue('E' . $f, $fr['numerator_upper_val']);
-                $sheet->setCellValue('F' . $f, is_array($fr['numerator_unit']) ? $fr['numerator_unit']['value'] : '');
+                foreach($fr['ingredient'] as $ing) {
+                    
+                    $sheet->setCellValue('A' . $f, is_array($ing['ingredient']) ? $ing['ingredient']['value'] : '');
+                    $sheet->setCellValue('B' . $f, is_array($ing['function']) ? $ing['function']['value'] : '');
+                    $sheet->setCellValue('C' . $f, is_array($ing['strength_type']) ? $ing['strength_type']['value'] : '');
+                    $sheet->setCellValue('D' . $f, $ing['numerator_lower_val']);
+                    $sheet->setCellValue('E' . $f, $ing['numerator_upper_val']);
+                    $sheet->setCellValue('F' . $f, is_array($ing['numerator_unit']) ? $ing['numerator_unit']['value'] : '');
+                    $f += 1;
+                }
                 $f += 1;
             }
 
@@ -795,12 +799,15 @@ class ClinicalController extends Controller
             // $sheet->fromArray($clinical->formulations, NULL, 'A2');
             $f = 2;
             foreach($clinical->formulations as $fr) {
-                $sheet->setCellValue('A' . $f, is_array($fr['ingredient']) ? $fr['ingredient']['value'] : '');
-                $sheet->setCellValue('B' . $f, is_array($fr['function']) ? $fr['function']['value'] : '');
-                $sheet->setCellValue('C' . $f, is_array($fr['strength_type']) ? $fr['strength_type']['value'] : '');
-                $sheet->setCellValue('D' . $f, $fr['numerator_lower_val']);
-                $sheet->setCellValue('E' . $f, $fr['numerator_upper_val']);
-                $sheet->setCellValue('F' . $f, is_array($fr['numerator_unit']) ? $fr['numerator_unit']['value'] : '');
+                foreach($fr['ingredient'] as $ing) {
+                    $sheet->setCellValue('A' . $f, is_array($ing['ingredient']) ? $ing['ingredient']['value'] : '');
+                    $sheet->setCellValue('B' . $f, is_array($ing['function']) ? $ing['function']['value'] : '');
+                    $sheet->setCellValue('C' . $f, is_array($ing['strength_type']) ? $ing['strength_type']['value'] : '');
+                    $sheet->setCellValue('D' . $f, $ing['numerator_lower_val']);
+                    $sheet->setCellValue('E' . $f, $ing['numerator_upper_val']);
+                    $sheet->setCellValue('F' . $f, is_array($ing['numerator_unit']) ? $ing['numerator_unit']['value'] : '');
+                    $f += 1;
+                }
                 $f += 1;
             }
 
