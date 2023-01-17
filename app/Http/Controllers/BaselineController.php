@@ -7,6 +7,7 @@ use App\Models\Baseline;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Countries;
+use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -33,8 +34,10 @@ class BaselineController extends Controller
     public function create()
     {
         $countries = Countries::orderBy('country_name')->get('country_name');
+        $products = Product::all();
         return Inertia::render('Baseline/Create', [
-            'countries' => $countries
+            'countries' => $countries,
+            'products' => $products
         ]);
     }
 
@@ -262,9 +265,11 @@ class BaselineController extends Controller
     {
         $baseline = Baseline::findOrFail($id);
         $countries = Countries::orderBy('country_name')->get('country_name');
+        $products = Product::all();
         return Inertia::render('Baseline/Edit', [
             'countries' => $countries,
-            'baseline' => $baseline
+            'baseline' => $baseline,
+            'products' => $products
         ]);
     }
 

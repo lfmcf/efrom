@@ -6,6 +6,7 @@ use App\Models\RegistrationTermination;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Countries;
+use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -31,8 +32,10 @@ class RegistrationTerminationController extends Controller
     public function create()
     {
         $countries = Countries::orderBy('country_name')->get('country_name');
+        $products = Product::all();
         return Inertia::render('RegistrationTermination/Create', [
-            'countries' => $countries
+            'countries' => $countries,
+            'products' => $products
         ]);
     }
 
@@ -253,9 +256,11 @@ class RegistrationTerminationController extends Controller
     {
         $rt = RegistrationTermination::findOrFail($id);
         $countries = Countries::orderBy('country_name')->get('country_name');
+        $products = Product::all();
         return Inertia::render('RegistrationTermination/Edit', [
             'countries' => $countries,
-            'rt' => $rt
+            'rt' => $rt,
+            'products' => $products
         ]);
     }
 

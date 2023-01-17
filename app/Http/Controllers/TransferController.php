@@ -7,6 +7,7 @@ use App\Models\Transfer;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Countries;
+use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -34,9 +35,11 @@ class TransferController extends Controller
     {
         $compnies = Company::orderBy('name')->get();
         $countries = Countries::orderBy('country_name')->get('country_name');
+        $products = Product::all();
         return Inertia::render('Transfer/Create', [
             'countries' => $countries,
-            'companies' => $compnies
+            'companies' => $compnies,
+            'products' => $products
         ]);
     }
 
@@ -278,10 +281,12 @@ class TransferController extends Controller
         $transfer = Transfer::findOrFail($id);
         $compnies = Company::orderBy('name')->get();
         $countries = Countries::orderBy('country_name')->get('country_name');
+        $products = Product::all();
         return Inertia::render('Transfer/Edit', [
             'countries' => $countries,
             'companies' => $compnies,
             'transfer' => $transfer,
+            'products' => $products
         ]);
     }
 

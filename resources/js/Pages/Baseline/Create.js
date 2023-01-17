@@ -63,6 +63,13 @@ const Create = (props) => {
         return { value: country.country_name, label: country.country_name };
     })
 
+    let porductOptions = props.products.map(function (product) {
+        return {
+            value : product.name,
+            label : product.name,
+        }
+    })
+
     const handleChange = (e) => {
         setData(e.target.name, e.target.value);
         clearErrors(e.target.name);
@@ -288,7 +295,7 @@ const Create = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label" style={{color: errors.product ? 'red' : ''}}>Product (*)</span>
                                                 <div className="form_group_field">
-                                                    <Select options={product_name}
+                                                    <Select options={porductOptions}
                                                         name="product"
                                                         onChange={handleSelectChange}
                                                         className="basic"

@@ -55,6 +55,13 @@ const Edit = (props) => {
     const [statuserror, setStatusError] = useState(false);
     const [statusCountry, setStatusCountry] = useState([{label: 'All', value: 'All'}])
 
+    let porductOptions = props.products.map(function (product) {
+        return {
+            value : product.name,
+            label : product.name,
+        }
+    })
+
     const handleMChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -231,7 +238,7 @@ const Edit = (props) => {
 
                     <form className="form" ref={formRef} onSubmit={handleSubmit}>
                         <Tabs defaultActiveKey="first">
-                            <Tab eventKey="first" title="New Renewal" title="New Registration" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>
+                            <Tab eventKey="first" title="New Renewal" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>
                                 <Box
                                     sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100%' }}
                                 >
@@ -256,9 +263,9 @@ const Edit = (props) => {
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label" style={{color: errors.product ? 'red' : ''}}>Product Name (*)</span>
+                                                <span className="form_group_label" style={{color: errors.product ? 'red' : ''}}>Product (*)</span>
                                                 <div className="form_group_field">
-                                                    <Select options={product_name}
+                                                    <Select options={porductOptions}
                                                         name="product"
                                                         onChange={handleSelectChange}
                                                         className="basic"

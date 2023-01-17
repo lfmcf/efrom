@@ -50,6 +50,13 @@ const EditNoHqproject = (props) => {
         created_by: props.user.id,
     });
 
+    let porductOptions = props.products.map(function (product) {
+        return {
+            value : product.name,
+            label : product.name,
+        }
+    })
+
     const handleReset = () => {
         reset()
      }
@@ -264,9 +271,9 @@ const EditNoHqproject = (props) => {
                                     </div>
                                 </div>
                                 <div className="form_group_inline">
-                                    <span className="form_group_label" style={{color: errors.product ? 'red' : ''}}>Product Name (*)</span>
+                                    <span className="form_group_label" style={{color: errors.product ? 'red' : ''}}>Product (*)</span>
                                     <div className="form_group_field">
-                                        <Select options={product_name}
+                                        <Select options={porductOptions}
                                             name="product"
                                             onChange={handleSelectChange}
                                             className="basic"
