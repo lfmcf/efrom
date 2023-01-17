@@ -8,6 +8,7 @@ use App\Models\Variation;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Countries;
+use App\Models\Product;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -25,8 +26,10 @@ class VariationController extends Controller
     public function index()
     {
         $countries = Countries::orderBy('country_name')->get('country_name');
-        return Inertia::render('MarketingAuth/Variation', [
-            'countries' => $countries
+        $products = Product::all();
+        return Inertia::render('Variation/Create', [
+            'countries' => $countries,
+            'products' => $products
         ]);
     }
 
@@ -512,10 +515,12 @@ class VariationController extends Controller
 
         $variation = Variation::findOrFail($id);
         $countries = Countries::orderBy('country_name')->get('country_name');
+        $products = Product::all();
 
         return Inertia::render('Variation/Edit', [
             'countries' => $countries,
-            'variation' => $variation
+            'variation' => $variation,
+            'products' => $products
         ]);
 
 

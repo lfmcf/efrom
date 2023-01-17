@@ -54,6 +54,13 @@ const Create = (props) => {
     const [statuserror, setStatusError] = useState(false);
     const [statusCountry, setStatusCountry] = useState([{label: 'All', value: 'All'}])
 
+    let porductOptions = props.products.map(function (product) {
+        return {
+            value : product.name,
+            label : product.name,
+        }
+    })
+
     const handleMChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -289,7 +296,7 @@ const Create = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label" style={{color: errors.product ? 'red' : ''}}>Product (*)</span>
                                                 <div className="form_group_field">
-                                                    <Select options={product_name}
+                                                    <Select options={porductOptions}
                                                         name="product"
                                                         onChange={handleSelectChange}
                                                         className="basic"

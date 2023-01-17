@@ -6,6 +6,7 @@ use App\Models\CregistrationTermination;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Countries;
+use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -31,8 +32,10 @@ class CregistrationTerminationController extends Controller
     public function create()
     {
         $countries = Countries::orderBy('country_name')->get('country_name');
+        $products = Product::all();
         return Inertia::render('ClinicalRegistrationTerminiation/Create', [
-            'countries' => $countries
+            'countries' => $countries,
+            'products' => $products
         ]);
     }
 

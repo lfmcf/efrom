@@ -7,6 +7,7 @@ use App\Models\Amendments;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Countries;
+use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -32,8 +33,10 @@ class AmendmentsController extends Controller
     public function create()
     {
         $countries = Countries::orderBy('country_name')->get('country_name');
+        $products = Product::all();
         return Inertia::render('Amendment/Create', [
-            'countries' => $countries
+            'countries' => $countries,
+            'products' => $products
         ]);
     }
 
@@ -259,9 +262,11 @@ class AmendmentsController extends Controller
     {
         $amendments = Amendments::findOrFail($id);
         $countries = Countries::orderBy('country_name')->get('country_name');
+        $products = Product::all();
         return Inertia::render('Amendment/Edit', [
             'countries' => $countries,
-            'amendment' => $amendments
+            'amendment' => $amendments,
+            'products' => $products
         ]);
     }
 

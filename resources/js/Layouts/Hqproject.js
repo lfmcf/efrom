@@ -53,6 +53,13 @@ const Hqproject = (props) => {
         setShowMP(false)
     }
 
+    let porductOptions = props.products.map(function (product) {
+        return {
+            value : product.name,
+            label : product.name,
+        }
+    })
+
     // React.useEffect(() => {
         
     //     if(data.identification[indexRef.current].procedure_type && data.identification[indexRef.current].procedure_type.value == "Decentralized" || data.identification[indexRef.current].procedure_type && data.identification[indexRef.current].procedure_type.value == "Mutual Recognition" ) {
@@ -394,7 +401,7 @@ const Hqproject = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label" style={{color: errors['identification.' + index + '.product'] ? 'red' : ''}}>Product (*)</span>
                                                 <div className="form_group_field">
-                                                    <Select options={product_name}
+                                                    <Select options={porductOptions}
                                                         name="product"
                                                         onChange={(e) => handleIdentificationSelectChange(index, e, 'product')}
                                                         className="basic"

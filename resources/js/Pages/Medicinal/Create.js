@@ -370,10 +370,17 @@ const Create = (props) => {
         setData(arr);
     }
 
+    let porductOptions = props.products.map(function (product) {
+        return {
+            value : product.name,
+            label : product.name,
+        }
+    })
+
     let options = props.companies.map(function (companie) {
         return {
-            value: companie.name + " - " + companie.adress + " - " + companie.city + " - " + companie.countryname,
-            label: companie.name + " - " + companie.adress + " - " + companie.city + " - " + companie.countryname,
+            value: companie.name + " - " + companie.adressone + " - " + companie.city + " - " + companie.countryname,
+            label: companie.name + " - " + companie.adressone + " - " + companie.city + " - " + companie.countryname,
         };
     })
 
@@ -611,7 +618,7 @@ const Create = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label" style={{color : errors.product_name ? 'red' : ''}}>Product (*)</span>
                                                 <div className="form_group_field">
-                                                    <Select options={product_name}
+                                                    <Select options={porductOptions}
                                                         name="product_name"
                                                         onChange={handleSelectChange}
                                                         className="basic"

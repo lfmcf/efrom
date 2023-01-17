@@ -4,7 +4,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import Hqproject from "@/Layouts/Hqproject";
 import Nohqproject from "@/Layouts/Nohqproject";
 
-const Variation = ({countries, auth}) => {
+const Variation = ({countries, products, auth}) => {
 
     const [isHq, setHq] = useState(false)
     const handlehqChange = (e) => {
@@ -34,7 +34,7 @@ const Variation = ({countries, auth}) => {
                                     </label>
                                 </div>
                             </div>
-                            {isHq ? <Hqproject countries={countries} user={auth.user} handlehqChange={handlehqChange} /> : <Nohqproject countries={countries} user={auth.user} handlehqChange={handlehqChange} />}
+                            {isHq ? <Hqproject products={products} countries={countries} user={auth.user} handlehqChange={handlehqChange} /> : <Nohqproject products={products} countries={countries} user={auth.user} handlehqChange={handlehqChange} />}
                         </div>
                     {/* </div>
                 </div> */}

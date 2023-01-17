@@ -10,6 +10,7 @@ use App\Models\Company;
 use App\Models\substanceActive;
 use App\Models\packagingItemType;
 use App\Models\Countries;
+use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -28,11 +29,12 @@ class RcController extends Controller
         $substanceActive = substanceActive::all();
         $packagingItemTypes = packagingItemType::all();
         $countries = Countries::orderBy('country_name')->get('country_name');
+        
         return Inertia::render('Clinical/Index', [
             'companies' => $compnies,
             'substanceActive' => $substanceActive,
             'packagingItemTypes' => $packagingItemTypes,
-            'countries' => $countries
+            'countries' => $countries,
         ]);
     }
     /**
@@ -46,11 +48,13 @@ class RcController extends Controller
         $substanceActive = substanceActive::all();
         $packagingItemTypes = packagingItemType::all();
         $countries = Countries::orderBy('country_name')->get('country_name');
+        $products = Product::all();
         return Inertia::render('Medicinal/Create', [
             'companies' => $compnies,
             'substanceActive' => $substanceActive,
             'packagingItemTypes' => $packagingItemTypes,
-            'countries' => $countries
+            'countries' => $countries,
+            'products' => $products
         ]);
     }
 
@@ -572,12 +576,14 @@ class RcController extends Controller
         $substanceActive = substanceActive::all();
         $packagingItemTypes = packagingItemType::all();
         $countries = Countries::orderBy('country_name')->get('country_name');
+        $products = Product::all();
         return Inertia::render('Medicinal/Edit', [
             'companies' => $compnies,
             'substanceActive' => $substanceActive,
             'packagingItemTypes' => $packagingItemTypes,
             'countries' => $countries,
-            'rc' => $rc
+            'rc' => $rc,
+            'products' => $products
         ]);
     }
 

@@ -7,6 +7,7 @@ use App\Models\Clinical;
 use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\Countries;
+use App\Models\Product;
 use App\Models\substanceActive;
 use App\Models\packagingItemType;
 use Inertia\Inertia;
@@ -468,11 +469,13 @@ class ClinicalController extends Controller
         $countries = Countries::orderBy('country_name')->get('country_name');
         $substanceActive = substanceActive::all();
         $packagingItemTypes = packagingItemType::all();
+        $products = Product::all();
         return Inertia::render('Clinical/Create', [
             'companies' => $compnies,
             'substanceActive' => $substanceActive,
             'countries' => $countries,
             'packagingItemTypes' => $packagingItemTypes,
+            'products' => $products
         ]);
     }
 
@@ -483,12 +486,14 @@ class ClinicalController extends Controller
         $countries = Countries::orderBy('country_name')->get('country_name');
         $substanceActive = substanceActive::all();
         $packagingItemTypes = packagingItemType::all();
+        $products = Product::all();
         return Inertia::render('Clinical/Edit', [
             'companies' => $compnies,
             'substanceActive' => $substanceActive,
             'countries' => $countries,
             'packagingItemTypes' => $packagingItemTypes,
             'clinical' => $clinical,
+            'products' => $products
         ]);
     }
 

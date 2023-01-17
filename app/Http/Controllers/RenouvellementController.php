@@ -7,6 +7,7 @@ use App\Models\Renouvellement;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Countries;
+use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -32,8 +33,10 @@ class RenouvellementController extends Controller
     public function create()
     {
         $countries = Countries::orderBy('country_name')->get('country_name');
+        $products = Product::all();
         return Inertia::render('Renewal/Create', [
-            'countries' => $countries
+            'countries' => $countries,
+            'products' => $products
         ]);
     }
 
@@ -274,9 +277,11 @@ class RenouvellementController extends Controller
     {
         $renewal = Renouvellement::findOrFail($id);
         $countries = Countries::orderBy('country_name')->get('country_name');
+        $products = Product::all();
         return Inertia::render('Renewal/Edit', [
             'countries' => $countries,
-            'renewal' => $renewal
+            'renewal' => $renewal,
+            'products' => $products
         ]);
 
     }

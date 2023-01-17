@@ -161,6 +161,13 @@ const Edit = (props) => {
         { value: "Lower limit of temperature", label: "Lower limit of temperature" },
     ]
 
+    let porductOptions = props.products.map(function (product) {
+        return {
+            value : product.name,
+            label : product.name,
+        }
+    })
+
 
     let options = props.companies.map(function (companie) {
         return {
@@ -755,7 +762,7 @@ const Edit = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label" style={{color: errors.product_name ? 'red' : ''}}>Product (*)</span>
                                                 <div className="form_group_field">
-                                                    <Select options={product_name}
+                                                    <Select options={porductOptions}
                                                         name="product_name"
                                                         onChange={handleSelectChange}
                                                         className="basic"
