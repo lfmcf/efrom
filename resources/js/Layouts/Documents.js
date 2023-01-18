@@ -5,9 +5,18 @@ import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
 import { Tooltip } from '@mui/material';
 import moment from 'moment';
+import { usePage } from '@inertiajs/inertia-react';
 
 const Documents = ({ handleChanged, handleDocumentdate, addFormFields, formValues, removeDocumentsFields, handleDocumentSelectChange }) => {
+    const { lang } = usePage().props
 
+    let langOptions = lang.map(function (l) {
+        
+        return {
+            value : l.langue,
+            label : l.langue,
+        }
+    })
 
     return (
         <div className="row" style={{ height: '100%' }}>
@@ -74,10 +83,7 @@ const Documents = ({ handleChanged, handleDocumentdate, addFormFields, formValue
                                     <div className="form_group_inline" >
                                         <span className="form_group_label">Language</span>
                                         <div className="form_group_field">
-                                            <Select options={[
-                                                { label: 'English', value: 'English' },
-                                                { label: 'Frensh', value: 'Frensh' },
-                                            ]}
+                                            <Select options={langOptions}
                                                onChange={(selectedOption, name) => handleDocumentSelectChange(selectedOption, name, index)}
                                                 name="language"
                                                 className="basic"

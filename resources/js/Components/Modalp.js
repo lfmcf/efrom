@@ -19,7 +19,13 @@ const ModalP = ({ show, handleClose }) => {
         name: '',
     });
 
-    const handleSubmit = () => {}
+    const handleChange = (e) => {
+        setData(e.target.name, e.target.value)
+    }
+
+    const handleSubmit = () => {
+        post(route('createproduct'));
+    }
 
     return (
         <div>
@@ -35,6 +41,7 @@ const ModalP = ({ show, handleClose }) => {
                             type="text"
                             fullWidth
                             variant="standard"
+                            onChange={handleChange}
                         />
                     </DialogContent>
                     <DialogActions>

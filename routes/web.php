@@ -16,6 +16,8 @@ use App\Http\Controllers\CregistrationTerminationController;
 use App\Http\Controllers\AmendmentsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ClinicalController;
+use App\Http\Controllers\ProductController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -106,7 +108,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/formsByDate', [DashboardController::class, 'getformsnumber'])->name('formsByDate');
     
     Route::get('/company', [CompanyController::class, 'index'])->name('company');
-    
+    Route::post('/createproduct', [ProductController::class, 'store'])->name('createproduct');
     
     
 });
