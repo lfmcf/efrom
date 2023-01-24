@@ -8,12 +8,15 @@ import Select from 'react-select';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import BasicSpeedDial from '@/Components/SpeedDial';
-import { Tabs as Mtabs, Tab as Mtab } from '@mui/material';
+import { Tabs as Mtabs, Tab as Mtab, IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
 import SaveModal from '@/Components/SaveModal';
 import { Typography } from "@mui/material";
 import { product_name, procedure_type, status } from '@/Components/List';
 import { Head } from '@inertiajs/inertia-react';
+import ModalP from '@/Components/Modalp';
+import AddIcon from '@mui/icons-material/Add';
+import moment from 'moment';
 
 function a11yProps(index) {
     return {
@@ -34,7 +37,7 @@ const Create = (props) => {
         application_stage: baseline.application_stage,
         procedure_num: baseline.procedure_num,
         local_tradename: baseline.local_tradename,
-        product_type: baseline.product_type,
+        //product_type: baseline.product_type,
         baseline_title: baseline.baseline_title,
         description: baseline.description,
         application_num: baseline.application_num,
@@ -46,6 +49,7 @@ const Create = (props) => {
     });
 
     const countryRef = React.useRef();
+    const [showMP, setShowMP] = useState(false);
     const [value, setValue] = useState(0);
     const [showsavemodal, setSavemodal] = useState({ show: false, name: '' });
     const [statuserror, setStatusError] = useState(false);
@@ -55,6 +59,10 @@ const Create = (props) => {
 
         setValue(newValue);
     };
+
+    const handleCloseMP = () => {
+        setShowMP(false)
+    }
 
     let contries = props.countries.map(function (country) {
         return { value: country.country_name, label: country.country_name };
@@ -302,6 +310,9 @@ const Create = (props) => {
                                                         defaultValue={data.product}
                                                         styles={selectStyles(errors.product)}
                                                     />
+                                                    <IconButton color="primary" onClick={(e) => setShowMP(true)} aria-label="add product">
+                                                        <AddIcon />
+                                                    </IconButton>
                                                 </div>
                                             </div>
                                             </div>
@@ -367,7 +378,7 @@ const Create = (props) => {
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Application Stage</span>
+                                                <span className="form_group_label">Submission Type</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
                                                         { label: 'Marketing Authorisation', value: 'Marketing Authorisation' },
@@ -383,7 +394,7 @@ const Create = (props) => {
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="form_group_inline">
+                                            {/* <div className="form_group_inline">
                                                 <span className="form_group_label">Product Type</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
@@ -399,7 +410,7 @@ const Create = (props) => {
                                                         defaultValue={data.product_type}
                                                     />
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                     <div value={value} index={1} className="muitab" style={{ display: value != 1 ? 'none' : '' }}>
@@ -506,7 +517,11 @@ const Create = (props) => {
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label" style={{color : errors['statuses.' + index + '.status_date'] ? 'red' : ''}}>Status Date (*)</span>
                                                         <div className="form_group_field">
-                                                            <DatePicker name="status_date" selected={element.status_date ? new Date(element.status_date) : new Date()} onChange={(date) => handleDateChange(index, 'status_date', date)} style={{ borderColor: errors['statuses.' + index + '.status_date'] ? 'red' : '' }} />
+                                                            <DatePicker name="status_date" 
+                                                                selected={element.status_date ? new Date(element.status_date) : new Date()} 
+                                                                onChange={(date) => handleDateChange(index, 'status_date', date)} 
+                                                                value={element.status_date ? moment(element.status_date).format('DD-MMM-yy') : ''}
+                                                                style={{ borderColor: errors['statuses.' + index + '.status_date'] ? 'red' : '' }} />
                                                         </div>
                                                         
                                                     </div>
@@ -542,13 +557,21 @@ const Create = (props) => {
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label">Effective internal implementation date</span>
                                                         <div className="form_group_field">
-                                                            <DatePicker name="implimentation_date" selected={element.implimentation_date ? new Date(element.implimentation_date) : new Date()} onChange={(date) => handleDateChange(index, 'implimentation_date', date)} />
+                                                            <DatePicker name="implimentation_date" 
+                                                                selected={element.implimentation_date ? new Date(element.implimentation_date) : new Date()} 
+                                                                onChange={(date) => handleDateChange(index, 'implimentation_date', date)}
+                                                                value={element.implimentation_date ? moment(element.implimentation_date).format('DD-MMM-yy') : ''}
+                                                            />
                                                         </div>
                                                     </div>
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label">Implementation Deadline of deadline for answer</span>
                                                         <div className="form_group_field">
-                                                            <DatePicker name="deadline_for_answer" selected={element.deadline_for_answer ? new Date(element.deadline_for_answer) : new Date()} onChange={(date) => handleDateChange(index, 'deadline_for_answer', date)} />
+                                                            <DatePicker name="deadline_for_answer" 
+                                                                selected={element.deadline_for_answer ? new Date(element.deadline_for_answer) : new Date()} 
+                                                                onChange={(date) => handleDateChange(index, 'deadline_for_answer', date)}
+                                                                value={element.deadline_for_answer ? moment(element.deadline_for_answer).format('DD-MMM-yy') : ''}
+                                                            />
                                                         </div>
                                                     </div>
                                                     <div className="form_group_inline">
@@ -581,6 +604,7 @@ const Create = (props) => {
                                 <Documents handleChanged={handleDocumentChange} handleDocumentdate={handleDocumentdate} addFormFields={addFormFields} formValues={data.doc} removeDocumentsFields={removeDocumentsFields} handleDocumentSelectChange={handleDocumentSelectChange} />
                             </Tab>
                         </Tabs>
+                        <ModalP show={showMP} handleClose={handleCloseMP} />
                         <BasicSpeedDial processing={processing} showsavemodel={showsavemodel} showdraftmodel={showdraftmodel} reset={handleReset} />
                         <SaveModal show={showsavemodal.show} handleClose={handleSaveModalClose} handleSubmited={handleSaveModalConfirm} name={showsavemodal.name} />
                     </form>

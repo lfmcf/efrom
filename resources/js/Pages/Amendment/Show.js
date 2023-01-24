@@ -104,7 +104,7 @@ const Show = (props) => {
                                         <td>{amendment.local_tradename}</td>
                                     </tr>
                                     <tr>
-                                        <td>Application Stage</td>
+                                        <td>Submission Type</td>
                                         <td>{amendment.application_stage ? amendment.application_stage.value : ''}</td>
                                     </tr>
                                 </tbody>
@@ -157,7 +157,7 @@ const Show = (props) => {
                                                 </tr>
                                                 <tr>
                                                     <td>Status Date</td>
-                                                    <td>{moment(element.status_date).format('YYYY-MM-DD')}</td>
+                                                    <td>{moment(element.status_date).format('DD-MMM-yy')}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>eCTD sequence</td>
@@ -177,11 +177,11 @@ const Show = (props) => {
                                                 </tr>
                                                 <tr>
                                                     <td>Effective internal implementation date</td>
-                                                    <td>{moment(element.implimentation_date).format('YYYY-MM-DD')}</td>
+                                                    <td>{moment(element.implimentation_date).format('DD-MMM-yy')}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Implementation Deadline of deadline for answer</td>
-                                                    <td>{moment(element.deadline_for_answer).format('YYYY-MM-DD')}</td>
+                                                    <td>{moment(element.deadline_for_answer).format('DD-MMM-yy')}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Impacted of changes approved</td>
@@ -221,7 +221,7 @@ const Show = (props) => {
                                                 </tr>
                                                 <tr>
                                                     <td>Version date</td>
-                                                    <td>{element.version_date ? moment(element.version_date).format('YYYY-MM-DD') : ''}</td>
+                                                    <td>{element.version_date ? moment(element.version_date).format('DD-MMM-yy') : ''}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Remarks</td>

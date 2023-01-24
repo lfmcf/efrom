@@ -412,6 +412,10 @@ const Edit = (props) => {
         }),
     });
 
+    let handleRegistrationDateChange = (date) => {
+        setData('registration_date', date)
+    }
+
     let handleKyDateTypeChange = (i, e) => {
         let newFormValues = { ...data };
         newFormValues.key_dates[i]['date_type'] = e.value;
@@ -919,7 +923,11 @@ const Edit = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Registration Date</span>
                                                 <div className="form_group_field">
-                                                    <DatePicker name="registration_date" selected={data.registration_date ? new Date(data.registration_date) : ''} onChange={(date) => handleRegistrationDateChange(date)} value={data.registration_date ? moment(data.registration_date).format('DD-MMM-yy') : ''} />
+                                                    <DatePicker name="registration_date" 
+                                                        selected={data.registration_date ? new Date(data.registration_date) : ''} 
+                                                        onChange={(date) => handleRegistrationDateChange(date)} 
+                                                        value={data.registration_date ? moment(data.registration_date).format('DD-MMM-yy') : ''} 
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -1093,7 +1101,11 @@ const Edit = (props) => {
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Date</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="date" selected={element.date ? new Date(element.date) : ''} onChange={(date) => handleDateChange(index, 'date', date)} value={element.date ? moment(element.date).format('DD-MMM-yy') : ''} />
+                                                                <DatePicker name="date" 
+                                                                    selected={element.date ? new Date(element.date) : ''} 
+                                                                    onChange={(date) => handleDateChange(index, 'date', date)} 
+                                                                    value={element.date ? moment(element.date).format('DD-MMM-yy') : ''}
+                                                                />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1399,7 +1411,11 @@ const Edit = (props) => {
                                                             <span className="form_group_label">First Launch Date</span>
                                                             <div className="form_group_field">
                                                                 {/* <input type="text" name="first_lunch_date" onChange={(e) => handlePackagingsChange(index, e)} /> */}
-                                                                <DatePicker name="first_lunch_date" selected={element.first_lunch_date ? new Date(element.first_lunch_date) : ''} onChange={(date) => handleDateChange(index, 'first_lunch_date', date)} value={element.first_lunch_date} />
+                                                                <DatePicker name="first_lunch_date" 
+                                                                    selected={element.first_lunch_date ? new Date(element.first_lunch_date) : ''} 
+                                                                    onChange={(date) => handleDateChange(index, 'first_lunch_date', date)} 
+                                                                    value={element.first_lunch_date ? moment(element.first_lunch_date).format('DD-MMM-yy') : ''}
+                                                                />
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
@@ -1420,7 +1436,11 @@ const Edit = (props) => {
                                                             <span className="form_group_label">Discontinuation Date</span>
                                                             <div className="form_group_field">
                                                                 {/* <input type="text" name="discontinuation_date" onChange={(e) => handlePackagingsChange(index, e)} /> */}
-                                                                <DatePicker name="discontinuation_date" selected={element.discontinuation_date ?new Date(element.discontinuation_date) : ''} onChange={(date) => handleDateChange(index, 'discontinuation_date', date)} value={element.discontinuation_date} />
+                                                                <DatePicker name="discontinuation_date" 
+                                                                    selected={element.discontinuation_date ? new Date(element.discontinuation_date) : ''} 
+                                                                    onChange={(date) => handleDateChange(index, 'discontinuation_date', date)} 
+                                                                    value={element.discontinuation_date ? moment(element.discontinuation_date).format('DD-MMM-yy') : ''}
+                                                                />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1700,7 +1720,11 @@ const Edit = (props) => {
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label" style={{color: errors['statuses.' + index + '.status_date'] ? 'red' : ''}}>Status Date (*)</span>
                                                         <div className="form_group_field">
-                                                            <DatePicker name="status_date" selected={element.status_date ? new Date(element.status_date) : ''} onChange={(date) => handleDateChange(index, 'status_date', date)} value={element.status_date ? moment(element.status_date).format('DD-MMM-yy') : ''} />
+                                                            <DatePicker name="status_date" 
+                                                                selected={element.status_date ? new Date(element.status_date) : ''} 
+                                                                onChange={(date) => handleDateChange(index, 'status_date', date)} 
+                                                                value={element.status_date ? moment(element.status_date).format('DD-MMM-yy') : ''} 
+                                                            />
                                                         </div>
                                                         
                                                     </div>

@@ -166,7 +166,7 @@ const Show = (props) => {
                                                 </tr>
                                                 <tr>
                                                     <td>Status Date</td>
-                                                    <td>{moment(element.status_date).format('YYYY-MM-DD')}</td>
+                                                    <td>{moment(element.status_date).format('DD-MMM-yy')}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>eCTD sequence</td>
@@ -186,11 +186,11 @@ const Show = (props) => {
                                                 </tr>
                                                 <tr>
                                                     <td>Effective internal implementation date</td>
-                                                    <td>{element.implimentation_date ? moment(element.implimentation_date).format('YYYY-MM-DD') : ''}</td>
+                                                    <td>{element.implimentation_date ? moment(element.implimentation_date).format('DD-MMM-yy') : ''}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Implementation Deadline of deadline for answer</td>
-                                                    <td>{element.deadline_for_answer ? moment(element.deadline_for_answer).format('YYYY-MM-DD') : ''}</td>
+                                                    <td>{element.deadline_for_answer ? moment(element.deadline_for_answer).format('DD-MMM-yy') : ''}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Impacted of changes approved</td>
@@ -230,7 +230,7 @@ const Show = (props) => {
                                                 </tr>
                                                 <tr>
                                                     <td>Version date</td>
-                                                    <td>{element.version_date ? moment(element.version_date).format('YYYY-MM-DD') : ''}</td>
+                                                    <td>{element.version_date ? moment(element.version_date).format('DD-MMM-yy') : ''}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Remarks</td>

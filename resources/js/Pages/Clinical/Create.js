@@ -1096,7 +1096,11 @@ const Create = (props) => {
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Date</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="date" selected={data.key_dates[index].date} onChange={(date) => handleDateChange(index, 'date', date)} value={element.date ? moment(element.date).format('DD-MMM-yy') : ''} />
+                                                                <DatePicker name="date" 
+                                                                    selected={data.key_dates[index].date} 
+                                                                    onChange={(date) => handleDateChange(index, 'date', date)} 
+                                                                    value={element.date ? moment(element.date).format('DD-MMM-yy') : ''} 
+                                                                />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1402,7 +1406,11 @@ const Create = (props) => {
                                                             <span className="form_group_label">First Launch Date</span>
                                                             <div className="form_group_field">
                                                                 {/* <input type="text" name="first_lunch_date" onChange={(e) => handlePackagingsChange(index, e)} /> */}
-                                                                <DatePicker name="first_lunch_date" selected={data.packagings[index].first_lunch_date} onChange={(date) => handleDateChange(index, 'first_lunch_date', date)} value={element.first_lunch_date} />
+                                                                <DatePicker name="first_lunch_date" 
+                                                                    selected={data.packagings[index].first_lunch_date} 
+                                                                    onChange={(date) => handleDateChange(index, 'first_lunch_date', date)} 
+                                                                    value={element.first_lunch_date ? moment(element.first_lunch_date).format('DD-MMM-yy') : ''}
+                                                                />
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
@@ -1423,7 +1431,11 @@ const Create = (props) => {
                                                             <span className="form_group_label">Discontinuation Date</span>
                                                             <div className="form_group_field">
                                                                 {/* <input type="text" name="discontinuation_date" onChange={(e) => handlePackagingsChange(index, e)} /> */}
-                                                                <DatePicker name="discontinuation_date" selected={data.packagings[index].discontinuation_date} onChange={(date) => handleDateChange(index, 'discontinuation_date', date)} value={element.discontinuation_date} />
+                                                                <DatePicker name="discontinuation_date" 
+                                                                    selected={data.packagings[index].discontinuation_date} 
+                                                                    onChange={(date) => handleDateChange(index, 'discontinuation_date', date)} 
+                                                                    value={element.discontinuation_date ? moment(element.discontinuation_date).format('DD-MMM-yy') : ''}
+                                                                />
                                                             </div>
                                                         </div>
                                                     </div>

@@ -190,7 +190,7 @@ const Show = (props) => {
                                                     </tr>
                                                     <tr>
                                                         <td>Status Date</td>
-                                                        <td>{moment(element.status_date).format('YYYY-MM-DD')}</td>
+                                                        <td>{moment(element.status_date).format('DD-MMM-yy')}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>eCTD sequence</td>
@@ -210,15 +210,15 @@ const Show = (props) => {
                                                     </tr>
                                                     <tr>
                                                         <td>Planned Local implementation Date</td>
-                                                        <td>{element.local_implementation ? moment(element.local_implementation).format('YYYY-MM-DD') : ''}</td>
+                                                        <td>{element.local_implementation ? moment(element.local_implementation).format('DD-MMM-yy') : ''}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>HA Implimentation Deadline</td>
-                                                        <td>{element.implimentation_deadline ? moment(element.implimentation_deadline).format('YYYY-MM-DD') : ''}</td>
+                                                        <td>{element.implimentation_deadline ? moment(element.implimentation_deadline).format('DD-MMM-yy') : ''}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Actual Local Implementation</td>
-                                                        <td>{element.actual_implementation ? moment(element.actual_implementation).format('YYYY-MM-DD') : ''}</td>
+                                                        <td>{element.actual_implementation ? moment(element.actual_implementation).format('DD-MMM-yy') : ''}</td>
                                                     </tr>
 
                                                 </tbody>
@@ -254,7 +254,7 @@ const Show = (props) => {
                                                     </tr>
                                                     <tr>
                                                         <td>Version date</td>
-                                                        <td>{element.version_date ? moment(element.version_date).format('YYYY-MM-DD') : ''}</td>
+                                                        <td>{element.version_date ? moment(element.version_date).format('DD-MMM-yy') : ''}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Remarks</td>
@@ -396,7 +396,7 @@ const Show = (props) => {
                                             </tr>
                                             <tr>
                                                 <td>Status Date</td>
-                                                <td>{moment(element.status_date).format('YYYY-MM-DD')}</td>
+                                                <td>{moment(element.status_date).format('DD-MMM-yy')}</td>
                                             </tr>
                                             <tr>
                                                 <td>eCTD sequence</td>
@@ -416,15 +416,15 @@ const Show = (props) => {
                                             </tr>
                                             <tr>
                                                 <td>Planned Local implementation Date</td>
-                                                <td>{element.local_implementation ? moment(element.local_implementation).format('YYYY-MM-DD') : ''}</td>
+                                                <td>{element.local_implementation ? moment(element.local_implementation).format('DD-MMM-yy') : ''}</td>
                                             </tr>
                                             <tr>
                                                 <td>HA Implimentation Deadline</td>
-                                                <td>{element.implimentation_deadline ? moment(element.implimentation_deadline).format('YYYY-MM-DD') : ''}</td>
+                                                <td>{element.implimentation_deadline ? moment(element.implimentation_deadline).format('DD-MMM-yy') : ''}</td>
                                             </tr>
                                             <tr>
                                                 <td>Actual Local Implementation</td>
-                                                <td>{element.actual_implementation ? moment(element.actual_implementation).format('YYYY-MM-DD') : ''}</td>
+                                                <td>{element.actual_implementation ? moment(element.actual_implementation).format('DD-MMM-yy') : ''}</td>
                                             </tr>
 
                                         </tbody>
@@ -460,7 +460,7 @@ const Show = (props) => {
                                             </tr>
                                             <tr>
                                                 <td>Version date</td>
-                                                <td>{element.version_date ? moment(element.version_date).format('YYYY-MM-DD') : ''}</td>
+                                                <td>{element.version_date ? moment(element.version_date).format('DD-MMM-yy') : ''}</td>
                                             </tr>
                                             <tr>
                                                 <td>Remarks</td>
