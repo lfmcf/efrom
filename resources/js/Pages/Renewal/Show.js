@@ -165,7 +165,7 @@ const Show = (props) => {
                                                 </tr>
                                                 <tr>
                                                     <td>Status Date</td>
-                                                    <td>{moment(element.status_date).format('YYYY-MM-DD')}</td>
+                                                    <td>{moment(element.status_date).format('DD-MMM-yy')}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>eCTD sequence</td>
@@ -185,7 +185,7 @@ const Show = (props) => {
                                                 </tr>
                                                 <tr>
                                                     <td>Implementation Deadline</td>
-                                                    <td>{moment(element.implimentation_deadline).format('YYYY-MM-DD')}</td>
+                                                    <td>{moment(element.implimentation_deadline).format('DD-MMM-yy')}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Next Renewals</td>
@@ -193,11 +193,11 @@ const Show = (props) => {
                                                 </tr>
                                                 <tr>
                                                     <td>Next Renewals Submission Deadline</td>
-                                                    <td>{moment(element.next_renewals_deadline).format('YYYY-MM-DD')}</td>
+                                                    <td>{moment(element.next_renewals_deadline).format('DD-MMM-yy')}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Next Renewal Date</td>
-                                                    <td>{moment(element.next_renewals_date).format('YYYY-MM-DD')}</td>
+                                                    <td>{moment(element.next_renewals_date).format('DD-MMM-yy')}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -232,7 +232,7 @@ const Show = (props) => {
                                                 </tr>
                                                 <tr>
                                                     <td>Version date</td>
-                                                    <td>{element.version_date ? moment(element.version_date).format('YYYY-MM-DD') : ''}</td>
+                                                    <td>{element.version_date ? moment(element.version_date).format('DD-MMM-yy') : ''}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Remarks</td>

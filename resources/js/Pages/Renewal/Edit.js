@@ -8,12 +8,15 @@ import { useForm } from '@inertiajs/inertia-react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import BasicSpeedDial from '@/Components/SpeedDial';
-import { Tabs as Mtabs, Tab as Mtab } from '@mui/material';
+import { Tabs as Mtabs, Tab as Mtab, IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
 import SaveModal from '@/Components/SaveModal';
 import { Typography } from '@mui/material';
 import { product_name, procedure_type, status } from '@/Components/List';
 import { Head } from '@inertiajs/inertia-react';
+import ModalP from '@/Components/Modalp';
+import AddIcon from '@mui/icons-material/Add';
+import moment from 'moment';
 
 function a11yProps(index) {
     return {
@@ -35,7 +38,7 @@ const Edit = (props) => {
         application_stage: renewal.application_stage,
         procedure_num: renewal.procedure_num,
         local_tradename: renewal.local_tradename,
-        product_type: renewal.product_type,
+        //product_type: renewal.product_type,
         renewal_title: renewal.renewal_title,
         // category: '',
         // description: '',
@@ -49,6 +52,7 @@ const Edit = (props) => {
     });
 
     const countryRef = React.useRef();
+    const [showMP, setShowMP] = useState(false);
     const [value, setValue] = useState(0);
     const [showsavemodal, setSavemodal] = useState({ show: false, name: '' });
     const formRef = React.useRef();
@@ -60,7 +64,11 @@ const Edit = (props) => {
             value : product.name,
             label : product.name,
         }
-    })
+    });
+
+    const handleCloseMP = () => {
+        setShowMP(false)
+    }
 
     const handleMChange = (event, newValue) => {
         setValue(newValue);
@@ -275,6 +283,9 @@ const Edit = (props) => {
                                                         styles={selectStyles(errors.product)}
                                                         value={data.product}
                                                     />
+                                                    <IconButton color="primary" onClick={(e) => setShowMP(true)} aria-label="add product">
+                                                        <AddIcon />
+                                                    </IconButton>
                                                 </div>
                                             </div>
                                             </div>
@@ -340,7 +351,7 @@ const Edit = (props) => {
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Application Stage</span>
+                                                <span className="form_group_label">Submission Type</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
                                                         { label: 'Marketing Authorisation', value: 'Marketing Authorisation' },
@@ -356,7 +367,7 @@ const Edit = (props) => {
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="form_group_inline">
+                                            {/* <div className="form_group_inline">
                                                 <span className="form_group_label">Product Type</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
@@ -372,7 +383,7 @@ const Edit = (props) => {
                                                         value={data.product_type}
                                                     />
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                     <div value={value} index={1} className="muitab" style={{ display: value != 1 ? 'none' : '' }}>
@@ -503,7 +514,7 @@ const Edit = (props) => {
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label" style={{color: errors['statuses.' + index + '.status_date'] ? 'red' : ''}}>Status Date (*)</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="status_date" selected={element.status_date ? new Date(element.status_date) : ''} onChange={(date) => handleDateChange(index, 'status_date', date)} />
+                                                                <DatePicker name="status_date" selected={element.status_date ? new Date(element.status_date) : ''} onChange={(date) => handleDateChange(index, 'status_date', date)} value={element.status_date ? moment(element.status_date).format('DD-MMM-yy') : ''} />
                                                             </div>
                                                             
                                                         </div>
@@ -538,7 +549,7 @@ const Edit = (props) => {
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Implementation Deadline</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="implimentation_deadline" selected={element.implimentation_deadline ? new Date(element.implimentation_deadline) : ''} onChange={(date) => handleDateChange(index, 'implimentation_deadline', date)} />
+                                                                <DatePicker name="implimentation_deadline" selected={element.implimentation_deadline ? new Date(element.implimentation_deadline) : ''} onChange={(date) => handleDateChange(index, 'implimentation_deadline', date)} value={element.implimentation_deadline ? moment(element.implimentation_deadline).format('DD-MMM-yy') : ''} />
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
@@ -562,13 +573,13 @@ const Edit = (props) => {
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Next Renewals Submission Deadline</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="next_renewals_deadline" selected={element.next_renewals_deadline ? new Date(element.next_renewals_deadline): ''} onChange={(date) => handleDateChange(index, 'next_renewals_deadline', date)} />
+                                                                <DatePicker name="next_renewals_deadline" selected={element.next_renewals_deadline ? new Date(element.next_renewals_deadline): ''} onChange={(date) => handleDateChange(index, 'next_renewals_deadline', date)} value={element.next_renewals_deadline ? moment(element.next_renewals_deadline).format('DD-MMM-yy') : ''} />
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Next Renewal Date</span>
                                                             <div className="form_group_field">
-                                                                <DatePicker name="next_renewals_date" selected={element.next_renewals_date ? new Date(element.next_renewals_date) : ''} onChange={(date) => handleDateChange(index, 'next_renewals_date', date)}  />
+                                                                <DatePicker name="next_renewals_date" selected={element.next_renewals_date ? new Date(element.next_renewals_date) : ''} onChange={(date) => handleDateChange(index, 'next_renewals_date', date)} value={element.next_renewals_date ? moment(element.next_renewals_date).format('DD-MMM-yy') : ''} />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -585,6 +596,7 @@ const Edit = (props) => {
                                 <Documents handleChanged={handleDocumentChange} handleDocumentdate={handleDocumentdate} addFormFields={addFormFields} formValues={data.doc} removeDocumentsFields={removeDocumentsFields} handleDocumentSelectChange={handleDocumentSelectChange} />
                             </Tab>
                         </Tabs>
+                        <ModalP show={showMP} handleClose={handleCloseMP} />
                         <BasicSpeedDial processing={processing} showsavemodel={showsavemodel} showdraftmodel={showdraftmodel} reset={handleReset} />
                         <SaveModal show={showsavemodal.show} handleClose={handleSaveModalClose} handleSubmited={handleSaveModalConfirm} name={showsavemodal.name} />
                        

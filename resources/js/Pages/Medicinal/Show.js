@@ -244,7 +244,7 @@ const Show = (props) => {
                                                 </tr>
                                                 <tr>
                                                     <td>Date</td>
-                                                    <td>{element.date ? moment(element.date).format('YYYY-MM-DD') : ''}</td>
+                                                    <td>{element.date ? moment(element.date).format('DD-MMM-yy') : ''}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Remarks</td>
@@ -367,7 +367,7 @@ const Show = (props) => {
                                                 </tr>
                                                 <tr>
                                                     <td>First Launch Date</td>
-                                                    <td>{moment(element.first_lunch_date).format('YYYY-MM-DD')}</td>
+                                                    <td>{moment(element.first_lunch_date).format('DD-MMM-yy')}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Packaging Discontinued</td>
@@ -375,7 +375,7 @@ const Show = (props) => {
                                                 </tr>
                                                 <tr>
                                                     <td>Discontinuation Date</td>
-                                                    <td>{moment(element.discontinuation_date).format('YYYY-MM-DD')}</td>
+                                                    <td>{moment(element.discontinuation_date).format('DD-MMM-yy')}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Remarks</td>
@@ -512,7 +512,7 @@ const Show = (props) => {
                                                 </tr>
                                                 <tr>
                                                     <td>Status Date</td>
-                                                    <td>{moment(element.status_date).format('YYYY-MM-DD')}</td>
+                                                    <td>{moment(element.status_date).format('DD-MMM-yy')}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>eCTD Sequence</td>
@@ -589,7 +589,7 @@ const Show = (props) => {
                                                 </tr>
                                                 <tr>
                                                     <td>Version date</td>
-                                                    <td>{element.version_date ? moment(element.version_date).format('YYYY-MM-DD') : ''}</td>
+                                                    <td>{element.version_date ? moment(element.version_date).format('DD-MMM-yy') : ''}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Remarks</td>
