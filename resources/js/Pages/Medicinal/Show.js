@@ -155,6 +155,14 @@ const Show = (props) => {
                                         <td>{rc.dossier_reference}</td>
                                     </tr>
                                     <tr>
+                                        <td>PV Contact Email</td>
+                                        <td>{rc.pv_contact_email}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>PV Contact Phone</td>
+                                        <td>{rc.pv_contact_phone}</td>
+                                    </tr>
+                                    <tr>
                                         <td>Remarks</td>
                                         <td>{rc.remarks}</td>
                                     </tr>

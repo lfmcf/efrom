@@ -131,6 +131,10 @@ class RcController extends Controller
         $rc->local_tradename = $request->local_tradename;
         $rc->registration_holder = $request->registration_holder;
         $rc->application_number = $request->application_number;
+        $rc->dossier_reference = $request->dossier_reference;
+        $rc->pv_contact_email = $request->pv_contact_email;
+        $rc->pv_contact_phone = $request->pv_contact_phone;
+        $rc->bremarks = $request->bremarks;
         $rc->authorized_pharmaceutical_form = $request->authorized_pharmaceutical_form;
         $rc->administrable_pharmaceutical_form = $request->administrable_pharmaceutical_form;
         $rc->route_of_admin = $request->route_of_admin;
@@ -173,6 +177,8 @@ class RcController extends Controller
                 'Registration Holder',
                 'Application Number',
                 'Dossier Reference Number',
+                'PV Contact Email',
+                'PV Contact Phone',
                 'Remarks',
             );
             $OrphanDrug = array(
@@ -290,6 +296,8 @@ class RcController extends Controller
                 $rc->registration_holder['value'],
                 $rc->application_number,
                 $rc->dossier_reference,
+                $rc->pv_contact_email,
+                $rc->pv_contact_phone,
                 $rc->bremarks
             ], NULL, 'A2');
 
@@ -659,6 +667,10 @@ class RcController extends Controller
         $rc->local_tradename = $request->local_tradename;
         $rc->registration_holder = $request->registration_holder;
         $rc->application_number = $request->application_number;
+        $rc->dossier_reference = $request->dossier_reference;
+        $rc->pv_contact_email = $request->pv_contact_email;
+        $rc->pv_contact_phone = $request->pv_contact_phone;
+        $rc->bremarks = $request->bremarks;
         $rc->authorized_pharmaceutical_form = $request->authorized_pharmaceutical_form;
         $rc->administrable_pharmaceutical_form = $request->administrable_pharmaceutical_form;
         $rc->route_of_admin = $request->route_of_admin;
@@ -701,6 +713,8 @@ class RcController extends Controller
                 'Registration Holder',
                 'Application Number',
                 'Dossier Reference Number',
+                'PV Contact Email',
+                'PV Contact Phone',
                 'Remarks',
             );
             $OrphanDrug = array(
@@ -817,6 +831,8 @@ class RcController extends Controller
                 $rc->registration_holder['value'],
                 $rc->application_number,
                 $rc->dossier_reference,
+                $rc->pv_contact_email,
+                $rc->pv_contact_phone,
                 $rc->bremarks
             ], NULL, 'A2');
 

@@ -73,6 +73,8 @@ const Edit = (props) => {
         registration_holder: rc.registration_holder,
         application_number: rc.application_number,
         dossier_reference: rc.dossier_reference,
+        pv_contact_email: rc.pv_contact_email,
+        pv_contact_phone: rc.pv_contact_phone,
         bremarks: rc.bremarks,
         authorized_pharmaceutical_form: rc.authorized_pharmaceutical_form,
         administrable_pharmaceutical_form: rc.administrable_pharmaceutical_form,
@@ -730,6 +732,20 @@ const Edit = (props) => {
                                                 </Tooltip>
                                                 <div className="form_group_field">
                                                     <input type="text" name="dossier_reference" onChange={handleChange} value={data.dossier_reference} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className='inline_form'>
+                                            <div className="form_group_inline">
+                                                <span className="form_group_label">PV Contact Email</span>
+                                                <div className="form_group_field">
+                                                    <input type="email" name="pv_contact_email" onChange={handleChange} value={data.pv_contact_email} />
+                                                </div>
+                                            </div>
+                                            <div className="form_group_inline" >
+                                                <span className="form_group_label">PV Contact Phone</span>
+                                                <div className="form_group_field">
+                                                    <input type="text" name="pv_contact_phone" onChange={handleChange} value={data.pv_contact_phone} />
                                                 </div>
                                             </div>
                                         </div>
