@@ -699,7 +699,7 @@ const Create = (props) => {
                                             <div className="form_group_inline" >
                                                 <span className="form_group_label">Remarks</span>
                                                 <div className="form_group_field">
-                                                    <textarea rows="3" type="text" name="bremarks" onChange={handleChange} value={data.bremarks} />
+                                                    <textarea type="text" name="bremarks" onChange={handleChange} value={data.bremarks} />
                                                 </div>
                                             </div>
                                         </div>
