@@ -301,8 +301,6 @@ class RcController extends Controller
                 $rc->bremarks
             ], NULL, 'A2');
 
-            
-
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(2);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Dosage Form');
@@ -473,8 +471,6 @@ class RcController extends Controller
                 }
             }
 
-            
-            
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(11);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Status');
@@ -497,8 +493,6 @@ class RcController extends Controller
             //     $datef = $sheet->getCell('C'.$i);
             //     $sheet->setCellValue('C'.$i, date("d-m-Y", strtotime($datef)));
             // }
-
-            
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(12);
@@ -535,18 +529,21 @@ class RcController extends Controller
             // }
 
             $writer = new Xlsx($spreadsheet);
-            
+
+            $nom = explode("-", $request->product_name['value']);
+            $productName = $nom[0];
+
             $date = date('d-m-y');
             if($request->procedure_type['value'] == 'National' || $request->procedure_type['value'] == 'Centralized') {
-                $name = 'eForm_NewRegistration_' .$request->product_name['value'] . '_' .$request->country['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_NewRegistration_' .$request->product_name['value'] . '_' .$request->country['value'];
+                $name = 'eForm_NewRegistration_' .$productName . '_' .$request->country['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_NewRegistration_' .$productName . '_' .$request->country['value'];
             }else {
-                $name = 'eForm_NewRegistration_' .$request->product_name['value'] . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_NewRegistration_' .$request->product_name['value'] . '_' .$request->procedure_type['value'];
+                $name = 'eForm_NewRegistration_' .$productName . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_NewRegistration_' .$productName . '_' .$request->procedure_type['value'];
             }
             
             $writer->save($name);
-            Mail::to(getenv('MAIL_TO'))->send(new RcSubmit($name, $request->product_name['value'], $subject));
+            Mail::to(getenv('MAIL_TO'))->send(new RcSubmit($name, $productName, $subject));
 
             return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
             
@@ -1057,20 +1054,23 @@ class RcController extends Controller
             // }
 
             $writer = new Xlsx($spreadsheet);
+
+            $nom = explode("-", $request->product_name['value']);
+            $productName = $nom[0];
             
             $date = date('d-m-y');
             if($request->procedure_type['value'] == 'National' || $request->procedure_type['value'] == 'Centralized') {
-                $name = 'eForm_NewRegistration_' .$request->product_name['value'] . '_' .$request->country['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_NewRegistration_' .$request->product_name['value'] . '_' .$request->country['value'];
+                $name = 'eForm_NewRegistration_' .$productName . '_' .$request->country['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_NewRegistration_' .$productName . '_' .$request->country['value'];
             }else {
-                $name = 'eForm_NewRegistration_' .$request->product_name['value'] . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_NewRegistration_' .$request->product_name['value'] . '_' .$request->procedure_type['value'];
+                $name = 'eForm_NewRegistration_' .$productName . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_NewRegistration_' .$productName . '_' .$request->procedure_type['value'];
             }
             
-            // $writer->save($name);
-            // Mail::to(getenv('MAIL_TO'))->send(new RcSubmit($name, $request->product_name['value'], $subject));
+            $writer->save($name);
+            Mail::to(getenv('MAIL_TO'))->send(new RcSubmit($name, $productName, $subject));
 
-            // return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
+            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
             
         }
 

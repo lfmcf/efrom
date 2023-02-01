@@ -235,19 +235,22 @@ class TransferController extends Controller
             // }
 
             $writer = new Xlsx($spreadsheet);
+
+            $nom = explode("-", $request->product['value']);
+            $productName = $nom[0];
             
             $date = date('d-m-y');
             if($request->procedure_type['value'] == 'National' || $request->procedure_type['value'] == 'Centralized') {
-                $name = 'eForm_MATransfer_' .$request->product['value'] . '_' .$request->country['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_MATransfer_' .$request->product['value'] . '_' .$request->country['value'];
+                $name = 'eForm_MATransfer_' .$productName . '_' .$request->country['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_MATransfer_' .$productName . '_' .$request->country['value'];
             }else {
-                $name = 'eForm_MATransfer_' .$request->product['value'] . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_MATransfer_' .$request->product['value'] . '_' .$request->procedure_type['value'];
+                $name = 'eForm_MATransfer_' .$productName . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_MATransfer_' .$productName . '_' .$request->procedure_type['value'];
             }
             // $name = 'Transfer ' . $date . '.xlsx';
             $writer->save($name);
 
-            Mail::to(getenv('MAIL_TO'))->send(new MailTransfer($name, $request->product['value'], $subject));
+            Mail::to(getenv('MAIL_TO'))->send(new MailTransfer($name, $productName, $subject));
 
             return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
         }
@@ -483,19 +486,22 @@ class TransferController extends Controller
             // }
 
             $writer = new Xlsx($spreadsheet);
+
+            $nom = explode("-", $request->product['value']);
+            $productName = $nom[0];
             
             $date = date('d-m-y');
             if($request->procedure_type['value'] == 'National' || $request->procedure_type['value'] == 'Centralized') {
-                $name = 'eForm_MATransfer_' .$request->product['value'] . '_' .$request->country['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_MATransfer_' .$request->product['value'] . '_' .$request->country['value'];
+                $name = 'eForm_MATransfer_' .$productName . '_' .$request->country['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_MATransfer_' .$productName . '_' .$request->country['value'];
             }else {
-                $name = 'eForm_MATransfer_' .$request->product['value'] . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_MATransfer_' .$request->product['value'] . '_' .$request->procedure_type['value'];
+                $name = 'eForm_MATransfer_' .$productName . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_MATransfer_' .$productName . '_' .$request->procedure_type['value'];
             }
             // $name = 'Transfer ' . $date . '.xlsx';
             $writer->save($name);
 
-            Mail::to(getenv('MAIL_TO'))->send(new MailTransfer($name, $request->product['value'], $subject));
+            Mail::to(getenv('MAIL_TO'))->send(new MailTransfer($name, $productName, $subject));
 
             return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
         }

@@ -445,17 +445,20 @@ class ClinicalController extends Controller
             // $writer->save($name);
             // Mail::to(getenv('MAIL_TO'))->send(new MailClinical($name));
 
+            $nom = explode("-", $request->product_name['value']);
+            $productName = $nom[0];
+
             $date = date('d-m-y');
             if($request->procedure_type['value'] == 'National' || $request->procedure_type['value'] == 'Centralized') {
-                $name = 'eForm_NewClinical_' .$request->product_name['value'] . '_' .$request->country['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_NewClinical_' .$request->product_name['value'] . '_' .$request->country['value'];
+                $name = 'eForm_NewClinical_' .$productName . '_' .$request->country['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_NewClinical_' .$productName . '_' .$request->country['value'];
             }else {
-                $name = 'eForm_NewClinical_' .$request->product_name['value'] . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_NewClinical_' .$request->product_name['value'] . '_' .$request->procedure_type['value'];
+                $name = 'eForm_NewClinical_' .$productName . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_NewClinical_' .$productName . '_' .$request->procedure_type['value'];
             }
             
             $writer->save($name);
-            Mail::to(getenv('MAIL_TO'))->send(new MailClinical($name, $request->product_name['value'], $subject));
+            Mail::to(getenv('MAIL_TO'))->send(new MailClinical($name, $productName, $subject));
 
             return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
         }
@@ -920,6 +923,9 @@ class ClinicalController extends Controller
             // }
 
             $writer = new Xlsx($spreadsheet);
+
+            $nom = explode("-", $request->product_name['value']);
+            $productName = $nom[0];
             
             // $date = date('d-m-y');
             // $name = 'Clinical ' . $date . '.xlsx';
@@ -928,15 +934,15 @@ class ClinicalController extends Controller
 
             $date = date('d-m-y');
             if($request->procedure_type['value'] == 'National' || $request->procedure_type['value'] == 'Centralized') {
-                $name = 'eForm_NewClinical_' .$request->product_name['value'] . '_' .$request->country['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_NewClinical_' .$request->product_name['value'] . '_' .$request->country['value'];
+                $name = 'eForm_NewClinical_' .$productName . '_' .$request->country['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_NewClinical_' .$productName . '_' .$request->country['value'];
             }else {
-                $name = 'eForm_NewClinical_' .$request->product_name['value'] . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_NewClinical_' .$request->product_name['value'] . '_' .$request->procedure_type['value'];
+                $name = 'eForm_NewClinical_' .$productName . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_NewClinical_' .$productName . '_' .$request->procedure_type['value'];
             }
             
             $writer->save($name);
-            Mail::to(getenv('MAIL_TO'))->send(new MailClinical($name, $request->product_name['value'], $subject));
+            Mail::to(getenv('MAIL_TO'))->send(new MailClinical($name, $productName, $subject));
 
             return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
         }

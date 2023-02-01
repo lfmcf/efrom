@@ -249,6 +249,9 @@ class VariationController extends Controller
             }
 
             $writer = new Xlsx($spreadsheet);
+
+            // $nom = explode("-", $request->product_name['value']);
+            // $productName = $nom[0];
             
             $date = date('d-m-y');
             if($request->procedure_type == 'National' || $request->procedure_type == 'Centralized') {
@@ -469,19 +472,22 @@ class VariationController extends Controller
             // }
 
             $writer = new Xlsx($spreadsheet);
+
+            $nom = explode("-", $request->product['value']);
+            $productName = $nom[0];
             
             $date = date('d-m-y');
             // $name = 'Variation ' . $date . '.xlsx';
             if($request->procedure_type == 'National' || $request->procedure_type == 'Centralized') {
-                $name = 'eForm_Variation_' .$request->product['value'] . '_' .$request->country['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_Variation_' .$request->product['value'] . '_' .$request->country['value'];
+                $name = 'eForm_Variation_' .$productName . '_' .$request->country['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_Variation_' .$productName . '_' .$request->country['value'];
             }else {
-                $name = 'eForm_Variation_' .$request->product['value'] . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_Variation_' .$request->product['value'] . '_' .$request->procedure_type['value'];
+                $name = 'eForm_Variation_' .$productName . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_Variation_' .$productName . '_' .$request->procedure_type['value'];
             }
             $writer->save($name);
 
-            Mail::to(getenv('MAIL_TO'))->send(new NoHqVariation($name, $request->product['value'], $subject));
+            Mail::to(getenv('MAIL_TO'))->send(new NoHqVariation($name, $productName, $subject));
 
             return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
 
@@ -735,19 +741,22 @@ class VariationController extends Controller
             // }
 
             $writer = new Xlsx($spreadsheet);
+
+            $nom = explode("-", $request->product['value']);
+            $productName = $nom[0];
             
             $date = date('d-m-y');
             // $name = 'Variation ' . $date . '.xlsx';
             if($request->procedure_type == 'National' || $request->procedure_type == 'Centralized') {
-                $name = 'eForm_Variation_' .$request->product['value'] . '_' .$request->country['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_Variation_' .$request->product['value'] . '_' .$request->country['value'];
+                $name = 'eForm_Variation_' .$productName . '_' .$request->country['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_Variation_' .$productName . '_' .$request->country['value'];
             }else {
-                $name = 'eForm_Variation_' .$request->product['value'] . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_Variation_' .$request->product['value'] . '_' .$request->procedure_type['value'];
+                $name = 'eForm_Variation_' .$productName . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
+                $subject = 'eForm_Variation_' .$productName . '_' .$request->procedure_type['value'];
             }
             $writer->save($name);
 
-            Mail::to(getenv('MAIL_TO'))->send(new NoHqVariation($name, $request->product['value'], $subject));
+            Mail::to(getenv('MAIL_TO'))->send(new NoHqVariation($name, $productName, $subject));
 
             return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
 
