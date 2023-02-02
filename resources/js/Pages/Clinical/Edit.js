@@ -33,8 +33,8 @@ const Edit = (props) => {
         procedure_type: clinical.procedure_type,
         country: clinical.country,
         rms: clinical.rms,
-        procedure_number: clinical.procedure_number,
         application_stage: clinical.application_stage,
+        
         // registration_title: clinical.registration_title,
         product_name: clinical.product_name,
         protocol_number: clinical.protocol_number,
@@ -43,6 +43,13 @@ const Edit = (props) => {
         clinical_phase: clinical.clinical_phase,
         protocol_type: clinical.protocol_type,
         paediatric_indication: clinical.paediatric_indication,
+        procedure_number: clinical.procedure_number,
+        investigationnal_code: clinical.investigationnal_code,
+        application_number: clinical.application_number,
+        medicines_regulatory_authority: clinical.medicines_regulatory_authority,
+        registration_alternate_number: clinical.registration_alternate_number,
+        registration_number: clinical.registration_number,
+        registration_date: clinical.registration_date,
         remarks: clinical.remarks,
         authorized_pharmaceutical_form: clinical.authorized_pharmaceutical_form,
         administrable_pharmaceutical_form: clinical.administrable_pharmaceutical_form,
@@ -896,13 +903,14 @@ const Edit = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Medicines Regulatory Authority</span>
                                                 <div className="form_group_field">
-                                                    <Select 
+                                                    <Select options={options}
                                                         name='medicines_regulatory_authority'
                                                         onChange={handleSelectChange}
                                                         className="basic"
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
+                                                        value={data.medicines_regulatory_authority}
                                                     />
                                                 </div>
                                             </div>
@@ -911,13 +919,45 @@ const Edit = (props) => {
                                              <div className="form_group_inline">
                                                 <span className="form_group_label">Registration alternate number</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name="registration_alternate_number" onChange={handleChange} value={data.registration_alternate_number} />
+                                                    {/* <input type="text" name="registration_alternate_number" onChange={handleChange} value={data.registration_alternate_number} /> */}
+                                                    <Select options={[
+                                                        {label: 'EudraCT', value: 'EudraCT'},
+                                                        {label: 'IND number', value: 'IND number'},
+                                                        {label: 'registration number ', value: 'registration number '},
+                                                        {label: 'Sponsor study report number', value: 'Sponsor study report number'},
+                                                        {label: 'ClinicalTrials.gov Identifier', value: 'ClinicalTrials.gov Identifier'},
+                                                        {label: 'UTN', value: 'UTN'},
+                                                    ]}
+                                                        name='registration_alternate_number'
+                                                        onChange={handleSelectChange}
+                                                        className="basic"
+                                                        classNamePrefix="basic"
+                                                        placeholder=''
+                                                        isClearable
+                                                        value={data.registration_alternate_number}
+                                                    />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Registration number</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name="registration_number" onChange={handleChange} value={data.registration_number} />
+                                                    {/* <input type="text" name="registration_number" onChange={handleChange} value={data.registration_number} /> */}
+                                                    <Select options={[
+                                                        { label: 'EudraCT', value: 'EudraCT' },
+                                                        { label: 'IND number', value: 'IND number' },
+                                                        { label: 'registration number ', value: 'registration number ' },
+                                                        { label: 'Sponsor study report number', value: 'Sponsor study report number' },
+                                                        { label: 'ClinicalTrials.gov Identifier', value: 'ClinicalTrials.gov Identifier' },
+                                                        { label: 'UTN', value: 'UTN' },
+                                                    ]}
+                                                        name='registration_number'
+                                                        onChange={handleSelectChange}
+                                                        className="basic"
+                                                        classNamePrefix="basic"
+                                                        placeholder=''
+                                                        isClearable
+                                                        value={data.registration_number}
+                                                    />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
