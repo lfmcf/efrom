@@ -895,7 +895,7 @@ const Create = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Medicines Regulatory Authority</span>
                                                 <div className="form_group_field">
-                                                    <Select 
+                                                    <Select options={options}
                                                         name='medicines_regulatory_authority'
                                                         onChange={handleSelectChange}
                                                         className="basic"
@@ -910,13 +910,43 @@ const Create = (props) => {
                                              <div className="form_group_inline">
                                                 <span className="form_group_label">Registration alternate number</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name="registration_alternate_number" onChange={handleChange} value={data.registration_alternate_number} />
+                                                    {/* <input type="text" name="registration_alternate_number" onChange={handleChange} value={data.registration_alternate_number} /> */}
+                                                    <Select options={[
+                                                        {label: 'EudraCT', value: 'EudraCT'},
+                                                        {label: 'IND number', value: 'IND number'},
+                                                        {label: 'registration number ', value: 'registration number '},
+                                                        {label: 'Sponsor study report number', value: 'Sponsor study report number'},
+                                                        {label: 'ClinicalTrials.gov Identifier', value: 'ClinicalTrials.gov Identifier'},
+                                                        {label: 'UTN', value: 'UTN'},
+                                                    ]}
+                                                        name='registration_alternate_number'
+                                                        onChange={handleSelectChange}
+                                                        className="basic"
+                                                        classNamePrefix="basic"
+                                                        placeholder=''
+                                                        isClearable
+                                                    />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Registration number</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name="registration_number" onChange={handleChange} value={data.registration_number} />
+                                                    {/* <input type="text" name="registration_number" onChange={handleChange} value={data.registration_number} /> */}
+                                                    <Select options={[
+                                                        { label: 'EudraCT', value: 'EudraCT' },
+                                                        { label: 'IND number', value: 'IND number' },
+                                                        { label: 'registration number ', value: 'registration number ' },
+                                                        { label: 'Sponsor study report number', value: 'Sponsor study report number' },
+                                                        { label: 'ClinicalTrials.gov Identifier', value: 'ClinicalTrials.gov Identifier' },
+                                                        { label: 'UTN', value: 'UTN' },
+                                                    ]}
+                                                        name='registration_number'
+                                                        onChange={handleSelectChange}
+                                                        className="basic"
+                                                        classNamePrefix="basic"
+                                                        placeholder=''
+                                                        isClearable
+                                                    />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
