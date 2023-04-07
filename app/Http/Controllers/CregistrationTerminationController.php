@@ -236,11 +236,11 @@ class CregistrationTerminationController extends Controller
             $name = 'Registration Termination' . $date . '.xlsx';
             $writer->save($name);
 
-            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
+            return redirect('dashboard')->with('message', 'Your eForm was well submitted');
 
         }
 
-        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
+        return redirect('dashboard')->with('message', 'Your eForm was well saved');
     }
 
     /**

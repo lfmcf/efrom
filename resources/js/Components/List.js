@@ -247,6 +247,9 @@ export const status = [
     {value:'MRP Assessment Report / Received', label:'MRP Assessment Report / Received'},
     {value:'Positive Opinion / Obtained', label:'Positive Opinion / Obtained'},
     {value:'MRP Application / End of procedure', label:'MRP Application / End of procedure'},
+    {value: 'Dossier Initial Submission - submitted', label: 'Dossier Initial Submission - submitted'},
+    {value: 'Assesment report -  received', label: 'Assesment report -  received'},
+    {value: 'Conditional Approval - obtained', label: 'Conditional Approval - obtained'},
 ];
 
 // export default List;

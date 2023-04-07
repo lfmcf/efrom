@@ -444,11 +444,18 @@ class RcController extends Controller
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Indications');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($indications, NULL, 'A1');
-            $sheet->fromArray([
-                $rc->indication['value'],
-                is_array($rc->paediatric_use) ? $rc->paediatric_use['value'] : '',
-                $rc->age,
-            ], NULL, 'A2');
+            $in = 2;
+            foreach($rc->indication as $ind) {
+                $sheet->setCellValue('A' . $in, $ind['value']);
+                $in++;
+            }
+            $sheet->setCellValue('B2', is_array($rc->paediatric_use) ? $rc->paediatric_use['value'] : '');
+            $sheet->setCellValue('C2', $rc->age);
+            // $sheet->fromArray([
+            //     $rc->indication['value'],
+            //     is_array($rc->paediatric_use) ? $rc->paediatric_use['value'] : '',
+            //     $rc->age,
+            // ], NULL, 'A2');
 
             
 
@@ -545,11 +552,11 @@ class RcController extends Controller
             $writer->save($name);
             Mail::to(getenv('MAIL_TO'))->send(new RcSubmit($name, $productName, $subject));
 
-            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
+            return redirect('dashboard')->with('message', 'Your eForm was well submitted');
             
         }
 
-        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
+        return redirect('dashboard')->with('message', 'Your eForm was well saved');
     }
 
 
@@ -972,11 +979,18 @@ class RcController extends Controller
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Indications');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($indications, NULL, 'A1');
-            $sheet->fromArray([
-                $rc->indication['value'],
-                is_array($rc->paediatric_use) ? $rc->paediatric_use['value'] : '',
-                $rc->age,
-            ], NULL, 'A2');
+            $in = 2;
+            foreach($rc->indication as $ind) {
+                $sheet->setCellValue('A' . $in, $ind['value']);
+                $in++;
+            }
+            $sheet->setCellValue('B2', is_array($rc->paediatric_use) ? $rc->paediatric_use['value'] : '');
+            $sheet->setCellValue('C2', $rc->age);
+            // $sheet->fromArray([
+            //     $rc->indication['value'],
+            //     is_array($rc->paediatric_use) ? $rc->paediatric_use['value'] : '',
+            //     $rc->age,
+            // ], NULL, 'A2');
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(10);
@@ -1070,11 +1084,11 @@ class RcController extends Controller
             $writer->save($name);
             Mail::to(getenv('MAIL_TO'))->send(new RcSubmit($name, $productName, $subject));
 
-            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
+            return redirect('dashboard')->with('message', 'Your eForm was well submitted');
             
         }
 
-        //return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
+        return redirect('dashboard')->with('message', 'Your eForm was well saved');
     }
 
     /**

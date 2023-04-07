@@ -1112,10 +1112,14 @@ const Edit = (props) => {
                                                                             <Select options={[
                                                                                 { value: '% (W/V)', label: '% (W/V)' },
                                                                                 { value: '% (W/W)', label: '% (W/W)' },
+                                                                                { value: 'µg', label: 'µg' },
+                                                                                { value: 'Each', label: 'Each' },
                                                                                 { value: 'IC', label: 'IC' },
                                                                                 { value: 'IR', label: 'IR' },
                                                                                 { value: 'mg', label: 'mg' },
-                                                                                { value: 'ug', label: 'ug' },
+                                                                                { value: 'ml', label: 'ml' },
+                                                                                { value: 'Tablet', label: 'Tablet' },
+                                                                                { value: 'Vial', label: 'Vial' },
                                                                             ]}
                                                                                 name="numerator_unit"
                                                                                 onChange={(selectedOption, name) => handleFormulationSelectChange(selectedOption, name, index, i)}
@@ -1141,10 +1145,14 @@ const Edit = (props) => {
                                                                         <Select options={[
                                                                                 { value: '% (W/V)', label: '% (W/V)' },
                                                                                 { value: '% (W/W)', label: '% (W/W)' },
+                                                                                { value: 'µg', label: 'µg' },
+                                                                                { value: 'Each', label: 'Each' },
                                                                                 { value: 'IC', label: 'IC' },
                                                                                 { value: 'IR', label: 'IR' },
                                                                                 { value: 'mg', label: 'mg' },
-                                                                                { value: 'ug', label: 'ug' },
+                                                                                { value: 'ml', label: 'ml' },
+                                                                                { value: 'Tablet', label: 'Tablet' },
+                                                                                { value: 'Vial', label: 'Vial' },
                                                                             ]}
                                                                                 name="denominator_unit"
                                                                                 onChange={(selectedOption, name) => handleFormulationSelectChange(selectedOption, name, index, i)}
@@ -1444,6 +1452,7 @@ const Edit = (props) => {
                                                 <div className="form_group_field">
                                                     <Select options={indications}
                                                         name="indication"
+                                                        isMulti
                                                         onChange={handleSelectChange}
                                                         className="basic"
                                                         classNamePrefix="basic"

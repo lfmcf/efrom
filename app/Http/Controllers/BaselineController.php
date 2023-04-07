@@ -237,11 +237,11 @@ class BaselineController extends Controller
 
             Mail::to(getenv('MAIL_TO'))->send(new MailBaseline($name, $productName, $subject));
             
-            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
+            return redirect('dashboard')->with('message', 'Your eForm was well submitted');
 
         }
 
-        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
+        return redirect('dashboard')->with('message', 'Your eForm was well saved');
     }
 
     /**
@@ -477,11 +477,11 @@ class BaselineController extends Controller
 
             Mail::to(getenv('MAIL_TO'))->send(new MailBaseline($name, $productName, $subject));
             
-            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
+            return redirect('dashboard')->with('message', 'Your eForm was well submitted');
 
         }
 
-        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
+        return redirect('dashboard')->with('message', 'Your eForm was well saved');
     }
 
     /**

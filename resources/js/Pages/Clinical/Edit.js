@@ -60,8 +60,8 @@ const Edit = (props) => {
         under_intensive_monitoring: clinical.under_intensive_monitoring,
         key_dates: clinical.key_dates,
         //alternate_number_type: clinical.alternate_number_type,
-        alternate_number: clinical.alternate_number,
-        atcremarks: clinical.atcremarks,
+        // alternate_number: clinical.alternate_number,
+        // atcremarks: clinical.atcremarks,
         local_agent_company: clinical.local_agent_company,
         formulations: clinical.formulations,
         packagings: clinical.packagings,
@@ -672,7 +672,7 @@ const Edit = (props) => {
                                         sx={{ borderRight: 1, borderColor: 'divider' }}
                                     >
                                         <Mtab label="General information" {...a11yProps(0)} style={{ color: errors.procedure_type || errors.application_stage || errors.country ? 'red' : '' }} />
-                                        <Mtab label="Basic information" {...a11yProps(1)} style={{ color: errors.product_name }} />
+                                        <Mtab label="Basic information" {...a11yProps(1)} style={{ color: errors.product_name ? 'red' : '' }} />
                                         <Mtab label="Dosage Form / ATC" {...a11yProps(2)} style={{ color: errors.authorized_pharmaceutical_form || errors.route_of_admin || errors.atc ? 'red' : '' }} />
                                         <Mtab label="Orphan Drug Details" {...a11yProps(3)} />
                                         <Mtab label="Under Intensive Monitoring Details" {...a11yProps(4)} />
@@ -917,7 +917,7 @@ const Edit = (props) => {
                                         </div>
                                         <div className="inline_form">
                                              <div className="form_group_inline">
-                                                <span className="form_group_label">Registration alternate number</span>
+                                                <span className="form_group_label">Registration number type</span>
                                                 <div className="form_group_field">
                                                     {/* <input type="text" name="registration_alternate_number" onChange={handleChange} value={data.registration_alternate_number} /> */}
                                                     <Select options={[
@@ -941,8 +941,8 @@ const Edit = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Registration number</span>
                                                 <div className="form_group_field">
-                                                    {/* <input type="text" name="registration_number" onChange={handleChange} value={data.registration_number} /> */}
-                                                    <Select options={[
+                                                    <input type="text" name="registration_number" onChange={handleChange} value={data.registration_number} />
+                                                    {/* <Select options={[
                                                         { label: 'EudraCT', value: 'EudraCT' },
                                                         { label: 'IND number', value: 'IND number' },
                                                         { label: 'registration number ', value: 'registration number ' },
@@ -957,7 +957,7 @@ const Edit = (props) => {
                                                         placeholder=''
                                                         isClearable
                                                         value={data.registration_number}
-                                                    />
+                                                    /> */}
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
@@ -1177,20 +1177,20 @@ const Edit = (props) => {
                                                         value={data.alternate_number_type}
                                                     />
                                                 </div>
-                                            </div> */}
+                                            </div> 
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Alternate Number</span>
                                                 <div className="form_group_field">
                                                     <input type="text" name="alternate_number" onChange={handleChange} value={data.alternate_number} />
                                                 </div>
-                                            </div>
+                                            </div>*/}
                                         </div>
-                                        <div className="form_group_inline">
+                                        {/* <div className="form_group_inline">
                                             <span className="form_group_label">Remarks</span>
                                             <div className="form_group_field">
                                                 <input type="text" name="atcremarks" onChange={handleChange} value={data.atcremarks} />
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                     <div value={value} index={6} className="muitab" style={{ display: value != 6 ? 'none' : '' }}>
                                         <div className="form_group">
@@ -1328,10 +1328,14 @@ const Edit = (props) => {
                                                                         <Select options={[
                                                                             { value: '% (W/V)', label: '% (W/V)' },
                                                                             { value: '% (W/W)', label: '% (W/W)' },
+                                                                            { value: 'µg', label: 'µg' },
+                                                                            { value: 'Each', label: 'Each' },
                                                                             { value: 'IC', label: 'IC' },
                                                                             { value: 'IR', label: 'IR' },
                                                                             { value: 'mg', label: 'mg' },
-                                                                            { value: 'ug', label: 'ug' },
+                                                                            { value: 'ml', label: 'ml' },
+                                                                            { value: 'Tablet', label: 'Tablet' },
+                                                                            { value: 'Vial', label: 'Vial' },
                                                                         ]}
                                                                             name="numerator_unit"
                                                                             onChange={(selectedOption, name) => handleFormulationSelectChange(selectedOption, name, index, i)}
@@ -1358,10 +1362,14 @@ const Edit = (props) => {
                                                                         <Select options={[
                                                                                 { value: '% (W/V)', label: '% (W/V)' },
                                                                                 { value: '% (W/W)', label: '% (W/W)' },
+                                                                                { value: 'µg', label: 'µg' },
+                                                                                { value: 'Each', label: 'Each' },
                                                                                 { value: 'IC', label: 'IC' },
                                                                                 { value: 'IR', label: 'IR' },
                                                                                 { value: 'mg', label: 'mg' },
-                                                                                { value: 'ug', label: 'ug' },
+                                                                                { value: 'ml', label: 'ml' },
+                                                                                { value: 'Tablet', label: 'Tablet' },
+                                                                                { value: 'Vial', label: 'Vial' },
                                                                             ]}
                                                                                 name="denominator_unit"
                                                                                 onChange={(selectedOption, name) => handleFormulationSelectChange(selectedOption, name, index, i)}
@@ -1403,7 +1411,7 @@ const Edit = (props) => {
                                                         ''}
                                                     <div className="inline_form">
                                                         <div className="form_group_inline">
-                                                            <span className="form_group_label" style={{ color: errors['packagings.' + index + '.packaging_type'] ? 'red' : '' }}>Packaging Type (*)</span>
+                                                            <span className="form_group_label" style={{ color: errors['packagings.' + index + '.packaging_type'] ? 'red' : '' }}>Packaging Type</span>
                                                             <div className="form_group_field">
                                                                 <Select options={options_2}
                                                                     name="packaging_type"
@@ -1412,15 +1420,15 @@ const Edit = (props) => {
                                                                     classNamePrefix="basic"
                                                                     placeholder=''
                                                                     isClearable
-                                                                    styles={selectStyles(errors['packagings.' + index + '.packaging_type'] ? 'red' : '' )}
+                                                                    // styles={selectStyles(errors['packagings.' + index + '.packaging_type'] ? 'red' : '' )}
                                                                     value={element.packaging_type}
                                                                 />
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
-                                                            <span className="form_group_label" style={{ color: errors['packagings.' + index + '.packaging_name'] ? 'red' : '' }}>Packaging Name (*)</span>
+                                                            <span className="form_group_label" style={{ color: errors['packagings.' + index + '.packaging_name'] ? 'red' : '' }}>Packaging Name</span>
                                                             <div className="form_group_field">
-                                                                <input type="text" name="packaging_name" onChange={(e) => handlePackagingsChange(index, e)} style={{ borderColor: errors['packagings.' + index + '.packaging_name'] ? 'red' : '' }} value={element.packaging_name} />
+                                                                <input type="text" name="packaging_name" onChange={(e) => handlePackagingsChange(index, e)} value={element.packaging_name} />
                                                             </div>
                                                             
                                                         </div>
@@ -1595,6 +1603,7 @@ const Edit = (props) => {
                                                     
                                                     <Select options={indications}
                                                         name="indication"
+                                                        isMulti
                                                         onChange={handleSelectChange}
                                                         className="basic"
                                                         classNamePrefix="basic"
@@ -1744,6 +1753,9 @@ const Edit = (props) => {
                                                                 { label: 'Application / Submission Planned', value: 'Application / Submission Planned' },
                                                                 { label: 'Application / Approval Expected', value: 'Application / Approval Expected' },
                                                                 { label: 'Application/ End of Procedure', value: 'Application/ End of Procedure' },
+                                                                { label: 'Dossier Initial Submission - submitted', value: 'Dossier Initial Submission - submitted' },
+                                                                { label: 'Assesment report -  received', value: 'Assesment report -  received' },
+                                                                { label: 'Conditional Approval - obtained', value: 'Conditional Approval - obtained' },
                                                             ]}
                                                                 name='status'
                                                                 onChange={(selectedOption, name) => handleStatusSelectChange(selectedOption, name, index)}

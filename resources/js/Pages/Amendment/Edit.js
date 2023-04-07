@@ -39,6 +39,7 @@ const Edit = (props) => {
         procedure_num: amendment.procedure_num,
         local_tradename: amendment.local_tradename,
         // product_type: '',
+        aremarks: amendment.aremarks,
         amendment_title: amendment.amendment_title,
         description: amendment.description,
         reason: amendment.reason,
@@ -216,7 +217,7 @@ const Edit = (props) => {
     }
 
     React.useEffect(() => {
-        if(data.procedure_type && data.procedure_type.value == "Decentralized" || data.procedure_type && data.procedure_type.value == "Mutual Recognition" ) {
+        if(data.procedure_type && data.procedure_type.value == "European Procedure" ) {
             if(data.country.length !== 0) {
                 setStatusCountry(statusCountry => [{label: 'All', value: 'All'}, ...data.country])
             }else {
@@ -315,7 +316,7 @@ const Edit = (props) => {
                                                         onChange={handleSelectChange}
                                                         className="basic"
                                                         classNamePrefix="basic"
-                                                        isMulti={data.procedure_type && data.procedure_type.value === 'Decentralized' || data.procedure_type && data.procedure_type.value === 'Mutual Recognition' ? true : false}
+                                                        isMulti={data.procedure_type && data.procedure_type.value === 'European Procedure' ? true : false}
                                                         ref={ele => countryRef.current = ele}
                                                         placeholder=''
                                                         isClearable
@@ -324,7 +325,7 @@ const Edit = (props) => {
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="form_group_inline" style={{display: data.procedure_type && data.procedure_type.value === 'Decentralized' || data.procedure_type && data.procedure_type.value === 'Mutual Recognition' ? '' : 'none'}}>
+                                            <div className="form_group_inline" style={{display: data.procedure_type && data.procedure_type.value === 'European Procedure' ? '' : 'none'}}>
                                                 <span className="form_group_label">RMS</span>
                                                 <div className="form_group_field">
                                                     <Select options={contries}
@@ -346,7 +347,7 @@ const Edit = (props) => {
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Local Tradename</span>
+                                                <span className="form_group_label">Full protocol title</span>
                                                 <div className="form_group_field">
                                                     <input type="text" name='local_tradename' onChange={handleChange} value={data.local_tradename} />
                                                 </div>
@@ -370,6 +371,12 @@ const Edit = (props) => {
                                                         value={data.application_stage}
                                                     />
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div className="inline_form">
+                                            <div className="form_group_inline">
+                                                <span className="form_group_label">Remarks</span>
+                                                <textarea type="text" name="aremarks" onChange={handleChange} value={data.aremarks} />
                                             </div>
                                         </div>
                                     </div>
@@ -417,7 +424,7 @@ const Edit = (props) => {
                                         </div>
                                     </div>
                                     <div value={value} index={2} className="muitab" style={{ display: value != 2 ? 'none' : '' }}>
-                                        {data.procedure_type == 'Decentralized' || data.procedure_type == 'Mutual Recognition' ?
+                                        {data.procedure_type.value == 'European Procedure' ?
                                             <div style={{ display: 'flex', justifyContent: 'end' }}>
                                                 <button type="button" className="add_doc_form" data-toggle="tooltip" data-placement="top" title="Add Status" onClick={addStatusFields}>
                                                     <i className="bi bi-plus-lg"></i>
@@ -437,7 +444,7 @@ const Edit = (props) => {
                                                     : ''
                                                 }
                                                 <div className="inline_form">
-                                                    {data.procedure_type && data.procedure_type.value == 'Decentralized' || data.procedure_type && data.procedure_type.value == 'Mutual Recognition' ?
+                                                    {data.procedure_type && data.procedure_type.value == 'European Procedure' ?
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Country</span>
                                                             <div className="form_group_field">
@@ -478,6 +485,9 @@ const Edit = (props) => {
                                                                 { label: 'Application / Submission Planned', value: 'Application / Submission Planned' },
                                                                 { label: 'Application / Approval Expected', value: 'Application / Approval Expected' },
                                                                 { label: 'Application/ End of Procedure', value: 'Application/ End of Procedure' },
+                                                                { label: 'Dossier Initial Submission - submitted', value: 'Dossier Initial Submission - submitted' },
+                                                                { label: 'Assesment report -  received', value: 'Assesment report -  received' },
+                                                                { label: 'Conditional Approval - obtained', value: 'Conditional Approval - obtained' },
                                                             ]}
                                                                 name='status'
                                                                 onChange={(selectedOption, name) => handleStatusSelectChange(selectedOption, name, index)}
@@ -522,12 +532,7 @@ const Edit = (props) => {
                                                             <input type="text" name="cdds" onChange={e => handleStatusChanged(index, e)} value={element.cdds} />
                                                         </div>
                                                     </div>
-                                                    <div className="form_group_inline">
-                                                        <span className="form_group_label">Remarks</span>
-                                                        <div className="form_group_field">
-                                                            <input type="text" name="remarks" onChange={e => handleStatusChanged(index, e)} value={element.remarks} />
-                                                        </div>
-                                                    </div>
+                                                   
                                                 </div>
                                                 <div className="inline_form">
                                                     <div className="form_group_inline">
@@ -565,6 +570,14 @@ const Edit = (props) => {
                                                                 isClearable
                                                                 value={element.changes_approved}
                                                             />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="inline_form">
+                                                    <div className="form_group_inline">
+                                                        <span className="form_group_label">Remarks</span>
+                                                        <div className="form_group_field">
+                                                            <textarea type="text" name="remarks" onChange={e => handleStatusChanged(index, e)} value={element.remarks} />
                                                         </div>
                                                     </div>
                                                 </div>

@@ -36,8 +36,8 @@ class ClinicalController extends Controller
                     'authorized_pharmaceutical_form' => 'required',
                     'route_of_admin' => 'required',
                     'atc' => 'required',
-                    'packagings.*.packaging_name' => 'required',
-                    'packagings.*.packaging_type' => 'required',
+                    // 'packagings.*.packaging_name' => 'required',
+                    // 'packagings.*.packaging_type' => 'required',
                     'indication' => 'required',
                     'statuses.*.status' => 'required',
                     'statuses.*.status_date' => 'required',
@@ -94,9 +94,6 @@ class ClinicalController extends Controller
         $clinical->orphan_indication = $request->orphan_indication;
         $clinical->under_intensive_monitoring = $request->under_intensive_monitoring;
         $clinical->key_dates = $request->key_dates;
-        // $clinical->alternate_number_type = $request->alternate_number_type;
-        $clinical->alternate_number = $request->alternate_number;
-        $clinical->remarks = $request->remarks;
         $clinical->local_agent_company = $request->local_agent_company;
         $clinical->formulations = $request->formulations;
         $clinical->packagings = $request->packagings;
@@ -127,10 +124,10 @@ class ClinicalController extends Controller
                 'Procedure Number',
                 'Investigationnal Code',
                 'Application Number',
-                'Registration alternate number',
+                'Medicines Regulatory Authority',
+                'Registration number type',
                 'Registration number',
                 'Registration Date',
-                'Medicines Regulatory Authority',
                 'Remarks',
             );
             $dosageForm = array(
@@ -150,19 +147,19 @@ class ClinicalController extends Controller
                 'Key Date Type',
                 'Date',
                 'Remarks',
-                'Alternate Number',
-                'Remarks',
             );
             $localAgent = array(
                 'Local Agent Company',
             );
             $formulations = array(
                 'Ingredient',
+                'Function',
                 'Strength Type',
                 'Numerator Lower Val',
                 'Numerator Upper Val',
                 'Numerator Unit',
-                'Function'
+                'Denominator Value',
+                'Denominator Unit',
             );
             $packagings = array(
                 'Packaging Type',
@@ -246,10 +243,10 @@ class ClinicalController extends Controller
                 $clinical->procedure_number,
                 $clinical->investigationnal_code,
                 $clinical->application_number,
-                $clinical->registration_alternate_number,
+                $clinical->medicines_regulatory_authority ?  $clinical->medicines_regulatory_authority['value'] : '',
+                $clinical->registration_alternate_number ? $clinical->registration_alternate_number['value'] : '',
                 $clinical->registration_number,
                 $clinical->registration_date,
-                $clinical->medicines_regulatory_authority,
                 $clinical->remarks,
             ], NULL, 'A2');
 
@@ -304,8 +301,8 @@ class ClinicalController extends Controller
                 $n+1;
             }
             //$sheet->setCellValue('D2', $clinical->alternate_number_type ? $clinical->alternate_number_type['value'] : '');
-            $sheet->setCellValue('D2', $clinical->alternate_number);
-            $sheet->setCellValue('E2', $clinical->remarks);
+            // $sheet->setCellValue('D2', $clinical->alternate_number);
+            // $sheet->setCellValue('E2', $clinical->remarks);
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(6);
@@ -330,6 +327,8 @@ class ClinicalController extends Controller
                     $sheet->setCellValue('D' . $f, $ing['numerator_lower_val']);
                     $sheet->setCellValue('E' . $f, $ing['numerator_upper_val']);
                     $sheet->setCellValue('F' . $f, is_array($ing['numerator_unit']) ? $ing['numerator_unit']['value'] : '');
+                    $sheet->setCellValue('G' . $f, $ing['denominator_value']);
+                    $sheet->setCellValue('H' . $f, is_array($ing['denominator_unit']) ? $ing['denominator_unit']['value'] : '');
                     $f += 1;
                 }
                 $f += 1;
@@ -371,11 +370,14 @@ class ClinicalController extends Controller
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Indications');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($indications, NULL, 'A1');
-            $sheet->fromArray([
-                $clinical->indication['value'],
-                // is_array($clinical->paediatric_use) ? $clinical->paediatric_use['value'] : '',
-                // $clinical->age,
-            ], NULL, 'A2');
+            $in = 2;
+            foreach($clinical->indication as $ind) {
+                $sheet->setCellValue('A' . $in, $ind['value']);
+                $in++;
+            }
+            // $sheet->fromArray([
+            //     $clinical->indication['value'],
+            // ], NULL, 'A2');
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(10);
@@ -460,10 +462,10 @@ class ClinicalController extends Controller
             $writer->save($name);
             Mail::to(getenv('MAIL_TO'))->send(new MailClinical($name, $productName, $subject));
 
-            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
+            return redirect('dashboard')->with('message', 'Your eForm was well submitted');
         }
 
-        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
+        return redirect('dashboard')->with('message', 'Your eForm was well saved');
     }
 
     public function create()
@@ -520,8 +522,8 @@ class ClinicalController extends Controller
                     'authorized_pharmaceutical_form' => 'required',
                     'route_of_admin' => 'required',
                     'atc' => 'required',
-                    'packagings.*.packaging_name' => 'required',
-                    'packagings.*.packaging_type' => 'required',
+                    // 'packagings.*.packaging_name' => 'required',
+                    // 'packagings.*.packaging_type' => 'required',
                     'indication' => 'required',
                     'statuses.*.status' => 'required',
                     'statuses.*.status_date' => 'required',
@@ -579,8 +581,7 @@ class ClinicalController extends Controller
         $clinical->under_intensive_monitoring = $request->under_intensive_monitoring;
         $clinical->key_dates = $request->key_dates;
         // $clinical->alternate_number_type = $request->alternate_number_type;
-        $clinical->alternate_number = $request->alternate_number;
-        $clinical->remarks = $request->remarks;
+        // $clinical->alternate_number = $request->alternate_number;
         $clinical->local_agent_company = $request->local_agent_company;
         $clinical->formulations = $request->formulations;
         $clinical->packagings = $request->packagings;
@@ -612,10 +613,10 @@ class ClinicalController extends Controller
                 'Procedure Number',
                 'Investigationnal Code',
                 'Application Number',
-                'Registration alternate number',
+                'Medicines Regulatory Authority',
+                'Registration number type',
                 'Registration number',
                 'Registration Date',
-                'Medicines Regulatory Authority',
                 'Remarks',
             );
             $dosageForm = array(
@@ -635,19 +636,19 @@ class ClinicalController extends Controller
                 'Key Date Type',
                 'Date',
                 'Remarks',
-                'Alternate Number',
-                'Remarks',
             );
             $localAgent = array(
                 'Local Agent Company',
             );
             $formulations = array(
                 'Ingredient',
+                'Function',
                 'Strength Type',
                 'Numerator Lower Val',
                 'Numerator Upper Val',
                 'Numerator Unit',
-                'Function'
+                'Denominator Value',
+                'Denominator Unit',
             );
             $packagings = array(
                 'Packaging Type',
@@ -731,10 +732,11 @@ class ClinicalController extends Controller
                 $clinical->procedure_number,
                 $clinical->investigationnal_code,
                 $clinical->application_number,
-                $clinical->registration_alternate_number,
+                $clinical->medicines_regulatory_authority ? $clinical->medicines_regulatory_authority['value'] : '',
+                $clinical->registration_alternate_number ? $clinical->registration_alternate_number['value'] : '',
                 $clinical->registration_number,
                 $clinical->registration_date,
-                $clinical->medicines_regulatory_authority,
+                // $clinical->medicines_regulatory_authority,
                 $clinical->remarks,
             ], NULL, 'A2');
 
@@ -789,8 +791,8 @@ class ClinicalController extends Controller
                 $n+1;
             }
             //$sheet->setCellValue('D2', $clinical->alternate_number_type ? $clinical->alternate_number_type['value'] : '');
-            $sheet->setCellValue('D2', $clinical->alternate_number);
-            $sheet->setCellValue('E2', $clinical->remarks);
+            // $sheet->setCellValue('D2', $clinical->alternate_number);
+            // $sheet->setCellValue('E2', $clinical->remarks);
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(6);
@@ -814,6 +816,8 @@ class ClinicalController extends Controller
                     $sheet->setCellValue('D' . $f, $ing['numerator_lower_val']);
                     $sheet->setCellValue('E' . $f, $ing['numerator_upper_val']);
                     $sheet->setCellValue('F' . $f, is_array($ing['numerator_unit']) ? $ing['numerator_unit']['value'] : '');
+                    $sheet->setCellValue('G' . $f, $ing['denominator_value']);
+                    $sheet->setCellValue('H' . $f, is_array($ing['denominator_unit']) ? $ing['denominator_unit']['value'] : '');
                     $f += 1;
                 }
                 $f += 1;
@@ -855,11 +859,14 @@ class ClinicalController extends Controller
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Indications');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($indications, NULL, 'A1');
-            $sheet->fromArray([
-                $clinical->indication['value'],
-                //is_array($clinical->paediatric_use) ? $clinical->paediatric_use['value'] : '',
-                // $clinical->age,
-            ], NULL, 'A2');
+            $in = 2;
+            foreach($clinical->indication as $ind) {
+                $sheet->setCellValue('A' . $in, $ind['value']);
+                $in++;
+            }
+            // $sheet->fromArray([
+            //     $clinical->indication['value'],
+            // ], NULL, 'A2');
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(10);
@@ -944,9 +951,9 @@ class ClinicalController extends Controller
             $writer->save($name);
             Mail::to(getenv('MAIL_TO'))->send(new MailClinical($name, $productName, $subject));
 
-            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
+            return redirect('dashboard')->with('message', 'Your eForm was well submitted');
         }
 
-        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
+        return redirect('dashboard')->with('message', 'Your eForm was well saved');
     }
 }

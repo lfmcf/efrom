@@ -58,8 +58,8 @@ const Create = (props) => {
         under_intensive_monitoring: '',
         key_dates: [{ date_type: "", date: '', remarks: "" }],
         // alternate_number_type: '',
-        alternate_number: '',
-        atcremarks: '',
+        // alternate_number: '',
+        // atcremarks: '',
         local_agent_company: '',
         formulations: [
             {ingredient : [{ ingredient: '', strength_type: '', numerator_lower_val: '', numerator_upper_val: '', numerator_unit: '', function: '', denominator_value: '', denominator_unit: '' }]}
@@ -71,7 +71,7 @@ const Create = (props) => {
             }
         ],
 
-        indication: '',
+        indication: [],
         // paediatric_use: '',
         manufacturing: [{ manufacturer: '', operation_type: [] }],
         statuses: [{ country: '', status: '', status_date: '', ectd_sequence: '', change_control_ref: '', internal_submission_reference: '', remarks: '' }],
@@ -664,7 +664,7 @@ const Create = (props) => {
                                         sx={{ borderRight: 1, borderColor: 'divider' }}
                                     >
                                         <Mtab label="General information" {...a11yProps(0)} style={{ color: errors.procedure_type || errors.application_stage || errors.country ? 'red' : '' }} />
-                                        <Mtab label="Basic information" {...a11yProps(1)} style={{ color: errors.product_name }} />
+                                        <Mtab label="Basic information" {...a11yProps(1)} style={{ color: errors.product_name ? 'red' : '' }} />
                                         <Mtab label="Dosage Form / ATC" {...a11yProps(2)} style={{ color: errors.authorized_pharmaceutical_form || errors.route_of_admin || errors.atc ? 'red' : '' }} />
                                         <Mtab label="Orphan Drug Details" {...a11yProps(3)} />
                                         <Mtab label="Under Intensive Monitoring Details" {...a11yProps(4)} />
@@ -682,7 +682,7 @@ const Create = (props) => {
                                                 <span className="form_group_label" style={{color: errors.procedure_type ? 'red' : ''}}>Procedure Type (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
-                                                        {value: "Nationale procedure", label: "Nationale procedure"},
+                                                        {value: "Nationale Procedure", label: "Nationale Procedure"},
                                                         {value: "European Procedure", label: "European Procedure"},
                                                     ]}
                                                         name="procedure_type"
@@ -908,7 +908,7 @@ const Create = (props) => {
                                         </div>
                                         <div className="inline_form">
                                              <div className="form_group_inline">
-                                                <span className="form_group_label">Registration alternate number</span>
+                                                <span className="form_group_label">Registration number type</span>
                                                 <div className="form_group_field">
                                                     {/* <input type="text" name="registration_alternate_number" onChange={handleChange} value={data.registration_alternate_number} /> */}
                                                     <Select options={[
@@ -931,8 +931,8 @@ const Create = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Registration number</span>
                                                 <div className="form_group_field">
-                                                    {/* <input type="text" name="registration_number" onChange={handleChange} value={data.registration_number} /> */}
-                                                    <Select options={[
+                                                    <input type="text" name="registration_number" onChange={handleChange} value={data.registration_number} />
+                                                    {/* <Select options={[
                                                         { label: 'EudraCT', value: 'EudraCT' },
                                                         { label: 'IND number', value: 'IND number' },
                                                         { label: 'registration number ', value: 'registration number ' },
@@ -946,7 +946,7 @@ const Create = (props) => {
                                                         classNamePrefix="basic"
                                                         placeholder=''
                                                         isClearable
-                                                    />
+                                                    /> */}
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
@@ -1163,19 +1163,19 @@ const Create = (props) => {
                                                     />
                                                 </div>
                                             </div> */}
-                                            <div className="form_group_inline">
+                                            {/* <div className="form_group_inline">
                                                 <span className="form_group_label">Alternate Number</span>
                                                 <div className="form_group_field">
                                                     <input type="text" name="alternate_number" onChange={handleChange} value={data.alternate_number} />
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
-                                        <div className="form_group_inline">
+                                        {/* <div className="form_group_inline">
                                             <span className="form_group_label">Remarks</span>
                                             <div className="form_group_field">
                                                 <input type="text" name="atcremarks" onChange={handleChange} value={data.atcremarks} />
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                     <div value={value} index={6} className="muitab" style={{ display: value != 6 ? 'none' : '' }}>
                                         <div className="form_group">
@@ -1313,10 +1313,14 @@ const Create = (props) => {
                                                                         <Select options={[
                                                                             { value: '% (W/V)', label: '% (W/V)' },
                                                                             { value: '% (W/W)', label: '% (W/W)' },
+                                                                            { value: 'µg', label: 'µg' },
+                                                                            { value: 'Each', label: 'Each' },
                                                                             { value: 'IC', label: 'IC' },
                                                                             { value: 'IR', label: 'IR' },
                                                                             { value: 'mg', label: 'mg' },
-                                                                            { value: 'ug', label: 'ug' },
+                                                                            { value: 'ml', label: 'ml' },
+                                                                            { value: 'Tablet', label: 'Tablet' },
+                                                                            { value: 'Vial', label: 'Vial' },
                                                                         ]}
                                                                             name="numerator_unit"
                                                                             onChange={(selectedOption, name) => handleFormulationSelectChange(selectedOption, name, index, i)}
@@ -1343,10 +1347,14 @@ const Create = (props) => {
                                                                         <Select options={[
                                                                                 { value: '% (W/V)', label: '% (W/V)' },
                                                                                 { value: '% (W/W)', label: '% (W/W)' },
+                                                                                { value: 'µg', label: 'µg' },
+                                                                                { value: 'Each', label: 'Each' },
                                                                                 { value: 'IC', label: 'IC' },
                                                                                 { value: 'IR', label: 'IR' },
                                                                                 { value: 'mg', label: 'mg' },
-                                                                                { value: 'ug', label: 'ug' },
+                                                                                { value: 'ml', label: 'ml' },
+                                                                                { value: 'Tablet', label: 'Tablet' },
+                                                                                { value: 'Vial', label: 'Vial' },
                                                                             ]}
                                                                                 name="denominator_unit"
                                                                                 onChange={(selectedOption, name) => handleFormulationSelectChange(selectedOption, name, index, i)}
@@ -1388,7 +1396,7 @@ const Create = (props) => {
                                                         ''}
                                                     <div className="inline_form">
                                                         <div className="form_group_inline">
-                                                            <span className="form_group_label" style={{ color: errors['packagings.' + index + '.packaging_type'] ? 'red' : '' }}>Packaging Type (*)</span>
+                                                            <span className="form_group_label" style={{ color: errors['packagings.' + index + '.packaging_type'] ? 'red' : '' }}>Packaging Type</span>
                                                             <div className="form_group_field">
                                                                 <Select options={options_2}
                                                                     name="packaging_type"
@@ -1397,15 +1405,15 @@ const Create = (props) => {
                                                                     classNamePrefix="basic"
                                                                     placeholder=''
                                                                     isClearable
-                                                                    styles={selectStyles(errors['packagings.' + index + '.packaging_type'] ? 'red' : '' )}
+                                                                    // styles={selectStyles(errors['packagings.' + index + '.packaging_type'] ? 'red' : '' )}
                                                                     value={element.packaging_type}
                                                                 />
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
-                                                            <span className="form_group_label" style={{ color: errors['packagings.' + index + '.packaging_name'] ? 'red' : '' }}>Packaging Name (*)</span>
+                                                            <span className="form_group_label" style={{ color: errors['packagings.' + index + '.packaging_name'] ? 'red' : '' }}>Packaging Name</span>
                                                             <div className="form_group_field">
-                                                                <input type="text" name="packaging_name" onChange={(e) => handlePackagingsChange(index, e)} style={{ borderColor: errors['packagings.' + index + '.packaging_name'] ? 'red' : '' }} value={element.packaging_name} />
+                                                                <input type="text" name="packaging_name" onChange={(e) => handlePackagingsChange(index, e)} value={element.packaging_name} />
                                                             </div>
                                                             
                                                         </div>
@@ -1580,6 +1588,7 @@ const Create = (props) => {
                                                     
                                                     <Select options={indications}
                                                         name="indication"
+                                                        isMulti
                                                         onChange={handleSelectChange}
                                                         className="basic"
                                                         classNamePrefix="basic"
@@ -1729,6 +1738,9 @@ const Create = (props) => {
                                                                 { label: 'Application / Submission Planned', value: 'Application / Submission Planned' },
                                                                 { label: 'Application / Approval Expected', value: 'Application / Approval Expected' },
                                                                 { label: 'Application/ End of Procedure', value: 'Application/ End of Procedure' },
+                                                                { label: 'Dossier Initial Submission - submitted', value: 'Dossier Initial Submission - submitted' },
+                                                                { label: 'Assesment report -  received', value: 'Assesment report -  received' },
+                                                                { label: 'Conditional Approval - obtained', value: 'Conditional Approval - obtained' },
                                                             ]}
                                                                 name='status'
                                                                 onChange={(selectedOption, name) => handleStatusSelectChange(selectedOption, name, index)}

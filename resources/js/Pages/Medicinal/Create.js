@@ -499,7 +499,7 @@ const Create = (props) => {
                                     >
                                         <Mtab label="General information" {...a11yProps(0)} style={{ color: errors.country || errors.procedure_type || errors.application_stage ? 'red' : '' }} />
                                         <Mtab label="Basic information" {...a11yProps(1)} style={{ color: errors.product_name || errors.local_tradename || errors.registration_holder ? 'red' : '' }} />
-                                        <Mtab label="Dosage Form / ATC" {...a11yProps(2)} style={{color: errors.authorized_pharmaceutical_form || errors.route_of_admin || errors.atc}} />
+                                        <Mtab label="Dosage Form / ATC" {...a11yProps(2)} style={{color: errors.authorized_pharmaceutical_form || errors.route_of_admin || errors.atc ? 'red' : ''}} />
                                         <Mtab label="Orphan Drug Details" {...a11yProps(3)} />
                                         <Mtab label="Under Intensive Monitoring Details" {...a11yProps(4)} />
                                         <Mtab label="Key Dates / Alternate Numbers" {...a11yProps(5)} />
@@ -1058,10 +1058,14 @@ const Create = (props) => {
                                                                             <Select options={[
                                                                                 { value: '% (W/V)', label: '% (W/V)' },
                                                                                 { value: '% (W/W)', label: '% (W/W)' },
+                                                                                { value: 'µg', label: 'µg' },
+                                                                                { value: 'Each', label: 'Each' },
                                                                                 { value: 'IC', label: 'IC' },
                                                                                 { value: 'IR', label: 'IR' },
                                                                                 { value: 'mg', label: 'mg' },
-                                                                                { value: 'ug', label: 'ug' },
+                                                                                { value: 'ml', label: 'ml' },
+                                                                                { value: 'Tablet', label: 'Tablet' },
+                                                                                { value: 'Vial', label: 'Vial' },
                                                                             ]}
                                                                                 name="numerator_unit"
                                                                                 onChange={(selectedOption, name) => handleFormulationSelectChange(selectedOption, name, index, i)}
@@ -1087,10 +1091,14 @@ const Create = (props) => {
                                                                         <Select options={[
                                                                                 { value: '% (W/V)', label: '% (W/V)' },
                                                                                 { value: '% (W/W)', label: '% (W/W)' },
+                                                                                { value: 'µg', label: 'µg' },
+                                                                                { value: 'Each', label: 'Each' },
                                                                                 { value: 'IC', label: 'IC' },
                                                                                 { value: 'IR', label: 'IR' },
                                                                                 { value: 'mg', label: 'mg' },
-                                                                                { value: 'ug', label: 'ug' },
+                                                                                { value: 'ml', label: 'ml' },
+                                                                                { value: 'Tablet', label: 'Tablet' },
+                                                                                { value: 'Vial', label: 'Vial' },
                                                                             ]}
                                                                                 name="denominator_unit"
                                                                                 onChange={(selectedOption, name) => handleFormulationSelectChange(selectedOption, name, index, i)}
@@ -1390,6 +1398,7 @@ const Create = (props) => {
                                                 <div className="form_group_field">
                                                     <Select options={indications}
                                                         name="indication"
+                                                        isMulti
                                                         onChange={handleSelectChange}
                                                         className="basic"
                                                         classNamePrefix="basic"
