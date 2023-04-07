@@ -40,7 +40,7 @@ const SaveModal = ({show, handleClose, handleSubmited, name}) => {
                 aria-describedby="alert-dialog-slide-description"
             >
                 <DialogTitle>
-                    {name == 'submit' ? 'Confirmez-vous la soumission du formulaire' : 'Confirmez-vous la sauvegarde du formulaire'}
+                    {name == 'submit' ? 'Do you want to Submit your eForm?' : 'Do you want to Save your eForm?'}
                     
                 </DialogTitle>
                 {/* <DialogContent>
@@ -50,8 +50,8 @@ const SaveModal = ({show, handleClose, handleSubmited, name}) => {
                     </DialogContentText>
                 </DialogContent> */}
                 <DialogActions>
-                    <Button onClick={handleClose}>Disagree</Button>
-                    <Button onClick={handleClose} name={name} onClick={handleSubmited}>Agree</Button>
+                    <Button onClick={handleClose}>No</Button>
+                    <Button name={name} onClick={handleSubmited}>Yes</Button>
                 </DialogActions>
             </Dialog>
         </div>

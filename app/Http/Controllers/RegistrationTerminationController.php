@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Rt;
 use App\Models\RegistrationTermination;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -222,14 +223,21 @@ class RegistrationTerminationController extends Controller
             
             $date = date('d-m-y');
             $name = 'Registration Termination' . $date . '.xlsx';
+            $nom = explode("-", $request->product['value']);
+            $productName = $nom[0];
+
+            $subject = 'eForm_RegistrationTermination_'.$productName . '_' .$request->procedure_type['value'];
+
             $writer->save($name);
+
+            Mail::to(getenv('MAIL_TO'))->send(new Rt($name, $productName, $subject));
 
             // Mail::to(getenv('MAIL_TO'))->send(new Renewal($name, $request->product['value'], $subject));
 
-            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
+            return redirect('dashboard')->with('message', 'Your eForm was well submitted');
         }
 
-        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
+        return redirect('dashboard')->with('message', 'Your eForm was well saved');
     }
 
     /**
@@ -447,12 +455,20 @@ class RegistrationTerminationController extends Controller
             
             $date = date('d-m-y');
             $name = 'Registration Termination' . $date . '.xlsx';
+
+            $nom = explode("-", $request->product['value']);
+            $productName = $nom[0];
+
+            $subject = 'eForm_RegistrationTermination_'.$productName . '_' .$request->procedure_type['value'];
+
             $writer->save($name);
 
-            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
+            Mail::to(getenv('MAIL_TO'))->send(new Rt($name, $productName, $subject));
+
+            return redirect('dashboard')->with('message', 'Your eForm was well submitted');
         }
 
-        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
+        return redirect('dashboard')->with('message', 'Your eForm was well saved');
     }
 
     /**

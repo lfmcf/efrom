@@ -92,6 +92,7 @@ class AmendmentsController extends Controller
         $amendments->application_stage = $request->application_stage;
         $amendments->procedure_num = $request->procedure_num;
         $amendments->local_tradename = $request->local_tradename;
+        $amendments->aremarks = $request->aremarks;
         $amendments->amendment_title = $request->amendment_title;
         $amendments->description = $request->description;
         $amendments->reason = $request->reason;
@@ -109,9 +110,9 @@ class AmendmentsController extends Controller
                 'Country',
                 'RMS',
                 'Procedure Number',
-                'Local Tradename',
+                'Full protocol title',
                 'Submission Type',
-                // 'Product Type'
+                'Remarks',
             );
             $amendmentsDetails = array(
                 'Amendment Title',
@@ -120,6 +121,7 @@ class AmendmentsController extends Controller
                 'Remarks'
             );
             $EventsStatus = array(
+                'Country',
                 'Status',
                 'Status Date',
                 'eCTD sequence',
@@ -154,7 +156,7 @@ class AmendmentsController extends Controller
                 $amendments->procedure_num,
                 $amendments->local_tradename,
                 $amendments->application_stage ? $amendments->application_stage['value']: '',
-                // $amendments->product_type
+                $amendments->aremarks,
             ], NULL, 'A2');
 
             if(array_key_exists('value', $amendments->country)) {
@@ -234,10 +236,10 @@ class AmendmentsController extends Controller
 
             Mail::to(getenv('MAIL_TO'))->send(new Amendment($name, $productName, $subject));
 
-            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
+            return redirect('dashboard')->with('message', 'Your eForm was well submitted');
         }
         
-        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
+        return redirect('dashboard')->with('message', 'Your eForm was well saved');
     }
 
     /**
@@ -326,6 +328,7 @@ class AmendmentsController extends Controller
         $amendments->application_stage = $request->application_stage;
         $amendments->procedure_num = $request->procedure_num;
         $amendments->local_tradename = $request->local_tradename;
+        $amendments->aremarks = $request->aremarks;
         $amendments->amendment_title = $request->amendment_title;
         $amendments->description = $request->description;
         $amendments->reason = $request->reason;
@@ -343,9 +346,9 @@ class AmendmentsController extends Controller
                 'Country',
                 'RMS',
                 'Procedure Number',
-                'Local Tradename',
+                'Full protocol title',
                 'Submission Type',
-                // 'Product Type'
+                'Remarks',
             );
             $amendmentsDetails = array(
                 'Amendment Title',
@@ -354,6 +357,7 @@ class AmendmentsController extends Controller
                 'Remarks'
             );
             $EventsStatus = array(
+                'Country',
                 'Status',
                 'Status Date',
                 'eCTD sequence',
@@ -388,7 +392,7 @@ class AmendmentsController extends Controller
                 $amendments->procedure_num,
                 $amendments->local_tradename,
                 $amendments->application_stage ? $amendments->application_stage['value']: '',
-                // $amendments->product_type
+                $amendments->aremarks
             ], NULL, 'A2');
 
             if(array_key_exists('value', $amendments->country)) {
@@ -468,10 +472,10 @@ class AmendmentsController extends Controller
 
             Mail::to(getenv('MAIL_TO'))->send(new Amendment($name, $productName, $subject));
 
-            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
+            return redirect('dashboard')->with('message', 'Your eForm was well submitted');
         }
         
-        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
+        return redirect('dashboard')->with('message', 'Your eForm was well saved');
     }
 
     /**
