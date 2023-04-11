@@ -690,7 +690,7 @@ const Edit = (props) => {
                                                 <span className="form_group_label" style={{color: errors.procedure_type ? 'red' : ''}}>Procedure Type (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
-                                                        {value: "Nationale procedure", label: "Nationale procedure"},
+                                                        {value: "National procedure", label: "National procedure"},
                                                         {value: "European Procedure", label: "European Procedure"},
                                                     ]}
                                                         name="procedure_type"
@@ -1113,7 +1113,7 @@ const Edit = (props) => {
                                         </div>
                                         {data.key_dates.map((element, index) => (
                                             <fieldset key={index}>
-                                                <legend>Keys {index + 1}</legend>
+                                                <legend>Key {index + 1}</legend>
                                                 <div key={index} style={{ marginBottom: '20px' }}>
                                                     {index > 0 ?
                                                         <div style={{ display: 'flex', justifyContent: 'end' }}>

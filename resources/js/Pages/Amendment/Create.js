@@ -310,7 +310,7 @@ const Create = (props) => {
                                                 <span className="form_group_label" style={{color: errors.procedure_type ? 'red' : ''}}>Procedure Type (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
-                                                        {value: "Nationale Procedure", label: "Nationale Procedure"},
+                                                        {value: "National Procedure", label: "National Procedure"},
                                                         {value: "European Procedure", label: "European Procedure"},
                                                     ]}
                                                         name="procedure_type"
@@ -441,17 +441,18 @@ const Create = (props) => {
                                         </div>
                                     </div>
                                     <div value={value} index={2} className="muitab" style={{ display: value != 2 ? 'none' : '' }}>
-                                        {data.procedure_type.value == 'European Procedure' ?
+                                        {/* {data.procedure_type.value == 'European Procedure' ? */}
                                             <div style={{ display: 'flex', justifyContent: 'end' }}>
                                                 <button type="button" className="add_doc_form" data-toggle="tooltip" data-placement="top" title="Add Status" onClick={addStatusFields}>
                                                     <i className="bi bi-plus-lg"></i>
                                                 </button>
                                             </div>
-                                            : ''
-                                        }
+                                            {/* : ''
+                                        } */}
 
                                         {data.statuses.map((element, index) => (
-                                            <div key={index}>
+                                            <fieldset key={index}>
+                                                <legend>Statut {index + 1}</legend>
                                                 {index > 0 ?
                                                     <div style={{ display: 'flex', justifyContent: 'end' }}>
                                                         <button type="button" style={{ width: '14px', height: '14px', background: 'transparent', padding: '0', margin: '0 0 20px 0' }} onClick={() => removeStatusFields(index)}>
@@ -461,7 +462,7 @@ const Create = (props) => {
                                                     : ''
                                                 }
                                                 <div className="inline_form">
-                                                    {data.procedure_type && data.procedure_type.value == 'European Procedure' ?
+                                                    {/* {data.procedure_type && data.procedure_type.value == 'European Procedure' ? */}
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Country</span>
                                                             <div className="form_group_field">
@@ -482,7 +483,7 @@ const Create = (props) => {
                                                                 />
                                                             </div>
                                                         </div>
-                                                        : ''}
+                                                        {/* : ''} */}
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label" style={{color: errors['statuses.' + index + '.status'] ? 'red' : ''}}>Status (*)</span>
                                                         <div className="form_group_field">
@@ -597,7 +598,7 @@ const Create = (props) => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </fieldset>
                                         ))}
                                     </div>
                                 </Box>

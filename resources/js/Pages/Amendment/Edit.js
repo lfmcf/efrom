@@ -296,7 +296,10 @@ const Edit = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label" style={{color: errors.procedure_type ? 'red' : ''}}>Procedure Type (*)</span>
                                                 <div className="form_group_field">
-                                                    <Select options={procedure_type}
+                                                    <Select options={[
+                                                        {value: "National Procedure", label: "National Procedure"},
+                                                        {value: "European Procedure", label: "European Procedure"},
+                                                    ]}
                                                         name="procedure_type"
                                                         onChange={handleSelectChange}
                                                         className="basic"
@@ -434,7 +437,8 @@ const Edit = (props) => {
                                         }
 
                                         {data.statuses.map((element, index) => (
-                                            <div key={index}>
+                                            <fieldset key={index}>
+                                                <legend>Statut {index + 1}</legend>
                                                 {index > 0 ?
                                                     <div style={{ display: 'flex', justifyContent: 'end' }}>
                                                         <button type="button" style={{ width: '14px', height: '14px', background: 'transparent', padding: '0', margin: '0 0 20px 0' }} onClick={() => removeStatusFields(index)}>
@@ -581,7 +585,7 @@ const Edit = (props) => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </fieldset>
                                         ))}
                                     </div>
                                 </Box>
