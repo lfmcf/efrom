@@ -4,43 +4,56 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c73e829d07cc296623cf9ee7dab6455c",
+    "content-hash": "097d62a29c27b0e1e95ae5ab742ffa9f",
     "packages": [
         {
-            "name": "aacotroneo/laravel-saml2",
-            "version": "2.1.0",
+            "name": "24slides/laravel-saml2",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/aacotroneo/laravel-saml2.git",
-                "reference": "6ed350b37aec3470655335a33e24496e15bde9b7"
+                "url": "https://github.com/24Slides/laravel-saml2.git",
+                "reference": "dbac551c654eb37a27903fb8c8e44bc73749cfa4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aacotroneo/laravel-saml2/zipball/6ed350b37aec3470655335a33e24496e15bde9b7",
-                "reference": "6ed350b37aec3470655335a33e24496e15bde9b7",
+                "url": "https://api.github.com/repos/24Slides/laravel-saml2/zipball/dbac551c654eb37a27903fb8c8e44bc73749cfa4",
+                "reference": "dbac551c654eb37a27903fb8c8e44bc73749cfa4",
                 "shasum": ""
             },
             "require": {
                 "ext-openssl": "*",
-                "illuminate/support": ">=5.0.0",
-                "onelogin/php-saml": "^3.0.0",
-                "php": ">=5.5.0"
+                "illuminate/console": "~5.5|^6.0|^7.0|^8.0|^9.0|^10.0",
+                "illuminate/database": "~5.5|^6.0|^7.0|^8.0|^9.0|^10.0",
+                "illuminate/support": "~5.4|^6.0|^7.0|^8.0|^9.0|^10.0",
+                "onelogin/php-saml": "^3.0|^4.0",
+                "php": ">=7.1",
+                "ramsey/uuid": "^3.8|^4.0"
             },
             "require-dev": {
-                "mockery/mockery": "0.9.*",
-                "phpunit/phpunit": "~4.0"
+                "mockery/mockery": "^0.9.9",
+                "phpunit/phpunit": "^7.5|^9.0",
+                "squizlabs/php_codesniffer": "^2.3"
             },
             "type": "library",
             "extra": {
                 "laravel": {
+                    "aliases": {
+                        "Saml2": "Slides\\Saml2\\Facades\\Auth"
+                    },
                     "providers": [
-                        "Aacotroneo\\Saml2\\Saml2ServiceProvider"
+                        "Slides\\Saml2\\ServiceProvider"
                     ]
+                },
+                "branch-aliases": {
+                    "dev-master": "2.0.8-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Aacotroneo\\Saml2\\": "src/"
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Slides\\Saml2\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -49,27 +62,24 @@
             ],
             "authors": [
                 {
-                    "name": "aacotroneo",
-                    "email": "aacotroneo@gmail.com"
-                },
-                {
-                    "name": "Niraj Patkar",
-                    "email": "niraj@alphonso.in"
+                    "name": "Artem Brezhnev",
+                    "email": "brezzhnev@gmail.com"
                 }
             ],
-            "description": "A Laravel package for Saml2 integration as a SP (service provider) for multiple IdPs, based on OneLogin toolkit which is much more lightweight than simplesamlphp.",
-            "homepage": "https://github.com/aacotroneo/laravel-saml2",
+            "description": "SAML2 Service Provider integration to your Laravel 5.4+ application, based on OneLogin toolkit",
+            "homepage": "https://github.com/24slides/laravel-saml2",
             "keywords": [
                 "SAML2",
+                "SSO",
                 "laravel",
                 "onelogin",
                 "saml"
             ],
             "support": {
-                "issues": "https://github.com/aacotroneo/laravel-saml2/issues",
-                "source": "https://github.com/aacotroneo/laravel-saml2/tree/master"
+                "issues": "https://github.com/24Slides/laravel-saml2/issues",
+                "source": "https://github.com/24Slides/laravel-saml2/tree/2.2.0"
             },
-            "time": "2019-10-01T23:05:14+00:00"
+            "time": "2023-02-20T20:21:13+00:00"
         },
         {
             "name": "asm89/stack-cors",
@@ -2767,34 +2777,35 @@
         },
         {
             "name": "onelogin/php-saml",
-            "version": "3.6.1",
+            "version": "4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/onelogin/php-saml.git",
-                "reference": "a7328b11887660ad248ea10952dd67a5aa73ba3b"
+                "reference": "b22a57ebd13e838b90df5d3346090bc37056409d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/onelogin/php-saml/zipball/a7328b11887660ad248ea10952dd67a5aa73ba3b",
-                "reference": "a7328b11887660ad248ea10952dd67a5aa73ba3b",
+                "url": "https://api.github.com/repos/onelogin/php-saml/zipball/b22a57ebd13e838b90df5d3346090bc37056409d",
+                "reference": "b22a57ebd13e838b90df5d3346090bc37056409d",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4",
+                "php": ">=7.3",
                 "robrichards/xmlseclibs": ">=3.1.1"
             },
             "require-dev": {
-                "pdepend/pdepend": "^2.5.0",
-                "php-coveralls/php-coveralls": "^1.0.2 || ^2.0",
-                "phploc/phploc": "^2.1 || ^3.0 || ^4.0",
-                "phpunit/phpunit": "<7.5.18",
-                "sebastian/phpcpd": "^2.0 || ^3.0 || ^4.0",
-                "squizlabs/php_codesniffer": "^3.1.1"
+                "pdepend/pdepend": "^2.8.0",
+                "php-coveralls/php-coveralls": "^2.0",
+                "phploc/phploc": "^4.0 || ^5.0 || ^6.0 || ^7.0",
+                "phpunit/phpunit": "^9.5",
+                "sebastian/phpcpd": "^4.0 || ^5.0 || ^6.0 ",
+                "squizlabs/php_codesniffer": "^3.5.8"
             },
             "suggest": {
                 "ext-curl": "Install curl lib to be able to use the IdPMetadataParser for parsing remote XMLs",
-                "ext-gettext": "Install gettext and php5-gettext libs to handle translations",
-                "ext-openssl": "Install openssl lib in order to handle with x509 certs (require to support sign and encryption)"
+                "ext-dom": "Install xml lib",
+                "ext-openssl": "Install openssl lib in order to handle with x509 certs (require to support sign and encryption)",
+                "ext-zlib": "Install zlib"
             },
             "type": "library",
             "autoload": {
@@ -2818,7 +2829,7 @@
                 "issues": "https://github.com/onelogin/php-saml/issues",
                 "source": "https://github.com/onelogin/php-saml/"
             },
-            "time": "2021-03-02T10:13:07+00:00"
+            "time": "2022-07-15T20:44:36+00:00"
         },
         {
             "name": "opis/closure",

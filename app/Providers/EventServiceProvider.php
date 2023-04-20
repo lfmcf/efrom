@@ -30,27 +30,27 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Event::listen('Aacotroneo\Saml2\Events\Saml2LoginEvent', function (\Aacotroneo\Saml2\Events\Saml2LoginEvent $event) {
-            $messageId = $event->getSaml2Auth()->getLastMessageId();
-            // Add your own code preventing reuse of a $messageId to stop replay attacks
+        // Event::listen('Aacotroneo\Saml2\Events\Saml2LoginEvent', function (\Aacotroneo\Saml2\Events\Saml2LoginEvent $event) {
+        //     $messageId = $event->getSaml2Auth()->getLastMessageId();
+        //     // Add your own code preventing reuse of a $messageId to stop replay attacks
         
-            $user = $event->getSaml2User();
-            $userData = [
-                'id' => $user->getUserId(),
-                'attributes' => $user->getAttributes(),
-                'assertion' => $user->getRawSamlAssertion()
-            ];
-            // dd($userData);
-            //$laravelUser = find user by ID or attribute
-            $laravelUser = User::where('email', $userData['id'])->first();
-            // dd($laravelUser);
-            //if it does not exist create it and go on  or show an error message
-            //Auth::login($laravelUser);
-            if (Auth::loginUsingId($laravelUser->id)) {
-                // dd(Auth::check());
-            }else {
-                throw new AuthenticationException();
-            }
-        });
+        //     $user = $event->getSaml2User();
+        //     $userData = [
+        //         'id' => $user->getUserId(),
+        //         'attributes' => $user->getAttributes(),
+        //         'assertion' => $user->getRawSamlAssertion()
+        //     ];
+        //     // dd($userData);
+        //     //$laravelUser = find user by ID or attribute
+        //     $laravelUser = User::where('email', $userData['id'])->first();
+        //     // dd($laravelUser);
+        //     //if it does not exist create it and go on  or show an error message
+        //     //Auth::login($laravelUser);
+        //     if (Auth::loginUsingId($laravelUser->id)) {
+        //         // dd(Auth::check());
+        //     }else {
+        //         throw new AuthenticationException();
+        //     }
+        // });
     }
 }
