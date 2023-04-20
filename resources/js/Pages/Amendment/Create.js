@@ -13,7 +13,6 @@ import Box from '@mui/material/Box';
 import SaveModal from '@/Components/SaveModal';
 import { Typography } from '@mui/material';
 import { product_name, procedure_type } from '@/Components/List';
-import { Head } from '@inertiajs/inertia-react';
 import moment from "moment";
 import ModalP from '@/Components/Modalp';
 import AddIcon from '@mui/icons-material/Add';

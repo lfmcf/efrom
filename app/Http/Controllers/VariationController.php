@@ -264,10 +264,10 @@ class VariationController extends Controller
             $writer->save($name);
             Mail::to(getenv('MAIL_TO'))->send(new HqVariation($name, $request->product, $subject));
 
-            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
+            return redirect('dashboard')->with('message', 'Your form has been successfully submitted to the Data Entry Team');
         }
 
-        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
+        return redirect('dashboard')->with('message', 'Your form has been successfully saved');
     }
 
     public function store(Request $request)
@@ -489,11 +489,11 @@ class VariationController extends Controller
 
             Mail::to(getenv('MAIL_TO'))->send(new NoHqVariation($name, $productName, $subject));
 
-            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
+            return redirect('dashboard')->with('message', 'Your form has been successfully submitted to the Data Entry Team');
 
         }
 
-        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
+        return redirect('dashboard')->with('message', 'Your form has been successfully saved');
     }
 
     /**
@@ -758,11 +758,11 @@ class VariationController extends Controller
 
             Mail::to(getenv('MAIL_TO'))->send(new NoHqVariation($name, $productName, $subject));
 
-            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
+            return redirect('dashboard')->with('message', 'Your form has been successfully submitted to the Data Entry Team');
 
         }
 
-        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
+        return redirect('dashboard')->with('message', 'Your form has been successfully saved');
     }
 
     public function updatehq(Request $request, Variation $variation) 
@@ -976,10 +976,10 @@ class VariationController extends Controller
             $writer->save($name);
             Mail::to(getenv('MAIL_TO'))->send(new HqVariation($name, $request->product, $subject));
 
-            return redirect('dashboard')->with('message', 'Votre formulaire a bien été soumis');
+            return redirect('dashboard')->with('message', 'Your form has been successfully submitted to the Data Entry Team');
         }
 
-        return redirect('dashboard')->with('message', 'Votre formulaire a bien été sauvegardé');
+        return redirect('dashboard')->with('message', 'Your form has been successfully saved');
     }
 
     /**

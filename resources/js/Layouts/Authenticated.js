@@ -71,7 +71,7 @@ export default function Authenticated({ auth, header, children }) {
                     url: "renewal-create"
                 },
                 {
-                    name: "Transfer",
+                    name: "MA Transfer",
                     url: "transfer-create"
                 },
                 {
@@ -100,7 +100,7 @@ export default function Authenticated({ auth, header, children }) {
             name: "Lifecycle Management ",
             children: [
                 {
-                    name: "Amendments",
+                    name: "Amendment",
                     url: "amendments-create"
                 }
             ]
@@ -191,7 +191,7 @@ export default function Authenticated({ auth, header, children }) {
                                         <p className="sidebar_link_title">Clinical</p>
                                     </button>
                                     <button className="sidebar_link topbar_link" style={{ background: whichMenu == 'devices' ? 'rgba(243, 243, 243, 0.3)' : '' }} onClick={() => handleSelectMenu('devices')} disabled>
-                                        <p className="sidebar_link_title">Devices</p>
+                                        <p className="sidebar_link_title">Device</p>
                                     </button>
                                 </ul>
                             </div>
