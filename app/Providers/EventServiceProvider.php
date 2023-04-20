@@ -6,9 +6,9 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
-use Slides\Saml2\Events\SignedIn;
 use App\Models\User;
-use Auth;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\AuthenticationException;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -32,8 +32,6 @@ class EventServiceProvider extends ServiceProvider
     {
         Event::listen(\Slides\Saml2\Events\SignedIn::class, function(\Slides\Saml2\Events\SignedIn $event){
             $messageId = $event->getAuth()->getLastMessageId();
-
-            // your own code preventing reuse of a $messageId to stop replay attacks
             $samlUser = $event->getSaml2User();
             $userData = [
                 'id' => $samlUser->getUserId(),
@@ -44,7 +42,7 @@ class EventServiceProvider extends ServiceProvider
             $user = User::where('email', $userData['id'])->first();
 
             if (Auth::loginUsingId($user->id)) {
-                // dd(Auth::check());
+                
             }else {
                 throw new AuthenticationException();
             }

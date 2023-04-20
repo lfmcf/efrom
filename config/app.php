@@ -177,6 +177,7 @@ return [
 
         Jenssegers\Mongodb\MongodbServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Slides\Saml2\ServiceProvider::class,
         
     ],
 
@@ -232,6 +233,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Saml2' => Slides\Saml2\Facades\Auth::class,
 
     ],
 
