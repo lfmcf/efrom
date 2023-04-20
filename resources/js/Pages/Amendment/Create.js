@@ -261,7 +261,7 @@ const Create = (props) => {
         <>
             <div className="row">
                 <div className="col-md-12">
-                    <h3 className="page-title">Amendments</h3>
+                    <h3 className="page-title">Amendment</h3>
                 </div>
             </div>
             <div className="row">
