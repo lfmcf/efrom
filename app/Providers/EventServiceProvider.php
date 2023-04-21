@@ -33,13 +33,15 @@ class EventServiceProvider extends ServiceProvider
         Event::listen(\Slides\Saml2\Events\SignedIn::class, function(\Slides\Saml2\Events\SignedIn $event){
             $messageId = $event->getAuth()->getLastMessageId();
             $samlUser = $event->getSaml2User();
-            $userData = [
-                'id' => $samlUser->getUserId(),
-                'attributes' => $samlUser->getAttributes(),
-                'assertion' => $samlUser->getRawSamlAssertion()
-            ];
+            $attributes = $samlUser->getAttributes();
+            $userEmail = $attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'][0];
+            // $userData = [
+            //     'id' => $samlUser->getUserId(),
+            //     'attributes' => $samlUser->getAttributes(),
+            //     'assertion' => $samlUser->getRawSamlAssertion()
+            // ];
 
-            $user = User::where('email', $userData['id'])->first();
+            $user = User::where('email', $userEmail)->first();
 
             if (Auth::loginUsingId($user->id)) {
                 
