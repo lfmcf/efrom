@@ -43,7 +43,7 @@ class EventServiceProvider extends ServiceProvider
 
             $user = User::where('email', $userEmail)->first();
 
-            if (Auth::login($user->id)) {
+            if (Auth::login($user)) {
                 return redirect('/');
             }else {
                 throw new AuthenticationException();
