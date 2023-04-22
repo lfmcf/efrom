@@ -37,7 +37,7 @@ const Create = (props) => {
         local_tradename: '',
         //product_type: '',
         description: '',
-        type: '',
+        // type: '',
         reason: '',
         remarks: '',
         reason_for_passive: '',
@@ -422,7 +422,7 @@ const Create = (props) => {
                                                     <input type="text" name="description" onChange={handleChange} value={data.description} />
                                                 </div>
                                             </div>
-                                            <div className="form_group_inline">
+                                            {/* <div className="form_group_inline">
                                                 <span className="form_group_label">Registration Termination Type</span>
                                                 <div className="form_group_field">
                                                     
@@ -439,7 +439,7 @@ const Create = (props) => {
                                                         value={data.type}
                                                     />
                                                 </div>
-                                            </div>
+                                            </div> */}
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Reason of the event</span>
                                                 <div className="form_group_field">
@@ -520,7 +520,7 @@ const Create = (props) => {
                                         </div>
                                         {data.statuses.map((element, index) => (
                                             <fieldset key={index}>
-                                                <legend>Statut {index + 1}</legend>
+                                                <legend>Status {index + 1}</legend>
                                                 <div key={index}>
                                                     {index > 0 ?
                                                         <div style={{ display: 'flex', justifyContent: 'end' }}>

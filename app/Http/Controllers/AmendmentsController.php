@@ -96,6 +96,7 @@ class AmendmentsController extends Controller
         $amendments->amendment_title = $request->amendment_title;
         $amendments->description = $request->description;
         $amendments->reason = $request->reason;
+        $amendments->control = $request->control;
         $amendments->remarks = $request->remarks;
         $amendments->statuses = $request->statuses;
         $amendments->doc = $docs;
@@ -118,6 +119,7 @@ class AmendmentsController extends Controller
                 'Amendment Title',
                 'Description of the event',
                 'Reason for variation',
+                'Change Control or pre-assessment',
                 'Remarks'
             );
             $EventsStatus = array(
@@ -125,18 +127,19 @@ class AmendmentsController extends Controller
                 'Status',
                 'Status Date',
                 'eCTD sequence',
-                'Change Control or pre-assessment',
-                'CCDS/Core PIL ref n°',
+                // 'Change Control or pre-assessment',
+                // 'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Effective internal implementation date',
                 'Implementation Deadline of deadline for answer',
-                'Impacted of changes approved'
+                // 'Impacted of changes approved'
             );
             $document = array(
                 'Document type',
                 'Document title',
                 'Language',
                 'Version date',
+                'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Document'
             );
@@ -177,6 +180,7 @@ class AmendmentsController extends Controller
                 $amendments->amendment_title,
                 $amendments->description,
                 $amendments->reason ? $amendments->reason['value'] : '',
+                $amendments->control,
                 $amendments->remarks
             ], NULL, 'A2');
 
@@ -192,12 +196,12 @@ class AmendmentsController extends Controller
                 $sheet->setCellValue('B' . $st, $stt['status']['value']);
                 $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
                 $sheet->setCellValue('D' . $st, $stt['ectd']);
-                $sheet->setCellValue('E' . $st, $stt['control']);
-                $sheet->setCellValue('F' . $st, $stt['cdds']);
-                $sheet->setCellValue('G' . $st, $stt['remarks']);
-                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_date'])));
-                $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
-                $sheet->setCellValue('J' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
+                // $sheet->setCellValue('E' . $st, $stt['control']);
+                // $sheet->setCellValue('E' . $st, $stt['cdds']);
+                $sheet->setCellValue('E' . $st, $stt['remarks']);
+                $sheet->setCellValue('F' . $st, date("d-m-Y", strtotime($stt['implimentation_date'])));
+                $sheet->setCellValue('G' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
+                // $sheet->setCellValue('J' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
                 $st++;
             }
 
@@ -213,8 +217,9 @@ class AmendmentsController extends Controller
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
                 $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
                 $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $sheet->setCellValue('E' . $dc, $docu['cdds']);
+                $sheet->setCellValue('F' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('G' . $dc, $docu['document']);
                 $dc++;
             }
 
@@ -332,6 +337,7 @@ class AmendmentsController extends Controller
         $amendments->amendment_title = $request->amendment_title;
         $amendments->description = $request->description;
         $amendments->reason = $request->reason;
+        $amendments->control = $request->control;
         $amendments->remarks = $request->remarks;
         $amendments->statuses = $request->statuses;
         $amendments->doc = $docs;
@@ -354,6 +360,7 @@ class AmendmentsController extends Controller
                 'Amendment Title',
                 'Description of the event',
                 'Reason for variation',
+                'Change Control or pre-assessment',
                 'Remarks'
             );
             $EventsStatus = array(
@@ -361,18 +368,19 @@ class AmendmentsController extends Controller
                 'Status',
                 'Status Date',
                 'eCTD sequence',
-                'Change Control or pre-assessment',
+                //'Change Control or pre-assessment',
                 'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Effective internal implementation date',
                 'Implementation Deadline of deadline for answer',
-                'Impacted of changes approved'
+                // 'Impacted of changes approved'
             );
             $document = array(
                 'Document type',
                 'Document title',
                 'Language',
                 'Version date',
+                'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Document'
             );
@@ -413,6 +421,7 @@ class AmendmentsController extends Controller
                 $amendments->amendment_title,
                 $amendments->description,
                 $amendments->reason ? $amendments->reason['value'] : '',
+                $amendments->control,
                 $amendments->remarks
             ], NULL, 'A2');
 
@@ -428,12 +437,12 @@ class AmendmentsController extends Controller
                 $sheet->setCellValue('B' . $st, $stt['status']['value']);
                 $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
                 $sheet->setCellValue('D' . $st, $stt['ectd']);
-                $sheet->setCellValue('E' . $st, $stt['control']);
-                $sheet->setCellValue('F' . $st, $stt['cdds']);
-                $sheet->setCellValue('G' . $st, $stt['remarks']);
-                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_date'])));
-                $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
-                $sheet->setCellValue('J' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
+                // $sheet->setCellValue('E' . $st, $stt['control']);
+                // $sheet->setCellValue('E' . $st, $stt['cdds']);
+                $sheet->setCellValue('E' . $st, $stt['remarks']);
+                $sheet->setCellValue('F' . $st, date("d-m-Y", strtotime($stt['implimentation_date'])));
+                $sheet->setCellValue('G' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
+                // $sheet->setCellValue('J' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
                 $st++;
             }
 
@@ -449,8 +458,9 @@ class AmendmentsController extends Controller
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
                 $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
                 $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $sheet->setCellValue('E' . $dc, $docu['cdds']);
+                $sheet->setCellValue('F' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('G' . $dc, $docu['document']);
                 $dc++;
             }
 

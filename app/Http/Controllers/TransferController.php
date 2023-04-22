@@ -97,6 +97,7 @@ class TransferController extends Controller
         $transfer->reason = $request->reason;
         $transfer->previous_mah = $request->previous_mah;
         $transfer->new_mah = $request->new_mah;
+        $transfer->control = $request->control;
         $transfer->remarks = $request->remarks;
         $transfer->statuses = $request->statuses;
         $transfer->doc = $docs;
@@ -120,6 +121,7 @@ class TransferController extends Controller
                 'Reason for transfer',
                 'Previous MAH',
                 'New MAH',
+                'Change Control or pre-assessment',
                 'Remarks',
             );
             $eventStatus = array(
@@ -127,8 +129,8 @@ class TransferController extends Controller
                 'Status',
                 'Status Date',
                 'eCTD sequence',
-                'Change Control or pre-assessment',
-                'CCDS/Core PIL ref n°',
+                // 'Change Control or pre-assessment',
+                // 'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Effective internal implementation date',
                 'Implementation Deadline of deadline for answer',
@@ -139,6 +141,7 @@ class TransferController extends Controller
                 'Document title',
                 'Language',
                 'Version date',
+                'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Document'
             );
@@ -181,6 +184,7 @@ class TransferController extends Controller
                 $transfer->reason ? $transfer->reason['value'] : '',
                 $transfer->previous_mah ? $transfer->previous_mah['value'] : '',
                 $transfer->new_mah ? $transfer->new_mah['value'] : '',
+                $transfer->control,
                 $transfer->remarks
             ], NULL, 'A2');
 
@@ -202,12 +206,12 @@ class TransferController extends Controller
                 $sheet->setCellValue('B' . $st, $stt['status']['value']);
                 $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
                 $sheet->setCellValue('D' . $st, $stt['ectd']);
-                $sheet->setCellValue('E' . $st, $stt['control']);
-                $sheet->setCellValue('F' . $st, $stt['cdds']);
-                $sheet->setCellValue('G' . $st, $stt['remarks']);
-                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_date'])));
-                $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
-                $sheet->setCellValue('J' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
+                // $sheet->setCellValue('E' . $st, $stt['control']);
+                // $sheet->setCellValue('F' . $st, $stt['cdds']);
+                $sheet->setCellValue('E' . $st, $stt['remarks']);
+                $sheet->setCellValue('F' . $st, date("d-m-Y", strtotime($stt['implimentation_date'])));
+                $sheet->setCellValue('G' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
+                $sheet->setCellValue('H' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
                 $st++;
             }
 
@@ -223,8 +227,9 @@ class TransferController extends Controller
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
                 $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
                 $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $sheet->setCellValue('E' . $dc, $docu['cdds']);
+                $sheet->setCellValue('F' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('G' . $dc, $docu['document']);
                 $dc++;
             }
             // $sheet->fromArray($transfer->doc, NULL, 'A2');
@@ -348,6 +353,7 @@ class TransferController extends Controller
         $transfer->reason = $request->reason;
         $transfer->previous_mah = $request->previous_mah;
         $transfer->new_mah = $request->new_mah;
+        $transfer->control = $request->control;
         $transfer->remarks = $request->remarks;
         $transfer->statuses = $request->statuses;
         $transfer->doc = $docs;
@@ -371,6 +377,7 @@ class TransferController extends Controller
                 'Reason for transfer',
                 'Previous MAH',
                 'New MAH',
+                'Change Control or pre-assessment',
                 'Remarks',
             );
             $eventStatus = array(
@@ -378,8 +385,8 @@ class TransferController extends Controller
                 'Status',
                 'Status Date',
                 'eCTD sequence',
-                'Change Control or pre-assessment',
-                'CCDS/Core PIL ref n°',
+                // 'Change Control or pre-assessment',
+                // 'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Effective internal implementation date',
                 'Implementation Deadline of deadline for answer',
@@ -390,6 +397,7 @@ class TransferController extends Controller
                 'Document title',
                 'Language',
                 'Version date',
+                'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Document'
             );
@@ -432,6 +440,7 @@ class TransferController extends Controller
                 $transfer->reason ? $transfer->reason['value'] : '',
                 $transfer->previous_mah ? $transfer->previous_mah['value'] : '',
                 $transfer->new_mah ? $transfer->new_mah['value'] : '',
+                $transfer->control,
                 $transfer->remarks
             ], NULL, 'A2');
 
@@ -453,12 +462,12 @@ class TransferController extends Controller
                 $sheet->setCellValue('B' . $st, $stt['status']['value']);
                 $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
                 $sheet->setCellValue('D' . $st, $stt['ectd']);
-                $sheet->setCellValue('E' . $st, $stt['control']);
-                $sheet->setCellValue('F' . $st, $stt['cdds']);
-                $sheet->setCellValue('G' . $st, $stt['remarks']);
-                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_date'])));
-                $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
-                $sheet->setCellValue('J' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
+                // $sheet->setCellValue('E' . $st, $stt['control']);
+                // $sheet->setCellValue('F' . $st, $stt['cdds']);
+                $sheet->setCellValue('E' . $st, $stt['remarks']);
+                $sheet->setCellValue('F' . $st, date("d-m-Y", strtotime($stt['implimentation_date'])));
+                $sheet->setCellValue('G' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
+                $sheet->setCellValue('H' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
                 $st++;
             }
 
@@ -474,8 +483,9 @@ class TransferController extends Controller
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
                 $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
                 $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $sheet->setCellValue('E' . $dc, $docu['cdds']);
+                $sheet->setCellValue('F' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('G' . $dc, $docu['document']);
                 $dc++;
             }
             // $sheet->fromArray($transfer->doc, NULL, 'A2');

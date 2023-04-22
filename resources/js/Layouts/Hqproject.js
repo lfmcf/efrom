@@ -28,9 +28,9 @@ const Hqproject = (props) => {
 
     const { data, setData, post, processing, errors, clearErrors, reset } = useForm({
         identification: [{product: "", procedure_type: "", country: [], application_stage: "", rms: "", procedure_num: "", local_tradename: ""}],
-        variation: [{product: "",country:"",variation_title: "",category: "", variation_type: "", submission_type: "", application_number: "", submission_number: "", submission_format: "", variation_reason: ""}],
-        statuses: [{product: "",country:"",status: "", status_date: '', ectd: "", control: "", cdds: "", remarks: "", local_implementation: '', implimentation_deadline: '', actual_implementation: ''}],
-        doc: [{document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: ''}],
+        variation: [{product: "",country:"",variation_title: "", variation_type: "", application_number: "", submission_number: "", submission_format: "", variation_reason: "", control: ""}],
+        statuses: [{product: "",country:"",status: "", status_date: '', ectd: "", control: "",  remarks: "", local_implementation: '', implimentation_deadline: '', actual_implementation: ''}],
+        doc: [{document_type: '', document_title: '', language: '', version_date: '', cdds: '', dremarks: '', document: ''}],
         isHq: true,
         created_by: props.user.id,
     });
@@ -110,13 +110,13 @@ const Hqproject = (props) => {
 
     let addVariationFields = () => {
         let arr = {...data};
-        arr.variation.push({product: "",country:"",variation_title: "",category: "", variation_type: "", submission_type: "", application_number: "", submission_number: "", submission_format: "", variation_reason: ""});
+        arr.variation.push({product: "",country:"",variation_title: "", variation_type: "", application_number: "", submission_number: "", submission_format: "", variation_reason: "", control:""});
         setData(arr);
     }
 
     let addStatusFields = () => {
         let arr = {...data};
-        arr.statuses.push({product: "",country:"",status: "", status_date: '', ectd: "", control: "", cdds: "", remarks: "", local_implementation: '', implimentation_deadline: '', actual_implementation: ''});
+        arr.statuses.push({product: "",country:"",status: "", status_date: '', ectd: "", control: "", remarks: "", local_implementation: '', implimentation_deadline: '', actual_implementation: ''});
         setData(arr);
     }
 
@@ -140,7 +140,7 @@ const Hqproject = (props) => {
 
     let addFormFields = () => {
         let arr = {...data};
-        arr.doc.push({document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: ''});
+        arr.doc.push({document_type: '', document_title: '', language: '', version_date: '', cdds: '', dremarks: '', document: ''});
         setData(arr);
     }
 
@@ -252,7 +252,7 @@ const Hqproject = (props) => {
         }
         let l = data.variation.length
         for (let i = 0; i <= l; i++) {
-            if (errors['variation.' + i + '.category'] || errors['variation.' + i + '.submission_type'] || errors['variation.' + i + '.variation_title'] || errors['variation.' + i + '.variation_type']) {
+            if (errors['variation.' + i + '.variation_title'] || errors['variation.' + i + '.variation_type']) {
                 setVariationhaserror(true);
                 break;
             } else {
@@ -581,7 +581,7 @@ const Hqproject = (props) => {
                                                     <input type="text" name='variation_title' onChange={(e) => handleVariationChange(index, e)} style={{borderColor : errors['variation.' + index + '.variation_title'] ? 'red' : ''}} value={element.variation_title} />
                                                 </div>
                                             </div>
-                                            <div className="form_group_inline">
+                                            {/* <div className="form_group_inline">
                                                 <span className="form_group_label" style={{color: errors['variation.' + index + '.category'] ? 'red' : ''}}>Variation Category (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
@@ -598,7 +598,7 @@ const Hqproject = (props) => {
                                                         value={element.category}
                                                     />
                                                 </div>
-                                            </div>
+                                            </div> */}
                                             <div className="form_group_inline">
                                                 <span className="form_group_label" style={{color: errors['variation.' + index + '.variation_type'] ? 'red' : ''}}>Variation Type (*)</span>
                                                 <div className="form_group_field">
@@ -644,7 +644,7 @@ const Hqproject = (props) => {
                                             </div>
                                         </div>
                                         <div className="inline_form">
-                                            <div className="form_group_inline">
+                                            {/* <div className="form_group_inline">
                                                 <span className="form_group_label" style={{color: errors['variation.' + index + '.submission_type'] ? 'red' : ''}}>Submission Type (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
@@ -663,9 +663,9 @@ const Hqproject = (props) => {
                                                     />
                                                 </div>
                                                 
-                                            </div>
+                                            </div> */}
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Applcation N°</span>
+                                                <span className="form_group_label">Application N°</span>
                                                 <div className="form_group_field">
                                                     <input type="text" name='application_number' onChange={(e) => handleVariationChange(index, e)} value={element.application_number} />
                                                 </div>
@@ -696,7 +696,12 @@ const Hqproject = (props) => {
                                                     />
                                                 </div>
                                             </div>
-
+                                            <div className="form_group_inline">
+                                                <span className="form_group_label">Change Control or pre-assessment</span>
+                                                <div className="form_group_field">
+                                                    <input type="text" name="control" onChange={e => handleVariationChange(index, e)} value={element.control} />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -711,7 +716,7 @@ const Hqproject = (props) => {
 
                             {data.statuses.map((element, index) => (
                                 <fieldset key={index}>
-                                    <legend>Statut {index + 1}</legend>
+                                    <legend>Status {index + 1}</legend>
                                     <div >
                                         {index > 0 ?
                                             <div style={{ display: 'flex', justifyContent: 'end' }}>
@@ -769,7 +774,7 @@ const Hqproject = (props) => {
                                         </div>
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label" style={{color: errors['statuses.' + index + '.status'] ? 'red' : ''}}>Status</span>
+                                                <span className="form_group_label" style={{color: errors['statuses.' + index + '.status'] ? 'red' : ''}}>Status (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={status}
                                                         onChange={(e) => handleStatusSelectChange(index, e, 'status')}
@@ -797,26 +802,7 @@ const Hqproject = (props) => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="inline_form">
-                                            <div className="form_group_inline">
-                                                <span className="form_group_label">Change Control or pre-assessment</span>
-                                                <div className="form_group_field">
-                                                    <input type="text" name="control" onChange={e => handleStatusChange(index, e)} value={element.control} />
-                                                </div>
-                                            </div>
-                                            <div className="form_group_inline">
-                                                <span className="form_group_label">CCDS/Core PIL ref n°</span>
-                                                <div className="form_group_field">
-                                                    <input type="text" name="cdds" onChange={e => handleStatusChange(index, e)} value={element.cdds} />
-                                                </div>
-                                            </div>
-                                            <div className="form_group_inline">
-                                                <span className="form_group_label">Remarks</span>
-                                                <div className="form_group_field">
-                                                    <input type="text" name="remarks" onChange={e => handleStatusChange(index, e)} value={element.remarks} />
-                                                </div>
-                                            </div>
-                                        </div>
+                                       
                                         <div className="inline_form">
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Planned Local implementation Date</span>
@@ -835,6 +821,21 @@ const Hqproject = (props) => {
                                                 <div className="form_group_field">
                                                     <DatePicker name="actual_implementation" selected={data.statuses[index].actual_implementation} onChange={(date) => handleDateChange(index, 'actual_implementation', date)} value={element.actual_implementation ? moment(element.actual_implementation).format('DD-MMM-yy') : ''} />
                                                     {/* <input type="text" name="actual_implementation" onChange={e => handleStatusChange(index, e)} /> */}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="inline_form">
+                                            
+                                            {/* <div className="form_group_inline">
+                                                <span className="form_group_label">CCDS/Core PIL ref n°</span>
+                                                <div className="form_group_field">
+                                                    <input type="text" name="cdds" onChange={e => handleStatusChange(index, e)} value={element.cdds} />
+                                                </div>
+                                            </div> */}
+                                            <div className="form_group_inline">
+                                                <span className="form_group_label">Status note</span>
+                                                <div className="form_group_field">
+                                                    <input type="text" name="remarks" onChange={e => handleStatusChange(index, e)} value={element.remarks} />
                                                 </div>
                                             </div>
                                         </div>

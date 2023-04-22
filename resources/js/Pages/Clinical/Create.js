@@ -47,6 +47,7 @@ const Create = (props) => {
         registration_alternate_number: '',
         registration_number: '',
         registration_date: '',
+        change_control_ref: '',
         medicines_regulatory_authority : '',
         remarks: '',
         authorized_pharmaceutical_form: '',
@@ -74,8 +75,8 @@ const Create = (props) => {
         indication: [],
         // paediatric_use: '',
         manufacturing: [{ manufacturer: '', operation_type: [] }],
-        statuses: [{ country: '', status: '', status_date: '', ectd_sequence: '', change_control_ref: '', internal_submission_reference: '', remarks: '' }],
-        doc: [{ document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: '' }],
+        statuses: [{ country: '', status: '', status_date: '', ectd_sequence: '', internal_submission_reference: '', remarks: '' }],
+        doc: [{ document_type: '', document_title: '', language: '', version_date: '', cdds: '', dremarks: '', document: '' }],
         created_by: props.auth.user.id,
     });
 
@@ -206,7 +207,7 @@ const Create = (props) => {
 
     let addStatusesFields = () => {
         let newArr = { ...data };
-        newArr.statuses.push({ country: '', status: '', status_date: '', ectd_sequence: '', change_control_ref: '', internal_submission_reference: '', remarks: '' });
+        newArr.statuses.push({ country: '', status: '', status_date: '', ectd_sequence: '', internal_submission_reference: '', remarks: '' });
         setData(newArr);
     }
 
@@ -237,7 +238,7 @@ const Create = (props) => {
 
     let addFormFields = () => {
         let arr = { ...data };
-        arr.doc.push({ document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: '' });
+        arr.doc.push({ document_type: '', document_title: '', language: '', version_date: '', cdds: '', dremarks: '', document: '' });
         setData(arr);
     }
 
@@ -914,7 +915,7 @@ const Create = (props) => {
                                                     <Select options={[
                                                         {label: 'EudraCT', value: 'EudraCT'},
                                                         {label: 'IND number', value: 'IND number'},
-                                                        {label: 'registration number ', value: 'registration number '},
+                                                        {label: 'Registration number ', value: 'Registration number '},
                                                         {label: 'Sponsor study report number', value: 'Sponsor study report number'},
                                                         {label: 'ClinicalTrials.gov Identifier', value: 'ClinicalTrials.gov Identifier'},
                                                         {label: 'UTN', value: 'UTN'},
@@ -953,6 +954,12 @@ const Create = (props) => {
                                                 <span className="form_group_label">Registration Date</span>
                                                 <div className="form_group_field">
                                                     <DatePicker selected={data.registration_date} name="registration_date" onChange={(date) => handleRegistrationDateChange(date)} value={data.registration_date ? moment(data.registration_date).format('DD-MMM-yy') : ''} />
+                                                </div>
+                                            </div>
+                                            <div className="form_group_inline">
+                                                <span className="form_group_label">Change Control Ref</span>
+                                                <div className="form_group_field">
+                                                    <input type="text" name="change_control_ref" onChange={handleChange} value={data.change_control_ref} />
                                                 </div>
                                             </div>
                                         </div>
@@ -1001,6 +1008,8 @@ const Create = (props) => {
                                                     />
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div className='inline_form'>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label" style={{color: errors.route_of_admin ? 'red' : ''}}>Route Of Admin (*)</span>
                                                 <div className="form_group_field">
@@ -1723,25 +1732,7 @@ const Create = (props) => {
                                                         <span className="form_group_label" style={{color: errors['statuses.' + index + '.status'] ? 'red' : ''}}>Status (*)</span>
                                                         <div className="form_group_field">
                                                             
-                                                            <Select options={[
-                                                                { label: 'Application / Submitted', value: 'Application / Submitted' },
-                                                                { label: 'Positive Opinion / Obtained', value: 'Positive Opinion / Obtained' },
-                                                                { label: 'Approval / Obtained', value: 'Approval / Obtained' },
-                                                                { label: 'Application / Rejected', value: 'Application / Rejected' },
-                                                                { label: 'Application / Withdrawn by MAH not due Safety/Efficacy', value: 'Application / Withdrawn by MAH not due Safety/Efficacy' },
-                                                                { label: 'Study / Start Date Submitted', value: 'Study / Start Date Submitted' },
-                                                                { label: 'Study / End Date Submitted', value: 'Study / End Date Submitted' },
-                                                                { label: 'Study / Results Submitted', value: 'Study / Results Submitted' },
-                                                                { label: 'Application / Dispatch to local RA', value: 'Application / Dispatch to local RA' },
-                                                                { label: 'Application / Validated', value: 'Application / Validated' },
-                                                                { label: 'Application / Dispatch Planned', value: 'Application / Dispatch Planned' },
-                                                                { label: 'Application / Submission Planned', value: 'Application / Submission Planned' },
-                                                                { label: 'Application / Approval Expected', value: 'Application / Approval Expected' },
-                                                                { label: 'Application/ End of Procedure', value: 'Application/ End of Procedure' },
-                                                                { label: 'Dossier Initial Submission - submitted', value: 'Dossier Initial Submission - submitted' },
-                                                                { label: 'Assesment report -  received', value: 'Assesment report -  received' },
-                                                                { label: 'Conditional Approval - obtained', value: 'Conditional Approval - obtained' },
-                                                            ]}
+                                                            <Select options={status}
                                                                 name='status'
                                                                 onChange={(selectedOption, name) => handleStatusSelectChange(selectedOption, name, index)}
                                                                 className="basic"
@@ -1767,14 +1758,6 @@ const Create = (props) => {
                                                             <input type="text" name="ectd_sequence" onChange={(e) => handleStatusesChange(index, e)} value={element.ectd_sequence} />
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div className="inline_form">
-                                                    <div className="form_group_inline">
-                                                        <span className="form_group_label">Change Control Ref</span>
-                                                        <div className="form_group_field">
-                                                            <input type="text" name="change_control_ref" onChange={(e) => handleStatusesChange(index, e)} value={element.change_control_ref} />
-                                                        </div>
-                                                    </div>
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label">Internal Submission Reference</span>
                                                         <div className="form_group_field">
@@ -1783,7 +1766,7 @@ const Create = (props) => {
                                                     </div>
                                                 </div>
                                                 <div className="form_group_inline">
-                                                    <span className="form_group_label">Remarks</span>
+                                                    <span className="form_group_label">Status note</span>
                                                     <div className="form_group_field">
                                                         <input type="text" name="remarks" onChange={(e) => handleStatusesChange(index, e)} value={element.remarks} />
                                                     </div>

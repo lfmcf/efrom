@@ -90,8 +90,9 @@ class RegistrationTerminationController extends Controller
         $crt->local_tradename = $request->local_tradename;
         $crt->product_type = $request->product_type;
         $crt->description = $request->description;
-        $crt->rttype = $request->rttype;
+        // $crt->rttype = $request->rttype;
         $crt->reason = $request->reason;
+        $crt->control = $request->control;
         $crt->remarks = $request->remarks;
         $crt->statuses = $request->statuses;
         $crt->doc = $docs;
@@ -112,8 +113,9 @@ class RegistrationTerminationController extends Controller
             );
             $details = array(
                 'Description of the event',
-                'Registration Termination Type',
+                //'Registration Termination Type',
                 'Reason of the event',
+                'Change Control or pre-assessment',
                 'Remarks'
             );
             $status = array(
@@ -121,8 +123,8 @@ class RegistrationTerminationController extends Controller
                 'Status',
                 'Status Date',
                 'eCTD sequence',
-                'Change Control or pre-assessment',
-                'CCDS/Core PIL ref n°',
+                // 'Change Control or pre-assessment',
+                // 'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Effective internal implementation date',
                 'Implementation Deadline of deadline for answer',
@@ -133,6 +135,7 @@ class RegistrationTerminationController extends Controller
                 'Document title',
                 'Language',
                 'Version date',
+                'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Document'
             );
@@ -170,8 +173,9 @@ class RegistrationTerminationController extends Controller
             $sheet->fromArray($details, NULL, 'A1');
             $sheet->fromArray([
                 $crt->description,
-                is_array($crt->type) ? $crt->type['value'] : '',
+                // is_array($crt->type) ? $crt->type['value'] : '',
                 $crt->reason ? $crt->reason['value'] : '',
+                $crt->control,
                 $crt->remarks
             ], NULL, 'A2');
 
@@ -187,12 +191,12 @@ class RegistrationTerminationController extends Controller
                 $sheet->setCellValue('B' . $st, $stt['status']['value']);
                 $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
                 $sheet->setCellValue('D' . $st, $stt['ectd']);
-                $sheet->setCellValue('E' . $st, $stt['control']);
-                $sheet->setCellValue('F' . $st, $stt['cdds']);
-                $sheet->setCellValue('G' . $st, $stt['remarks']);
-                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_date'])));
-                $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
-                $sheet->setCellValue('J' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
+                // $sheet->setCellValue('E' . $st, $stt['control']);
+                // $sheet->setCellValue('F' . $st, $stt['cdds']);
+                $sheet->setCellValue('E' . $st, $stt['remarks']);
+                $sheet->setCellValue('F' . $st, date("d-m-Y", strtotime($stt['implimentation_date'])));
+                $sheet->setCellValue('G' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
+                $sheet->setCellValue('H' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
                 $st++;
             }
 
@@ -208,8 +212,9 @@ class RegistrationTerminationController extends Controller
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
                 $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
                 $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $sheet->setCellValue('E' . $dc, $docu['cdds']);
+                $sheet->setCellValue('F' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('G' . $dc, $docu['document']);
                 $dc++;
             }
             // $sheet->fromArray($crt->doc, NULL, 'A2');
@@ -322,8 +327,9 @@ class RegistrationTerminationController extends Controller
         $crt->local_tradename = $request->local_tradename;
         $crt->product_type = $request->product_type;
         $crt->description = $request->description;
-        $crt->rttype = $request->rttype;
+        // $crt->rttype = $request->rttype;
         $crt->reason = $request->reason;
+        $crt->control = $request->control;
         $crt->remarks = $request->remarks;
         $crt->statuses = $request->statuses;
         $crt->doc = $docs;
@@ -344,8 +350,9 @@ class RegistrationTerminationController extends Controller
             );
             $details = array(
                 'Description of the event',
-                'Registration Termination Type',
+                // 'Registration Termination Type',
                 'Reason of the event',
+                'Change Control or pre-assessment',
                 'Remarks'
             );
             $status = array(
@@ -353,8 +360,8 @@ class RegistrationTerminationController extends Controller
                 'Status',
                 'Status Date',
                 'eCTD sequence',
-                'Change Control or pre-assessment',
-                'CCDS/Core PIL ref n°',
+                // 'Change Control or pre-assessment',
+                // 'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Effective internal implementation date',
                 'Implementation Deadline of deadline for answer',
@@ -365,6 +372,7 @@ class RegistrationTerminationController extends Controller
                 'Document title',
                 'Language',
                 'Version date',
+                'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Document'
             );
@@ -402,8 +410,9 @@ class RegistrationTerminationController extends Controller
             $sheet->fromArray($details, NULL, 'A1');
             $sheet->fromArray([
                 $crt->description,
-                $crt->type ? $crt->type['value'] : '',
+                // $crt->type ? $crt->type['value'] : '',
                 $crt->reason ? $crt->reason['value'] : '',
+                $crt->control,
                 $crt->remarks
             ], NULL, 'A2');
 
@@ -419,12 +428,12 @@ class RegistrationTerminationController extends Controller
                 $sheet->setCellValue('B' . $st, $stt['status']['value']);
                 $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
                 $sheet->setCellValue('D' . $st, $stt['ectd']);
-                $sheet->setCellValue('E' . $st, $stt['control']);
-                $sheet->setCellValue('F' . $st, $stt['cdds']);
-                $sheet->setCellValue('G' . $st, $stt['remarks']);
-                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_deadline'])));
-                $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
-                $sheet->setCellValue('J' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
+                // $sheet->setCellValue('E' . $st, $stt['control']);
+                // $sheet->setCellValue('F' . $st, $stt['cdds']);
+                $sheet->setCellValue('E' . $st, $stt['remarks']);
+                $sheet->setCellValue('F' . $st, date("d-m-Y", strtotime($stt['implimentation_deadline'])));
+                $sheet->setCellValue('G' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
+                $sheet->setCellValue('H' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
                 $st++;
             }
 
@@ -440,8 +449,9 @@ class RegistrationTerminationController extends Controller
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
                 $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
                 $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $sheet->setCellValue('E' . $dc, $docu['cdds']);
+                $sheet->setCellValue('F' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('G' . $dc, $docu['document']);
                 $dc++;
             }
             // $sheet->fromArray($crt->doc, NULL, 'A2');

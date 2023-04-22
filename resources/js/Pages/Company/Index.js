@@ -32,7 +32,7 @@ const Index = (props) => {
         <>
             <div className="row">
                 <div className="col-md-12">
-                    <h3 className="page-title">New Company</h3>
+                    <h3 className="page-title">MA - Company Registration</h3>
                 </div>
             </div>
             <div className="row">

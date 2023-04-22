@@ -6,6 +6,7 @@ import Select from 'react-select';
 import { Tooltip } from '@mui/material';
 import moment from 'moment';
 import { usePage } from '@inertiajs/inertia-react';
+import InfoIcon from '@mui/icons-material/Info';
 
 const Documents = ({ handleChanged, handleDocumentdate, addFormFields, formValues, removeDocumentsFields, handleDocumentSelectChange }) => {
     const { lang } = usePage().props
@@ -58,8 +59,8 @@ const Documents = ({ handleChanged, handleDocumentdate, addFormFields, formValue
                                                 {label: 'Patient Information Leaflet', value: 'Patient Information Leaflet'},
                                                 {label: 'Proof of submission', value: 'Proof of submission'},
                                                 {label: 'Protocol', value: 'Protocol'},
-                                                {label: 'Regulatory Decision Document', value: 'Regulatory Decision Document'},
                                                 {label: 'Questions', value: 'Questions'},
+                                                {label: 'Regulatory Decision Document', value: 'Regulatory Decision Document'},
                                                 {label: 'SMPC', value: 'SMPC'},
                                             ]}
                                                 onChange={(selectedOption, name) => handleDocumentSelectChange(selectedOption, name, index)}
@@ -101,22 +102,35 @@ const Documents = ({ handleChanged, handleDocumentdate, addFormFields, formValue
                                         </div>
                                     </div>
                                 </div>
+
                                 <div className="inline_form">
+
                                     <div className="form_group_inline">
-                                        <Tooltip arrow title="for product Information like SmPC, PIL, Mock-up please provide internal reference">
-                                            <span className="form_group_label">Remarks</span>
+                                        <Tooltip arrow title="for SmPC or PIL approved only. please note that only approved and finalized Product Information (PI) is to be provided like approved SmPC, PIL and labels. Do not add submitted PI">
+                                            <span className="form_group_label">CCDS/Core PIL ref n° <InfoIcon fontSize='small' /></span>
                                         </Tooltip>
-                                        
                                         <div className="form_group_field">
-                                            <input type="text" name="dremarks" onChange={e => handleChanged(index, e)} value={element.dremarks} />
+                                            <input type="text" name="cdds" onChange={e => handleChanged(index, e)} value={element.cdds} />
                                         </div>
                                     </div>
+
                                     <div className="form_group_inline">
                                         <span className="form_group_label">Document</span>
                                         <div className="form_group_field">
                                             <input type="file" name="document" style={{ paddingTop: '2.5px' }} onChange={e => handleChanged(index, e)} />
                                         </div>
                                     </div>
+                                </div>
+
+                                <div className="form_group_inline">
+                                    <Tooltip arrow title="for product Information like SmPC, PIL, Mock-up please provide internal reference">
+                                        <span className="form_group_label">Remarks <InfoIcon fontSize='small' /></span>
+                                    </Tooltip>
+
+                                    <div className="form_group_field">
+                                        <input type="text" name="dremarks" onChange={e => handleChanged(index, e)} value={element.dremarks} />
+                                    </div>
+
                                 </div>
                             </div>
                         </fieldset>

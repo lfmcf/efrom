@@ -84,6 +84,7 @@ class ClinicalController extends Controller
         $clinical->registration_alternate_number = $request->registration_alternate_number;
         $clinical->registration_number = $request->registration_number;
         $clinical->registration_date = $request->registration_date;
+        $clinical->change_control_ref = $request->change_control_ref;
         $clinical->medicines_regulatory_authority = $request->medicines_regulatory_authority;
         $clinical->remarks = $request->remarks;
         $clinical->authorized_pharmaceutical_form = $request->authorized_pharmaceutical_form;
@@ -128,6 +129,7 @@ class ClinicalController extends Controller
                 'Registration number type',
                 'Registration number',
                 'Registration Date',
+                'Change Control Ref',
                 'Remarks',
             );
             $dosageForm = array(
@@ -189,7 +191,7 @@ class ClinicalController extends Controller
                 'Status',
                 'Status Date',
                 'eCTD Sequence',
-                'Change Control Ref',
+                // 'Change Control Ref',
                 'Internal Submission Reference',
                 'Remarks',
             );
@@ -198,6 +200,7 @@ class ClinicalController extends Controller
                 'Document title',
                 'Language',
                 'Version date',
+                'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Document'
             );
@@ -247,6 +250,7 @@ class ClinicalController extends Controller
                 $clinical->registration_alternate_number ? $clinical->registration_alternate_number['value'] : '',
                 $clinical->registration_number,
                 $clinical->registration_date,
+                $clinical->change_control_ref,
                 $clinical->remarks,
             ], NULL, 'A2');
 
@@ -410,7 +414,7 @@ class ClinicalController extends Controller
                 $sheet->setCellValue('B' . $st, is_array($stt['status']) ? $stt['status']['value'] : '');
                 $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
                 $sheet->setCellValue('D' . $st, $stt['ectd_sequence']);
-                $sheet->setCellValue('E' . $st, $stt['change_control_ref']);
+                // $sheet->setCellValue('E' . $st, $stt['change_control_ref']);
                 $sheet->setCellValue('F' . $st, $stt['internal_submission_reference']);
                 $sheet->setCellValue('G' . $st, $stt['remarks']);
                 $st++;
@@ -428,8 +432,9 @@ class ClinicalController extends Controller
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
                 $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
                 $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $sheet->setCellValue('E' . $dc, $docu['cdds']);
+                $sheet->setCellValue('F' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('G' . $dc, $docu['document']);
                 $dc++;
             }
 
@@ -570,6 +575,7 @@ class ClinicalController extends Controller
         $clinical->registration_alternate_number = $request->registration_alternate_number;
         $clinical->registration_number = $request->registration_number;
         $clinical->registration_date = $request->registration_date;
+        $clinical->change_control_ref = $request->change_control_ref;
         $clinical->medicines_regulatory_authority = $request->medicines_regulatory_authority;
         $clinical->remarks = $request->remarks;
         $clinical->authorized_pharmaceutical_form = $request->authorized_pharmaceutical_form;
@@ -617,6 +623,7 @@ class ClinicalController extends Controller
                 'Registration number type',
                 'Registration number',
                 'Registration Date',
+                'Change Control Ref',
                 'Remarks',
             );
             $dosageForm = array(
@@ -678,7 +685,7 @@ class ClinicalController extends Controller
                 'Status',
                 'Status Date',
                 'eCTD Sequence',
-                'Change Control Ref',
+                // 'Change Control Ref',
                 'Internal Submission Reference',
                 'Remarks',
             );
@@ -687,6 +694,7 @@ class ClinicalController extends Controller
                 'Document title',
                 'Language',
                 'Version date',
+                'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Document'
             );
@@ -736,6 +744,7 @@ class ClinicalController extends Controller
                 $clinical->registration_alternate_number ? $clinical->registration_alternate_number['value'] : '',
                 $clinical->registration_number,
                 $clinical->registration_date,
+                $clinical->change_control_ref,
                 // $clinical->medicines_regulatory_authority,
                 $clinical->remarks,
             ], NULL, 'A2');
@@ -899,7 +908,7 @@ class ClinicalController extends Controller
                 $sheet->setCellValue('B' . $st, is_array($stt['status']) ? $stt['status']['value'] : '');
                 $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
                 $sheet->setCellValue('D' . $st, $stt['ectd_sequence']);
-                $sheet->setCellValue('E' . $st, $stt['change_control_ref']);
+                // $sheet->setCellValue('E' . $st, $stt['change_control_ref']);
                 $sheet->setCellValue('F' . $st, $stt['internal_submission_reference']);
                 $sheet->setCellValue('G' . $st, $stt['remarks']);
                 $st++;
@@ -917,8 +926,9 @@ class ClinicalController extends Controller
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
                 $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
                 $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $sheet->setCellValue('E' . $dc, $docu['cdds']);
+                $sheet->setCellValue('F' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('G' . $dc, $docu['document']);
                 $dc++;
             }
 
