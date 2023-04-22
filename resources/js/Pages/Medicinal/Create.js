@@ -75,6 +75,7 @@ const Create = (props) => {
         dossier_reference: '',
         pv_contact_email: '',
         pv_contact_phone: '',
+        change_control_ref: '',
         bremarks: '',
         authorized_pharmaceutical_form: '',
         administrable_pharmaceutical_form: '',
@@ -103,11 +104,11 @@ const Create = (props) => {
         manufacturing: [{ manufacturer: '', operation_type: [] }],
         interaction_remarks: '',
         commitment_remarks: '',
-        statuses: [{ country: '', status: '', status_date: '', ectd_sequence: '', change_control_ref: '', internal_submission_reference: '', remarks: '' }],
+        statuses: [{ country: '', status: '', status_date: '', ectd_sequence: '', internal_submission_reference: '', remarks: '' }],
         next_renewals: '',
         nr_submission_deadline :'',
         nr_date: '',
-        doc: [{ document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: '' }],
+        doc: [{ document_type: '', document_title: '', language: '', version_date: '', cdds: '', dremarks: '', document: '' }],
         created_by: props.auth.user.id,
     });
 
@@ -178,7 +179,7 @@ const Create = (props) => {
 
     let addFormFields = () => {
         let arr = { ...data };
-        arr.doc.push({ document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: '' });
+        arr.doc.push({ document_type: '', document_title: '', language: '', version_date: '', cdds: '', dremarks: '', document: '' });
         setData(arr);
     }
 
@@ -257,7 +258,7 @@ const Create = (props) => {
 
     let addStatusesFields = () => {
         let newArr = { ...data };
-        newArr.statuses.push({ country: '', status: '', status_date: '', ectd_sequence: '', change_control_ref: '', internal_submission_reference: '', remarks: '' });
+        newArr.statuses.push({ country: '', status: '', status_date: '', ectd_sequence: '', internal_submission_reference: '', remarks: '' });
         setData(newArr);
     }
 
@@ -692,6 +693,12 @@ const Create = (props) => {
                                                 <span className="form_group_label">PV Contact Phone</span>
                                                 <div className="form_group_field">
                                                     <input type="text" name="pv_contact_phone" onChange={handleChange} value={data.pv_contact_phone} />
+                                                </div>
+                                            </div>
+                                            <div className="form_group_inline">
+                                                <span className="form_group_label">Change Control Ref</span>
+                                                <div className="form_group_field">
+                                                    <input type="text" name="change_control_ref" onChange={handleChange} value={data.change_control_ref} />
                                                 </div>
                                             </div>
                                         </div>
@@ -1565,14 +1572,6 @@ const Create = (props) => {
                                                                 <input type="text" name="ectd_sequence" onChange={(e) => handleStatusesChange(index, e)} value={data.statuses[index].ectd_sequence} />
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div className="inline_form">
-                                                        <div className="form_group_inline">
-                                                            <span className="form_group_label">Change Control Ref</span>
-                                                            <div className="form_group_field">
-                                                                <input type="text" name="change_control_ref" onChange={(e) => handleStatusesChange(index, e)} value={data.statuses[index].change_control_ref} />
-                                                            </div>
-                                                        </div>
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Internal Submission Reference</span>
                                                             <div className="form_group_field">
@@ -1580,8 +1579,9 @@ const Create = (props) => {
                                                             </div>
                                                         </div>
                                                     </div>
+                                                   
                                                     <div className="form_group_inline">
-                                                        <span className="form_group_label">Remarks</span>
+                                                        <span className="form_group_label">Status note</span>
                                                         <div className="form_group_field">
                                                             <input type="text" name="remarks" onChange={(e) => handleStatusesChange(index, e)} value={data.statuses[index].remarks} />
                                                         </div>

@@ -58,10 +58,10 @@ class VariationController extends Controller
                     'identification.*.product' => 'required',
                     'identification.*.procedure_type' => 'required',
                     'identification.*.country' => 'required',
-                    'variation.*.category' => 'required',
+                    // 'variation.*.category' => 'required',
                     'variation.*.variation_type' => 'required',
                     'variation.*.variation_title' => 'required',
-                    'variation.*.submission_type' => 'required',
+                    // 'variation.*.submission_type' => 'required',
                     'statuses.*.status' => 'required',
                     'statuses.*.status_date' => 'required',
                 ]
@@ -119,13 +119,14 @@ class VariationController extends Controller
                 'Product',
                 'Country',
                 'Variation Title',
-                'Variation Category',
+                // 'Variation Category',
                 'Variation Type',
                 'Reason for variation',
-                'Submission Type',
+                // 'Submission Type',
                 'Applcation N°',
                 'Submission/Procedure N°',
-                'Dossier Submission Format'
+                'Dossier Submission Format',
+                'Change Control or pre-assessment',
             );
             $eventStatus = array(
                 'Product',
@@ -133,8 +134,8 @@ class VariationController extends Controller
                 'Status',
                 'Status Date',
                 'eCTD sequence',
-                'Change Control or pre-assessment',
-                'CCDS/Core PIL ref n°',
+                // 'Change Control or pre-assessment',
+                // 'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Planned Local implementation Date',
                 'HA Implimentation Deadline',
@@ -145,6 +146,7 @@ class VariationController extends Controller
                 'Document title',
                 'Language',
                 'Version date',
+                'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Document'
             );
@@ -189,13 +191,14 @@ class VariationController extends Controller
                 $sheet->setCellValue('A' . $d, $vari['product'] ? $vari['product']['value'] : '');
                 $sheet->setCellValue('B' . $d, $vari['country'] ? $vari['country']['value'] : '');
                 $sheet->setCellValue('C' . $d, $vari['variation_title']);
-                $sheet->setCellValue('D' . $d, $vari['category']['value']);
-                $sheet->setCellValue('E' . $d, $vari['variation_type']['value']);
-                $sheet->setCellValue('F' . $d, $vari['variation_reason'] ? $vari['variation_reason']['value']: '');
-                $sheet->setCellValue('G' . $d, $vari['submission_type'] ? $vari['submission_type']['value']: '');
-                $sheet->setCellValue('H' . $d, $vari['application_number']);
-                $sheet->setCellValue('I' . $d, $vari['submission_number']);
-                $sheet->setCellValue('J' . $d, $vari['submission_format'] ? $vari['variation_reason']['value']: '');
+                //$sheet->setCellValue('D' . $d, $vari['category']['value']);
+                $sheet->setCellValue('D' . $d, $vari['variation_type']['value']);
+                $sheet->setCellValue('E' . $d, $vari['variation_reason'] ? $vari['variation_reason']['value']: '');
+                // $sheet->setCellValue('G' . $d, $vari['submission_type'] ? $vari['submission_type']['value']: '');
+                $sheet->setCellValue('F' . $d, $vari['application_number']);
+                $sheet->setCellValue('G' . $d, $vari['submission_number']);
+                $sheet->setCellValue('H' . $d, $vari['submission_format'] ? $vari['variation_reason']['value']: '');
+                $sheet->setCellValue('I' . $d, $vari['control']);
                 $d++;
             }
 
@@ -217,12 +220,12 @@ class VariationController extends Controller
                 $sheet->setCellValue('C' . $s, $st['status'] ? $st['status']['value'] : '');
                 $sheet->setCellValue('D' . $s, date("d-m-Y", strtotime($st['status_date'])));
                 $sheet->setCellValue('E' . $s, $st['ectd']);
-                $sheet->setCellValue('F' . $s, $st['control']);
-                $sheet->setCellValue('G' . $s, $st['cdds']);
-                $sheet->setCellValue('H' . $s, $st['remarks']);
-                $sheet->setCellValue('I' . $s, date("d-m-Y", strtotime($st['local_implementation'])));
-                $sheet->setCellValue('J' . $s, date("d-m-Y", strtotime($st['implimentation_deadline'])));
-                $sheet->setCellValue('K' . $s, date("d-m-Y", strtotime($st['actual_implementation'])));
+                // $sheet->setCellValue('F' . $s, $st['control']);
+                // $sheet->setCellValue('G' . $s, $st['cdds']);
+                $sheet->setCellValue('F' . $s, $st['remarks']);
+                $sheet->setCellValue('G' . $s, date("d-m-Y", strtotime($st['local_implementation'])));
+                $sheet->setCellValue('H' . $s, date("d-m-Y", strtotime($st['implimentation_deadline'])));
+                $sheet->setCellValue('I' . $s, date("d-m-Y", strtotime($st['actual_implementation'])));
                 $s++;
             }
 
@@ -243,8 +246,9 @@ class VariationController extends Controller
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
                 $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
                 $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $sheet->setCellValue('E' . $dc, $docu['cdds']);
+                $sheet->setCellValue('F' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('G' . $dc, $docu['document']);
                 $dc++;
             }
 
@@ -280,9 +284,9 @@ class VariationController extends Controller
                     'procedure_type' => 'required',
                     'country' => 'required',
                     'variation_title' => 'required',
-                    'category' => 'required',
+                    //'category' => 'required',
                     'variation_type' => 'required',
-                    'submission_type' => 'required',
+                    // 'submission_type' => 'required',
                     'statuses.*.status' => 'required',
                     'statuses.*.status_date' => 'required',
                 ]
@@ -324,14 +328,14 @@ class VariationController extends Controller
         // $var->product_type = $request->product_type;
 
         $var->variation_title = $request->variation_title;
-        $var->category = $request->category;
+        //$var->category = $request->category;
         $var->variation_type = $request->variation_type;
-        $var->submission_type = $request->submission_type;
+        //$var->submission_type = $request->submission_type;
         $var->application_number = $request->application_number;
         $var->submission_number = $request->submission_number;
         $var->variation_reason = $request->variation_reason;
         $var->submission_format = $request->submission_format;
-
+        $var->control = $request->control;
         $var->statuses = $request->statuses;
         $var->doc = $docs;
         $var->isHq = $request->isHq;
@@ -351,21 +355,22 @@ class VariationController extends Controller
             );
             $variationDetail = array(
                 'Variation Title',
-                'Variation Category',
+                // 'Variation Category',
                 'Variation Type',
                 'Reason for variation',
-                'Submission Type',
+                // 'Submission Type',
                 'Applcation N°',
                 'Submission/Procedure N°',
                 'Dossier Submission Format',
+                'Change Control or pre-assessment',
             );
             $eventStatus = array(
                 'Country',
                 'Status',
                 'Status Date',
                 'eCTD sequence',
-                'Change Control',
-                'CCDS/Core PIL ref n°',
+                // 'Change Control',
+                // 'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Planned Local implementation Date',
                 'HA Implimentation Deadline',
@@ -376,6 +381,7 @@ class VariationController extends Controller
                 'Document title',
                 'Language',
                 'Version date',
+                'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Document'
             );
@@ -415,13 +421,14 @@ class VariationController extends Controller
 
             $sheet->fromArray([
                 $var->variation_title,
-                $var->category['value'],
+                // $var->category['value'],
                 $var->variation_type['value'],
                 is_array($var->variation_reason) ? $var->variation_reason['value'] : '',
-                is_array($var->submission_type) ? $var->submission_type['value'] : '',
+                // is_array($var->submission_type) ? $var->submission_type['value'] : '',
                 $var->application_number,
                 $var->submission_number,
                 is_array($var->submission_format) ? $var->submission_format['value'] : '',
+                $var->control,
             ], NULL, 'A2');
 
             $spreadsheet->createSheet();
@@ -434,12 +441,12 @@ class VariationController extends Controller
                 $sheet->setCellValue('A' . $st, is_array($stt['status']) ? $stt['status']['value'] : '');
                 $sheet->setCellValue('B' . $st, date("d-m-Y", strtotime($stt['status_date'])));
                 $sheet->setCellValue('C' . $st, $stt['ectd']);
-                $sheet->setCellValue('D' . $st, $stt['control']);
-                $sheet->setCellValue('E' . $st, $stt['cdds']);
-                $sheet->setCellValue('F' . $st, $stt['remarks']);
-                $sheet->setCellValue('G' . $st, date("d-m-Y", strtotime($stt['local_implementation'])));
-                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_deadline'])));
-                $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['actual_implementation'])));
+                // $sheet->setCellValue('D' . $st, $stt['control']);
+                // $sheet->setCellValue('E' . $st, $stt['cdds']);
+                $sheet->setCellValue('E' . $st, $stt['remarks']);
+                $sheet->setCellValue('F' . $st, date("d-m-Y", strtotime($stt['local_implementation'])));
+                $sheet->setCellValue('G' . $st, date("d-m-Y", strtotime($stt['implimentation_deadline'])));
+                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['actual_implementation'])));
                 $st++;
             }
             // $sheet->fromArray($var->statuses, NULL, 'A2');
@@ -460,8 +467,9 @@ class VariationController extends Controller
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
                 $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
                 $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $sheet->setCellValue('E' . $dc, $docu['cdds']);
+                $sheet->setCellValue('F' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('G' . $dc, $docu['document']);
                 $dc++;
             }
             // $sheet->fromArray($var->doc, NULL, 'A2');
@@ -548,9 +556,9 @@ class VariationController extends Controller
                     'procedure_type' => 'required',
                     'country' => 'required',
                     'variation_title' => 'required',
-                    'category' => 'required',
+                    //'category' => 'required',
                     'variation_type' => 'required',
-                    'submission_type' => 'required',
+                    // 'submission_type' => 'required',
                     'statuses.*.status' => 'required',
                     'statuses.*.status_date' => 'required',
                 ]
@@ -592,14 +600,14 @@ class VariationController extends Controller
         // $var->product_type = $request->product_type;
 
         $var->variation_title = $request->variation_title;
-        $var->category = $request->category;
+        //$var->category = $request->category;
         $var->variation_type = $request->variation_type;
-        $var->submission_type = $request->submission_type;
+        // $var->submission_type = $request->submission_type;
         $var->application_number = $request->application_number;
         $var->submission_number = $request->submission_number;
         $var->variation_reason = $request->variation_reason;
         $var->submission_format = $request->submission_format;
-
+        $var->control = $request->control;
         $var->statuses = $request->statuses;
         $var->doc = $docs;
         $var->isHq = $request->isHq;
@@ -619,21 +627,22 @@ class VariationController extends Controller
             );
             $variationDetail = array(
                 'Variation Title',
-                'Variation Category',
+                // 'Variation Category',
                 'Variation Type',
                 'Reason for variation',
-                'Submission Type',
+                // 'Submission Type',
                 'Applcation N°',
                 'Submission/Procedure N°',
                 'Dossier Submission Format',
+                'Change Control or pre-assessment',
             );
             $eventStatus = array(
                 'Country',
                 'Status',
                 'Status Date',
                 'eCTD sequence',
-                'Change Control',
-                'CCDS/Core PIL ref n°',
+                // 'Change Control',
+                // 'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Planned Local implementation Date',
                 'HA Implimentation Deadline',
@@ -644,6 +653,7 @@ class VariationController extends Controller
                 'Document title',
                 'Language',
                 'Version date',
+                'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Document'
             );
@@ -683,13 +693,14 @@ class VariationController extends Controller
 
             $sheet->fromArray([
                 $var->variation_title,
-                $var->category['value'],
+                // $var->category['value'],
                 $var->variation_type['value'],
                 is_array($var->variation_reason) ? $var->variation_reason['value'] : '',
-                is_array($var->submission_type) ? $var->submission_type['value'] : '',
+                // is_array($var->submission_type) ? $var->submission_type['value'] : '',
                 $var->application_number,
                 $var->submission_number,
                 is_array($var->submission_format) ? $var->submission_format['value'] : '',
+                $var->control,
             ], NULL, 'A2');
 
             $spreadsheet->createSheet();
@@ -702,12 +713,12 @@ class VariationController extends Controller
                 $sheet->setCellValue('A' . $st, is_array($stt['status']) ? $stt['status']['value'] : '');
                 $sheet->setCellValue('B' . $st, date("d-m-Y", strtotime($stt['status_date'])));
                 $sheet->setCellValue('C' . $st, $stt['ectd']);
-                $sheet->setCellValue('D' . $st, $stt['control']);
-                $sheet->setCellValue('E' . $st, $stt['cdds']);
-                $sheet->setCellValue('F' . $st, $stt['remarks']);
-                $sheet->setCellValue('G' . $st, date("d-m-Y", strtotime($stt['local_implementation'])));
-                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_deadline'])));
-                $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['actual_implementation'])));
+                // $sheet->setCellValue('D' . $st, $stt['control']);
+                // $sheet->setCellValue('E' . $st, $stt['cdds']);
+                $sheet->setCellValue('E' . $st, $stt['remarks']);
+                $sheet->setCellValue('F' . $st, date("d-m-Y", strtotime($stt['local_implementation'])));
+                $sheet->setCellValue('G' . $st, date("d-m-Y", strtotime($stt['implimentation_deadline'])));
+                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['actual_implementation'])));
                 $st++;
             }
             // $sheet->fromArray($var->statuses, NULL, 'A2');
@@ -728,8 +739,9 @@ class VariationController extends Controller
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
                 $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
                 $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $sheet->setCellValue('E' . $dc, $docu['cdds']);
+                $sheet->setCellValue('F' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('G' . $dc, $docu['document']);
                 $dc++;
             }
 
@@ -773,10 +785,10 @@ class VariationController extends Controller
                     'identification.*.product' => 'required',
                     'identification.*.procedure_type' => 'required',
                     'identification.*.country' => 'required',
-                    'variation.*.category' => 'required',
+                    // 'variation.*.category' => 'required',
                     'variation.*.variation_type' => 'required',
                     'variation.*.variation_title' => 'required',
-                    'variation.*.submission_type' => 'required',
+                    // 'variation.*.submission_type' => 'required',
                     'statuses.*.status' => 'required',
                     'statuses.*.status_date' => 'required',
                 ]
@@ -834,13 +846,14 @@ class VariationController extends Controller
                 'Product',
                 'Country',
                 'Variation Title',
-                'Variation Category',
+                // 'Variation Category',
                 'Variation Type',
                 'Reason for variation',
                 'Submission Type',
                 'Applcation N°',
                 'Submission/Procedure N°',
-                'Dossier Submission Format'
+                'Dossier Submission Format',
+                'Change Control or pre-assessment',
             );
             $eventStatus = array(
                 'Product',
@@ -848,8 +861,8 @@ class VariationController extends Controller
                 'Status',
                 'Status Date',
                 'eCTD sequence',
-                'Change Control or pre-assessment',
-                'CCDS/Core PIL ref n°',
+                // 'Change Control or pre-assessment',
+                // 'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Planned Local implementation Date',
                 'HA Implimentation Deadline',
@@ -860,6 +873,7 @@ class VariationController extends Controller
                 'Document title',
                 'Language',
                 'Version date',
+                'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Document'
             );
@@ -904,13 +918,14 @@ class VariationController extends Controller
                 $sheet->setCellValue('A' . $d, $vari['product'] ? $vari['product']['value'] : '');
                 $sheet->setCellValue('B' . $d, $vari['country'] ? $vari['country']['value'] : '');
                 $sheet->setCellValue('C' . $d, $vari['variation_title']);
-                $sheet->setCellValue('D' . $d, $vari['category']['value']);
-                $sheet->setCellValue('E' . $d, $vari['variation_type']['value']);
-                $sheet->setCellValue('F' . $d, $vari['variation_reason'] ? $vari['variation_reason']['value']: '');
-                $sheet->setCellValue('G' . $d, $vari['submission_type'] ? $vari['submission_type']['value']: '');
-                $sheet->setCellValue('H' . $d, $vari['application_number']);
-                $sheet->setCellValue('I' . $d, $vari['submission_number']);
-                $sheet->setCellValue('J' . $d, $vari['submission_format'] ? $vari['variation_reason']['value']: '');
+                // $sheet->setCellValue('D' . $d, $vari['category']['value']);
+                $sheet->setCellValue('D' . $d, $vari['variation_type']['value']);
+                $sheet->setCellValue('E' . $d, $vari['variation_reason'] ? $vari['variation_reason']['value']: '');
+                // $sheet->setCellValue('G' . $d, $vari['submission_type'] ? $vari['submission_type']['value']: '');
+                $sheet->setCellValue('F' . $d, $vari['application_number']);
+                $sheet->setCellValue('G' . $d, $vari['submission_number']);
+                $sheet->setCellValue('H' . $d, $vari['submission_format'] ? $vari['variation_reason']['value']: '');
+                $sheet->setCellValue('I' . $d, $vari['control']);
                 $d++;
             }
 
@@ -932,12 +947,12 @@ class VariationController extends Controller
                 $sheet->setCellValue('C' . $s, $st['status'] ? $st['status']['value'] : '');
                 $sheet->setCellValue('D' . $s, date("d-m-Y", strtotime($st['status_date'])));
                 $sheet->setCellValue('E' . $s, $st['ectd']);
-                $sheet->setCellValue('F' . $s, $st['control']);
-                $sheet->setCellValue('G' . $s, $st['cdds']);
-                $sheet->setCellValue('H' . $s, $st['remarks']);
-                $sheet->setCellValue('I' . $s, date("d-m-Y", strtotime($st['local_implementation'])));
-                $sheet->setCellValue('J' . $s, date("d-m-Y", strtotime($st['implimentation_deadline'])));
-                $sheet->setCellValue('K' . $s, date("d-m-Y", strtotime($st['actual_implementation'])));
+                // $sheet->setCellValue('F' . $s, $st['control']);
+                // $sheet->setCellValue('E' . $s, $st['cdds']);
+                $sheet->setCellValue('F' . $s, $st['remarks']);
+                $sheet->setCellValue('G' . $s, date("d-m-Y", strtotime($st['local_implementation'])));
+                $sheet->setCellValue('H' . $s, date("d-m-Y", strtotime($st['implimentation_deadline'])));
+                $sheet->setCellValue('I' . $s, date("d-m-Y", strtotime($st['actual_implementation'])));
                 $s++;
             }
 
@@ -958,8 +973,9 @@ class VariationController extends Controller
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
                 $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
                 $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $sheet->setCellValue('E' . $dc, $docu['cdds']);
+                $sheet->setCellValue('F' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('G' . $dc, $docu['document']);
                 $dc++;
             }
 

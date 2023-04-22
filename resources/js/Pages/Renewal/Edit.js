@@ -45,6 +45,7 @@ const Edit = (props) => {
         application_num: renewal.application_num,
         submission_format: renewal.submission_format,
         validation_reason: renewal.validation_reason,
+        control: renewal.control,
         remarks: renewal.remarks,
         statuses: renewal.statuses,
         doc: renewal.doc,
@@ -80,7 +81,7 @@ const Edit = (props) => {
 
     let addFormFields = () => {
         let arr = { ...data };
-        arr.doc.push({ document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: '' });
+        arr.doc.push({ document_type: '', document_title: '', language: '', version_date: '', cdds: '', dremarks: '', document: '' });
         setData(arr);
     }
 
@@ -91,7 +92,7 @@ const Edit = (props) => {
 
     let addStatusFields = () => {
         let newArr = { ...data };
-        newArr.statuses.push({ country: '', status: '', status_date: '', ectd: '', control: '', cdds: '', remarks: '', implimentation_deadline: '', next_renewals: '', next_renewals_deadline: '', next_renewals_date: '' });
+        newArr.statuses.push({ country: '', status: '', status_date: '', ectd: '', control: '', remarks: '', implimentation_deadline: '', next_renewals: '', next_renewals_deadline: '', next_renewals_date: '' });
         setData(newArr);
     }
 
@@ -445,8 +446,16 @@ const Edit = (props) => {
                                                     <input type="text" name='application_num' onChange={handleChange} value={data.application_num} />
                                                 </div>
                                             </div>
-
                                             <div className="form_group_inline">
+                                                <span className="form_group_label">Change Control or pre-assessment</span>
+                                                <div className="form_group_field">
+                                                    <input type="text" name='control' onChange={handleChange} value={data.control} />
+                                                </div>
+                                            </div>
+                                           
+                                        </div>
+                                        <div className='inline_form'>
+                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Remarks</span>
                                                 <input type="text" name="remarks" onChange={handleChange} value={data.remarks} />
                                             </div>
@@ -462,7 +471,7 @@ const Edit = (props) => {
 
                                         {data.statuses.map((element, index) => (
                                             <fieldset key={index}>
-                                                <legend>Statut {index + 1}</legend>
+                                                <legend>Status {index + 1}</legend>
                                                 <div key={index}>
                                                     {index > 0 ?
                                                         <div style={{ display: 'flex', justifyContent: 'end' }}>
@@ -525,26 +534,7 @@ const Edit = (props) => {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="inline_form">
-                                                        <div className="form_group_inline">
-                                                            <span className="form_group_label">Change Control or pre-assessment</span>
-                                                            <div className="form_group_field">
-                                                                <input type="text" name='control' onChange={e => handleStatusChanged(index, e)} value={element.control} />
-                                                            </div>
-                                                        </div>
-                                                        <div className="form_group_inline">
-                                                            <span className="form_group_label">CCDS/Core PIL ref n°</span>
-                                                            <div className="form_group_field">
-                                                                <input type="text" name='cdds' onChange={e => handleStatusChanged(index, e)} value={element.cdds} />
-                                                            </div>
-                                                        </div>
-                                                        <div className="form_group_inline">
-                                                            <span className="form_group_label">Remarks</span>
-                                                            <div className="form_group_field">
-                                                                <input type="text" name='remarks' onChange={e => handleStatusChanged(index, e)} value={element.remarks} />
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    
                                                     <div className="inline_form">
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Implementation Deadline</span>
@@ -580,6 +570,21 @@ const Edit = (props) => {
                                                             <span className="form_group_label">Next Renewal Date</span>
                                                             <div className="form_group_field">
                                                                 <DatePicker name="next_renewals_date" selected={element.next_renewals_date ? new Date(element.next_renewals_date) : ''} onChange={(date) => handleDateChange(index, 'next_renewals_date', date)} value={element.next_renewals_date ? moment(element.next_renewals_date).format('DD-MMM-yy') : ''} />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="inline_form">
+                                                        
+                                                        {/* <div className="form_group_inline">
+                                                            <span className="form_group_label">CCDS/Core PIL ref n°</span>
+                                                            <div className="form_group_field">
+                                                                <input type="text" name='cdds' onChange={e => handleStatusChanged(index, e)} value={element.cdds} />
+                                                            </div>
+                                                        </div> */}
+                                                        <div className="form_group_inline">
+                                                            <span className="form_group_label">Status note</span>
+                                                            <div className="form_group_field">
+                                                                <input type="text" name='remarks' onChange={e => handleStatusChanged(index, e)} value={element.remarks} />
                                                             </div>
                                                         </div>
                                                     </div>

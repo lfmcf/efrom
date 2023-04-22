@@ -37,15 +37,16 @@ const Nohqproject = (props) => {
         local_tradename: '',
         // product_type: '',
         variation_title: '',
-        category: '',
+        // category: '',
         variation_type: '',
-        submission_type: '',
+        // submission_type: '',
         application_number: '',
         submission_number: '',
         submission_format: '',
         variation_reason: '',
-        statuses: [{country:'',status: '',status_date: '',ectd: '',control: '',cdds: '',remarks: '',local_implementation: '',implimentation_deadline: '',actual_implementation: ''}],
-        doc: [{document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: ''}],
+        control: '',
+        statuses: [{country:'',status: '',status_date: '',ectd: '', remarks: '',local_implementation: '',implimentation_deadline: '',actual_implementation: ''}],
+        doc: [{document_type: '', document_title: '', language: '', version_date: '', cdds: '', dremarks: '', document: ''}],
         isHq: false,
         created_by: props.user.id,
     });
@@ -109,7 +110,7 @@ const Nohqproject = (props) => {
 
     let addStatusFields = () => {
         let newArr = {...data};
-        newArr.statuses.push({country:'',status: '',status_date: '',ectd: '',control: '',cdds: '',remarks: '',local_implementation: '',implimentation_deadline: '',actual_implementation: ''});
+        newArr.statuses.push({country:'',status: '',status_date: '',ectd: '',remarks: '',local_implementation: '',implimentation_deadline: '',actual_implementation: ''});
         setData(newArr);
     }
 
@@ -121,7 +122,7 @@ const Nohqproject = (props) => {
 
     let addFormFields = () => {
         let arr = {...data};
-        arr.doc.push({document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: ''});
+        arr.doc.push({document_type: '', document_title: '', language: '', version_date: '', cdds: '', dremarks: '', document: ''});
         setData(arr);
     }
 
@@ -248,7 +249,7 @@ const Nohqproject = (props) => {
                             sx={{ borderRight: 1, borderColor: 'divider' }}
                         >
                             <Mtab label="Registration Identification" {...a11yProps(0)} style={{ color: errors.product || errors.procedure_type || errors.country ? "red": '' }} />
-                            <Mtab label="Variation Details" {...a11yProps(1)} style={{ color: errors.category || errors.submission_type || errors.variation_type ? "red": '' }} />
+                            <Mtab label="Variation Details" {...a11yProps(1)} style={{ color: errors.variation_title || errors.variation_type ? "red": '' }} />
                             <Mtab label="Status Details" {...a11yProps(2)} style={{color: statuserror ? 'red' : ''}} />
 
                         </Mtabs>
@@ -385,7 +386,7 @@ const Nohqproject = (props) => {
                                         <input type="text" name='variation_title' onChange={handleChange} style={{borderColor: errors.variation_title ? 'red' : ''}} value={data.variation_title} />
                                     </div>
                                 </div>
-                                <div className="form_group_inline">
+                                {/* <div className="form_group_inline">
                                     <span className="form_group_label" style={{color: errors.category ? 'red' : ''}}>Variation Category (*)</span>
                                     <div className="form_group_field">
                                         <Select options={[
@@ -403,7 +404,7 @@ const Nohqproject = (props) => {
                                         />
                                     </div>
                                     
-                                </div>
+                                </div> */}
                                 <div className="form_group_inline">
                                     <span className="form_group_label" style={{color: errors.variation_type ? 'red' : ''}}>Variation Type (*)</span>
                                     <div className="form_group_field">
@@ -451,7 +452,7 @@ const Nohqproject = (props) => {
 
                             </div>
                             <div className="inline_form">
-                                <div className="form_group_inline">
+                                {/* <div className="form_group_inline">
                                     <span className="form_group_label" style={{color: errors.submission_type ? 'red' : ''}}>Submission Type (*)</span>
                                     <div className="form_group_field">
                                         
@@ -470,9 +471,9 @@ const Nohqproject = (props) => {
                                             value={data.submission_type}
                                         />
                                     </div>  
-                                </div>
+                                </div> */}
                                 <div className="form_group_inline">
-                                    <span className="form_group_label">Applcation N°</span>
+                                    <span className="form_group_label">Application N°</span>
                                     <div className="form_group_field">
                                         <input type="text" name="application_number" onChange={handleChange} value={data.application_number} />
                                     </div>
@@ -501,6 +502,12 @@ const Nohqproject = (props) => {
                                             isClearable
                                             value={data.submission_format}
                                         />
+                                    </div>
+                                </div>
+                                <div className="form_group_inline">
+                                    <span className="form_group_label">Change Control or pre-assessment</span>
+                                    <div className="form_group_field">
+                                        <input type="text" name="control" onChange={handleChange} value={data.control} />
                                     </div>
                                 </div>
                             </div>
@@ -580,26 +587,7 @@ const Nohqproject = (props) => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="inline_form">
-                                            <div className="form_group_inline">
-                                                <span className="form_group_label">Change Control or pre-assessment</span>
-                                                <div className="form_group_field">
-                                                    <input type="text" name="control" onChange={e => handleStatusChanged(index, e)} value={element.control} />
-                                                </div>
-                                            </div>
-                                            <div className="form_group_inline">
-                                                <span className="form_group_label">CCDS/Core PIL ref n°</span>
-                                                <div className="form_group_field">
-                                                    <input type="text" name="cdds" onChange={e => handleStatusChanged(index, e)} value={element.cdds} />
-                                                </div>
-                                            </div>
-                                            <div className="form_group_inline">
-                                                <span className="form_group_label">Remarks</span>
-                                                <div className="form_group_field">
-                                                    <input type="text" name="remarks" onChange={e => handleStatusChanged(index, e)} value={element.remarks} />
-                                                </div>
-                                            </div>
-                                        </div>
+                                        
                                         <div className="inline_form">
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Planned Local implementation Date</span>
@@ -618,6 +606,21 @@ const Nohqproject = (props) => {
                                                 <div className="form_group_field">
                                                     <DatePicker name="actual_implementation" selected={data.statuses[index].actual_implementation} onChange={(date) => handleDateChange(index, 'actual_implementation', date)} value={element.actual_implementation ? moment(element.actual_implementation).format('DD-MMM-yy') : ''} />
                                                     {/* <input type="text" name="actual_implementation" onChange={(date) => handleDateChange(index, 'actual_implementation', date)}  /> */}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="inline_form">
+                                            
+                                            {/* <div className="form_group_inline">
+                                                <span className="form_group_label">CCDS/Core PIL ref n°</span>
+                                                <div className="form_group_field">
+                                                    <input type="text" name="cdds" onChange={e => handleStatusChanged(index, e)} value={element.cdds} />
+                                                </div>
+                                            </div> */}
+                                            <div className="form_group_inline">
+                                                <span className="form_group_label">Status note</span>
+                                                <div className="form_group_field">
+                                                    <input type="text" name="remarks" onChange={e => handleStatusChanged(index, e)} value={element.remarks} />
                                                 </div>
                                             </div>
                                         </div>

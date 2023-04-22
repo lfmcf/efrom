@@ -92,7 +92,7 @@ class CregistrationTerminationController extends Controller
         $crt->local_tradename = $request->local_tradename;
         //$crt->product_type = $request->product_type;
         $crt->description = $request->description;
-        $crt->type = $request->type;
+        // $crt->type = $request->type;
         $crt->reason = $request->reason;
         $crt->remarks = $request->remarks;
         $crt->reason_for_passive = $request->reason_for_passive;
@@ -117,7 +117,7 @@ class CregistrationTerminationController extends Controller
             );
             $details = array(
                 'Description of the event',
-                'Registration Termination Type',
+                // 'Registration Termination Type',
                 'Reason of the event',
                 'Remarks'
             );
@@ -180,7 +180,7 @@ class CregistrationTerminationController extends Controller
             $sheet->fromArray($details, NULL, 'A1');
             $sheet->fromArray([
                 $crt->description,
-                is_array($crt->type) ? $crt->type['value'] : '',
+                // is_array($crt->type) ? $crt->type['value'] : '',
                 $crt->reason ? $crt->reason['value'] : '',
                 $crt->remarks
             ], NULL, 'A2');

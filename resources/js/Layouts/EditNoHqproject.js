@@ -38,13 +38,14 @@ const EditNoHqproject = (props) => {
         local_tradename: variation.local_tradename,
         //product_type: variation.product_type,
         variation_title: variation.variation_title,
-        category: variation.category,
+        //category: variation.category,
         variation_type: variation.variation_type,
-        submission_type: variation.submission_type,
+        //submission_type: variation.submission_type,
         application_number: variation.application_number,
         submission_number: variation.submission_number,
         submission_format: variation.submission_format,
         variation_reason: variation.variation_reason,
+        control: variation.control,
         statuses: variation.statuses,
         doc: variation.doc,
         isHq: false,
@@ -125,7 +126,7 @@ const EditNoHqproject = (props) => {
 
     let addFormFields = () => {
         let arr = {...data};
-        arr.doc.push({document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: ''});
+        arr.doc.push({document_type: '', document_title: '', language: '', version_date: '', cdds: '', dremarks: '', document: ''});
         setData(arr);
     }
 
@@ -259,7 +260,7 @@ const EditNoHqproject = (props) => {
                             sx={{ borderRight: 1, borderColor: 'divider' }}
                         >
                             <Mtab label="Registration Identification" {...a11yProps(0)} style={{ color: errors.product || errors.procedure_type || errors.country ? "red": '' }} />
-                            <Mtab label="Variation Details" {...a11yProps(1)} style={{ color: errors.category || errors.submission_type || errors.variation_type ? "red": '' }} />
+                            <Mtab label="Variation Details" {...a11yProps(1)} style={{ color: errors.variation_title || errors.variation_type ? "red": '' }} />
                             <Mtab label="Status Details" {...a11yProps(2)} style={{color: statuserror ? 'red' : ''}} />
 
                         </Mtabs>
@@ -393,7 +394,7 @@ const EditNoHqproject = (props) => {
                                         <input type="text" name='variation_title' onChange={handleChange} style={{borderColor: errors.variation_title ? 'red' : ''}} value={data.variation_title} />
                                     </div>
                                 </div>
-                                <div className="form_group_inline">
+                                {/* <div className="form_group_inline">
                                     <span className="form_group_label" style={{color: errors.category ? 'red' : ''}}>Variation Category (*)</span>
                                     <div className="form_group_field">
                                         <Select options={[
@@ -411,7 +412,7 @@ const EditNoHqproject = (props) => {
                                         />
                                     </div>
                                     
-                                </div>
+                                </div> */}
                                 <div className="form_group_inline">
                                     <span className="form_group_label" style={{color: errors.variation_type ? 'red' : ''}}>Variation Type (*)</span>
                                     <div className="form_group_field">
@@ -459,7 +460,7 @@ const EditNoHqproject = (props) => {
 
                             </div>
                             <div className="inline_form">
-                                <div className="form_group_inline">
+                                {/* <div className="form_group_inline">
                                     <span className="form_group_label" style={{color: errors.submission_type ? 'red' : ''}}>Submission Type (*)</span>
                                     <div className="form_group_field">
                                         
@@ -478,9 +479,9 @@ const EditNoHqproject = (props) => {
                                             value={data.submission_type}
                                         />
                                     </div>  
-                                </div>
+                                </div> */}
                                 <div className="form_group_inline">
-                                    <span className="form_group_label">Applcation N°</span>
+                                    <span className="form_group_label">Application N°</span>
                                     <div className="form_group_field">
                                         <input type="text" name="application_number" onChange={handleChange} value={data.application_number} />
                                     </div>
@@ -509,6 +510,12 @@ const EditNoHqproject = (props) => {
                                             isClearable
                                             value={data.submission_format}
                                         />
+                                    </div>
+                                </div>
+                                <div className="form_group_inline">
+                                    <span className="form_group_label">Change Control or pre-assessment</span>
+                                    <div className="form_group_field">
+                                        <input type="text" name="control" onChange={handleChange} value={data.control} />
                                     </div>
                                 </div>
                             </div>
@@ -593,26 +600,7 @@ const EditNoHqproject = (props) => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="inline_form">
-                                            <div className="form_group_inline">
-                                                <span className="form_group_label">Change Control or pre-assessment</span>
-                                                <div className="form_group_field">
-                                                    <input type="text" name="control" onChange={e => handleStatusChanged(index, e)} value={element.control} />
-                                                </div>
-                                            </div>
-                                            <div className="form_group_inline">
-                                                <span className="form_group_label">CCDS/Core PIL ref n°</span>
-                                                <div className="form_group_field">
-                                                    <input type="text" name="cdds" onChange={e => handleStatusChanged(index, e)} value={element.cdds} />
-                                                </div>
-                                            </div>
-                                            <div className="form_group_inline">
-                                                <span className="form_group_label">Remarks</span>
-                                                <div className="form_group_field">
-                                                    <input type="text" name="remarks" onChange={e => handleStatusChanged(index, e)} value={element.remarks} />
-                                                </div>
-                                            </div>
-                                        </div>
+                                        
                                         <div className="inline_form">
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Planned Local implementation Date</span>
@@ -643,6 +631,21 @@ const EditNoHqproject = (props) => {
                                                         value={element.actual_implementation ? moment(element.actual_implementation).format('DD-MMM-yy') : ''} 
                                                     />
                                                     {/* <input type="text" name="actual_implementation" onChange={(date) => handleDateChange(index, 'actual_implementation', date)}  /> */}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="inline_form">
+                                            
+                                            {/* <div className="form_group_inline">
+                                                <span className="form_group_label">CCDS/Core PIL ref n°</span>
+                                                <div className="form_group_field">
+                                                    <input type="text" name="cdds" onChange={e => handleStatusChanged(index, e)} value={element.cdds} />
+                                                </div>
+                                            </div> */}
+                                            <div className="form_group_inline">
+                                                <span className="form_group_label">Status note</span>
+                                                <div className="form_group_field">
+                                                    <input type="text" name="remarks" onChange={e => handleStatusChanged(index, e)} value={element.remarks} />
                                                 </div>
                                             </div>
                                         </div>

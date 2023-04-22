@@ -12,7 +12,7 @@ import { Tabs as Mtabs, Tab as Mtab, IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
 import SaveModal from '@/Components/SaveModal';
 import { Typography } from '@mui/material';
-import { product_name, procedure_type } from '@/Components/List';
+import { product_name, procedure_type, status } from '@/Components/List';
 import { Head } from '@inertiajs/inertia-react';
 import ModalP from '@/Components/Modalp';
 import AddIcon from '@mui/icons-material/Add';
@@ -43,6 +43,7 @@ const Edit = (props) => {
         amendment_title: amendment.amendment_title,
         description: amendment.description,
         reason: amendment.reason,
+        control: amendment.control,
         remarks: amendment.remarks,
         statuses: amendment.statuses,
         doc: amendment.doc,
@@ -98,7 +99,7 @@ const Edit = (props) => {
 
     let addFormFields = () => {
         let arr = { ...data };
-        arr.doc.push({ document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: '' });
+        arr.doc.push({ document_type: '', document_title: '', language: '', version_date: '',cdds: '', dremarks: '', document: '' });
         setData(arr);
     }
 
@@ -114,7 +115,7 @@ const Edit = (props) => {
 
     let addStatusFields = () => {
         let newArr = { ...data };
-        newArr.statuses.push({ country: '', status: '', status_date: '', ectd: '', control: '', cdds: '', remarks: '', implimentation_date: '', deadline_for_answer: '', changes_approved: '' });
+        newArr.statuses.push({ country: '', status: '', status_date: '', ectd: '', cdds: '', remarks: '', implimentation_date: '', deadline_for_answer: ''});
         setData(newArr);
     }
 
@@ -397,6 +398,8 @@ const Edit = (props) => {
                                                     <input type="text" name="description" onChange={handleChange} value={data.description} />
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div className="inline_form">
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Reason for variation</span>
                                                 <div className="form_group_field">
@@ -419,6 +422,14 @@ const Edit = (props) => {
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
+                                                <span className="form_group_label">Change Control or pre-assessment</span>
+                                                <div className="form_group_field">
+                                                    <input type="text" name="control" onChange={handleChange} value={data.control} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="inline_form">
+                                            <div className="form_group_inline">
                                                 <span className="form_group_label">Remarks</span>
                                                 <div className="form_group_field">
                                                     <input type="text" name="remarks" onChange={handleChange} value={data.remarks} />
@@ -438,7 +449,7 @@ const Edit = (props) => {
 
                                         {data.statuses.map((element, index) => (
                                             <fieldset key={index}>
-                                                <legend>Statut {index + 1}</legend>
+                                                <legend>Status {index + 1}</legend>
                                                 {index > 0 ?
                                                     <div style={{ display: 'flex', justifyContent: 'end' }}>
                                                         <button type="button" style={{ width: '14px', height: '14px', background: 'transparent', padding: '0', margin: '0 0 20px 0' }} onClick={() => removeStatusFields(index)}>
@@ -474,25 +485,7 @@ const Edit = (props) => {
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label" style={{color: errors['statuses.' + index + '.status'] ? 'red' : ''}}>Status (*)</span>
                                                         <div className="form_group_field">
-                                                            <Select options={[
-                                                                { label: 'Application / Submitted', value: 'Application / Submitted' },
-                                                                { label: 'Positive Opinion / Obtained', value: 'Positive Opinion / Obtained' },
-                                                                { label: 'Approval / Obtained', value: 'Approval / Obtained' },
-                                                                { label: 'Application / Rejected', value: 'Application / Rejected' },
-                                                                { label: 'Application / Withdrawn by MAH not due Safety/Efficacy', value: 'Application / Withdrawn by MAH not due Safety/Efficacy' },
-                                                                { label: 'Study / Start Date Submitted', value: 'Study / Start Date Submitted' },
-                                                                { label: 'Study / End Date Submitted', value: 'Study / End Date Submitted' },
-                                                                { label: 'Study / Results Submitted', value: 'Study / Results Submitted' },
-                                                                { label: 'Application / Dispatch to local RA', value: 'Application / Dispatch to local RA' },
-                                                                { label: 'Application / Validated', value: 'Application / Validated' },
-                                                                { label: 'Application / Dispatch Planned', value: 'Application / Dispatch Planned' },
-                                                                { label: 'Application / Submission Planned', value: 'Application / Submission Planned' },
-                                                                { label: 'Application / Approval Expected', value: 'Application / Approval Expected' },
-                                                                { label: 'Application/ End of Procedure', value: 'Application/ End of Procedure' },
-                                                                { label: 'Dossier Initial Submission - submitted', value: 'Dossier Initial Submission - submitted' },
-                                                                { label: 'Assesment report -  received', value: 'Assesment report -  received' },
-                                                                { label: 'Conditional Approval - obtained', value: 'Conditional Approval - obtained' },
-                                                            ]}
+                                                            <Select options={status}
                                                                 name='status'
                                                                 onChange={(selectedOption, name) => handleStatusSelectChange(selectedOption, name, index)}
                                                                 className="basic"
@@ -524,12 +517,7 @@ const Edit = (props) => {
                                                     </div>
                                                 </div>
                                                 <div className="inline_form">
-                                                    <div className="form_group_inline">
-                                                        <span className="form_group_label">Change Control or pre-assessment</span>
-                                                        <div className="form_group_field">
-                                                            <input type="text" name="control" onChange={e => handleStatusChanged(index, e)} value={element.control} />
-                                                        </div>
-                                                    </div>
+                                                    
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label">CCDS/Core PIL ref n°</span>
                                                         <div className="form_group_field">
@@ -559,7 +547,7 @@ const Edit = (props) => {
                                                             />
                                                         </div>
                                                     </div>
-                                                    <div className="form_group_inline">
+                                                    {/* <div className="form_group_inline">
                                                         <span className="form_group_label">Impacted of changes approved</span>
                                                         <div className="form_group_field">
                                                             <Select options={[
@@ -575,11 +563,11 @@ const Edit = (props) => {
                                                                 value={element.changes_approved}
                                                             />
                                                         </div>
-                                                    </div>
+                                                    </div> */}
                                                 </div>
                                                 <div className="inline_form">
                                                     <div className="form_group_inline">
-                                                        <span className="form_group_label">Remarks</span>
+                                                        <span className="form_group_label">Status note</span>
                                                         <div className="form_group_field">
                                                             <textarea type="text" name="remarks" onChange={e => handleStatusChanged(index, e)} value={element.remarks} />
                                                         </div>

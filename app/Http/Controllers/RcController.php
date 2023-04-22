@@ -134,6 +134,7 @@ class RcController extends Controller
         $rc->dossier_reference = $request->dossier_reference;
         $rc->pv_contact_email = $request->pv_contact_email;
         $rc->pv_contact_phone = $request->pv_contact_phone;
+        $rc->change_control_ref = $request->change_control_ref;
         $rc->bremarks = $request->bremarks;
         $rc->authorized_pharmaceutical_form = $request->authorized_pharmaceutical_form;
         $rc->administrable_pharmaceutical_form = $request->administrable_pharmaceutical_form;
@@ -179,6 +180,7 @@ class RcController extends Controller
                 'Dossier Reference Number',
                 'PV Contact Email',
                 'PV Contact Phone',
+                'Change Control Ref',
                 'Remarks',
             );
             $OrphanDrug = array(
@@ -245,7 +247,7 @@ class RcController extends Controller
                 'Status',
                 'Status Date',
                 'eCTD Sequence',
-                'Change Control Ref',
+                // 'Change Control Ref',
                 'Internal Submission Reference',
                 'Remarks',
             );
@@ -259,6 +261,7 @@ class RcController extends Controller
                 'Document title',
                 'Language',
                 'Version date',
+                'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Document'
             );
@@ -298,6 +301,7 @@ class RcController extends Controller
                 $rc->dossier_reference,
                 $rc->pv_contact_email,
                 $rc->pv_contact_phone,
+                $rc->change_control_ref,
                 $rc->bremarks
             ], NULL, 'A2');
 
@@ -490,9 +494,9 @@ class RcController extends Controller
                 $sheet->setCellValue('B' . $st, is_array($stt['status']) ? $stt['status']['value'] : '');
                 $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
                 $sheet->setCellValue('D' . $st, $stt['ectd_sequence']);
-                $sheet->setCellValue('E' . $st, $stt['change_control_ref']);
-                $sheet->setCellValue('F' . $st, $stt['internal_submission_reference']);
-                $sheet->setCellValue('G' . $st, $stt['remarks']);
+                // $sheet->setCellValue('E' . $st, $stt['change_control_ref']);
+                $sheet->setCellValue('E' . $st, $stt['internal_submission_reference']);
+                $sheet->setCellValue('F' . $st, $stt['remarks']);
                 $st++;
             }
             // $hr = $sheet->getHighestRow();
@@ -523,8 +527,9 @@ class RcController extends Controller
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
                 $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
                 $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $sheet->setCellValue('E' . $dc, $docu['cdds']);
+                $sheet->setCellValue('F' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('G' . $dc, $docu['document']);
                 $dc++;
             }
             // $sheet->fromArray($rc->doc, NULL, 'A2');
@@ -674,6 +679,7 @@ class RcController extends Controller
         $rc->dossier_reference = $request->dossier_reference;
         $rc->pv_contact_email = $request->pv_contact_email;
         $rc->pv_contact_phone = $request->pv_contact_phone;
+        $rc->change_control_ref = $request->change_control_ref;
         $rc->bremarks = $request->bremarks;
         $rc->authorized_pharmaceutical_form = $request->authorized_pharmaceutical_form;
         $rc->administrable_pharmaceutical_form = $request->administrable_pharmaceutical_form;
@@ -719,6 +725,7 @@ class RcController extends Controller
                 'Dossier Reference Number',
                 'PV Contact Email',
                 'PV Contact Phone',
+                'Change Control Ref',
                 'Remarks',
             );
             $OrphanDrug = array(
@@ -785,7 +792,7 @@ class RcController extends Controller
                 'Status',
                 'Status Date',
                 'eCTD Sequence',
-                'Change Control Ref',
+                // 'Change Control Ref',
                 'Internal Submission Reference',
                 'Remarks',
             );
@@ -799,6 +806,7 @@ class RcController extends Controller
                 'Document title',
                 'Language',
                 'Version date',
+                'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Document'
             );
@@ -837,6 +845,7 @@ class RcController extends Controller
                 $rc->dossier_reference,
                 $rc->pv_contact_email,
                 $rc->pv_contact_phone,
+                $rc->change_control_ref,
                 $rc->bremarks
             ], NULL, 'A2');
 
@@ -1022,9 +1031,9 @@ class RcController extends Controller
                 $sheet->setCellValue('A' . $st, is_array($stt['status']) ? $stt['status']['value'] : '');
                 $sheet->setCellValue('B' . $st, date("d-m-Y", strtotime($stt['status_date'])));
                 $sheet->setCellValue('C' . $st, $stt['ectd_sequence']);
-                $sheet->setCellValue('D' . $st, $stt['change_control_ref']);
-                $sheet->setCellValue('E' . $st, $stt['internal_submission_reference']);
-                $sheet->setCellValue('F' . $st, $stt['remarks']);
+                // $sheet->setCellValue('D' . $st, $stt['change_control_ref']);
+                $sheet->setCellValue('D' . $st, $stt['internal_submission_reference']);
+                $sheet->setCellValue('E' . $st, $stt['remarks']);
                 $st++;
             }
             // $hr = $sheet->getHighestRow();
@@ -1055,8 +1064,9 @@ class RcController extends Controller
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
                 $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
                 $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $sheet->setCellValue('E' . $dc, $docu['cdds']);
+                $sheet->setCellValue('F' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('G' . $dc, $docu['document']);
                 $dc++;
             }
             // $sheet->fromArray($rc->doc, NULL, 'A2');

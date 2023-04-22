@@ -102,6 +102,7 @@ class RenouvellementController extends Controller
         $ren->application_num = $request->application_num;
         $ren->submission_format = $request->submission_format;
         $ren->validation_reason = $request->validation_reason;
+        $ren->control = $request->control;
         $ren->remarks = $request->remarks;
         $ren->statuses = $request->statuses;
         $ren->doc = $docs;
@@ -127,6 +128,7 @@ class RenouvellementController extends Controller
                 'Application N°',
                 'Dossier Submission Format',
                 'Reason For Variation',
+                'Change Control or pre-assessment',
                 'Remarks'
             );
             $renewalStatus = array(
@@ -134,8 +136,8 @@ class RenouvellementController extends Controller
                 'Status',
                 'Status Date',
                 'eCTD sequence',
-                'Change Control or pre-assessment',
-                'CCDS/Core PIL ref n°',
+                // 'Change Control or pre-assessment',
+                // 'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Implementation Deadline',
                 'Next Renewals',
@@ -147,6 +149,7 @@ class RenouvellementController extends Controller
                 'Document title',
                 'Language',
                 'Version date',
+                'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Document'
             );
@@ -190,6 +193,7 @@ class RenouvellementController extends Controller
                 $ren->application_num,
                 $ren->submission_format ? $ren->submission_format['value'] : '',
                 $ren->validation_reason ? $ren->validation_reason['value'] : '',
+                $ren->control,
                 $ren->remarks,
             ], NULL, 'A2');
 
@@ -206,13 +210,13 @@ class RenouvellementController extends Controller
                 $sheet->setCellValue('B' . $st, $stt['status']['value']);
                 $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
                 $sheet->setCellValue('D' . $st, $stt['ectd']);
-                $sheet->setCellValue('E' . $st, $stt['control']);
-                $sheet->setCellValue('F' . $st, $stt['cdds']);
-                $sheet->setCellValue('G' . $st, $stt['remarks']);
-                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_deadline'])));
-                $sheet->setCellValue('I' . $st, is_array($stt['next_renewals']) ? $stt['next_renewals']['value'] : '');
-                $sheet->setCellValue('J' . $st, date("d-m-Y", strtotime($stt['next_renewals_deadline'])));
-                $sheet->setCellValue('K' . $st, date("d-m-Y", strtotime($stt['next_renewals_date'])));
+                // $sheet->setCellValue('E' . $st, $stt['control']);
+                // $sheet->setCellValue('F' . $st, $stt['cdds']);
+                $sheet->setCellValue('E' . $st, $stt['remarks']);
+                $sheet->setCellValue('F' . $st, date("d-m-Y", strtotime($stt['implimentation_deadline'])));
+                $sheet->setCellValue('G' . $st, is_array($stt['next_renewals']) ? $stt['next_renewals']['value'] : '');
+                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['next_renewals_deadline'])));
+                $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['next_renewals_date'])));
                 $st++;
             }
 
@@ -228,8 +232,9 @@ class RenouvellementController extends Controller
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
                 $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
                 $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $sheet->setCellValue('E' . $dc, $docu['cdds']);
+                $sheet->setCellValue('F' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('G' . $dc, $docu['document']);
                 $dc++;
             }
 
@@ -351,6 +356,7 @@ class RenouvellementController extends Controller
         $ren->application_num = $request->application_num;
         $ren->submission_format = $request->submission_format;
         $ren->validation_reason = $request->validation_reason;
+        $ren->control = $request->control;
         $ren->remarks = $request->remarks;
         $ren->statuses = $request->statuses;
         $ren->doc = $docs;
@@ -376,6 +382,7 @@ class RenouvellementController extends Controller
                 'Application N°',
                 'Dossier Submission Format',
                 'Reason For Variation',
+                'Change Control or pre-assessment',
                 'Remarks'
             );
             $renewalStatus = array(
@@ -383,8 +390,8 @@ class RenouvellementController extends Controller
                 'Status',
                 'Status Date',
                 'eCTD sequence',
-                'Change Control or pre-assessment',
-                'CCDS/Core PIL ref n°',
+                // 'Change Control or pre-assessment',
+                // 'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Implementation Deadline',
                 'Next Renewals',
@@ -396,6 +403,7 @@ class RenouvellementController extends Controller
                 'Document title',
                 'Language',
                 'Version date',
+                'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Document'
             );
@@ -439,6 +447,7 @@ class RenouvellementController extends Controller
                 $ren->application_num,
                 $ren->submission_format ? $ren->submission_format['value'] : '',
                 $ren->validation_reason ? $ren->validation_reason['value'] : '',
+                $ren->control,
                 $ren->remarks,
             ], NULL, 'A2');
 
@@ -455,13 +464,13 @@ class RenouvellementController extends Controller
                 $sheet->setCellValue('B' . $st, is_array($stt['status']['value']));
                 $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
                 $sheet->setCellValue('D' . $st, $stt['ectd']);
-                $sheet->setCellValue('E' . $st, $stt['control']);
-                $sheet->setCellValue('F' . $st, $stt['cdds']);
-                $sheet->setCellValue('G' . $st, $stt['remarks']);
-                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_deadline'])));
-                $sheet->setCellValue('I' . $st, is_array($stt['next_renewals']) ? $stt['next_renewals']['value'] : '');
-                $sheet->setCellValue('J' . $st, date("d-m-Y", strtotime($stt['next_renewals_deadline'])));
-                $sheet->setCellValue('K' . $st, date("d-m-Y", strtotime($stt['next_renewals_date'])));
+                // $sheet->setCellValue('E' . $st, $stt['control']);
+                // $sheet->setCellValue('F' . $st, $stt['cdds']);
+                $sheet->setCellValue('E' . $st, $stt['remarks']);
+                $sheet->setCellValue('F' . $st, date("d-m-Y", strtotime($stt['implimentation_deadline'])));
+                $sheet->setCellValue('G' . $st, is_array($stt['next_renewals']) ? $stt['next_renewals']['value'] : '');
+                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['next_renewals_deadline'])));
+                $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['next_renewals_date'])));
                 $st++;
             }
 
@@ -477,8 +486,9 @@ class RenouvellementController extends Controller
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
                 $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
                 $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $sheet->setCellValue('E' . $dc, $docu['cdds']);
+                $sheet->setCellValue('F' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('G' . $dc, $docu['document']);
                 $dc++;
             }
 

@@ -94,6 +94,7 @@ class BaselineController extends Controller
         $baseline->description = $request->description;
         $baseline->application_num = $request->application_num;
         $baseline->reason = $request->reason;
+        $baseline->control = $request->control;
         $baseline->remarks = $request->remarks;
         $baseline->statuses = $request->statuses;
         $baseline->doc = $docs;
@@ -118,6 +119,7 @@ class BaselineController extends Controller
                 'Description of the event',
                 'Application N°',
                 'Reason for variation',
+                'Change Control or pre-assessment',
                 'Remarks'
             );
             $eventStatus = array(
@@ -125,8 +127,8 @@ class BaselineController extends Controller
                 'Status',
                 'Status Date',
                 'eCTD sequence',
-                'Change Control or pre-assessment',
-                'CCDS/Core PIL ref n°',
+                // 'Change Control or pre-assessment',
+                // 'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Effective internal implementation date',
                 'Implementation Deadline of deadline for answer',
@@ -137,6 +139,7 @@ class BaselineController extends Controller
                 'Document title',
                 'Language',
                 'Version date',
+                'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Document'
             );
@@ -177,6 +180,7 @@ class BaselineController extends Controller
                 $baseline->description,
                 $baseline->application_num,
                 $baseline->reason ? $baseline->reason['value'] : '',
+                $baseline->control,
                 $baseline->remarks
             ], NULL, 'A2');
 
@@ -192,12 +196,12 @@ class BaselineController extends Controller
                 $sheet->setCellValue('B' . $st, $stt['status']['value']);
                 $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
                 $sheet->setCellValue('D' . $st, $stt['ectd']);
-                $sheet->setCellValue('E' . $st, $stt['control']);
-                $sheet->setCellValue('F' . $st, $stt['cdds']);
-                $sheet->setCellValue('G' . $st, $stt['remarks']);
-                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_date'])));
-                $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
-                $sheet->setCellValue('J' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
+                // $sheet->setCellValue('E' . $st, $stt['control']);
+                // $sheet->setCellValue('F' . $st, $stt['cdds']);
+                $sheet->setCellValue('E' . $st, $stt['remarks']);
+                $sheet->setCellValue('F' . $st, date("d-m-Y", strtotime($stt['implimentation_date'])));
+                $sheet->setCellValue('G' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
+                $sheet->setCellValue('H' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
                 $st++;
             }
 
@@ -214,8 +218,9 @@ class BaselineController extends Controller
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
                 $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
                 $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $sheet->setCellValue('E' . $dc, $docu['cdds']);
+                $sheet->setCellValue('F' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('G' . $dc, $docu['document']);
                 $dc++;
             }
 
@@ -334,6 +339,7 @@ class BaselineController extends Controller
         $baseline->description = $request->description;
         $baseline->application_num = $request->application_num;
         $baseline->reason = $request->reason;
+        $baseline->control = $request->control;
         $baseline->remarks = $request->remarks;
         $baseline->statuses = $request->statuses;
         $baseline->doc = $docs;
@@ -358,6 +364,7 @@ class BaselineController extends Controller
                 'Description of the event',
                 'Application N°',
                 'Reason for variation',
+                'Change Control or pre-assessment',
                 'Remarks'
             );
             $eventStatus = array(
@@ -365,8 +372,8 @@ class BaselineController extends Controller
                 'Status',
                 'Status Date',
                 'eCTD sequence',
-                'Change Control or pre-assessment',
-                'CCDS/Core PIL ref n°',
+                // 'Change Control or pre-assessment',
+                // 'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Effective internal implementation date',
                 'Implementation Deadline of deadline for answer',
@@ -377,6 +384,7 @@ class BaselineController extends Controller
                 'Document title',
                 'Language',
                 'Version date',
+                'CCDS/Core PIL ref n°',
                 'Remarks',
                 'Document'
             );
@@ -417,6 +425,7 @@ class BaselineController extends Controller
                 $baseline->description,
                 $baseline->application_num,
                 $baseline->reason ? $baseline->reason['value'] : '',
+                $baseline->control,
                 $baseline->remarks
             ], NULL, 'A2');
 
@@ -432,12 +441,12 @@ class BaselineController extends Controller
                 $sheet->setCellValue('B' . $st, $stt['status']['value']);
                 $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
                 $sheet->setCellValue('D' . $st, $stt['ectd']);
-                $sheet->setCellValue('E' . $st, $stt['control']);
-                $sheet->setCellValue('F' . $st, $stt['cdds']);
-                $sheet->setCellValue('G' . $st, $stt['remarks']);
-                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_date'])));
-                $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
-                $sheet->setCellValue('J' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
+                // $sheet->setCellValue('E' . $st, $stt['control']);
+                // $sheet->setCellValue('F' . $st, $stt['cdds']);
+                $sheet->setCellValue('E' . $st, $stt['remarks']);
+                $sheet->setCellValue('F' . $st, date("d-m-Y", strtotime($stt['implimentation_date'])));
+                $sheet->setCellValue('G' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
+                $sheet->setCellValue('H' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
                 $st++;
             }
 
@@ -454,8 +463,9 @@ class BaselineController extends Controller
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
                 $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
                 $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $sheet->setCellValue('E' . $dc, $docu['cdds']);
+                $sheet->setCellValue('F' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('G' . $dc, $docu['document']);
                 $dc++;
             }
             
