@@ -188,9 +188,13 @@ const EditNoHqproject = (props) => {
         const search = window.location.search
         const opname = new URLSearchParams(search).get('opr');
         if (opname === 'edit') {
-            post(route("updatevariation", {'type': submitType}));
+            post(route("updatevariation", {'type': submitType}), {
+                onError: (e) => e.create ? alert(e.create) : alert('The eForm cannot be submitted due to field in Red not properly populated')
+            });
         }else {
-            post(route("storevariation", {'type': submitType}));
+            post(route("storevariation", {'type': submitType}), {
+                onError: (e) => e.create ? alert(e.create) : alert('The eForm cannot be submitted due to field in Red not properly populated')
+            });
         }
         
     }
