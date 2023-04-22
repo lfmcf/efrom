@@ -168,7 +168,9 @@ const Create = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         let submitType = window.event.target.name;
-        post(route("storeclinical_registration_termination", { 'type': submitType }));
+        post(route("storeclinical_registration_termination", { 'type': submitType }), {
+            onError: (e) => e.create ? alert(e.create) : alert('The eForm cannot be submitted due to field in Red not properly populated')
+        });
     }
 
     const showsavemodel = () => {

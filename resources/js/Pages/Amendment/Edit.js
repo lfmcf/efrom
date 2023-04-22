@@ -144,9 +144,13 @@ const Edit = (props) => {
         const search = window.location.search
         const opname = new URLSearchParams(search).get('opr');
         if (opname === 'edit') {
-            post(route("updateamendment", { 'type': submitType }));
+            post(route("updateamendment", { 'type': submitType }), {
+                onError: (e) => e.create ? alert(e.create) : alert('The eForm cannot be submitted due to field in Red not properly populated')
+            });
         }else {
-            post(route("storeamendment", { 'type': submitType }));
+            post(route("storeamendment", { 'type': submitType }), {
+                onError: (e) => e.create ? alert(e.create) : alert('The eForm cannot be submitted due to field in Red not properly populated')
+            });
         }
     }
 

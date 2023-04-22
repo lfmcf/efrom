@@ -17,6 +17,7 @@ use App\Http\Controllers\AmendmentsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ClinicalController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\MaCompanyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -107,7 +108,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/addcompany', [CompanyController::class, 'store'])->name('addcompany');
     Route::post('/formsByDate', [DashboardController::class, 'getformsnumber'])->name('formsByDate');
     
-    Route::get('/company', [CompanyController::class, 'index'])->name('company');
+    Route::get('/macompany', [MaCompanyController::class, 'create'])->name('macompany');
+    Route::post('/addmacompany', [MaCompanyController::class, 'store'])->name('storemacompany');
+    
     Route::post('/createproduct', [ProductController::class, 'store'])->name('createproduct');
     
     

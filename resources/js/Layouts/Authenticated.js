@@ -55,7 +55,7 @@ export default function Authenticated({ auth, header, children }) {
                 },
                 {
                     name: "Company Registration",
-                    url: "company"
+                    url: "macompany"
                 }
             ],
         },
