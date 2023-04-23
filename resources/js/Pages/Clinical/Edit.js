@@ -18,6 +18,7 @@ import { key_dates_list, operations, packageCondistion, product_name, procedure_
 import { Head } from '@inertiajs/inertia-react';
 import moment from 'moment';
 import ModalP from '@/Components/Modalp';
+import ActionAlerts from '@/Components/ActionAlerts';
 
 function a11yProps(index) {
     return {
@@ -84,6 +85,8 @@ const Edit = (props) => {
     const formRef = React.useRef();
     const [statusCountry, setStatusCountry] = useState([{label: 'All', value: 'All'}])
     const firstTimeRender = React.useRef(true);
+    const [alert, setAlert] = useState(false);
+    const [alertContent, setAlertContent] = useState('');
 
     const handleMChange = (event, newValue) => {
 
@@ -453,11 +456,27 @@ const Edit = (props) => {
         const opname = new URLSearchParams(search).get('opr');
         if (opname === 'edit') {
             post(route('updateclinical', { 'type': submitType }), {
-                onError: (e) => e.create ? alert(e.create) : alert('The eForm cannot be submitted due to field in Red not properly populated')
+                onError: (e) => {if(e.create){ 
+                    setAlert(true);
+                    setAlertContent(e.create)
+                }
+                else { 
+                    setAlert(true); 
+                    setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
+                }
+                }
             });
         }else {
             post(route('storeclinical', { 'type': submitType }), {
-                onError: (e) => e.create ? alert(e.create) : alert('The eForm cannot be submitted due to field in Red not properly populated')
+                onError: (e) => {if(e.create){ 
+                    setAlert(true);
+                    setAlertContent(e.create)
+                }
+                else { 
+                    setAlert(true); 
+                    setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
+                }
+                }
             });
         }
     }
@@ -649,7 +668,11 @@ const Edit = (props) => {
 
     React.useEffect(() => { 
         firstTimeRender.current = false 
-    }, [])
+    }, []);
+
+    const closeAlert = () => {
+        setAlert(false);
+    }
 
 
     return (
@@ -659,6 +682,7 @@ const Edit = (props) => {
                     <h3 className="page-title">registration creation - clinical</h3>
                 </div>
             </div>
+            {alert ? <ActionAlerts message={alertContent} closeAlert={closeAlert} /> : <></> }
             <div className="row">
                 <div className="col-md-12">
 

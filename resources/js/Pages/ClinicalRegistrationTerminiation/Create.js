@@ -17,6 +17,7 @@ import { Head } from '@inertiajs/inertia-react';
 import moment from "moment";
 import ModalP from '@/Components/Modalp';
 import AddIcon from '@mui/icons-material/Add';
+import ActionAlerts from '@/Components/ActionAlerts';
 
 function a11yProps(index) {
     return {
@@ -55,7 +56,9 @@ const Create = (props) => {
     // const [packagehaserror, setPackagehaserror] = useState(false);
     const [statuserror, setStatusError] = useState(false);
     const formRef = React.useRef();
-    const [statusCountry, setStatusCountry] = useState([{label: 'All', value: 'All'}])
+    const [statusCountry, setStatusCountry] = useState([{label: 'All', value: 'All'}]);
+    const [alert, setAlert] = useState(false);
+    const [alertContent, setAlertContent] = useState('');
 
     const handleMChange = (event, newValue) => {
         setValue(newValue);
@@ -169,7 +172,15 @@ const Create = (props) => {
         e.preventDefault();
         let submitType = window.event.target.name;
         post(route("storeclinical_registration_termination", { 'type': submitType }), {
-            onError: (e) => e.create ? alert(e.create) : alert('The eForm cannot be submitted due to field in Red not properly populated')
+            onError: (e) => {if(e.create){ 
+                setAlert(true);
+                setAlertContent(e.create)
+            }
+            else { 
+                setAlert(true); 
+                setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
+            }
+            }
         });
     }
 
@@ -261,7 +272,11 @@ const Create = (props) => {
                 setStatusCountry(statusCountry => [...statusCountry, data.rms])
             }
         }
-    }, [data.rms])
+    }, [data.rms]);
+
+    const closeAlert = () => {
+        setAlert(false);
+    }
 
     return (
         <>
@@ -270,6 +285,7 @@ const Create = (props) => {
                     <h3 className="page-title">Registration Termination</h3>
                 </div>
             </div>
+            {alert ? <ActionAlerts message={alertContent} closeAlert={closeAlert} /> : <></> }
             <div className="row">
                 <div className="col-md-12">
 

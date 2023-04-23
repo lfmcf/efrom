@@ -17,6 +17,7 @@ import { Head } from '@inertiajs/inertia-react';
 import ModalP from '@/Components/Modalp';
 import AddIcon from '@mui/icons-material/Add';
 import moment from 'moment';
+import ActionAlerts from '@/Components/ActionAlerts';
 
 function a11yProps(index) {
     return {
@@ -55,7 +56,9 @@ const Edit = (props) => {
     const [showsavemodal, setSavemodal] = useState({ show: false, name: '' });
     const formRef = React.useRef();
     const [statuserror, setStatusError] = useState(false);
-    const [statusCountry, setStatusCountry] = useState([{label: 'All', value: 'All'}])
+    const [statusCountry, setStatusCountry] = useState([{label: 'All', value: 'All'}]);
+    const [alert, setAlert] = useState(false);
+    const [alertContent, setAlertContent] = useState('');
 
     const handleMChange = (event, newValue) => {
 
@@ -169,11 +172,27 @@ const Edit = (props) => {
         const opname = new URLSearchParams(search).get('opr');
         if (opname === 'edit') {
             post(route('update_registration_termination', { 'type': submitType }), {
-                onError: (e) => e.create ? alert(e.create) : alert('The eForm cannot be submitted due to field in Red not properly populated')
+                onError: (e) => {if(e.create){ 
+                    setAlert(true);
+                    setAlertContent(e.create)
+                }
+                else { 
+                    setAlert(true); 
+                    setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
+                }
+                }
             });
         } else {
             post(route("store_registration_termination", { 'type': submitType }), {
-                onError: (e) => e.create ? alert(e.create) : alert('The eForm cannot be submitted due to field in Red not properly populated')
+                onError: (e) => {if(e.create){ 
+                    setAlert(true);
+                    setAlertContent(e.create)
+                }
+                else { 
+                    setAlert(true); 
+                    setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
+                }
+                }
             });
         }
        
@@ -268,7 +287,11 @@ const Edit = (props) => {
                 setStatusCountry(statusCountry => [...statusCountry, data.rms])
             }
         }
-    }, [data.rms])
+    }, [data.rms]);
+
+    const closeAlert = () => {
+        setAlert(false);
+    }
 
     return (
         <>
@@ -278,6 +301,7 @@ const Edit = (props) => {
                     <h3 className="page-title">Registration Termination</h3>
                 </div>
             </div>
+            {alert ? <ActionAlerts message={alertContent} closeAlert={closeAlert} /> : <></> }
             <div className="row">
                 <div className="col-md-12">
 

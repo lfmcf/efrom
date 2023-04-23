@@ -15,6 +15,7 @@ import SaveModal from '@/Components/SaveModal';
 import { Typography } from '@mui/material';
 import { Head } from '@inertiajs/inertia-react';
 import moment from 'moment';
+import ActionAlerts from '@/Components/ActionAlerts';
 
 function a11yProps(index) {
     return {
@@ -70,6 +71,8 @@ const EditNoHqproject = (props) => {
     const [statuserror, setStatusError] = useState(false);
     const [statusCountry, setStatusCountry] = useState([{label: 'All', value: 'All'}])
     const firstTimeRender = React.useRef(true);
+    const [alert, setAlert] = useState(false);
+    const [alertContent, setAlertContent] = useState('');
 
     const handleMChange = (event, newValue) => {
         setValue(newValue);
@@ -189,11 +192,27 @@ const EditNoHqproject = (props) => {
         const opname = new URLSearchParams(search).get('opr');
         if (opname === 'edit') {
             post(route("updatevariation", {'type': submitType}), {
-                onError: (e) => e.create ? alert(e.create) : alert('The eForm cannot be submitted due to field in Red not properly populated')
+                onError: (e) => {if(e.create){ 
+                    setAlert(true);
+                    setAlertContent(e.create)
+                }
+                else { 
+                    setAlert(true); 
+                    setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
+                }
+                }
             });
         }else {
             post(route("storevariation", {'type': submitType}), {
-                onError: (e) => e.create ? alert(e.create) : alert('The eForm cannot be submitted due to field in Red not properly populated')
+                onError: (e) => {if(e.create){ 
+                    setAlert(true);
+                    setAlertContent(e.create)
+                }
+                else { 
+                    setAlert(true); 
+                    setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
+                }
+                }
             });
         }
         
@@ -246,9 +265,19 @@ const EditNoHqproject = (props) => {
         setData(arr);
     }
 
+    const closeAlert = () => {
+        setAlert(false);
+    }
+
     return (
         <>
         <Head title="Create Variation" />
+        <div className="row">
+                <div className="col-md-12">
+                    <h3 className="page-title">Variation</h3>
+                </div>
+            </div>
+        {alert ? <ActionAlerts message={alertContent} closeAlert={closeAlert} /> : <></> }
         <form className="form" onSubmit={handleSubmit} ref={formRef} id='eform'>
             <Tabs defaultActiveKey="first">
                 <Tab eventKey="first" title="New Variation" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>

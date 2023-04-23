@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class RenouvellementController extends Controller
 {
@@ -108,157 +109,22 @@ class RenouvellementController extends Controller
         $ren->doc = $docs;
         $ren->created_by = $request->created_by;
         $ren->type = $request->query('type');
-        $ren->save();
 
-        if ($request->query('type') == 'submit') {
-            $registrationIdentification = array(
-                'Product',
-                'Procedure Type',
-                'Country',
-                'RMS',
-                'Procedure Number',
-                'Local Tradename',
-                'Submission Type',
-                // 'Product Type'
-            );
-            $renewalDetail = array(
-                'Renewal Title',
-                // 'Variation Category',
-                // 'Event Description',
-                'Application N°',
-                'Dossier Submission Format',
-                'Reason For Variation',
-                'Change Control or pre-assessment',
-                'Remarks'
-            );
-            $renewalStatus = array(
-                'Country',
-                'Status',
-                'Status Date',
-                'eCTD sequence',
-                // 'Change Control or pre-assessment',
-                // 'CCDS/Core PIL ref n°',
-                'Remarks',
-                'Implementation Deadline',
-                'Next Renewals',
-                'Next Renewals Submission Deadline',
-                'Next Renewal Date'
-            );
-            $document = array(
-                'Document type',
-                'Document title',
-                'Language',
-                'Version date',
-                'CCDS/Core PIL ref n°',
-                'Remarks',
-                'Document'
-            );
-
-            $spreadsheet = new Spreadsheet();
-            $sheet = $spreadsheet->getActiveSheet();
-            $sheet->setTitle('Registration identification');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-
-            $sheet->fromArray($registrationIdentification, NULL, 'A1');
-            $sheet->fromArray([
-                $ren->product['value'],
-                $ren->procedure_type['value'],
-                "",
-                $ren->rms ? $ren->rms['value'] : '',
-                $ren->procedure_num,
-                $ren->local_tradename,
-                $ren->application_stage ? $ren->application_stage['value'] : '',
-                // $ren->product_type ? $ren->product_type['value'] : ''
-            ], NULL, 'A2');
-
-            if(array_key_exists('value', $ren->country)) {
-                $sheet->setCellValue('C2', $ren->country['value']);
+        if($request->query('type') === 'submit') {
+            $res = $this->generetExcel($ren);
+            if($res === true){
+                $ren->save();
+                return redirect('dashboard')->with('message', 'Your form has been successfully submitted to the Data Entry Team');
             }else {
-                foreach ($ren->country as $cnt => $country) {
-                    $cnt += 2;
-                    $sheet->setCellValue('C' . $cnt, $country['value']);
-                }
+                return redirect()->back()->withErrors([
+                    'create' => 'ups, there was an error please try later'
+                ]);
             }
             
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(1);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Renewal Details');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($renewalDetail, NULL, 'A1');
-            $sheet->fromArray([
-                $ren->renewal_title,
-                // $ren->category,
-                // $ren->description,
-                $ren->application_num,
-                $ren->submission_format ? $ren->submission_format['value'] : '',
-                $ren->validation_reason ? $ren->validation_reason['value'] : '',
-                $ren->control,
-                $ren->remarks,
-            ], NULL, 'A2');
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(2);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Status');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($renewalStatus, NULL, 'A1');
-            
-
-            $st = 2;
-            foreach($ren->statuses as $stt) {
-                $sheet->setCellValue('A' . $st, is_array($stt['country']) ? $stt['country']['value'] : '');
-                $sheet->setCellValue('B' . $st, $stt['status']['value']);
-                $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
-                $sheet->setCellValue('D' . $st, $stt['ectd']);
-                // $sheet->setCellValue('E' . $st, $stt['control']);
-                // $sheet->setCellValue('F' . $st, $stt['cdds']);
-                $sheet->setCellValue('E' . $st, $stt['remarks']);
-                $sheet->setCellValue('F' . $st, date("d-m-Y", strtotime($stt['implimentation_deadline'])));
-                $sheet->setCellValue('G' . $st, is_array($stt['next_renewals']) ? $stt['next_renewals']['value'] : '');
-                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['next_renewals_deadline'])));
-                $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['next_renewals_date'])));
-                $st++;
-            }
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(3);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Documents');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($document, NULL, 'A1');
-
-            $dc = 2;
-            foreach($ren->doc as $docu) {
-                $sheet->setCellValue('A' . $dc, is_array($docu['document_type']) ? $docu['document_type']['value'] : '');
-                $sheet->setCellValue('B' . $dc, $docu['document_title']);
-                $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
-                $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['cdds']);
-                $sheet->setCellValue('F' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('G' . $dc, $docu['document']);
-                $dc++;
-            }
-
-            $writer = new Xlsx($spreadsheet);
-
-            $nom = explode("-", $request->product['value']);
-            $productName = $nom[0];
-            
-            $date = date('d-m-y');
-            if($request->procedure_type['value'] == 'National' || $request->procedure_type['value'] == 'Centralized') {
-                $name = 'eForm_Renewal_' .$productName . '_' .$request->country['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_Renewal_' .$productName . '_' .$request->country['value'];
-            }else {
-                $name = 'eForm_Renewal_' .$productName . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_Renewal_' .$productName . '_' .$request->procedure_type['value'];
-            }
-            $writer->save($name);
-
-            Mail::to(getenv('MAIL_TO'))->send(new Renewal($name, $productName, $subject));
-
-            return redirect('dashboard')->with('message', 'Your form has been successfully submitted to the Data Entry Team');
+        }else {
+            $ren->save();
+            return redirect('dashboard')->with('message', 'Your form has been successfully saved');
         }
-
-        return redirect('dashboard')->with('message', 'Your form has been successfully saved');
     }
 
     /**
@@ -362,52 +228,80 @@ class RenouvellementController extends Controller
         $ren->doc = $docs;
         $ren->created_by = $request->created_by;
         $ren->type = $request->query('type');
-        $ren->save();
 
-        if ($request->query('type') == 'submit') {
-            $registrationIdentification = array(
-                'Product',
-                'Procedure Type',
-                'Country',
-                'RMS',
-                'Procedure Number',
-                'Local Tradename',
-                'Submission Type',
-                // 'Product Type'
-            );
-            $renewalDetail = array(
-                'Renewal Title',
-                // 'Variation Category',
-                // 'Event Description',
-                'Application N°',
-                'Dossier Submission Format',
-                'Reason For Variation',
-                'Change Control or pre-assessment',
-                'Remarks'
-            );
-            $renewalStatus = array(
-                'Country',
-                'Status',
-                'Status Date',
-                'eCTD sequence',
-                // 'Change Control or pre-assessment',
-                // 'CCDS/Core PIL ref n°',
-                'Remarks',
-                'Implementation Deadline',
-                'Next Renewals',
-                'Next Renewals Submission Deadline',
-                'Next Renewal Date'
-            );
-            $document = array(
-                'Document type',
-                'Document title',
-                'Language',
-                'Version date',
-                'CCDS/Core PIL ref n°',
-                'Remarks',
-                'Document'
-            );
+        if($request->query('type') === 'submit') {
+            $res = $this->generetExcel($ren);
+            if($res === true){
+                $ren->save();
+                return redirect('dashboard')->with('message', 'Your form has been successfully submitted to the Data Entry Team');
+            }else {
+                return redirect()->back()->withErrors([
+                    'create' => 'ups, there was an error please try later'
+                ]);
+            }
+            
+        }else {
+            $ren->save();
+            return redirect('dashboard')->with('message', 'Your form has been successfully saved');
+        }
+    }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Renouvellement  $renouvellement
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Renouvellement $renouvellement)
+    {
+        //
+    }
+
+    public function generetExcel($ren)
+    {
+        $registrationIdentification = array(
+            'Product',
+            'Procedure Type',
+            'Country',
+            'RMS',
+            'Procedure Number',
+            'Local Tradename',
+            'Submission Type',
+            // 'Product Type'
+        );
+        $renewalDetail = array(
+            'Renewal Title',
+            // 'Variation Category',
+            // 'Event Description',
+            'Application N°',
+            'Dossier Submission Format',
+            'Reason For Variation',
+            'Change Control or pre-assessment',
+            'Remarks'
+        );
+        $renewalStatus = array(
+            'Country',
+            'Status',
+            'Status Date',
+            'eCTD sequence',
+            // 'Change Control or pre-assessment',
+            // 'CCDS/Core PIL ref n°',
+            'Remarks',
+            'Implementation Deadline',
+            'Next Renewals',
+            'Next Renewals Submission Deadline',
+            'Next Renewal Date'
+        );
+        $document = array(
+            'Document type',
+            'Document title',
+            'Language',
+            'Version date',
+            'CCDS/Core PIL ref n°',
+            'Remarks',
+            'Document'
+        );
+        try {
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
             $sheet->setTitle('Registration identification');
@@ -422,18 +316,18 @@ class RenouvellementController extends Controller
                 $ren->procedure_num,
                 $ren->local_tradename,
                 $ren->application_stage ? $ren->application_stage['value'] : '',
-                //$ren->product_type ? $ren->product_type['value'] : ''
+                // $ren->product_type ? $ren->product_type['value'] : ''
             ], NULL, 'A2');
 
-            if(array_key_exists('value', $ren->country)) {
+            if (array_key_exists('value', $ren->country)) {
                 $sheet->setCellValue('C2', $ren->country['value']);
-            }else {
+            } else {
                 foreach ($ren->country as $cnt => $country) {
                     $cnt += 2;
                     $sheet->setCellValue('C' . $cnt, $country['value']);
                 }
             }
-            
+
 
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(1);
@@ -456,12 +350,12 @@ class RenouvellementController extends Controller
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Status');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($renewalStatus, NULL, 'A1');
-            
+
 
             $st = 2;
-            foreach($ren->statuses as $stt) {
+            foreach ($ren->statuses as $stt) {
                 $sheet->setCellValue('A' . $st, is_array($stt['country']) ? $stt['country']['value'] : '');
-                $sheet->setCellValue('B' . $st, is_array($stt['status']['value']));
+                $sheet->setCellValue('B' . $st, $stt['status']['value']);
                 $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
                 $sheet->setCellValue('D' . $st, $stt['ectd']);
                 // $sheet->setCellValue('E' . $st, $stt['control']);
@@ -481,10 +375,10 @@ class RenouvellementController extends Controller
             $sheet->fromArray($document, NULL, 'A1');
 
             $dc = 2;
-            foreach($ren->doc as $docu) {
+            foreach ($ren->doc as $docu) {
                 $sheet->setCellValue('A' . $dc, is_array($docu['document_type']) ? $docu['document_type']['value'] : '');
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
-                $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
+                $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value'] : '');
                 $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
                 $sheet->setCellValue('E' . $dc, $docu['cdds']);
                 $sheet->setCellValue('F' . $dc, $docu['dremarks']);
@@ -494,35 +388,25 @@ class RenouvellementController extends Controller
 
             $writer = new Xlsx($spreadsheet);
 
-            $nom = explode("-", $request->product['value']);
+            $nom = explode("-", $ren->product['value']);
             $productName = $nom[0];
-            
+
             $date = date('d-m-y');
-            if($request->procedure_type['value'] == 'National' || $request->procedure_type['value'] == 'Centralized') {
-                $name = 'eForm_Renewal_' .$productName . '_' .$request->country['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_Renewal_' .$productName . '_' .$request->country['value'];
-            }else {
-                $name = 'eForm_Renewal_' .$productName . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_Renewal_' .$productName . '_' .$request->procedure_type['value'];
+            if ($ren->procedure_type['value'] == 'National' || $ren->procedure_type['value'] == 'Centralized') {
+                $name = 'eForm_Renewal_' . $productName . '_' . $ren->country['value'] . '_' . $date . '.xlsx';
+                $subject = 'eForm_Renewal_' . $productName . '_' . $ren->country['value'];
+            } else {
+                $name = 'eForm_Renewal_' . $productName . '_' . $ren->procedure_type['value'] . '_' . $date . '.xlsx';
+                $subject = 'eForm_Renewal_' . $productName . '_' . $ren->procedure_type['value'];
             }
             $writer->save($name);
 
             Mail::to(getenv('MAIL_TO'))->send(new Renewal($name, $productName, $subject));
+            return true;
+        } catch (Throwable $e) {
 
-            return redirect('dashboard')->with('message', 'Your form has been successfully submitted to the Data Entry Team');
+            report($e);
+            return $e;
         }
-
-        return redirect('dashboard')->with('message', 'Your form has been successfully saved');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Renouvellement  $renouvellement
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Renouvellement $renouvellement)
-    {
-        //
     }
 }

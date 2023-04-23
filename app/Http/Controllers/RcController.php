@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class RcController extends Controller
 {
@@ -162,406 +163,21 @@ class RcController extends Controller
         $rc->created_by = $request->created_by;
         $rc->type = $request->query('type');
 
-        $rc->save();
-
-        if ($request->query('type') === 'submit') {
-            $generalInfo = array(
-                'Procedure Type',
-                'Country',
-                'RMS',
-                'Procedure Number',
-                'Submission Type'
-            );
-            $basicInfo = array(
-                'Product',
-                'Local Tradename',
-                'Registration Holder',
-                'Application Number',
-                'Dossier Reference Number',
-                'PV Contact Email',
-                'PV Contact Phone',
-                'Change Control Ref',
-                'Remarks',
-            );
-            $OrphanDrug = array(
-                'Orphan Designation Status',
-                'Orphan Indication Type',
-            );
-            $UnderIntensive = array(
-                'Under Intensive Monitoring',
-            );
-            $dosageForm = array(
-                'Authorized Pharmaceutical Form',
-                'Administrable pharmaceutical form',
-                'Route Of Admin',
-                'ATC',
-            );
-            $keyDates = array(
-                'Key Date Type',
-                'Date',
-                'Remarks',
-                'Alternate Number Type',
-                'Alternate Number',
-                'Remarks',
-            );
-            $localAgent = array(
-                'Local Agent Company',
-            );
-            $formulations = array(
-                'Ingredient',
-                'Strength Type',
-                'Numerator Lower Val',
-                'Numerator Upper Val',
-                'Numerator Unit',
-                'Function'
-            );
-            $packagings = array(
-                'Sellable Unit Determined By',
-                'Product Legal Status of Supply',
-                'Packaging Type',
-                'Packaging Registration number',
-                'Packaging Name',
-                'Description',
-                'Launched',
-                'First Launch Date',
-                'Packaging Discontinued',
-                'Discontinuation Date',
-                'Remarks',
-                'Package Shelf-life Type',
-                'Shelf Life',
-                'Shelf-life Unit',
-                'Package Storage Condition',
-                'Remarks'
-            );
-            $indications = array(
-                'Indications',
-                'Paediatric Use',
-                'Age'
-            );
-            $manufacturing = array(
-                'Manufacturer',
-                'Operation Type'
-            );
-            $status = array(
-                'Country',
-                'Status',
-                'Status Date',
-                'eCTD Sequence',
-                // 'Change Control Ref',
-                'Internal Submission Reference',
-                'Remarks',
-            );
-            $next_renewals = array(
-                'Next Renewals',
-                'Next Renewal Submission Deadline',
-                'Next Renewal Date',
-            );
-            $document = array(
-                'Document type',
-                'Document title',
-                'Language',
-                'Version date',
-                'CCDS/Core PIL ref n°',
-                'Remarks',
-                'Document'
-            );
-            
-            $spreadsheet = new Spreadsheet();
-            $sheet = $spreadsheet->getActiveSheet();
-            $sheet->setTitle('General information');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($generalInfo, NULL, 'A1');
-            $sheet->fromArray([
-                $rc->procedure_type['value'],
-                "",
-                $rc->rms ? $rc->rms['value'] : '',
-                $rc->procedure_number,
-                $rc->application_stage['value'],
-            ], NULL, 'A2');
-           
-            if(array_key_exists('value', $rc->country)) {
-                $sheet->setCellValue('B2', $rc->country['value']);
+        if($request->query('type') === 'submit') {
+            $res = $this->generetExcel($rc);
+            if($res === true){
+                $rc->save();
+                return redirect('dashboard')->with('message', 'Your form has been successfully submitted to the Data Entry Team');
             }else {
-                foreach ($rc->country as $cnt => $country) {
-                    $cnt += 2;
-                    $sheet->setCellValue('B' . $cnt, $country['value']);
-                }
+                return redirect()->back()->withErrors([
+                    'create' => 'ups, there was an error please try later'
+                ]);
             }
             
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(1);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Basic information');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($basicInfo, NULL, 'A1');
-            $sheet->fromArray([
-                $rc->product_name['value'],
-                $rc->local_tradename,
-                $rc->registration_holder['value'],
-                $rc->application_number,
-                $rc->dossier_reference,
-                $rc->pv_contact_email,
-                $rc->pv_contact_phone,
-                $rc->change_control_ref,
-                $rc->bremarks
-            ], NULL, 'A2');
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(2);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Dosage Form');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($dosageForm, NULL, 'A1');
-            $sheet->setCellValue('A2', $rc->authorized_pharmaceutical_form['value']);
-            if(is_array($rc->administrable_pharmaceutical_form))
-            {
-                $sheet->setCellValue('B2', $rc->administrable_pharmaceutical_form['value']);
-            }else {
-                $sheet->setCellValue('B2', "");
-            }
-            
-            $c= 2;
-            foreach($rc->route_of_admin as  $roa) {
-                $sheet->setCellValue('C' . $c, $roa['value']);
-                $c+=1;
-            }
-            $e= 2;
-            foreach($rc->atc as  $at) {
-                $sheet->setCellValue('D' . $e, $at['value']);
-                $e+=1;
-            }
-
-            
-            // $sheet->fromArray([
-            //     $rc->authorized_pharmaceutical_form,
-            //     $rc->administrable_pharmaceutical_form,
-            //     $rc->route_of_admin,
-            //     $rc->atc,
-            // ], NULL, 'A2');
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(3);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Orphan Drug');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($OrphanDrug, NULL, 'A1');
-            $sheet->fromArray([
-                is_array($rc->orphan_designation_status) ? $rc->orphan_designation_status['value'] : '',
-                is_array($rc->orphan_indication_type) ? $rc->orphan_indication_type['value'] : '',
-            ], NULL, 'A2');
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(4);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Under Intensive');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($UnderIntensive, NULL, 'A1');
-            $sheet->fromArray([
-                is_array($rc->under_intensive_monitoring) ? $rc->under_intensive_monitoring['value'] : '',
-            ], NULL, 'A2');
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(5);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Key Dates');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($keyDates, NULL, 'A1');
-            // $sheet->fromArray($rc->key_dates, NULL, 'A2');
-            $n = 2;
-            if(isset($rc->key_dates)) {
-                foreach($rc->key_dates as  $kd) {
-                    //is_array($kd['date_type']) ? $sheet->setCellValue('A' . $n, $kd['date_type']['value']) : $sheet->setCellValue('A' . $n, '');
-                    $sheet->setCellValue('A' . $n, is_array($kd['date_type']) ? $kd['date_type']['value'] : '');
-                    $sheet->setCellValue('B' . $n, date("d-m-Y",strtotime($kd['date'])));
-                    $sheet->setCellValue('C' . $n, $kd['remarks']);
-                    $n+=1;
-                }
-            }
-            
-            $sheet->setCellValue('D2', is_array($rc->alternate_number_type) ? $rc->alternate_number_type['value'] : '');
-            $sheet->setCellValue('E2', $rc->alternate_number);
-            $sheet->setCellValue('F2', $rc->remarks);
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(6);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Local Agent');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($localAgent, NULL, 'A1');
-            $sheet->fromArray([is_array($rc->local_agent_company) ? $rc->local_agent_company['value'] : ''], NULL, 'A2');
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(7);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Formulations');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($formulations, NULL, 'A1');
-            $f = 2;
-           
-            foreach($rc->formulations as $fr) {
-                foreach($fr['ingredient'] as $ing) {
-                    
-                    $sheet->setCellValue('A' . $f, is_array($ing['ingredient']) ? $ing['ingredient']['value'] : '');
-                    $sheet->setCellValue('B' . $f, is_array($ing['function']) ? $ing['function']['value'] : '');
-                    $sheet->setCellValue('C' . $f, is_array($ing['strength_type']) ? $ing['strength_type']['value'] : '');
-                    $sheet->setCellValue('D' . $f, $ing['numerator_lower_val']);
-                    $sheet->setCellValue('E' . $f, $ing['numerator_upper_val']);
-                    $sheet->setCellValue('F' . $f, is_array($ing['numerator_unit']) ? $ing['numerator_unit']['value'] : '');
-                    $f += 1;
-                }
-                $f += 1;
-            }
-            // $sheet->fromArray($rc->formulations
-            // , NULL, 'A2');
-
-            
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(8);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Packagings');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($packagings, NULL, 'A1');
-            $c = 2;
-            foreach ($rc->packagings as $package) {
-                $sheet->setCellValue('A' . $c, is_array($package['sellable_unit_determined_by']) ? $package['sellable_unit_determined_by']['value']: '');
-                $sheet->setCellValue('B' . $c, is_array($package['product_legal_status_of_supply']) ? $package['product_legal_status_of_supply']['value'] : '');
-                $sheet->setCellValue('C' . $c, is_array($package['packaging_type']) ? $package['packaging_type']['value'] : '');
-                $sheet->setCellValue('D' . $c, $package['packaging_registration_number']);
-                $sheet->setCellValue('E' . $c, $package['packaging_name']);
-                $sheet->setCellValue('F' . $c, $package['description']);
-                $sheet->setCellValue('G' . $c, is_array($package['launched']) ? $package['launched']['value'] : '');
-                $sheet->setCellValue('H' . $c, date("d-m-Y",strtotime($package['first_lunch_date'])));
-                $sheet->setCellValue('I' . $c, is_array($package['packaging_discontinued']) ? $package['packaging_discontinued']['value'] : '');
-                $sheet->setCellValue('J' . $c, date("d-m-Y",strtotime($package['discontinuation_date'])));
-                $sheet->setCellValue('K' . $c, $package['remarks']);
-                if(isset($package['packagelif'])){
-                    foreach ($package['packagelif'] as $i => $pl) {
-                        $sheet->setCellValue('L' . $c, is_array($pl['package_shelf_life_type']) ? $pl['package_shelf_life_type']['value'] : '');
-                        $sheet->setCellValue('M' . $c, $pl['shelf_life']);
-                        $sheet->setCellValue('N' . $c, is_array($pl['shelf_life_unit']) ? $pl['shelf_life_unit']['value'] : '');
-                        $sheet->setCellValue('P' . $c, $pl['remarks']);
-                        if (isset($pl['package_storage_condition'])) {
-                            foreach ($pl['package_storage_condition'] as $psc) {
-                                $sheet->setCellValue('O' . $c, $psc['value']);
-                                $c += 1;
-                            }
-                        }
-                    }
-                } 
-            }
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(9);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Indications');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($indications, NULL, 'A1');
-            $in = 2;
-            foreach($rc->indication as $ind) {
-                $sheet->setCellValue('A' . $in, $ind['value']);
-                $in++;
-            }
-            $sheet->setCellValue('B2', is_array($rc->paediatric_use) ? $rc->paediatric_use['value'] : '');
-            $sheet->setCellValue('C2', $rc->age);
-            // $sheet->fromArray([
-            //     $rc->indication['value'],
-            //     is_array($rc->paediatric_use) ? $rc->paediatric_use['value'] : '',
-            //     $rc->age,
-            // ], NULL, 'A2');
-
-            
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(10);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Manufacturing');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($manufacturing, NULL, 'A1');
-            $b = 2;
-            if(isset($rc->manufacturing)) {
-                foreach ($rc->manufacturing as $mnf) {
-                    $sheet->setCellValue('A' . $b, is_array($mnf['manufacturer']) ? $mnf['manufacturer']['value'] : '');
-                    if (isset($mnf['operation_type'])){
-                        foreach ($mnf['operation_type'] as $opt) {
-                            $sheet->setCellValue('B' . $b, is_array($opt) ? $opt['value'] : '');
-                            $b++;
-                        }
-                    }
-                    
-                }
-            }
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(11);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Status');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($status, NULL, 'A1');
-            // $sheet->fromArray($rc->statuses, NULL, 'A2');
-            $st = 2;
-            foreach($rc->statuses as $stt) {
-                $sheet->setCellValue('A' . $st, is_array($stt['country']) ? $stt['country']['value'] : '');
-                $sheet->setCellValue('B' . $st, is_array($stt['status']) ? $stt['status']['value'] : '');
-                $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
-                $sheet->setCellValue('D' . $st, $stt['ectd_sequence']);
-                // $sheet->setCellValue('E' . $st, $stt['change_control_ref']);
-                $sheet->setCellValue('E' . $st, $stt['internal_submission_reference']);
-                $sheet->setCellValue('F' . $st, $stt['remarks']);
-                $st++;
-            }
-            // $hr = $sheet->getHighestRow();
-            // for($i=2; $i<=$hr; $i++) {
-            //     $datef = $sheet->getCell('C'.$i);
-            //     $sheet->setCellValue('C'.$i, date("d-m-Y", strtotime($datef)));
-            // }
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(12);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Next Renewals');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($next_renewals, NULL, 'A1');
-            $sheet->fromArray([
-                $rc->next_renewals,
-                $rc->nr_submission_deadline,
-                $rc->nr_date,
-            ], NULL, 'A2');
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(13);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Documents');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($document, NULL, 'A1');
-            $dc = 2;
-            foreach($rc->doc as $docu) {
-                $sheet->setCellValue('A' . $dc, is_array($docu['document_type']) ? $docu['document_type']['value'] : '');
-                $sheet->setCellValue('B' . $dc, $docu['document_title']);
-                $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
-                $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['cdds']);
-                $sheet->setCellValue('F' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('G' . $dc, $docu['document']);
-                $dc++;
-            }
-            // $sheet->fromArray($rc->doc, NULL, 'A2');
-            // $hr = $sheet->getHighestRow();
-            // for($i=2; $i<=$hr; $i++) {
-            //     $datef = $sheet->getCell('D'.$i);
-            //     $sheet->setCellValue('D'.$i, date("d-m-Y", strtotime($datef)));
-                
-            // }
-
-            $writer = new Xlsx($spreadsheet);
-
-            $nom = explode("-", $request->product_name['value']);
-            $productName = $nom[0];
-
-            $date = date('d-m-y');
-            if($request->procedure_type['value'] == 'National' || $request->procedure_type['value'] == 'Centralized') {
-                $name = 'eForm_NewRegistration_' .$productName . '_' .$request->country['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_NewRegistration_' .$productName . '_' .$request->country['value'];
-            }else {
-                $name = 'eForm_NewRegistration_' .$productName . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_NewRegistration_' .$productName . '_' .$request->procedure_type['value'];
-            }
-            
-            $writer->save($name);
-            Mail::to(getenv('MAIL_TO'))->send(new RcSubmit($name, $productName, $subject));
-
-            return redirect('dashboard')->with('message', 'Your form has been successfully submitted to the Data Entry Team');
-            
+        }else {
+            $rc->save();
+            return redirect('dashboard')->with('message', 'Your form has been successfully saved');
         }
-
-        return redirect('dashboard')->with('message', 'Your form has been successfully saved');
     }
 
 
@@ -706,111 +322,145 @@ class RcController extends Controller
         $rc->doc = $docs;
         $rc->created_by = $request->created_by;
         $rc->type = $request->query('type');
-        $rc->save();
 
-        if ($request->query('type') === 'submit') {
-            $generalInfo = array(
-                'Procedure Type',
-                'Country',
-                'RMS',
-                'Procedure Number',
-                'Product Type',
-                'Submission Type'
-            );
-            $basicInfo = array(
-                'Product',
-                'Local Tradename',
-                'Registration Holder',
-                'Application Number',
-                'Dossier Reference Number',
-                'PV Contact Email',
-                'PV Contact Phone',
-                'Change Control Ref',
-                'Remarks',
-            );
-            $OrphanDrug = array(
-                'Orphan Designation Status',
-                'Orphan Indication Type',
-            );
-            $UnderIntensive = array(
-                'Under Intensive Monitoring',
-            );
-            $dosageForm = array(
-                'Authorized Pharmaceutical Form',
-                'Administrable pharmaceutical form',
-                'Route Of Admin',
-                'ATC',
-            );
-            $keyDates = array(
-                'Key Date Type',
-                'Date',
-                'Remarks',
-                'Alternate Number Type',
-                'Alternate Number',
-                'Remarks',
-            );
-            $localAgent = array(
-                'Local Agent Company',
-            );
-            $formulations = array(
-                'Ingredient',
-                'Strength Type',
-                'Numerator Lower Val',
-                'Numerator Upper Val',
-                'Numerator Unit',
-                'Function'
-            );
-            $packagings = array(
-                'Sellable Unit Determined By',
-                'Product Legal Status of Supply',
-                'Packaging Type',
-                'Packaging Registration number',
-                'Packaging Name',
-                'Description',
-                'Launched',
-                'First Launch Date',
-                'Packaging Discontinued',
-                'Discontinuation Date',
-                'Remarks',
-                'Package Shelf-life Type',
-                'Shelf Life',
-                'Shelf-life Unit',
-                'Package Storage Condition',
-                'Remarks'
-            );
-            $indications = array(
-                'Indications',
-                'Paediatric Use',
-                'Age'
-            );
-            $manufacturing = array(
-                'Manufacturer',
-                'Operation Type'
-            );
-            $status = array(
-                'Country',
-                'Status',
-                'Status Date',
-                'eCTD Sequence',
-                // 'Change Control Ref',
-                'Internal Submission Reference',
-                'Remarks',
-            );
-            $next_renewals = array(
-                'Next Renewals',
-                'Next Renewal Submission Deadline',
-                'Next Renewal Date',
-            );
-            $document = array(
-                'Document type',
-                'Document title',
-                'Language',
-                'Version date',
-                'CCDS/Core PIL ref n°',
-                'Remarks',
-                'Document'
-            );
+        if($request->query('type') === 'submit') {
+            $res = $this->generetExcel($rc);
+            if($res === true){
+                $rc->save();
+                return redirect('dashboard')->with('message', 'Your form has been successfully submitted to the Data Entry Team');
+            }else {
+                return redirect()->back()->withErrors([
+                    'create' => 'ups, there was an error please try later'
+                ]);
+            }
             
+        }else {
+            $rc->save();
+            return redirect('dashboard')->with('message', 'Your form has been successfully saved');
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Rc  $rc
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Rc $rc)
+    {
+       
+    }
+
+    public function messages()
+    {
+        return [
+            'packagings.*.packaging_name' => 'A package name is required',
+        ];
+    }
+
+    public function generetExcel($rc)
+    {
+        $generalInfo = array(
+            'Procedure Type',
+            'Country',
+            'RMS',
+            'Procedure Number',
+            'Submission Type'
+        );
+        $basicInfo = array(
+            'Product',
+            'Local Tradename',
+            'Registration Holder',
+            'Application Number',
+            'Dossier Reference Number',
+            'PV Contact Email',
+            'PV Contact Phone',
+            'Change Control Ref',
+            'Remarks',
+        );
+        $OrphanDrug = array(
+            'Orphan Designation Status',
+            'Orphan Indication Type',
+        );
+        $UnderIntensive = array(
+            'Under Intensive Monitoring',
+        );
+        $dosageForm = array(
+            'Authorized Pharmaceutical Form',
+            'Administrable pharmaceutical form',
+            'Route Of Admin',
+            'ATC',
+        );
+        $keyDates = array(
+            'Key Date Type',
+            'Date',
+            'Remarks',
+            'Alternate Number Type',
+            'Alternate Number',
+            'Remarks',
+        );
+        $localAgent = array(
+            'Local Agent Company',
+        );
+        $formulations = array(
+            'Ingredient',
+            'Strength Type',
+            'Numerator Lower Val',
+            'Numerator Upper Val',
+            'Numerator Unit',
+            'Function'
+        );
+        $packagings = array(
+            'Sellable Unit Determined By',
+            'Product Legal Status of Supply',
+            'Packaging Type',
+            'Packaging Registration number',
+            'Packaging Name',
+            'Description',
+            'Launched',
+            'First Launch Date',
+            'Packaging Discontinued',
+            'Discontinuation Date',
+            'Remarks',
+            'Package Shelf-life Type',
+            'Shelf Life',
+            'Shelf-life Unit',
+            'Package Storage Condition',
+            'Remarks'
+        );
+        $indications = array(
+            'Indications',
+            'Paediatric Use',
+            'Age'
+        );
+        $manufacturing = array(
+            'Manufacturer',
+            'Operation Type'
+        );
+        $status = array(
+            'Country',
+            'Status',
+            'Status Date',
+            'eCTD Sequence',
+            // 'Change Control Ref',
+            'Internal Submission Reference',
+            'Remarks',
+        );
+        $next_renewals = array(
+            'Next Renewals',
+            'Next Renewal Submission Deadline',
+            'Next Renewal Date',
+        );
+        $document = array(
+            'Document type',
+            'Document title',
+            'Language',
+            'Version date',
+            'CCDS/Core PIL ref n°',
+            'Remarks',
+            'Document'
+        );
+        try {
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
             $sheet->setTitle('General information');
@@ -823,15 +473,16 @@ class RcController extends Controller
                 $rc->procedure_number,
                 $rc->application_stage['value'],
             ], NULL, 'A2');
-            if(array_key_exists('value', $rc->country)) {
+
+            if (array_key_exists('value', $rc->country)) {
                 $sheet->setCellValue('B2', $rc->country['value']);
-            }else {
+            } else {
                 foreach ($rc->country as $cnt => $country) {
                     $cnt += 2;
                     $sheet->setCellValue('B' . $cnt, $country['value']);
                 }
             }
-            
+
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(1);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Basic information');
@@ -855,23 +506,24 @@ class RcController extends Controller
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($dosageForm, NULL, 'A1');
             $sheet->setCellValue('A2', $rc->authorized_pharmaceutical_form['value']);
-            if(is_array($rc->administrable_pharmaceutical_form))
-            {
+            if (is_array($rc->administrable_pharmaceutical_form)) {
                 $sheet->setCellValue('B2', $rc->administrable_pharmaceutical_form['value']);
-            }else {
+            } else {
                 $sheet->setCellValue('B2', "");
             }
-            
-            $c= 2;
-            foreach($rc->route_of_admin as  $roa) {
+
+            $c = 2;
+            foreach ($rc->route_of_admin as  $roa) {
                 $sheet->setCellValue('C' . $c, $roa['value']);
-                $c+=1;
+                $c += 1;
             }
-            $e= 2;
-            foreach($rc->atc as  $at) {
+            $e = 2;
+            foreach ($rc->atc as  $at) {
                 $sheet->setCellValue('D' . $e, $at['value']);
-                $e+=1;
+                $e += 1;
             }
+
+
             // $sheet->fromArray([
             //     $rc->authorized_pharmaceutical_form,
             //     $rc->administrable_pharmaceutical_form,
@@ -905,16 +557,16 @@ class RcController extends Controller
             $sheet->fromArray($keyDates, NULL, 'A1');
             // $sheet->fromArray($rc->key_dates, NULL, 'A2');
             $n = 2;
-            if(isset($rc->key_dates)) {
-                foreach($rc->key_dates as  $kd) {
+            if (isset($rc->key_dates)) {
+                foreach ($rc->key_dates as  $kd) {
                     //is_array($kd['date_type']) ? $sheet->setCellValue('A' . $n, $kd['date_type']['value']) : $sheet->setCellValue('A' . $n, '');
                     $sheet->setCellValue('A' . $n, is_array($kd['date_type']) ? $kd['date_type']['value'] : '');
-                    $sheet->setCellValue('B' . $n, date("d-m-Y",strtotime($kd['date'])));
+                    $sheet->setCellValue('B' . $n, date("d-m-Y", strtotime($kd['date'])));
                     $sheet->setCellValue('C' . $n, $kd['remarks']);
-                    $n+=1;
+                    $n += 1;
                 }
             }
-            
+
             $sheet->setCellValue('D2', is_array($rc->alternate_number_type) ? $rc->alternate_number_type['value'] : '');
             $sheet->setCellValue('E2', $rc->alternate_number);
             $sheet->setCellValue('F2', $rc->remarks);
@@ -932,10 +584,10 @@ class RcController extends Controller
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($formulations, NULL, 'A1');
             $f = 2;
-           
-            foreach($rc->formulations as $fr) {
-                foreach($fr['ingredient'] as $ing) {
-                    
+
+            foreach ($rc->formulations as $fr) {
+                foreach ($fr['ingredient'] as $ing) {
+
                     $sheet->setCellValue('A' . $f, is_array($ing['ingredient']) ? $ing['ingredient']['value'] : '');
                     $sheet->setCellValue('B' . $f, is_array($ing['function']) ? $ing['function']['value'] : '');
                     $sheet->setCellValue('C' . $f, is_array($ing['strength_type']) ? $ing['strength_type']['value'] : '');
@@ -949,6 +601,8 @@ class RcController extends Controller
             // $sheet->fromArray($rc->formulations
             // , NULL, 'A2');
 
+
+
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(8);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Packagings');
@@ -956,18 +610,18 @@ class RcController extends Controller
             $sheet->fromArray($packagings, NULL, 'A1');
             $c = 2;
             foreach ($rc->packagings as $package) {
-                $sheet->setCellValue('A' . $c, is_array($package['sellable_unit_determined_by']) ? $package['sellable_unit_determined_by']['value']: '');
+                $sheet->setCellValue('A' . $c, is_array($package['sellable_unit_determined_by']) ? $package['sellable_unit_determined_by']['value'] : '');
                 $sheet->setCellValue('B' . $c, is_array($package['product_legal_status_of_supply']) ? $package['product_legal_status_of_supply']['value'] : '');
                 $sheet->setCellValue('C' . $c, is_array($package['packaging_type']) ? $package['packaging_type']['value'] : '');
                 $sheet->setCellValue('D' . $c, $package['packaging_registration_number']);
                 $sheet->setCellValue('E' . $c, $package['packaging_name']);
                 $sheet->setCellValue('F' . $c, $package['description']);
                 $sheet->setCellValue('G' . $c, is_array($package['launched']) ? $package['launched']['value'] : '');
-                $sheet->setCellValue('H' . $c, date("d-m-Y",strtotime($package['first_lunch_date'])));
+                $sheet->setCellValue('H' . $c, date("d-m-Y", strtotime($package['first_lunch_date'])));
                 $sheet->setCellValue('I' . $c, is_array($package['packaging_discontinued']) ? $package['packaging_discontinued']['value'] : '');
-                $sheet->setCellValue('J' . $c, date("d-m-Y",strtotime($package['discontinuation_date'])));
+                $sheet->setCellValue('J' . $c, date("d-m-Y", strtotime($package['discontinuation_date'])));
                 $sheet->setCellValue('K' . $c, $package['remarks']);
-                if(isset($package['packagelif'])){
+                if (isset($package['packagelif'])) {
                     foreach ($package['packagelif'] as $i => $pl) {
                         $sheet->setCellValue('L' . $c, is_array($pl['package_shelf_life_type']) ? $pl['package_shelf_life_type']['value'] : '');
                         $sheet->setCellValue('M' . $c, $pl['shelf_life']);
@@ -980,7 +634,7 @@ class RcController extends Controller
                             }
                         }
                     }
-                } 
+                }
             }
 
             $spreadsheet->createSheet();
@@ -989,7 +643,7 @@ class RcController extends Controller
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($indications, NULL, 'A1');
             $in = 2;
-            foreach($rc->indication as $ind) {
+            foreach ($rc->indication as $ind) {
                 $sheet->setCellValue('A' . $in, $ind['value']);
                 $in++;
             }
@@ -1001,25 +655,26 @@ class RcController extends Controller
             //     $rc->age,
             // ], NULL, 'A2');
 
+
+
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(10);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Manufacturing');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($manufacturing, NULL, 'A1');
             $b = 2;
-            if(isset($rc->manufacturing)) {
+            if (isset($rc->manufacturing)) {
                 foreach ($rc->manufacturing as $mnf) {
                     $sheet->setCellValue('A' . $b, is_array($mnf['manufacturer']) ? $mnf['manufacturer']['value'] : '');
-                    if (isset($mnf['operation_type'])){
+                    if (isset($mnf['operation_type'])) {
                         foreach ($mnf['operation_type'] as $opt) {
                             $sheet->setCellValue('B' . $b, is_array($opt) ? $opt['value'] : '');
                             $b++;
                         }
                     }
-                    
                 }
             }
-            
+
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex(11);
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Status');
@@ -1027,13 +682,14 @@ class RcController extends Controller
             $sheet->fromArray($status, NULL, 'A1');
             // $sheet->fromArray($rc->statuses, NULL, 'A2');
             $st = 2;
-            foreach($rc->statuses as $stt) {
-                $sheet->setCellValue('A' . $st, is_array($stt['status']) ? $stt['status']['value'] : '');
-                $sheet->setCellValue('B' . $st, date("d-m-Y", strtotime($stt['status_date'])));
-                $sheet->setCellValue('C' . $st, $stt['ectd_sequence']);
-                // $sheet->setCellValue('D' . $st, $stt['change_control_ref']);
-                $sheet->setCellValue('D' . $st, $stt['internal_submission_reference']);
-                $sheet->setCellValue('E' . $st, $stt['remarks']);
+            foreach ($rc->statuses as $stt) {
+                $sheet->setCellValue('A' . $st, is_array($stt['country']) ? $stt['country']['value'] : '');
+                $sheet->setCellValue('B' . $st, is_array($stt['status']) ? $stt['status']['value'] : '');
+                $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
+                $sheet->setCellValue('D' . $st, $stt['ectd_sequence']);
+                // $sheet->setCellValue('E' . $st, $stt['change_control_ref']);
+                $sheet->setCellValue('E' . $st, $stt['internal_submission_reference']);
+                $sheet->setCellValue('F' . $st, $stt['remarks']);
                 $st++;
             }
             // $hr = $sheet->getHighestRow();
@@ -1059,10 +715,10 @@ class RcController extends Controller
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($document, NULL, 'A1');
             $dc = 2;
-            foreach($rc->doc as $docu) {
+            foreach ($rc->doc as $docu) {
                 $sheet->setCellValue('A' . $dc, is_array($docu['document_type']) ? $docu['document_type']['value'] : '');
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
-                $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
+                $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value'] : '');
                 $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
                 $sheet->setCellValue('E' . $dc, $docu['cdds']);
                 $sheet->setCellValue('F' . $dc, $docu['dremarks']);
@@ -1074,48 +730,30 @@ class RcController extends Controller
             // for($i=2; $i<=$hr; $i++) {
             //     $datef = $sheet->getCell('D'.$i);
             //     $sheet->setCellValue('D'.$i, date("d-m-Y", strtotime($datef)));
-                
+
             // }
 
             $writer = new Xlsx($spreadsheet);
 
-            $nom = explode("-", $request->product_name['value']);
+            $nom = explode("-", $rc->product_name['value']);
             $productName = $nom[0];
-            
+
             $date = date('d-m-y');
-            if($request->procedure_type['value'] == 'National' || $request->procedure_type['value'] == 'Centralized') {
-                $name = 'eForm_NewRegistration_' .$productName . '_' .$request->country['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_NewRegistration_' .$productName . '_' .$request->country['value'];
-            }else {
-                $name = 'eForm_NewRegistration_' .$productName . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_NewRegistration_' .$productName . '_' .$request->procedure_type['value'];
+            if ($rc->procedure_type['value'] == 'National' || $rc->procedure_type['value'] == 'Centralized') {
+                $name = 'eForm_NewRegistration_' . $productName . '_' . $rc->country['value'] . '_' . $date . '.xlsx';
+                $subject = 'eForm_NewRegistration_' . $productName . '_' . $rc->country['value'];
+            } else {
+                $name = 'eForm_NewRegistration_' . $productName . '_' . $rc->procedure_type['value'] . '_' . $date . '.xlsx';
+                $subject = 'eForm_NewRegistration_' . $productName . '_' . $rc->procedure_type['value'];
             }
-            
+
             $writer->save($name);
             Mail::to(getenv('MAIL_TO'))->send(new RcSubmit($name, $productName, $subject));
+            return true;
+        } catch (Throwable $e) {
 
-            return redirect('dashboard')->with('message', 'Your form has been successfully submitted to the Data Entry Team');
-            
+            report($e);
+            return $e;
         }
-
-        return redirect('dashboard')->with('message', 'Your form has been successfully saved');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Rc  $rc
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Rc $rc)
-    {
-       
-    }
-
-    public function messages()
-    {
-        return [
-            'packagings.*.packaging_name' => 'A package name is required',
-        ];
     }
 }

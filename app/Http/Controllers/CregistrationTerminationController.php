@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class CregistrationTerminationController extends Controller
 {
@@ -102,145 +103,22 @@ class CregistrationTerminationController extends Controller
         $crt->doc = $docs;
         $crt->created_by = $request->created_by;
         $crt->type = $request->query('type');
-        $crt->save();
 
-        if ($request->query('type') == 'submit') {
-            $registrationIdentification = array(
-                'Product',
-                'Procedure Type',
-                'Country',
-                'RMS',
-                'Procedure Number',
-                'Local Tradename',
-                'Submission Type',
-                // 'Product Type'
-            );
-            $details = array(
-                'Description of the event',
-                // 'Registration Termination Type',
-                'Reason of the event',
-                'Remarks'
-            );
-            $passive = array(
-                'Reason for Passive',
-                'Passive Date',
-                'Passive comment',
-            );
-            $status = array(
-                'Country',
-                'Status',
-                'Status Date',
-                'eCTD sequence',
-                'Change Control or pre-assessment',
-                'CCDS/Core PIL ref n°',
-                'Remarks',
-                'Effective internal implementation date',
-                'Implementation Deadline of deadline for answer',
-                'Impacted of changes approved'
-            );
-            $document = array(
-                'Document type',
-                'Document title',
-                'Language',
-                'Version date',
-                'Remarks',
-                'Document'
-            );
-
-            $spreadsheet = new Spreadsheet();
-            $sheet = $spreadsheet->getActiveSheet();
-            $sheet->setTitle('Registration identification');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-
-            $sheet->fromArray($registrationIdentification, NULL, 'A1');
-            $sheet->fromArray([
-                $crt->product['value'],
-                $crt->procedure_type['value'],
-                "",
-                $crt->rms ? $crt->rms['value'] : '',
-                $crt->procedure_num,
-                $crt->local_tradename,
-                $crt->application_stage ? $crt->application_stage['value'] : '',
-                // $crt->product_type ? $crt->product_type['value'] : ''
-            ], NULL, 'A2');
-
-            if(array_key_exists('value', $crt->country)) {
-                $sheet->setCellValue('C2', $crt->country['value']);
+        if($request->query('type') === 'submit') {
+            $res = $this->generetExcel($crt);
+            if($res === true){
+                $crt->save();
+                return redirect('dashboard')->with('message', 'Your form has been successfully submitted to the Data Entry Team');
             }else {
-                foreach ($crt->country as $cnt => $country) {
-                    $cnt += 2;
-                    $sheet->setCellValue('C' . $cnt, $country['value']);
-                }
-            }
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(1);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('RegistrationTermination Details');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($details, NULL, 'A1');
-            $sheet->fromArray([
-                $crt->description,
-                // is_array($crt->type) ? $crt->type['value'] : '',
-                $crt->reason ? $crt->reason['value'] : '',
-                $crt->remarks
-            ], NULL, 'A2');
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(2);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Passive Details');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($passive, NULL, 'A1');
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(3);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Events Status');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($status, NULL, 'A1');
-            //$sheet->fromArray($crt->statuses, NULL, 'A2');
-
-            $st = 2;
-            foreach($crt->statuses as $stt) {
-                $sheet->setCellValue('A' . $st, is_array($stt['country']) ? $stt['country']['value'] : '');
-                $sheet->setCellValue('B' . $st, $stt['status']['value']);
-                $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
-                $sheet->setCellValue('D' . $st, $stt['ectd']);
-                $sheet->setCellValue('E' . $st, $stt['control']);
-                $sheet->setCellValue('F' . $st, $stt['cdds']);
-                $sheet->setCellValue('G' . $st, $stt['remarks']);
-                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_date'])));
-                $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
-                $sheet->setCellValue('J' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
-                $st++;
-            }
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(4);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Documents');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($document, NULL, 'A1');
-            
-            $dc = 2;
-            foreach($crt->doc as $docu) {
-                $sheet->setCellValue('A' . $dc, is_array($docu['document_type']) ? $docu['document_type']['value'] : '');
-                $sheet->setCellValue('B' . $dc, $docu['document_title']);
-                $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
-                $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('F' . $dc, $docu['document']);
-                $dc++;
+                return redirect()->back()->withErrors([
+                    'create' => 'ups, there was an error please try later'
+                ]);
             }
             
-            $writer = new Xlsx($spreadsheet);
-            
-            $date = date('d-m-y');
-            $name = 'Registration Termination' . $date . '.xlsx';
-            $writer->save($name);
-
-            return redirect('dashboard')->with('message', 'Your form has been successfully submitted to the Data Entry Team');
-
+        }else {
+            $crt->save();
+            return redirect('dashboard')->with('message', 'Your form has been successfully saved');
         }
-
-        return redirect('dashboard')->with('message', 'Your form has been successfully saved');
     }
 
     /**
@@ -286,5 +164,146 @@ class CregistrationTerminationController extends Controller
     public function destroy(CregistrationTermination $cregistrationTermination)
     {
         //
+    }
+
+    public function generetExcel($crt)
+    {
+        $registrationIdentification = array(
+            'Product',
+            'Procedure Type',
+            'Country',
+            'RMS',
+            'Procedure Number',
+            'Local Tradename',
+            'Submission Type',
+            // 'Product Type'
+        );
+        $details = array(
+            'Description of the event',
+            // 'Registration Termination Type',
+            'Reason of the event',
+            'Remarks'
+        );
+        $passive = array(
+            'Reason for Passive',
+            'Passive Date',
+            'Passive comment',
+        );
+        $status = array(
+            'Country',
+            'Status',
+            'Status Date',
+            'eCTD sequence',
+            'Change Control or pre-assessment',
+            'CCDS/Core PIL ref n°',
+            'Remarks',
+            'Effective internal implementation date',
+            'Implementation Deadline of deadline for answer',
+            'Impacted of changes approved'
+        );
+        $document = array(
+            'Document type',
+            'Document title',
+            'Language',
+            'Version date',
+            'Remarks',
+            'Document'
+        );
+        try {
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+            $sheet->setTitle('Registration identification');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+
+            $sheet->fromArray($registrationIdentification, NULL, 'A1');
+            $sheet->fromArray([
+                $crt->product['value'],
+                $crt->procedure_type['value'],
+                "",
+                $crt->rms ? $crt->rms['value'] : '',
+                $crt->procedure_num,
+                $crt->local_tradename,
+                $crt->application_stage ? $crt->application_stage['value'] : '',
+                // $crt->product_type ? $crt->product_type['value'] : ''
+            ], NULL, 'A2');
+
+            if (array_key_exists('value', $crt->country)) {
+                $sheet->setCellValue('C2', $crt->country['value']);
+            } else {
+                foreach ($crt->country as $cnt => $country) {
+                    $cnt += 2;
+                    $sheet->setCellValue('C' . $cnt, $country['value']);
+                }
+            }
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(1);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('RegistrationTermination Details');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($details, NULL, 'A1');
+            $sheet->fromArray([
+                $crt->description,
+                // is_array($crt->type) ? $crt->type['value'] : '',
+                $crt->reason ? $crt->reason['value'] : '',
+                $crt->remarks
+            ], NULL, 'A2');
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(2);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Passive Details');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($passive, NULL, 'A1');
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(3);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Events Status');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($status, NULL, 'A1');
+            //$sheet->fromArray($crt->statuses, NULL, 'A2');
+
+            $st = 2;
+            foreach ($crt->statuses as $stt) {
+                $sheet->setCellValue('A' . $st, is_array($stt['country']) ? $stt['country']['value'] : '');
+                $sheet->setCellValue('B' . $st, $stt['status']['value']);
+                $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
+                $sheet->setCellValue('D' . $st, $stt['ectd']);
+                $sheet->setCellValue('E' . $st, $stt['control']);
+                $sheet->setCellValue('F' . $st, $stt['cdds']);
+                $sheet->setCellValue('G' . $st, $stt['remarks']);
+                $sheet->setCellValue('H' . $st, date("d-m-Y", strtotime($stt['implimentation_date'])));
+                $sheet->setCellValue('I' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
+                $sheet->setCellValue('J' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
+                $st++;
+            }
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(4);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('Documents');
+            $sheet->getStyle('1:1')->getFont()->setBold(true);
+            $sheet->fromArray($document, NULL, 'A1');
+
+            $dc = 2;
+            foreach ($crt->doc as $docu) {
+                $sheet->setCellValue('A' . $dc, is_array($docu['document_type']) ? $docu['document_type']['value'] : '');
+                $sheet->setCellValue('B' . $dc, $docu['document_title']);
+                $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value'] : '');
+                $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
+                $sheet->setCellValue('E' . $dc, $docu['dremarks']);
+                $sheet->setCellValue('F' . $dc, $docu['document']);
+                $dc++;
+            }
+
+            $writer = new Xlsx($spreadsheet);
+
+            $date = date('d-m-y');
+            $name = 'Registration Termination' . $date . '.xlsx';
+            $writer->save($name);
+            //Mail::to(getenv('MAIL_TO'))->send(new MailClinical($name, $productName, $subject));
+            return true;
+        } catch (Throwable $e) {
+
+            report($e);
+            return $e;
+        }
     }
 }

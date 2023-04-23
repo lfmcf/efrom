@@ -486,11 +486,11 @@ const Dashboard = (props) => {
 
     const [open, setOpen] = React.useState(false);
     const [data, setData] = useState([]);
-    const [show, setShow] = useState(false);
     const [numberForms, setNumberForms] = useState();
     const [value, setValue] = React.useState("01/01/2022");
     const [tovalue, setTovalue] = React.useState("02/15/2022");
     const [formType, setFormType] = React.useState("All");
+    const [view, setView] = useState(localStorage.getItem('view') ?  localStorage.getItem('view') : 'table');
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -525,9 +525,7 @@ const Dashboard = (props) => {
             { form: 'Clinical Registration Termination', population: props.crtcount },
         ];
         setData(arr)
-    }, []);
-
-    
+    }, [view]);
 
     return (
         <>
@@ -548,13 +546,13 @@ const Dashboard = (props) => {
                         {/* <h3 className="page-title"><i style={{ paddingBottom: '8px' }} className="fas fa-home"></i> / Dashboard</h3> */}
                         <div>
                             <Tp title="Tables view">
-                                <IconButton onClick={() => setShow(!show)} size='small' aria-label="delete" color="success">
+                                <IconButton onClick={() => localStorage.setItem('view', 'table') & setView('table') } size='small' aria-label="delete" color="success">
                                     <TableViewIcon />
                                 </IconButton>
                             </Tp>
                             <span style={{ fontSize: '20px' }}>/</span>
                             <Tp title="KPI view">
-                                <IconButton onClick={() => setShow(!show)} size='small' aria-label="delete" color="secondary">
+                                <IconButton onClick={() => localStorage.setItem('view', 'kpi') & setView('kpi')} size='small' aria-label="delete" color="secondary">
                                     <EqualizerIcon />
                                 </IconButton>
                             </Tp>
@@ -563,7 +561,7 @@ const Dashboard = (props) => {
 
                 </div>
             </div>
-            <div style={{ display: show ? '' : 'none' }}>
+            <div style={{ display: view === 'table' ? '' : 'none' }}>
                 <div className="row">
                     <div className="col-12" >
                         <div className="card main-card">
@@ -608,7 +606,7 @@ const Dashboard = (props) => {
 
             </div>
 
-            <div style={{ display: show ? 'none' : '' }}>
+            <div style={{ display: view === 'kpi' ? '' : 'none' }}>
 
                 <Grid container spacing={2}>
                     <Grid item xs={3}>
@@ -645,7 +643,6 @@ const Dashboard = (props) => {
                     <Grid item xs={9}>
                         <h5 className='mb-3 head-table' style={{ fontSize: '15px' }}>Number of Forms by type of forms</h5>
                         <Paper elevation={0} variant="outlined" style={{ margin: '10px 0' }}>
-
                             <Chart
                                 data={data}
                             >
@@ -656,9 +653,7 @@ const Dashboard = (props) => {
                                     valueField="population"
                                     argumentField="form"
                                 />
-                                {/* <Title
-                            text="Number of Forms by type of forms"
-                        /> */}
+    
                                 <EventTracker />
                                 <Tooltip />
                             </Chart>
