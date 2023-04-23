@@ -11,7 +11,7 @@ export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
-        remember: '',
+        remember: false,
     });
 
     useEffect(() => {
@@ -63,9 +63,11 @@ export default function Login({ status, canResetPassword }) {
                 <div className="main_form_group">
                     <div className="main_form_field">
                         <label className="remember_btn">
-                            <input type="checkbox" name="remember" value={data.remember} className="main_form_checkbox" onChange={onHandleChange} />
+                            <input type="checkbox" name="remember" checked={data.remember} className="main_form_checkbox" onChange={onHandleChange} />
                             <span className="main_form_custom">
+                                {data.remember ?
                                 <svg className="mdi-icon" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg>
+                                : ''}
                             </span>
                             <span className="main_form_text">Remember me</span>
                         </label>
@@ -76,7 +78,7 @@ export default function Login({ status, canResetPassword }) {
                         <button type="submit" className="btn_signin">Sign In</button>
                     </div>
                     <div className="form-button">
-                        <button type='button' onClick={() => window.location.replace('https://dataeform.com/saml2/72840654-f704-423e-aa3c-502bc1c68c2a/login')} className="btn_signin">SSO</button>
+                        <button type='button' onClick={() => window.location.replace('https://dataeform.com/saml2/72840654-f704-423e-aa3c-502bc1c68c2a/login')} className="btn_signin">Connect with Azure</button>
                     </div>
                 </div>
                 
