@@ -17,6 +17,7 @@ import { Head } from '@inertiajs/inertia-react';
 import moment from 'moment';
 import ModalP from '@/Components/Modalp';
 import AddIcon from '@mui/icons-material/Add';
+import ActionAlerts from '@/Components/ActionAlerts';
 
 function a11yProps(index) {
     return {
@@ -53,7 +54,9 @@ const Create = (props) => {
     const [showsavemodal, setSavemodal] = useState({ show: false, name: '' });
     const formRef = React.useRef();
     const [statuserror, setStatusError] = useState(false);
-    const [statusCountry, setStatusCountry] = useState([{label: 'All', value: 'All'}])
+    const [statusCountry, setStatusCountry] = useState([{label: 'All', value: 'All'}]);
+    const [alert, setAlert] = useState(false);
+    const [alertContent, setAlertContent] = useState('');
 
     let porductOptions = props.products.map(function (product) {
         return {
@@ -178,7 +181,15 @@ const Create = (props) => {
         e.preventDefault();
         let submitType = window.event.target.name;
         post(route('storerenewal', { 'type': submitType }), {
-            onError: (e) => e.create ? alert(e.create) : alert('The eForm cannot be submitted due to field in Red not properly populated')
+            onError: (e) => {if(e.create){ 
+                setAlert(true);
+                setAlertContent(e.create)
+            }
+            else { 
+                setAlert(true); 
+                setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
+            }
+            }
         });
     }
 
@@ -259,6 +270,10 @@ const Create = (props) => {
         reset()
     }
 
+    const closeAlert = () => {
+        setAlert(false);
+    }
+
     return (
         <>
             <Head title="Renewal - Create" />
@@ -267,6 +282,7 @@ const Create = (props) => {
                     <h3 className="page-title">Renewal</h3>
                 </div>
             </div>
+            {alert ? <ActionAlerts message={alertContent} closeAlert={closeAlert} /> : <></> }
             <div className="row">
                 <div className="col-md-12">
 

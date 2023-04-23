@@ -115,7 +115,7 @@ class AmendmentsController extends Controller
             
         }else {
             $amendments->save();
-            return redirect('dashboard')->with('message', 'Your form has been successfully submitted saved');
+            return redirect('dashboard')->with('message', 'Your form has been successfully saved');
         }
         
         
@@ -232,7 +232,7 @@ class AmendmentsController extends Controller
             }
         } else {
             $amendments->save();
-            return redirect('dashboard')->with('message', 'Your form has been successfully submitted saved');
+            return redirect('dashboard')->with('message', 'Your form has been successfully saved');
         }
         
     }

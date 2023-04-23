@@ -22,6 +22,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import moment from 'moment';
+import ActionAlerts from '@/Components/ActionAlerts';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -119,6 +120,8 @@ const Edit = (props) => {
     const [value, setValue] = useState(0);
     const [statusCountry, setStatusCountry] = useState([{label: 'All', value: 'All'}])
     const firstTimeRender = React.useRef(true);
+    const [alert, setAlert] = useState(false);
+    const [alertContent, setAlertContent] = useState('');
 
     const handleMChange = (event, newValue) => {
 
@@ -132,11 +135,27 @@ const Edit = (props) => {
         const opname = new URLSearchParams(search).get('opr');
         if (opname === 'edit') {
             post(route('updatefinishproduct', { 'type': submitType }), {
-                onError: (e) => e.create ? alert(e.create) : alert('The eForm cannot be submitted due to field in Red not properly populated')
+                onError: (e) => {if(e.create){ 
+                    setAlert(true);
+                    setAlertContent(e.create)
+                }
+                else { 
+                    setAlert(true); 
+                    setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
+                }
+                }
             });
         } else {
             post(route('storefinishproduct', { 'type': submitType }), {
-                onError: (e) => e.create ? alert(e.create) : alert('The eForm cannot be submitted due to field in Red not properly populated')
+                onError: (e) => {if(e.create){ 
+                    setAlert(true);
+                    setAlertContent(e.create)
+                }
+                else { 
+                    setAlert(true); 
+                    setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
+                }
+                }
             });
         }
 
@@ -533,6 +552,9 @@ const Edit = (props) => {
         }
     }, [errors]);
 
+    const closeAlert = () => {
+        setAlert(false);
+    }
 
     return (
         <>
@@ -542,6 +564,7 @@ const Edit = (props) => {
                     <h3 className="page-title">MA - registration creation</h3>
                 </div>
             </div>
+            {alert ? <ActionAlerts message={alertContent} closeAlert={closeAlert} /> : <></> }
             <div className="row">
                 <div className="col-md-12">
 

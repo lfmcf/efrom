@@ -13,6 +13,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Company;
+use Throwable;
 
 class TransferController extends Controller
 {
@@ -103,164 +104,22 @@ class TransferController extends Controller
         $transfer->doc = $docs;
         $transfer->created_by = $request->created_by;
         $transfer->type = $request->query('type');
-        $transfer->save();
 
-        if ($request->query('type') === 'submit') {
-            $registrationIdentification = array(
-                'Product',
-                'Procedure Type',
-                'Country',
-                'RMS',
-                'Procedure Number',
-                'Local Tradename',
-                'Submission Type',
-                // 'Product Type'
-            );
-            $maTransferDetail = array(
-                'Transfer Description',
-                'Reason for transfer',
-                'Previous MAH',
-                'New MAH',
-                'Change Control or pre-assessment',
-                'Remarks',
-            );
-            $eventStatus = array(
-                'Country',
-                'Status',
-                'Status Date',
-                'eCTD sequence',
-                // 'Change Control or pre-assessment',
-                // 'CCDS/Core PIL ref n°',
-                'Remarks',
-                'Effective internal implementation date',
-                'Implementation Deadline of deadline for answer',
-                'Impacted of changes approved'
-            );
-            $document = array(
-                'Document type',
-                'Document title',
-                'Language',
-                'Version date',
-                'CCDS/Core PIL ref n°',
-                'Remarks',
-                'Document'
-            );
-
-
-            $spreadsheet = new Spreadsheet();
-            $sheet = $spreadsheet->getActiveSheet();
-            $sheet->setTitle('Registration identification');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-
-            $sheet->fromArray($registrationIdentification, NULL, 'A1');
-
-            $sheet->fromArray([
-                $transfer->product['value'],
-                $transfer->procedure_type['value'],
-                "",
-                $transfer->rms ? $transfer->rms['value'] : '',
-                $transfer->procedure_num,
-                $transfer->local_tradename,
-                $transfer->application_stage ? $transfer->application_stage['value'] : '',
-                // $transfer->product_type ? $transfer->product_type['value'] : ''
-            ], NULL, 'A2');
-
-            if(array_key_exists('value', $transfer->country)) {
-                $sheet->setCellValue('C2', $transfer->country['value']);
+        if($request->query('type') === 'submit') {
+            $res = $this->generetExcel($transfer);
+            if($res === true){
+                $transfer->save();
+                return redirect('dashboard')->with('message', 'Your form has been successfully submitted to the Data Entry Team');
             }else {
-                foreach ($transfer->country as $cnt => $country) {
-                    $cnt += 2;
-                    $sheet->setCellValue('C' . $cnt, $country['value']);
-                }
+                return redirect()->back()->withErrors([
+                    'create' => 'ups, there was an error please try later'
+                ]);
             }
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(1);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('MA Transfer Details');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($maTransferDetail, NULL, 'A1');
-            $sheet->fromArray([
-                $transfer->description,
-                $transfer->reason ? $transfer->reason['value'] : '',
-                $transfer->previous_mah ? $transfer->previous_mah['value'] : '',
-                $transfer->new_mah ? $transfer->new_mah['value'] : '',
-                $transfer->control,
-                $transfer->remarks
-            ], NULL, 'A2');
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(2);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Events Status');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($eventStatus, NULL, 'A1');
-            // $sheet->fromArray($transfer->statuses, NULL, 'A2');
-            // $hr = $sheet->getHighestRow();
-            // for($i=2; $i<=$hr; $i++) {
-            //     $datef = $sheet->getCell('C'.$i);
-            //     $sheet->setCellValue('C'.$i, date("d-m-Y", strtotime($datef)));
-            // }
-
-            $st = 2;
-            foreach($transfer->statuses as $stt) {
-                $sheet->setCellValue('A' . $st, is_array($stt['country']) ? $stt['country']['value'] : '');
-                $sheet->setCellValue('B' . $st, $stt['status']['value']);
-                $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
-                $sheet->setCellValue('D' . $st, $stt['ectd']);
-                // $sheet->setCellValue('E' . $st, $stt['control']);
-                // $sheet->setCellValue('F' . $st, $stt['cdds']);
-                $sheet->setCellValue('E' . $st, $stt['remarks']);
-                $sheet->setCellValue('F' . $st, date("d-m-Y", strtotime($stt['implimentation_date'])));
-                $sheet->setCellValue('G' . $st, date("d-m-Y", strtotime($stt['deadline_for_answer'])));
-                $sheet->setCellValue('H' . $st, is_array($stt['changes_approved']) ? $stt['changes_approved']['value'] : '');
-                $st++;
-            }
-
-            $spreadsheet->createSheet();
-            $spreadsheet->setActiveSheetIndex(3);
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('Documents');
-            $sheet->getStyle('1:1')->getFont()->setBold(true);
-            $sheet->fromArray($document, NULL, 'A1');
-
-            $dc = 2;
-            foreach($transfer->doc as $docu) {
-                $sheet->setCellValue('A' . $dc, is_array($docu['document_type']) ? $docu['document_type']['value'] : '');
-                $sheet->setCellValue('B' . $dc, $docu['document_title']);
-                $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
-                $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
-                $sheet->setCellValue('E' . $dc, $docu['cdds']);
-                $sheet->setCellValue('F' . $dc, $docu['dremarks']);
-                $sheet->setCellValue('G' . $dc, $docu['document']);
-                $dc++;
-            }
-            // $sheet->fromArray($transfer->doc, NULL, 'A2');
-            // $hr = $sheet->getHighestRow();
-            // for($i=2; $i<=$hr; $i++) {
-            //     $datef = $sheet->getCell('D'.$i);
-            //     $sheet->setCellValue('D'.$i, date("d-m-Y", strtotime($datef)));
-            // }
-
-            $writer = new Xlsx($spreadsheet);
-
-            $nom = explode("-", $request->product['value']);
-            $productName = $nom[0];
             
-            $date = date('d-m-y');
-            if($request->procedure_type['value'] == 'National' || $request->procedure_type['value'] == 'Centralized') {
-                $name = 'eForm_MATransfer_' .$productName . '_' .$request->country['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_MATransfer_' .$productName . '_' .$request->country['value'];
-            }else {
-                $name = 'eForm_MATransfer_' .$productName . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_MATransfer_' .$productName . '_' .$request->procedure_type['value'];
-            }
-            // $name = 'Transfer ' . $date . '.xlsx';
-            $writer->save($name);
-
-            Mail::to(getenv('MAIL_TO'))->send(new MailTransfer($name, $productName, $subject));
-
-            return redirect('dashboard')->with('message', 'Your form has been successfully submitted to the Data Entry Team');
+        }else {
+            $transfer->save();
+            return redirect('dashboard')->with('message', 'Your form has been successfully saved');
         }
-
-        return redirect('dashboard')->with('message', 'Your form has been successfully saved');
     }
 
     /**
@@ -359,50 +218,78 @@ class TransferController extends Controller
         $transfer->doc = $docs;
         $transfer->created_by = $request->created_by;
         $transfer->type = $request->query('type');
-        $transfer->save();
 
-        if ($request->query('type') === 'submit') {
-            $registrationIdentification = array(
-                'Product',
-                'Procedure Type',
-                'Country',
-                'RMS',
-                'Procedure Number',
-                'Local Tradename',
-                'Submission Type',
-                // 'Product Type'
-            );
-            $maTransferDetail = array(
-                'Transfer Description',
-                'Reason for transfer',
-                'Previous MAH',
-                'New MAH',
-                'Change Control or pre-assessment',
-                'Remarks',
-            );
-            $eventStatus = array(
-                'Country',
-                'Status',
-                'Status Date',
-                'eCTD sequence',
-                // 'Change Control or pre-assessment',
-                // 'CCDS/Core PIL ref n°',
-                'Remarks',
-                'Effective internal implementation date',
-                'Implementation Deadline of deadline for answer',
-                'Impacted of changes approved'
-            );
-            $document = array(
-                'Document type',
-                'Document title',
-                'Language',
-                'Version date',
-                'CCDS/Core PIL ref n°',
-                'Remarks',
-                'Document'
-            );
+        if($request->query('type') === 'submit') {
+            $res = $this->generetExcel($transfer);
+            if($res === true){
+                $transfer->save();
+                return redirect('dashboard')->with('message', 'Your form has been successfully submitted to the Data Entry Team');
+            }else {
+                return redirect()->back()->withErrors([
+                    'create' => 'ups, there was an error please try later'
+                ]);
+            }
+            
+        }else {
+            $transfer->save();
+            return redirect('dashboard')->with('message', 'Your form has been successfully saved');
+        }
+    }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Transfer  $transfer
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Transfer $transfer)
+    {
+        //
+    }
 
+    public function generetExcel($transfer)
+    {
+        $registrationIdentification = array(
+            'Product',
+            'Procedure Type',
+            'Country',
+            'RMS',
+            'Procedure Number',
+            'Local Tradename',
+            'Submission Type',
+            // 'Product Type'
+        );
+        $maTransferDetail = array(
+            'Transfer Description',
+            'Reason for transfer',
+            'Previous MAH',
+            'New MAH',
+            'Change Control or pre-assessment',
+            'Remarks',
+        );
+        $eventStatus = array(
+            'Country',
+            'Status',
+            'Status Date',
+            'eCTD sequence',
+            // 'Change Control or pre-assessment',
+            // 'CCDS/Core PIL ref n°',
+            'Remarks',
+            'Effective internal implementation date',
+            'Implementation Deadline of deadline for answer',
+            'Impacted of changes approved'
+        );
+        $document = array(
+            'Document type',
+            'Document title',
+            'Language',
+            'Version date',
+            'CCDS/Core PIL ref n°',
+            'Remarks',
+            'Document'
+        );
+
+        try {
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
             $sheet->setTitle('Registration identification');
@@ -421,9 +308,9 @@ class TransferController extends Controller
                 // $transfer->product_type ? $transfer->product_type['value'] : ''
             ], NULL, 'A2');
 
-            if(array_key_exists('value', $transfer->country)) {
+            if (array_key_exists('value', $transfer->country)) {
                 $sheet->setCellValue('C2', $transfer->country['value']);
-            }else {
+            } else {
                 foreach ($transfer->country as $cnt => $country) {
                     $cnt += 2;
                     $sheet->setCellValue('C' . $cnt, $country['value']);
@@ -457,7 +344,7 @@ class TransferController extends Controller
             // }
 
             $st = 2;
-            foreach($transfer->statuses as $stt) {
+            foreach ($transfer->statuses as $stt) {
                 $sheet->setCellValue('A' . $st, is_array($stt['country']) ? $stt['country']['value'] : '');
                 $sheet->setCellValue('B' . $st, $stt['status']['value']);
                 $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
@@ -478,10 +365,10 @@ class TransferController extends Controller
             $sheet->fromArray($document, NULL, 'A1');
 
             $dc = 2;
-            foreach($transfer->doc as $docu) {
+            foreach ($transfer->doc as $docu) {
                 $sheet->setCellValue('A' . $dc, is_array($docu['document_type']) ? $docu['document_type']['value'] : '');
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
-                $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value']: '');
+                $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value'] : '');
                 $sheet->setCellValue('D' . $dc, date("d-m-Y", strtotime($docu['version_date'])));
                 $sheet->setCellValue('E' . $dc, $docu['cdds']);
                 $sheet->setCellValue('F' . $dc, $docu['dremarks']);
@@ -497,36 +384,26 @@ class TransferController extends Controller
 
             $writer = new Xlsx($spreadsheet);
 
-            $nom = explode("-", $request->product['value']);
+            $nom = explode("-", $transfer->product['value']);
             $productName = $nom[0];
-            
+
             $date = date('d-m-y');
-            if($request->procedure_type['value'] == 'National' || $request->procedure_type['value'] == 'Centralized') {
-                $name = 'eForm_MATransfer_' .$productName . '_' .$request->country['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_MATransfer_' .$productName . '_' .$request->country['value'];
-            }else {
-                $name = 'eForm_MATransfer_' .$productName . '_' .$request->procedure_type['value'] . '_' .$date . '.xlsx';
-                $subject = 'eForm_MATransfer_' .$productName . '_' .$request->procedure_type['value'];
+            if ($transfer->procedure_type['value'] == 'National' || $transfer->procedure_type['value'] == 'Centralized') {
+                $name = 'eForm_MATransfer_' . $productName . '_' . $transfer->country['value'] . '_' . $date . '.xlsx';
+                $subject = 'eForm_MATransfer_' . $productName . '_' . $transfer->country['value'];
+            } else {
+                $name = 'eForm_MATransfer_' . $productName . '_' . $transfer->procedure_type['value'] . '_' . $date . '.xlsx';
+                $subject = 'eForm_MATransfer_' . $productName . '_' . $transfer->procedure_type['value'];
             }
             // $name = 'Transfer ' . $date . '.xlsx';
             $writer->save($name);
 
             Mail::to(getenv('MAIL_TO'))->send(new MailTransfer($name, $productName, $subject));
+            return true;
+        } catch (Throwable $e) {
 
-            return redirect('dashboard')->with('message', 'Your form has been successfully submitted to the Data Entry Team');
+            report($e);
+            return $e;
         }
-
-        return redirect('dashboard')->with('message', 'Your form has been successfully saved');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Transfer  $transfer
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Transfer $transfer)
-    {
-        //
     }
 }

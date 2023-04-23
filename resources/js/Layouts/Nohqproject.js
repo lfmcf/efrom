@@ -17,6 +17,7 @@ import { Head } from '@inertiajs/inertia-react';
 import moment from 'moment';
 import ModalP from '@/Components/Modalp';
 import AddIcon from '@mui/icons-material/Add';
+import ActionAlerts from '@/Components/ActionAlerts';
 
 function a11yProps(index) {
     return {
@@ -61,7 +62,9 @@ const Nohqproject = (props) => {
     const [value, setValue] = useState(0);
     const [showsavemodal, setSavemodal] = useState({ show: false, name: '' });
     const [statuserror, setStatusError] = useState(false);
-    const [statusCountry, setStatusCountry] = useState([{label: 'All', value: 'All'}])
+    const [statusCountry, setStatusCountry] = useState([{label: 'All', value: 'All'}]);
+    const [alert, setAlert] = useState(false);
+    const [alertContent, setAlertContent] = useState('');
 
     let porductOptions = props.products.map(function (product) {
         return {
@@ -182,7 +185,15 @@ const Nohqproject = (props) => {
         e.preventDefault();
         let submitType = window.event.target.name;
         post(route("storevariation", {'type': submitType}), {
-            onError: (e) => e.create ? alert(e.create) : alert('The eForm cannot be submitted due to field in Red not properly populated')
+            onError: (e) => {if(e.create){ 
+                setAlert(true);
+                setAlertContent(e.create)
+            }
+            else { 
+                setAlert(true); 
+                setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
+            }
+            }
         });
     }
 
@@ -233,9 +244,14 @@ const Nohqproject = (props) => {
         setData(arr);
     }
 
+    const closeAlert = () => {
+        setAlert(false);
+    }
+
     return (
         <>
         <Head title="Create Variation" />
+        {alert ? <ActionAlerts message={alertContent} closeAlert={closeAlert} /> : <></> }
         <form className="form" onSubmit={handleSubmit} ref={formRef} id='eform'>
             <Tabs defaultActiveKey="first">
                 <Tab eventKey="first" title="New Variation" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>

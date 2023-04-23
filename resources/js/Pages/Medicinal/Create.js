@@ -26,6 +26,7 @@ import ModalP from '@/Components/Modalp';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
+import ActionAlerts from '@/Components/ActionAlerts';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -124,7 +125,9 @@ const Create = (props) => {
     const countryRef = React.useRef();
     const formRef = React.useRef();
     const [value, setValue] = useState(0);
-    const [statusCountry, setStatusCountry] = useState([{label: 'All', value: 'All'}])
+    const [statusCountry, setStatusCountry] = useState([{label: 'All', value: 'All'}]);
+    const [alert, setAlert] = useState(false);
+    const [alertContent, setAlertContent] = useState('');
 
     const handleMChange = (event, newValue) => {
         setValue(newValue);
@@ -134,7 +137,15 @@ const Create = (props) => {
         e.preventDefault();
         let submitType = window.event.target.name;
         post(route('storefinishproduct', { 'type': submitType }), {
-            onError: (e) => e.create ? alert(e.create) : alert('The eForm cannot be submitted due to field in Red not properly populated')
+            onError: (e) => {if(e.create){ 
+                setAlert(true);
+                setAlertContent(e.create)
+            }
+            else { 
+                setAlert(true); 
+                setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
+            }
+            }
         });
         
     }
@@ -476,6 +487,9 @@ const Create = (props) => {
         }
     }, [errors]);
     
+    const closeAlert = () => {
+        setAlert(false);
+    }
 
     return (
         <>
@@ -485,6 +499,7 @@ const Create = (props) => {
                     <h3 className="page-title">MA - registration creation</h3>
                 </div>
             </div>
+            {alert ? <ActionAlerts message={alertContent} closeAlert={closeAlert} /> : <></> }
             <div className="row">
                 <div className="col-md-12">
 
