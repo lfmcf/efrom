@@ -78,7 +78,7 @@ export default function Login({ status, canResetPassword }) {
                         <button type="submit" className="btn_signin">Sign In</button>
                     </div>
                     <div className="form-button">
-                        <button type='button' onClick={() => window.location.replace('https://dataeform.com/saml2/72840654-f704-423e-aa3c-502bc1c68c2a/login')} className="btn_signin">Connect with Azure</button>
+                        <button type='button' onClick={() => window.location.replace('https://dataeform.com/saml2/72840654-f704-423e-aa3c-502bc1c68c2a/login')} className="btn_signin">Log In with Azure</button>
                     </div>
                 </div>
                 
