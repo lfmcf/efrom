@@ -505,7 +505,6 @@ const Dashboard = (props) => {
 
     React.useEffect(() => {
         axios.post('/formsByDate', {'from' : value, 'to': tovalue, 'formType': formType}).then(res => {
-            console.log(res);
             setNumberForms(res.data)
         });
     }, [value, tovalue, formType])
@@ -514,7 +513,7 @@ const Dashboard = (props) => {
     React.useEffect(() => {
         flash.message ? setOpen(true) : setOpen(false)
         let arr = [
-            { form: 'MA Registration Creatio', population: props.macount },
+            { form: 'MA Registration Creation', population: props.macount },
             { form: 'Variation', population: props.varcount },
             { form: 'Renewal', population: props.rencount },
             { form: 'Transfer', population: props.trancount },
@@ -529,14 +528,11 @@ const Dashboard = (props) => {
 
     return (
         <>
-
-
             <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
                 <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                     {props.flash.message}
                 </Alert>
             </Snackbar>
-
 
             <Head title="Dashboard" />
             <div className="row">
@@ -567,36 +563,100 @@ const Dashboard = (props) => {
                         <div className="card main-card">
                             <div className="card-body dash-table">
                                 <div className='dash-table-wrap'>
-                                    <h5 className="mb-3 head-table" style={{ float: 'left' }}>MA Registration Creation</h5>
-                                    <Table columns={Rccolumns} data={Rcdata} for="ma" />
+                                    <h5 className="mb-3 head-table" style={{ float: Rcdata.lenght > 0 ? 'left' : '' }}>MA Registration Creation</h5>
+                                    {Rcdata.lenght > 0 ?
+                                        <Table columns={Rccolumns} data={Rcdata} for="ma" />
+                                    : 
+                                    <div className='row' >
+                                        <div className='col-12'>
+                                            <p>No submitted/saved eForm to display</p>
+                                        </div>
+                                        
+                                    </div>}
                                 </div>
                                 <div className='dash-table-wrap'>
-                                    <h5 className="mb-3 head-table" style={{ float: 'left' }}>Variation</h5>
+                                    <h5 className="mb-3 head-table" style={{ float: VariationData.lenght > 0 ? 'left' : '' }}>Variation</h5>
+                                    {VariationData.lenght > 0 ?
                                     <Table columns={Variationcolumns} data={VariationData} for="variation" />
+                                    : 
+                                    <div className='row' >
+                                        <div className='col-12'>
+                                            <p>No submitted/saved eForm to display</p>
+                                        </div>
+                                        
+                                    </div>}
                                 </div>
                                 <div className='dash-table-wrap'>
-                                    <h5 className="mb-3 head-table" style={{ float: 'left' }}>Renewal</h5>
+                                    <h5 className="mb-3 head-table" style={{ float: RenewalData.lenght > 0 ? 'left' : '' }}>Renewal</h5>
+                                    {RenewalData.lenght > 0 ?
                                     <Table columns={Renewalcolumns} data={RenewalData} for="renewal" />
+                                    : 
+                                    <div className='row' >
+                                        <div className='col-12'>
+                                            <p>No submitted/saved eForm to display</p>
+                                        </div>
+                                        
+                                    </div>}
                                 </div>
                                 <div className='dash-table-wrap'>
-                                    <h5 className="mb-3 head-table" style={{ float: 'left' }}>Baseline</h5>
+                                    <h5 className="mb-3 head-table" style={{ float: BaselineData.lenght > 0 ? 'left' : '' }}>Baseline</h5>
+                                    {BaselineData.lenght > 0 ?
                                     <Table columns={Baselinecolumns} data={BaselineData} for="baseline" />
+                                    : 
+                                    <div className='row' >
+                                        <div className='col-12'>
+                                            <p>No submitted/saved eForm to display</p>
+                                        </div>
+                                        
+                                    </div>}
                                 </div>
                                 <div className='dash-table-wrap'>
-                                    <h5 className="mb-3 head-table" style={{ float: 'left' }}>Clinical Registration Creation</h5>
+                                    <h5 className="mb-3 head-table" style={{ float: Clinical.lenght > 0 ? 'left' : '' }}>Clinical Registration Creation</h5>
+                                    {Clinical.lenght > 0 ?
                                     <Table columns={Clinicalrtcolumns} data={Clinical} for="crc" />
+                                    : 
+                                    <div className='row' >
+                                        <div className='col-12'>
+                                            <p>No submitted/saved eForm to display</p>
+                                        </div>
+                                        
+                                    </div>}
                                 </div>
                                 <div className='dash-table-wrap'>
-                                    <h5 className="mb-3 head-table" style={{ float: 'left' }}>Amendment</h5>
+                                    <h5 className="mb-3 head-table" style={{ float: Amendment.lenght > 0 ? 'left' : '' }}>Amendment</h5>
+                                    {Amendment.lenght > 0 ?
                                     <Table columns={Amendmentcolumns} data={Amendment} for="amendment" />
+                                    : 
+                                    <div className='row' >
+                                        <div className='col-12'>
+                                            <p>No submitted/saved eForm to display</p>
+                                        </div>
+                                        
+                                    </div>}
                                 </div>
                                 <div className='dash-table-wrap'>
-                                    <h5 className="mb-3 head-table" style={{ float: 'left' }}>MA Transfer</h5>
+                                    <h5 className="mb-3 head-table" style={{ float: Transfer.lenght > 0 ? 'left' : '' }}>MA Transfer</h5>
+                                    {Transfer.lenght > 0 ?
                                     <Table columns={Transfercolumns} data={Transfer} for="transfer" />
+                                    : 
+                                    <div className='row' >
+                                        <div className='col-12'>
+                                            <p>No submitted/saved eForm to display</p>
+                                        </div>
+                                        
+                                    </div>}
                                 </div>
                                 <div className='dash-table-wrap'>
-                                    <h5 className="mb-3 head-table" style={{ float: 'left' }}>Registration Termination</h5>
+                                    <h5 className="mb-3 head-table" style={{ float: Rt.lenght > 0 ? 'left' : '' }}>Registration Termination</h5>
+                                    {Rt.lenght > 0 ?
                                     <Table columns={Rtcolumns} data={Rt} for="rt" />
+                                    : 
+                                    <div className='row' >
+                                        <div className='col-12'>
+                                            <p>No submitted/saved eForm to display</p>
+                                        </div>
+                                        
+                                    </div>}
                                 </div>
                             </div>
                         </div>
@@ -607,11 +667,11 @@ const Dashboard = (props) => {
             </div>
 
             <div style={{ display: view === 'kpi' ? '' : 'none' }}>
-
+               
                 <Grid container spacing={2}>
                     <Grid item xs={3}>
                         <Paper elevation={0}>
-                            <h5 className='mb-3 head-table' style={{ fontSize: '15px' }}>Number of Forms by procedure type </h5>
+                            <h5 className='mb-3 head-table' style={{ fontSize: '15px' }}>Forms by procedure type </h5>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
                                     <Paper elevation={0} variant="outlined" className='dashpaper' style={{ background: '#2196f3' }}>
@@ -641,7 +701,7 @@ const Dashboard = (props) => {
                         </Paper>
                     </Grid>
                     <Grid item xs={9}>
-                        <h5 className='mb-3 head-table' style={{ fontSize: '15px' }}>Number of Forms by type of forms</h5>
+                        <h5 className='mb-3 head-table' style={{ fontSize: '15px' }}>Forms by type</h5>
                         <Paper elevation={0} variant="outlined" style={{ margin: '10px 0' }}>
                             <Chart
                                 data={data}
@@ -660,7 +720,7 @@ const Dashboard = (props) => {
                         </Paper>
                     </Grid>
                 </Grid>
-                <h5 className='mb-4 mt-4 head-table' style={{ fontSize: '15px' }}>Number of Forms In Date</h5>
+                <h5 className='mb-4 mt-4 head-table' style={{ fontSize: '15px' }}>Forms in date</h5>
                 <Paper elevation={0} variant="outlined" style={{ margin: '10px 0', padding: '20px 0' }}>
                     <Grid container spacing={2} style={{ alignItems: 'center' }}>
                         <Grid item xs={3}>
@@ -719,10 +779,11 @@ const Dashboard = (props) => {
                         </Grid>
                     </Grid>
                 </Paper>
+               
             </div>
 
             <footer style={{ margin: '5px 0', display: 'flex', justifyContent: 'center' }}>
-                <Typography variant="p" component="p">Powered By <span style={{ color: 'rgb(44, 197,162)', fontWeight: '800' }}>Ekemia</span> &copy; 2022</Typography>
+                <Typography variant="p" component="p">Powered By <span style={{ color: 'rgb(44, 197,162)', fontWeight: '800' }}>EKEMIA</span> &copy; 2022</Typography>
             </footer>
         </>
 

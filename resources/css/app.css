@@ -1043,7 +1043,7 @@ font-family: 'Open Sans' , sans-serif;
     font-family:"Open Sans",sans-serif; 
     font-weight: 600;
     color: #2c4166;
-    text-transform: capitalize;
+    /* text-transform: capitalize; */
 }
 
 .dash-table-wrap {
