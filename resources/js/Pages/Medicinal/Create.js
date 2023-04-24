@@ -234,7 +234,7 @@ const Create = (props) => {
 
     let addPackageValues = () => {
         let arr = { ...data };
-        arr.packagings.push({ sellable_unit_determined_by: '',product_legal_status_of_supply: '', packaging_type: "", packaging_registration_number: '' , packaging_name: "", description: "", launched: "", first_lunch_date: '', packaging_discontinued: "", discontinuation_date: '', remarks: '', packagelif: [{ package_shelf_life_type: "", shelf_life: "", shelf_life_unit: "", package_storage_condition: [] }] })
+        arr.packagings.push({ sellable_unit_determined_by: '',product_legal_status_of_supply: '', packaging_type: "", packaging_registration_number: '' , packaging_name: "", description: "", launched: "", first_lunch_date: '', packaging_discontinued: "", discontinuation_date: '', remarks: '', packagelif: [{ package_shelf_life_type: "", shelf_life: "", shelf_life_unit: "", package_storage_condition: [], remarks: '' }] })
         setData(arr);
     }
 
@@ -246,7 +246,7 @@ const Create = (props) => {
 
     let addPackagelifeValues = (i) => {
         let newArr = { ...data };
-        newArr.packagings[i].packagelif.push({ package_shelf_life_type: '', shelf_life: '', shelf_life_unit: '', package_storage_condition: [] });
+        newArr.packagings[i].packagelif.push({ package_shelf_life_type: '', shelf_life: '', shelf_life_unit: '', package_storage_condition: [], remarks: '' });
         setData(newArr)
     }
 

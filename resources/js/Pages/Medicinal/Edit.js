@@ -256,7 +256,7 @@ const Edit = (props) => {
 
     let addPackageValues = () => {
         let arr = { ...data };
-        arr.packagings.push({ packaging_type: "", packaging_name: "", description: "", launched: "", first_lunch_date: '', packaging_discontinued: "", discontinuation_date: '', remarks: '', packagelif: [{ package_shelf_life_type: "", shelf_life: "", shelf_life_unit: "", package_storage_condition: [] }] })
+        arr.packagings.push({ packaging_type: "", packaging_name: "", description: "", launched: "", first_lunch_date: '', packaging_discontinued: "", discontinuation_date: '', remarks: '', packagelif: [{ package_shelf_life_type: "", shelf_life: "", shelf_life_unit: "", package_storage_condition: [], remarks: '' }] })
         setData(arr);
     }
 
@@ -268,7 +268,7 @@ const Edit = (props) => {
 
     let addPackagelifeValues = (i) => {
         let newArr = { ...data };
-        newArr.packagings[i].packagelif.push({ package_shelf_life_type: '', shelf_life: '', shelf_life_unit: '', package_storage_condition: [] });
+        newArr.packagings[i].packagelif.push({ package_shelf_life_type: '', shelf_life: '', shelf_life_unit: '', package_storage_condition: [], remarks: '' });
         setData(newArr)
     }
 
