@@ -492,6 +492,8 @@ const Dashboard = (props) => {
     const [formType, setFormType] = React.useState("All");
     const [view, setView] = useState(localStorage.getItem('view') ?  localStorage.getItem('view') : 'table');
 
+    
+
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -563,8 +565,8 @@ const Dashboard = (props) => {
                         <div className="card main-card">
                             <div className="card-body dash-table">
                                 <div className='dash-table-wrap'>
-                                    <h5 className="mb-3 head-table" style={{ float: Rcdata.lenght > 0 ? 'left' : '' }}>MA Registration Creation</h5>
-                                    {Rcdata.lenght > 0 ?
+                                    <h5 className="mb-3 head-table" style={{ float: Rcdata.length > 0 ? 'left' : '' }}>MA Registration Creation</h5>
+                                    {Rcdata.length > 0 ?
                                         <Table columns={Rccolumns} data={Rcdata} for="ma" />
                                     : 
                                     <div className='row' >
@@ -575,7 +577,7 @@ const Dashboard = (props) => {
                                     </div>}
                                 </div>
                                 <div className='dash-table-wrap'>
-                                    <h5 className="mb-3 head-table" style={{ float: VariationData.lenght > 0 ? 'left' : '' }}>Variation</h5>
+                                    <h5 className="mb-3 head-table" style={{ float: VariationData.length > 0 ? 'left' : '' }}>Variation</h5>
                                     {VariationData.lenght > 0 ?
                                     <Table columns={Variationcolumns} data={VariationData} for="variation" />
                                     : 
@@ -586,9 +588,10 @@ const Dashboard = (props) => {
                                         
                                     </div>}
                                 </div>
+                                
                                 <div className='dash-table-wrap'>
-                                    <h5 className="mb-3 head-table" style={{ float: RenewalData.lenght > 0 ? 'left' : '' }}>Renewal</h5>
-                                    {RenewalData.lenght > 0 ?
+                                    <h5 className="mb-3 head-table" style={{ float: RenewalData.length > 0 ? 'left' : '' }}>Renewal</h5>
+                                    {RenewalData.length > 0 ?
                                     <Table columns={Renewalcolumns} data={RenewalData} for="renewal" />
                                     : 
                                     <div className='row' >
@@ -599,8 +602,8 @@ const Dashboard = (props) => {
                                     </div>}
                                 </div>
                                 <div className='dash-table-wrap'>
-                                    <h5 className="mb-3 head-table" style={{ float: BaselineData.lenght > 0 ? 'left' : '' }}>Baseline</h5>
-                                    {BaselineData.lenght > 0 ?
+                                    <h5 className="mb-3 head-table" style={{ float: BaselineData.length > 0 ? 'left' : '' }}>Baseline</h5>
+                                    {BaselineData.length > 0 ?
                                     <Table columns={Baselinecolumns} data={BaselineData} for="baseline" />
                                     : 
                                     <div className='row' >
@@ -611,8 +614,8 @@ const Dashboard = (props) => {
                                     </div>}
                                 </div>
                                 <div className='dash-table-wrap'>
-                                    <h5 className="mb-3 head-table" style={{ float: Clinical.lenght > 0 ? 'left' : '' }}>Clinical Registration Creation</h5>
-                                    {Clinical.lenght > 0 ?
+                                    <h5 className="mb-3 head-table" style={{ float: Clinical.length > 0 ? 'left' : '' }}>Clinical Registration Creation</h5>
+                                    {Clinical.length > 0 ?
                                     <Table columns={Clinicalrtcolumns} data={Clinical} for="crc" />
                                     : 
                                     <div className='row' >
@@ -623,8 +626,8 @@ const Dashboard = (props) => {
                                     </div>}
                                 </div>
                                 <div className='dash-table-wrap'>
-                                    <h5 className="mb-3 head-table" style={{ float: Amendment.lenght > 0 ? 'left' : '' }}>Amendment</h5>
-                                    {Amendment.lenght > 0 ?
+                                    <h5 className="mb-3 head-table" style={{ float: Amendment.length > 0 ? 'left' : '' }}>Amendment</h5>
+                                    {Amendment.length > 0 ?
                                     <Table columns={Amendmentcolumns} data={Amendment} for="amendment" />
                                     : 
                                     <div className='row' >
@@ -635,8 +638,8 @@ const Dashboard = (props) => {
                                     </div>}
                                 </div>
                                 <div className='dash-table-wrap'>
-                                    <h5 className="mb-3 head-table" style={{ float: Transfer.lenght > 0 ? 'left' : '' }}>MA Transfer</h5>
-                                    {Transfer.lenght > 0 ?
+                                    <h5 className="mb-3 head-table" style={{ float: Transfer.length > 0 ? 'left' : '' }}>MA Transfer</h5>
+                                    {Transfer.length > 0 ?
                                     <Table columns={Transfercolumns} data={Transfer} for="transfer" />
                                     : 
                                     <div className='row' >
@@ -647,8 +650,8 @@ const Dashboard = (props) => {
                                     </div>}
                                 </div>
                                 <div className='dash-table-wrap'>
-                                    <h5 className="mb-3 head-table" style={{ float: Rt.lenght > 0 ? 'left' : '' }}>Registration Termination</h5>
-                                    {Rt.lenght > 0 ?
+                                    <h5 className="mb-3 head-table" style={{ float: Rt.length > 0 ? 'left' : '' }}>Registration Termination</h5>
+                                    {Rt.length > 0 ?
                                     <Table columns={Rtcolumns} data={Rt} for="rt" />
                                     : 
                                     <div className='row' >
