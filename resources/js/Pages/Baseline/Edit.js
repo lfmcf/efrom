@@ -581,7 +581,7 @@ const Create = (props) => {
                                                         </div>
                                                     </div>
                                                     <div className="form_group_inline">
-                                                        <span className="form_group_label">Implementation Deadline of deadline for answer</span>
+                                                        <span className="form_group_label">Implementation Deadline</span>
                                                         <div className="form_group_field">
                                                             <DatePicker name="deadline_for_answer" 
                                                                 selected={element.deadline_for_answer ? new Date(element.deadline_for_answer) : new Date()} 
@@ -641,7 +641,7 @@ const Create = (props) => {
                 </div>
             </div>
             <footer style={{ margin: '5px 0', display: 'flex', justifyContent: 'center' }}>
-                <Typography variant="p" component="p">Powered By <span style={{ color: 'rgb(44, 197,162)', fontWeight: '800' }}>Ekemia</span> &copy; 2022</Typography>
+                <Typography variant="p" component="p">Powered By <span style={{ color: 'rgb(44, 197,162)', fontWeight: '800' }}>EKEMIA</span> &copy; 2022</Typography>
             </footer>
         </>
     )

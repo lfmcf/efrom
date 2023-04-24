@@ -40,11 +40,12 @@ const Create = (props) => {
         description: '',
         // type: '',
         reason: '',
+        control: '',
         remarks: '',
         reason_for_passive: '',
         passive_date: '',
         passive_comment: '',
-        statuses: [{ country: '', status: '', status_date: '', ectd: '', control: '', cdds: '', remarks: '', implimentation_date: '', deadline_for_answer: '', changes_approved: '' }],
+        statuses: [{ country: '', status: '', status_date: '', ectd: '', cdds: '', remarks: '', implimentation_date: '', deadline_for_answer: '', changes_approved: '' }],
         doc: [{ document_type: '', document_title: '', language: '', version_date: '', dremarks: '', document: '' }],
         created_by: props.auth.user.id,
     });
@@ -100,7 +101,7 @@ const Create = (props) => {
 
     let addStatusFields = () => {
         let newArr = { ...data };
-        newArr.statuses.push({ country: '', status: '', status_date: '', ectd: '', control: '', cdds: '', remarks: '', implimentation_date: '', deadline_for_answer: '', changes_approved: '' });
+        newArr.statuses.push({ country: '', status: '', status_date: '', ectd: '', cdds: '', remarks: '', implimentation_date: '', deadline_for_answer: '', changes_approved: '' });
         setData(newArr);
     }
 
@@ -306,7 +307,7 @@ const Create = (props) => {
                                         <Mtab label="Registration Identification" {...a11yProps(0)} style={{ color: errors.product || errors.procedure_type || errors.country ? "red": '' }} />
                                         <Mtab label="Registration Termination Details" {...a11yProps(1)} />
                                         <Mtab label="Passive Details" {...a11yProps(2)} />
-                                        <Mtab label="Event Status" {...a11yProps(3)} style={{ color: statuserror ? 'red' : '' }} />
+                                        <Mtab label="Status Details" {...a11yProps(3)} style={{ color: statuserror ? 'red' : '' }} />
                                     </Mtabs>
                                     <div value={value} index={0} className="muitab" style={{ display: value != 0 ? 'none' : '' }}>
                                         <div className="inline_form">
@@ -482,6 +483,12 @@ const Create = (props) => {
                                                     />
                                                 </div>
                                             </div>
+                                            <div className="form_group_inline">
+                                                <span className="form_group_label">Change Control or pre-assessment</span>
+                                                <div className="form_group_field">
+                                                    <input type="text" name="control" onChange={e => handleStatusChanged(index, e)} value={data.control} />
+                                                </div>
+                                            </div>
                                         </div>
                                         <div className="inline_form">
                                             
@@ -603,27 +610,18 @@ const Create = (props) => {
                                                         </div>
                                                     </div>
                                                     <div className="inline_form">
-                                                        <div className="form_group_inline">
-                                                            <span className="form_group_label">Change Control or pre-assessment</span>
-                                                            <div className="form_group_field">
-                                                                <input type="text" name="control" onChange={e => handleStatusChanged(index, e)} value={element.control} />
-                                                            </div>
-                                                        </div>
-                                                        <div className="form_group_inline">
+                                                        
+                                                        {/* <div className="form_group_inline">
                                                             <span className="form_group_label">CCDS/Core PIL ref n°</span>
                                                             <div className="form_group_field">
                                                                 <input type="text" name="cdds" onChange={e => handleStatusChanged(index, e)} value={element.cdds} />
                                                             </div>
-                                                        </div>
-                                                        <div className="form_group_inline">
-                                                            <span className="form_group_label">Remarks</span>
-                                                            <div className="form_group_field">
-                                                                <input type="text" name="remarks" onChange={e => handleStatusChanged(index, e)} value={element.remarks} />
-                                                            </div>
-                                                        </div>
+                                                        </div> */}
+                                                        
                                                     </div>
 
                                                     <div className="inline_form">
+                                                       
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Effective internal implementation date</span>
                                                             <div className="form_group_field">
@@ -631,7 +629,7 @@ const Create = (props) => {
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
-                                                            <span className="form_group_label">Implementation Deadline of deadline for answer</span>
+                                                            <span className="form_group_label">Implementation Deadline</span>
                                                             <div className="form_group_field">
                                                                 <DatePicker name="deadline_for_answer" selected={data.statuses[index].deadline_for_answer} onChange={(date) => handleDateChange(index, 'deadline_for_answer', date)} value={element.deadline_for_answer ? moment(element.deadline_for_answer).format('DD-MMM-yy') : ''} />
                                                             </div>
@@ -655,6 +653,14 @@ const Create = (props) => {
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div className="inline_form">
+                                                        <div className="form_group_inline">
+                                                            <span className="form_group_label">Status note</span>
+                                                            <div className="form_group_field">
+                                                                <input type="text" name="remarks" onChange={e => handleStatusChanged(index, e)} value={element.remarks} />
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </fieldset>
                                         ))}
@@ -674,7 +680,7 @@ const Create = (props) => {
                 </div>
             </div>
             <footer style={{ margin: '5px 0', display: 'flex', justifyContent: 'center' }}>
-                <Typography variant="p" component="p">Powered By <span style={{ color: 'rgb(44, 197,162)', fontWeight: '800' }}>Ekemia</span> &copy; 2022</Typography>
+                <Typography variant="p" component="p">Powered By <span style={{ color: 'rgb(44, 197,162)', fontWeight: '800' }}>EKEMIA</span> &copy; 2022</Typography>
             </footer>
         </>
     )

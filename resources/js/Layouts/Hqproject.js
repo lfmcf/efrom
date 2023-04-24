@@ -827,7 +827,7 @@ const Hqproject = (props) => {
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">HA Implimentation Deadline</span>
+                                                <span className="form_group_label">HA Implementation Deadline</span>
                                                 <div className="form_group_field">
                                                     <DatePicker name="implimentation_deadline" selected={data.statuses[index].implimentation_deadline} onChange={(date) => handleDateChange(index, 'implimentation_deadline', date)} value={element.implimentation_deadline ? moment(element.implimentation_deadline).format('DD-MMM-yy') : ''} />
                                                 </div>
@@ -871,7 +871,7 @@ const Hqproject = (props) => {
             <SaveModal show={showsavemodal.show} handleClose={handleSaveModalClose} handleSubmited={handleSaveModalConfirm} name={showsavemodal.name}  />
         </form>
          <footer style={{margin:'5px 0', display:'flex', justifyContent:'center'}}>
-                <Typography variant="p" component="p">Powered By <span style={{color:'rgb(44, 197,162)',fontWeight:'800'}}>Ekemia</span> &copy; 2022</Typography>
+                <Typography variant="p" component="p">Powered By <span style={{color:'rgb(44, 197,162)',fontWeight:'800'}}>EKEMIA</span> &copy; 2022</Typography>
             </footer>
             </>
     )

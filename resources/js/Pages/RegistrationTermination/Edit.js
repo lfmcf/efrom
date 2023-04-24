@@ -45,6 +45,9 @@ const Edit = (props) => {
         reason: rt.reason,
         control: rt.control,
         remarks: rt.remarks,
+        reason_for_passive: rt.reason_for_passive,
+        passive_date: rt.passive_date,
+        passive_comment: rt.passive_comment,
         statuses: rt.statuses,
         doc: rt.doc,
         created_by: props.auth.user.id,
@@ -289,6 +292,10 @@ const Edit = (props) => {
         }
     }, [data.rms]);
 
+    const handlePassiveDateChange = (date) => {
+        setData('passive_date', date)
+    }
+
     const closeAlert = () => {
         setAlert(false);
     }
@@ -321,7 +328,8 @@ const Edit = (props) => {
                                     >
                                         <Mtab label="Registration Identification" {...a11yProps(0)} style={{ color: errors.product || errors.procedure_type || errors.country ? "red": '' }} />
                                         <Mtab label="Registration Termination Details" {...a11yProps(1)} />
-                                        <Mtab label="Status Details" {...a11yProps(2)} style={{color: statuserror ? 'red' : ''}} />
+                                        <Mtab label="Passive Details" {...a11yProps(2)} />
+                                        <Mtab label="Status Details" {...a11yProps(3)} style={{color: statuserror ? 'red' : ''}} />
                                     </Mtabs>
                                     <div value={value} index={0} className="muitab" style={{ display: value != 0 ? 'none' : '' }}>
                                         <div className="inline_form">
@@ -508,6 +516,44 @@ const Edit = (props) => {
                                         </div>
                                     </div>
                                     <div value={value} index={2} className="muitab" style={{ display: value != 2 ? 'none' : '' }}>
+                                        <div className="inline_form">
+                                            <div className="form_group_inline">
+                                                <span className="form_group_label">Reason for Passive</span>
+                                                <div className="form_group_field">
+                                                    <Select options={[
+                                                        {label: 'Application Rejected', value: 'Application Rejected'},
+                                                        {label: 'Application Withdrawn Due to S/E', value: 'Application Withdrawn Due to S/E'},
+                                                        {label: 'Application Withdrawn NOT Due to S/E', value: 'Application Withdrawn NOT Due to S/E'},
+                                                        {label: 'Registration Revoked by HA', value: 'Registration Revoked by HA'},
+                                                        {label: 'Registration Terminated by MAH', value: 'Registration Terminated by MAH'},
+                                                    ]}
+                                                        name="reason_for_passive"
+                                                        className="basic"
+                                                        classNamePrefix="basic"
+                                                        isClearable
+                                                        placeholder=''
+                                                        onChange={handleSelectChange}
+                                                        value={data.reason_for_passive}
+                                                     />
+                                                </div>
+                                            </div>
+                                            <div className="form_group_inline">
+                                                <span className="form_group_label">Passive Date</span>
+                                                <div className="form_group_field">
+                                                    <DatePicker name="passve_date" selected={data.passive_date ? new Date(data.passive_date) : ''} onChange={(date) => handlePassiveDateChange(date)} value={data.passive_date ? moment(data.passive_date).format('DD-MMM-yy'): ''} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="inline_form">
+                                            <div className="form_group_inline">
+                                                <span className="form_group_label">Passive Comment</span>
+                                                <div className="form_group_field">
+                                                    <input type='text' name='passive_comment' onChange={handleChange} value={data.passive_comment} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div value={value} index={3} className="muitab" style={{ display: value != 3 ? 'none' : '' }}>
                                         <div style={{ display: 'flex', justifyContent: 'end' }}>
                                             <button type="button" className="add_doc_form" onClick={addStatusFields}>
                                                 <i className="bi bi-plus-lg"></i> Add Status
@@ -597,7 +643,7 @@ const Edit = (props) => {
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
-                                                            <span className="form_group_label">Implementation Deadline of deadline for answer</span>
+                                                            <span className="form_group_label">Implementation Deadline</span>
                                                             <div className="form_group_field">
                                                                 <DatePicker name="deadline_for_answer" 
                                                                     selected={element.deadline_for_answer ? new Date(element.deadline_for_answer) : ''} 
@@ -658,7 +704,7 @@ const Edit = (props) => {
                 </div>
             </div>
             <footer style={{ margin: '5px 0', display: 'flex', justifyContent: 'center' }}>
-                <Typography variant="p" component="p">Powered By <span style={{ color: 'rgb(44, 197,162)', fontWeight: '800' }}>Ekemia</span> &copy; 2022</Typography>
+                <Typography variant="p" component="p">Powered By <span style={{ color: 'rgb(44, 197,162)', fontWeight: '800' }}>EKEMIA</span> &copy; 2022</Typography>
             </footer>
         </>
     )

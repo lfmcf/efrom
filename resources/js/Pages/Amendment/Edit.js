@@ -299,7 +299,7 @@ const Edit = (props) => {
                                         sx={{ borderRight: 1, borderColor: 'divider' }}
                                     >
                                         <Mtab label="Registration Identification" {...a11yProps(0)} style={{ color: errors.product || errors.procedure_type || errors.country ? "red": '' }} />
-                                        <Mtab label="Amendments Details" {...a11yProps(1)} style={{ color: errors.amendment_title ? 'red' : '' }} />
+                                        <Mtab label="Amendment Details" {...a11yProps(1)} style={{ color: errors.amendment_title ? 'red' : '' }} />
                                         <Mtab label="Status Details" {...a11yProps(2)} style={{ color: statuserror ? 'red' : '' }} />
                                     </Mtabs>
                                     <div value={value} index={0} className="muitab" style={{ display: value != 0 ? 'none' : '' }}>
@@ -566,7 +566,7 @@ const Edit = (props) => {
                                                         </div>
                                                     </div>
                                                     <div className="form_group_inline">
-                                                        <span className="form_group_label">Implementation Deadline of deadline for answer</span>
+                                                        <span className="form_group_label">Implementation Deadline</span>
                                                         <div className="form_group_field">
                                                             <DatePicker name="deadline_for_answer" 
                                                                 selected={element.deadline_for_answer ? new Date(element.deadline_for_answer) : ''} 
