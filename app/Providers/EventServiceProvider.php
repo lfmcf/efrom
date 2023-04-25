@@ -47,10 +47,10 @@ class EventServiceProvider extends ServiceProvider
                 return redirect('/');
             }else {
                 $error = new AuthenticationException();
-                return response($error, 200);
-                // return redirect()->back()->withErrors([
-                //     'create' => new AuthenticationException()
-                // ]);
+                //return response($error, 200);
+                return redirect()->back()->withErrors([
+                    'create' => $error
+                ]);
             }
         });
     }
