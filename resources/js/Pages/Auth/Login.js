@@ -6,6 +6,7 @@ import Input from '@/Components/Input';
 import Label from '@/Components/Label';
 import ValidationErrors from '@/Components/ValidationErrors';
 import { Head, Link, useForm } from '@inertiajs/inertia-react';
+import axios from 'axios';
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -29,6 +30,12 @@ export default function Login({ status, canResetPassword }) {
 
         post(route('login'));
     };
+
+    const handlessologin = () => {
+        axios.get('https://dataeform.com/saml2/d9d4b5d7-263d-4537-8c4a-c256d3004b49/login').catch(e => {
+            console.log(e)
+        })
+    }
 
     return (
        
@@ -78,7 +85,7 @@ export default function Login({ status, canResetPassword }) {
                         <button type="submit" className="btn_signin">Log In</button>
                     </div>
                     <div className="form-button">
-                        <button type='button' onClick={() => window.location.replace('https://dataeform.com/saml2/72840654-f704-423e-aa3c-502bc1c68c2a/login')} className="btn_signin">Log In with Azure</button>
+                        <button type='button' onClick={handlessologin} className="btn_signin">Log In with Azure</button>
                     </div>
                 </div>
                 

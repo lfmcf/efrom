@@ -46,11 +46,11 @@ class EventServiceProvider extends ServiceProvider
             if (Auth::login($user)) {
                 return redirect('/');
             }else {
-                $error = new AuthenticationException();
+                throw new AuthenticationException();
                 //return response($error, 200);
-                return redirect()->back()->withErrors([
-                    'create' => $error
-                ]);
+                // return redirect()->back()->withErrors([
+                //     'create' => $error
+                // ]);
             }
         });
     }
