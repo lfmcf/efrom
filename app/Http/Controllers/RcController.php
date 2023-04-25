@@ -626,7 +626,7 @@ class RcController extends Controller
                         $sheet->setCellValue('L' . $c, is_array($pl['package_shelf_life_type']) ? $pl['package_shelf_life_type']['value'] : '');
                         $sheet->setCellValue('M' . $c, $pl['shelf_life']);
                         $sheet->setCellValue('N' . $c, is_array($pl['shelf_life_unit']) ? $pl['shelf_life_unit']['value'] : '');
-                        $sheet->setCellValue('P' . $c, '');
+                        $sheet->setCellValue('P' . $c, $pl['remarks'] ? $pl['remarks'] : '');
                         if (isset($pl['package_storage_condition'])) {
                             foreach ($pl['package_storage_condition'] as $psc) {
                                 $sheet->setCellValue('O' . $c, $psc['value']);
@@ -753,6 +753,7 @@ class RcController extends Controller
         } catch (Throwable $e) {
 
             report($e);
+            dd($e);
             return $e;
         }
     }
