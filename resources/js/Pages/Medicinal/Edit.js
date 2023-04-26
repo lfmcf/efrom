@@ -904,7 +904,7 @@ const Edit = (props) => {
                                     </div>
 
                                     <div index={4} className="muitab" style={{ display: value != 4 ? 'none' : '' }}>
-                                        <div className="form_group">
+                                        <div className="form_group_inline">
                                             <span className="form_group_label">Under Intensive Monitoring</span>
                                             <div className="form_group_field">
                                                 <Select options={[{ value: 'Yes', label: 'Yes' }, { value: 'No', label: 'No' }]}
@@ -1008,7 +1008,7 @@ const Edit = (props) => {
                                     </div>
 
                                     <div index={6} className="muitab" style={{ display: value != 6 ? 'none' : '' }}>
-                                        <div className="form_group">
+                                        <div className="form_group_inline">
                                             <span className="form_group_label">Local Agent Company</span>
                                             <div className="form_group_field">
                                                 <Select options={options}

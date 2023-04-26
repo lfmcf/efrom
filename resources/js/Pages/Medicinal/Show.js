@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 import { Head } from '@inertiajs/inertia-react';
 import moment from 'moment';
+import DocumentShow from '@/Components/DocumentShow';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -161,6 +162,10 @@ const Show = (props) => {
                                     <tr>
                                         <td>PV Contact Phone</td>
                                         <td>{rc.pv_contact_phone}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Change Control Ref</td>
+                                        <td>{rc.change_control_ref}</td>
                                     </tr>
                                     <tr>
                                         <td>Remarks</td>
@@ -336,6 +341,14 @@ const Show = (props) => {
                                                         <td>Numerator Unit</td>
                                                         <td>{ele.numerator_unit ? ele.numerator_unit.value : ''}</td>
                                                     </tr>
+                                                    <tr>
+                                                        <td>Denominator value</td>
+                                                        <td>{ele.denominator_value}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Denominator unit</td>
+                                                        <td>{ele.denominator_unit ? ele.denominator_unit.value : ''}</td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -358,8 +371,20 @@ const Show = (props) => {
                                             </thead>
                                             <tbody>
                                                 <tr>
+                                                    <td>Sellable unit determined by</td>
+                                                    <td>{element.sellable_unit_determined_by ? element.sellable_unit_determined_by.value : ''}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Product legal status of supply</td>
+                                                    <td>{element.product_legal_status_of_supply ? element.product_legal_status_of_supply.value : ''}</td>
+                                                </tr>
+                                                <tr>
                                                     <td>Packaging Type</td>
                                                     <td>{element.packaging_type ? element.packaging_type.value : ''}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Packaging registration number</td>
+                                                    <td>{element.packaging_registration_number }</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Packaging Name</td>
@@ -492,11 +517,11 @@ const Show = (props) => {
                                 <tbody>
                                     <tr>
                                         <td>Interaction remarks</td>
-                                        <td></td>
+                                        <td>{rc.interaction_remarks}</td>
                                     </tr>
                                     <tr>
                                         <td>Commitment remarks</td>
-                                        <td></td>
+                                        <td>{rc.commitment_remarks}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -526,16 +551,13 @@ const Show = (props) => {
                                                     <td>eCTD Sequence</td>
                                                     <td>{element.ectd_sequence}</td>
                                                 </tr>
-                                                <tr>
-                                                    <td>Change Control Ref</td>
-                                                    <td>{element.change_control_ref}</td>
-                                                </tr>
+                                                
                                                 <tr>
                                                     <td>Internal Submission Reference</td>
                                                     <td>{element.internal_submission_reference}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Remarks</td>
+                                                    <td>Status note</td>
                                                     <td>{element.remarks}</td>
                                                 </tr>
                                             </tbody>
@@ -556,58 +578,22 @@ const Show = (props) => {
                                     <tbody>
                                         <tr>
                                             <td>Next Renewals</td>
-                                            <td>{rc.next_renewals}</td>
+                                            <td>{rc.next_renewals ? 'Yes' : 'No'}</td>
                                         </tr>
                                         <tr>
                                             <td>Next Renewal Submission Deadline</td>
-                                            <td>{rc.nr_submission_deadline}</td>
+                                            <td>{rc.nr_submission_deadline ? moment(rc.nr_submission_deadline).format('DD-MMM-yy') :''}</td>
                                         </tr>
                                         <tr>
                                             <td>Next Renewal Date</td>
-                                            <td>{rc.nr_date}</td>
+                                            <td>{rc.nr_date ? moment(rc.nr_date).format('DD-MMM-yy') : ''}</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                         <div index={14} className="muitab" style={{ display: value != 14 ? 'none' : '' }}>
-                            {rc.doc.map((element, index) => (
-                                <div key={index}>
-                                    <h2 className='sous-heading-show'>Document - {index + 1}</h2>
-                                    <div>
-                                        <table className='showTable'>
-                                            <thead>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>Value</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>Document type</td>
-                                                    <td>{element.document_type ? element.document_type.value : ''}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Document title</td>
-                                                    <td>{element.document_title}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Language</td>
-                                                    <td>{element.language ? element.language.value : ''}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Version date</td>
-                                                    <td>{element.version_date ? moment(element.version_date).format('DD-MMM-yy') : ''}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Remarks</td>
-                                                    <td>{element.dremarks}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            ))}
+                            <DocumentShow docs={rc.doc} />
                         </div>
                     </Box>
                     

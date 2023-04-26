@@ -944,7 +944,7 @@ const Create = (props) => {
                                     </div>
 
                                     <div index={6} className="muitab" style={{ display: value != 6 ? 'none' : '' }}>
-                                        <div className="form_group">
+                                        <div className="form_group_inline">
                                             <span className="form_group_label">Local Agent Company</span>
                                             <div className="form_group_field">
                                                 <Select options={options}
