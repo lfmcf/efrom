@@ -170,7 +170,7 @@ const Show = (props) => {
                                     </tr>
                                     <tr>
                                         <td>Registration Date</td>
-                                        <td>{moment(clinical.registration_date).format('DD-MMM-yy')}</td>
+                                        <td>{clinical.registration_date ? moment(clinical.registration_date).format('DD-MMM-yy') : ''}</td>
                                     </tr>
                                     <tr>
                                         <td>Remarks</td>
