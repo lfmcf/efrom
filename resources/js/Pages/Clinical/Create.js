@@ -1102,7 +1102,7 @@ const Create = (props) => {
                                         </div>
                                     </div>
                                     <div value={value} index={4} className="muitab" style={{ display: value != 4 ? 'none' : '' }}>
-                                        <div className="form_group">
+                                        <div className="form_group_inline">
                                             <span className="form_group_label">Under Intensive Monitoring</span>
                                             <div className="form_group_field">
                                                 <Select options={[{ value: 'Yes', label: 'Yes' }, { value: 'No', label: 'No' }]}

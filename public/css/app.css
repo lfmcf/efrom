@@ -12431,13 +12431,21 @@ textarea {
 }
 
 .form_group_label {
-  width: 120px;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
   color: #646777;
   max-height: 32px;
   line-height: 18px;
   margin: auto 0;
   font-weight: 100;
   font-size: 12px;
+  text-transform: lowercase;
+  display: inline-block;
+}
+
+.form_group_label::first-letter {
+  text-transform: uppercase;
 }
 
 .form_group_field {
@@ -13102,6 +13110,18 @@ box-shadow: inset 0px 1px 12px 1px rgba(0,0,0,0.15); */
 
 .css-4dretl {
   height: 328px !important;
+}
+
+table.showTable tr td:first-child {
+  text-transform: lowercase;
+}
+
+table.showTable tr td:first-child::first-letter {
+  text-transform: capitalize;
+}
+
+footer span {
+  text-transform: uppercase;
 }
 
 /* Mui Tabs */

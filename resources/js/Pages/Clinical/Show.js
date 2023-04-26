@@ -40,7 +40,9 @@ function a11yProps(index) {
 }
 
 const Show = (props) => {
+    
     const { clinical } = props;
+    console.log(clinical)
     const [value, setValue] = useState(0);
 
 
@@ -97,10 +99,6 @@ const Show = (props) => {
                                         <td>RMS</td>
                                         <td>{clinical.rms ? clinical.rms.value : ''}</td>
                                     </tr> : ''}
-                                    {/* <tr>
-                                        <td>Procedure Number</td>
-                                        <td>{clinical.procedure_number}</td>
-                                    </tr> */}
                                     <tr>
                                         <td>Submission Type</td>
                                         <td>{clinical.application_stage.value}</td>
@@ -117,10 +115,7 @@ const Show = (props) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {/* <tr>
-                                        <td>Registration Title</td>
-                                        <td>{clinical.registration_title}</td>
-                                    </tr> */}
+                                    
                                     <tr>
                                         <td>Product</td>
                                         <td>{clinical.product_name.value}</td>
@@ -167,7 +162,7 @@ const Show = (props) => {
                                     </tr>
                                     <tr>
                                         <td>Registration alternate number</td>
-                                        <td>{clinical.registration_alternate_number}</td>
+                                        <td>{clinical.registration_alternate_number ? clinical.registration_alternate_number.value : ''}</td>
                                     </tr>
                                     <tr>
                                         <td>Registration number</td>
@@ -462,10 +457,7 @@ const Show = (props) => {
                                         <td>Paediatric Use</td>
                                         <td>{clinical.paediatric_use ? clinical.paediatric_use.value : ''}</td>
                                     </tr>
-                                    {/* <tr>
-                                <td>Age</td>
-                                <td>{clinical.age}</td>
-                            </tr> */}
+                                
                                 </tbody>
                             </table>
                         </div>
