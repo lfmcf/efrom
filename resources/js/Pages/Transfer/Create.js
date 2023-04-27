@@ -296,6 +296,7 @@ const Create = (props) => {
 
     return (
         <>
+            <Head title="MA - Transfer Create" />
             <div className="row">
                 <div className="col-md-12">
                     <h3 className="page-title">MA Transfer</h3>

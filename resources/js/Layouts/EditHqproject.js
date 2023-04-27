@@ -382,7 +382,7 @@ const EditHqproject = (props) => {
 
     return (
         <>
-        <Head title="Create Variation" />
+        <Head title="MA - HQ Variation Edit" />
         <div className="row">
                 <div className="col-md-12">
                     <h3 className="page-title">Variation</h3>

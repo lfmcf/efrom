@@ -631,7 +631,7 @@ const Create = (props) => {
     }, [errors]);
 
     React.useEffect(() => {
-        if(data.procedure_type && data.procedure_type.value == "Decentralized" || data.procedure_type && data.procedure_type.value == "Mutual Recognition" ) {
+        if(data.procedure_type && data.procedure_type.value == "European Procedure") {
             if(data.country.length !== 0) {
                 setStatusCountry(statusCountry => [{label: 'All', value: 'All'}, ...data.country])
             }else {
@@ -659,6 +659,7 @@ const Create = (props) => {
 
     return (
         <>
+            <Head title="Clinical Registration Creation Create" />
             <div className="row">
                 <div className="col-md-12">
                     <h3 className="page-title">registration creation - clinical</h3>
@@ -1481,7 +1482,7 @@ const Create = (props) => {
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Packaging Discontinued</span>
                                                             <div className="form_group_field">
-                                                                <Select options={[{ value: 'Yes', label: 'Yes' }, { value: 'No', label: 'No' }, { value: '', label: 'Not Applicable' }]}
+                                                                <Select options={[{ value: 'Yes', label: 'Yes' }, { value: 'No', label: 'No' }, { value: 'Not Applicable', label: 'Not Applicable' }]}
                                                                     name="packaging_discontinued"
                                                                     onChange={(selectedOption, name) => handlePackageSelectChange(selectedOption, name,index)}
                                                                     className="basic"
@@ -1724,7 +1725,7 @@ const Create = (props) => {
                                                     :
                                                     ''}
                                                 <div className="inline_form">
-                                                    {data.procedure_type && data.procedure_type.value == 'Decentralized' || data.procedure_type && data.procedure_type.value == 'Mutual Recognition' ?
+                                                    {data.procedure_type && data.procedure_type.value == 'European Procedure' ?
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Country</span>
                                                             <div className="form_group_field">

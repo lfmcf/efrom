@@ -291,6 +291,7 @@ const Create = (props) => {
 
     return (
         <>
+            <Head title="Baseline Edit" />
             <div className="row">
                 <div className="col-md-12">
                     <h3 className="page-title">Baseline</h3>

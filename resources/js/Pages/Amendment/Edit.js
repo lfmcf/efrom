@@ -29,7 +29,7 @@ function a11yProps(index) {
 
 const Edit = (props) => {
     const {amendment } = props;
-    console.log(amendment)
+    
     const { data, setData, post, processing, errors, clearErrors, reset } = useForm({
         id: amendment._id,
         product: amendment.product,
@@ -275,6 +275,7 @@ const Edit = (props) => {
 
     return (
         <>
+            <Head title="Amendment Edit" />
             <div className="row">
                 <div className="col-md-12">
                     <h3 className="page-title">Amendment</h3>
@@ -429,7 +430,7 @@ const Edit = (props) => {
                                         </div>
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Reason for variation</span>
+                                                <span className="form_group_label">Reason for amendment</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
                                                         { label: 'Indication', value: 'Indication' },

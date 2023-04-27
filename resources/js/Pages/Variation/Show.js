@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 import moment from 'moment';
 import { Head } from '@inertiajs/inertia-react';
+import DocumentShow from '@/Components/DocumentShow';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -52,6 +53,7 @@ const Show = (props) => {
     if (variation.isHq) {
         return (
             <div>
+                <Head title="MA - Variation Show" />
                 <div className="row">
                     <div className="col-md-12">
                         <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100%' }}>
@@ -107,13 +109,13 @@ const Show = (props) => {
                                                         <td>{element.local_tradename}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Application Stage</td>
+                                                        <td>Submission type</td>
                                                         <td>{element.application_stage ? element.application_stage.value : ''}</td>
                                                     </tr>
-                                                    <tr>
+                                                    {/* <tr>
                                                         <td>Product Type</td>
                                                         <td>{element.product_type ? element.product_type.value : ''}</td>
-                                                    </tr>
+                                                    </tr> */}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -137,10 +139,10 @@ const Show = (props) => {
                                                         <td>Variation Title</td>
                                                         <td>{element.variation_title}</td>
                                                     </tr>
-                                                    <tr>
+                                                    {/* <tr>
                                                         <td>Variation Category</td>
                                                         <td>{element.category.value}</td>
-                                                    </tr>
+                                                    </tr> */}
                                                     <tr>
                                                         <td>Variation Type</td>
                                                         <td>{element.variation_type.value}</td>
@@ -149,10 +151,10 @@ const Show = (props) => {
                                                         <td>Reason for variation</td>
                                                         <td>{element.variation_reason ?  element.variation_reason.value : ''}</td>
                                                     </tr>
-                                                    <tr>
+                                                    {/* <tr>
                                                         <td>Submission Type</td>
                                                         <td>{element.submission_type.value}</td>
-                                                    </tr>
+                                                    </tr> */}
                                                     <tr>
                                                         <td>Applcation N°</td>
                                                         <td>{element.application_number}</td>
@@ -164,6 +166,10 @@ const Show = (props) => {
                                                     <tr>
                                                         <td>Dossier Submission Format</td>
                                                         <td>{element.submission_format ?  element.submission_format.value : ''}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Change Control or pre-assessment</td>
+                                                        <td>{element.control}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -196,18 +202,15 @@ const Show = (props) => {
                                                         <td>eCTD sequence</td>
                                                         <td>{element.ectd}</td>
                                                     </tr>
-                                                    <tr>
+                                                    {/* <tr>
                                                         <td>Change Control or pre-assessment</td>
                                                         <td>{element.control}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>CCDS/Core PIL ref n°</td>
                                                         <td>{element.cdds}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Remarks</td>
-                                                        <td>{element.remarks}</td>
-                                                    </tr>
+                                                    </tr> */}
+                                                    
                                                     <tr>
                                                         <td>Planned Local implementation Date</td>
                                                         <td>{element.local_implementation ? moment(element.local_implementation).format('DD-MMM-yy') : ''}</td>
@@ -220,7 +223,10 @@ const Show = (props) => {
                                                         <td>Actual Local Implementation</td>
                                                         <td>{element.actual_implementation ? moment(element.actual_implementation).format('DD-MMM-yy') : ''}</td>
                                                     </tr>
-
+                                                    <tr>
+                                                        <td>Status note</td>
+                                                        <td>{element.remarks}</td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -228,7 +234,8 @@ const Show = (props) => {
                                 ))}
                             </div>
                             <div value={value} index={3} className="muitab" style={{ display: value != 3 ? 'none' : '' }}>
-                                {variation.doc.map((element, index) => (
+                                <DocumentShow docs={variation.doc} />
+                                {/* {variation.doc.map((element, index) => (
                                     <div key={index}>
                                         <h2 className='sous-heading-show'>Document - {index + 1}</h2>
                                         <div>
@@ -264,7 +271,7 @@ const Show = (props) => {
                                             </table>
                                         </div>
                                     </div>
-                                ))}
+                                ))} */}
                             </div>
                         </Box>
                     </div>
@@ -323,13 +330,13 @@ const Show = (props) => {
                                     <td>{variation.local_tradename}</td>
                                 </tr>
                                 <tr>
-                                    <td>Application Stage</td>
+                                    <td>Submission type</td>
                                     <td>{variation.application_stage ? variation.application_stage.value : ''}</td>
                                 </tr>
-                                <tr>
+                                {/* <tr>
                                     <td>Product Type</td>
                                     <td>{variation.product_type ? variation.product_type.value : ''}</td>
-                                </tr>
+                                </tr> */}
                             </tbody>
                         </table>
                     </div>
@@ -346,10 +353,10 @@ const Show = (props) => {
                                     <td>Variation Title</td>
                                     <td>{variation.variation_title}</td>
                                 </tr>
-                                <tr>
+                                {/* <tr>
                                     <td>Variation Category</td>
                                     <td>{variation.category.value}</td>
-                                </tr>
+                                </tr> */}
                                 <tr>
                                     <td>Variation Type</td>
                                     <td>{variation.variation_type.value}</td>
@@ -358,10 +365,10 @@ const Show = (props) => {
                                     <td>Reason for variation</td>
                                     <td>{variation.variation_reason ? variation.variation_reason.value : ''}</td>
                                 </tr>
-                                <tr>
+                                {/* <tr>
                                     <td>Submission Type</td>
                                     <td>{variation.submission_type.value}</td>
-                                </tr>
+                                </tr> */}
                                 <tr>
                                     <td>Applcation N°</td>
                                     <td>{variation.application_number}</td>
@@ -373,6 +380,10 @@ const Show = (props) => {
                                 <tr>
                                     <td>Dossier Submission Format</td>
                                     <td>{variation.submission_format ? variation.submission_format.value : ''}</td>
+                                </tr>
+                                <tr>
+                                    <td>Change control or pre-assessment</td>
+                                    <td>{variation.control}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -402,18 +413,15 @@ const Show = (props) => {
                                                 <td>eCTD sequence</td>
                                                 <td>{element.ectd}</td>
                                             </tr>
-                                            <tr>
+                                            {/* <tr>
                                                 <td>Change Control or pre-assessment</td>
                                                 <td>{element.control}</td>
                                             </tr>
                                             <tr>
                                                 <td>CCDS/Core PIL ref n°</td>
                                                 <td>{element.cdds}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Remarks</td>
-                                                <td>{element.remarks}</td>
-                                            </tr>
+                                            </tr> */}
+                                           
                                             <tr>
                                                 <td>Planned Local implementation Date</td>
                                                 <td>{element.local_implementation ? moment(element.local_implementation).format('DD-MMM-yy') : ''}</td>
@@ -426,7 +434,10 @@ const Show = (props) => {
                                                 <td>Actual Local Implementation</td>
                                                 <td>{element.actual_implementation ? moment(element.actual_implementation).format('DD-MMM-yy') : ''}</td>
                                             </tr>
-
+                                            <tr>
+                                                <td>Status note</td>
+                                                <td>{element.remarks}</td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -434,7 +445,8 @@ const Show = (props) => {
                         ))}
                     </div>
                     <div value={value} index={3} className="muitab" style={{ display: value != 3 ? 'none' : '' }}>
-                        {variation.doc.map((element, index) => (
+                        <DocumentShow docs={variation.doc} />
+                        {/* {variation.doc.map((element, index) => (
                             <div key={index}>
                                 <h2 className='sous-heading-show'>Document - {index + 1}</h2>
                                 <div>
@@ -470,7 +482,7 @@ const Show = (props) => {
                                     </table>
                                 </div>
                             </div>
-                        ))}
+                        ))} */}
                     </div>
                 </Box>
             </div>

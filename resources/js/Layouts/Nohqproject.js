@@ -250,7 +250,7 @@ const Nohqproject = (props) => {
 
     return (
         <>
-        <Head title="Create Variation" />
+        <Head title="MA - Variation Create" />
         {alert ? <ActionAlerts message={alertContent} closeAlert={closeAlert} /> : <></> }
         <form className="form" onSubmit={handleSubmit} ref={formRef} id='eform'>
             <Tabs defaultActiveKey="first">

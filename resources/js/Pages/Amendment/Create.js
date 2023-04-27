@@ -17,6 +17,7 @@ import moment from "moment";
 import ModalP from '@/Components/Modalp';
 import AddIcon from '@mui/icons-material/Add';
 import ActionAlerts from '@/Components/ActionAlerts';
+import { Head } from '@inertiajs/inertia-react';
 
 function a11yProps(index) {
     return {
@@ -277,6 +278,7 @@ const Create = (props) => {
 
     return (
         <>
+            <Head title="Amendment Create" />
             <div className="row">
                 <div className="col-md-12">
                     <h3 className="page-title">Amendment</h3>
@@ -432,7 +434,7 @@ const Create = (props) => {
                                         </div>
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label">Reason for variation</span>
+                                                <span className="form_group_label">Reason for amendment</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
                                                         { label: 'Indication', value: 'Indication' },

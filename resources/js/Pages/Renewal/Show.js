@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 import moment from 'moment';
 import { Head } from '@inertiajs/inertia-react';
+import DocumentShow from '@/Components/DocumentShow';
 
 
 function TabPanel(props) {
@@ -104,13 +105,13 @@ const Show = (props) => {
                                         <td>{renewal.local_tradename}</td>
                                     </tr>
                                     <tr>
-                                        <td>Application Stage</td>
+                                        <td>Submission type</td>
                                         <td>{renewal.application_stage ? renewal.application_stage.value : ''}</td>
                                     </tr>
-                                    <tr>
+                                    {/* <tr>
                                         <td>Product Type</td>
                                         <td>{renewal.product_type ? renewal.product_type.value : ''}</td>
-                                    </tr>
+                                    </tr> */}
                                 </tbody>
                             </table>
                         </div>
@@ -138,6 +139,10 @@ const Show = (props) => {
                                     <tr>
                                         <td>Renewal Procedure N°</td>
                                         <td>{renewal.application_num}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Change Control or pre-assessment</td>
+                                        <td>{renewal.control}</td>
                                     </tr>
                                     <tr>
                                         <td>Remarks</td>
@@ -171,21 +176,18 @@ const Show = (props) => {
                                                     <td>eCTD sequence</td>
                                                     <td>{element.ectd}</td>
                                                 </tr>
-                                                <tr>
+                                                {/* <tr>
                                                     <td>Change Control or pre-assessment</td>
                                                     <td>{element.control}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>CCDS/Core PIL ref n°</td>
                                                     <td>{element.cdds}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Remarks</td>
-                                                    <td>{element.remarks}</td>
-                                                </tr>
+                                                </tr> */}
+                                               
                                                 <tr>
                                                     <td>Implementation Deadline</td>
-                                                    <td>{moment(element.implimentation_deadline).format('DD-MMM-yy')}</td>
+                                                    <td>{element.implimentation_deadline ? moment(element.implimentation_deadline).format('DD-MMM-yy') : ''}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Next Renewals</td>
@@ -193,11 +195,15 @@ const Show = (props) => {
                                                 </tr>
                                                 <tr>
                                                     <td>Next Renewals Submission Deadline</td>
-                                                    <td>{moment(element.next_renewals_deadline).format('DD-MMM-yy')}</td>
+                                                    <td>{element.next_renewals_deadline ? moment(element.next_renewals_deadline).format('DD-MMM-yy') : ''}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Next Renewal Date</td>
-                                                    <td>{moment(element.next_renewals_date).format('DD-MMM-yy')}</td>
+                                                    <td>{element.next_renewals_date ? moment(element.next_renewals_date).format('DD-MMM-yy') : ''}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Status note</td>
+                                                    <td>{element.remarks}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -206,7 +212,8 @@ const Show = (props) => {
                             ))}
                         </div>
                         <div value={value} index={3} className="muitab" style={{ display: value != 3 ? 'none' : '' }}>
-                            {renewal.doc.map((element, index) => (
+                            <DocumentShow docs={renewal.doc} />
+                            {/* {renewal.doc.map((element, index) => (
                                 <div key={index}>
                                     <h2 className='sous-heading-show'>Document - {index + 1}</h2>
                                     <div>
@@ -242,7 +249,7 @@ const Show = (props) => {
                                         </table>
                                     </div>
                                 </div>
-                            ))}
+                            ))} */}
                         </div>
                     </Box>
                 </div>

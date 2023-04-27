@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 import moment from 'moment';
 import { Head } from '@inertiajs/inertia-react';
+import DocumentShow from '@/Components/DocumentShow';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -50,7 +51,7 @@ const Show = (props) => {
     };
     return (
         <>
-            <Head title="Baseline - Show" />
+            <Head title="Amendment Show" />
             <div className="row">
                 <div className="col-md-12">
                     <Box
@@ -88,9 +89,9 @@ const Show = (props) => {
                                     </tr>
                                     <tr>
                                         <td>Country(s)</td>
-                                        <td>{amendment.procedure_type.value === 'Decentralized' || amendment.procedure_type.value === 'Mutual Recognition' ? amendment.country.map((ele, i) => <ul key={i}><li>{ele.value}</li></ul>) : amendment.country.value}</td>
+                                        <td>{amendment.procedure_type.value === 'European Procedure' ? amendment.country.map((ele, i) => <ul key={i}><li>{ele.value}</li></ul>) : amendment.country.value}</td>
                                     </tr>
-                                    {amendment.procedure_type.value === 'Decentralized' || amendment.procedure_type.value === 'Mutual Recognition' ?
+                                    {amendment.procedure_type.value === 'European Procedure' ?
                                     <tr>
                                         <td>RMS</td>
                                         <td>{amendment.rms ? amendment.rms.value : ''}</td>
@@ -128,8 +129,12 @@ const Show = (props) => {
                                         <td>{amendment.description}</td>
                                     </tr>
                                     <tr>
-                                        <td>Reason for variation</td>
+                                        <td>Reason for amendment</td>
                                         <td>{amendment.reason ? amendment.reason.value : ''}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Change Control or pre-assessment</td>
+                                        <td>{amendment.control}</td>
                                     </tr>
                                     <tr>
                                         <td>Remarks</td>
@@ -163,18 +168,12 @@ const Show = (props) => {
                                                     <td>eCTD sequence</td>
                                                     <td>{element.ectd}</td>
                                                 </tr>
-                                                <tr>
-                                                    <td>Change Control or pre-assessment</td>
-                                                    <td>{element.control}</td>
-                                                </tr>
-                                                <tr>
+                                               
+                                                {/* <tr>
                                                     <td>CCDS/Core PIL ref n°</td>
                                                     <td>{element.cdds}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Remarks</td>
-                                                    <td>{element.remarks}</td>
-                                                </tr>
+                                                </tr> */}
+                                               
                                                 <tr>
                                                     <td>Effective internal implementation date</td>
                                                     <td>{moment(element.implimentation_date).format('DD-MMM-yy')}</td>
@@ -183,11 +182,14 @@ const Show = (props) => {
                                                     <td>Implementation Deadline of deadline for answer</td>
                                                     <td>{moment(element.deadline_for_answer).format('DD-MMM-yy')}</td>
                                                 </tr>
-                                                <tr>
+                                                {/* <tr>
                                                     <td>Impacted of changes approved</td>
                                                     <td>{element.changes_approved ? element.changes_approved.value : ''}</td>
+                                                </tr> */}
+                                                <tr>
+                                                    <td>Status note</td>
+                                                    <td>{element.remarks}</td>
                                                 </tr>
-                                                
                                             </tbody>
                                         </table>
                                     </div>
@@ -195,7 +197,8 @@ const Show = (props) => {
                             ))}
                         </div>
                         <div value={value} index={3} className="muitab" style={{ display: value != 3 ? 'none' : '' }}>
-                            {amendment.doc.map((element, index) => (
+                            <DocumentShow docs={amendment.doc} />
+                            {/* {amendment.doc.map((element, index) => (
                                 <div key={index}>
                                     <h2 className='sous-heading-show'>Document - {index + 1}</h2>
                                     <div>
@@ -231,7 +234,7 @@ const Show = (props) => {
                                         </table>
                                     </div>
                                 </div>
-                            ))}
+                            ))} */}
                         </div>
                     </Box>
                 </div>

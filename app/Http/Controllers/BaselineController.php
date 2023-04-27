@@ -101,9 +101,10 @@ class BaselineController extends Controller
         $baseline->doc = $docs;
         $baseline->created_by = $request->created_by;
         $baseline->type = $request->query('type');
-
+        
         if($request->query('type') === 'submit') {
             $res = $this->generetExcel($baseline);
+            
             if($res === true){
                 $baseline->save();
                 return redirect('dashboard')->with('message', 'Your form has been successfully submitted to the Data Entry Team');
@@ -354,10 +355,10 @@ class BaselineController extends Controller
             $sheet = $spreadsheet->getActiveSheet()->setTitle('Documents');
             $sheet->getStyle('1:1')->getFont()->setBold(true);
             $sheet->fromArray($document, NULL, 'A1');
-            $sheet->fromArray($baseline->doc, NULL, 'A2');
-
+            
             $dc = 2;
             foreach ($baseline->doc as $docu) {
+                
                 $sheet->setCellValue('A' . $dc, is_array($docu['document_type']) ? $docu['document_type']['value'] : '');
                 $sheet->setCellValue('B' . $dc, $docu['document_title']);
                 $sheet->setCellValue('C' . $dc, is_array($docu['language']) ? $docu['language']['value'] : '');
@@ -388,7 +389,6 @@ class BaselineController extends Controller
             return true;
 
         } catch (Throwable $e) {
-
             report($e);
             return $e;
         }
