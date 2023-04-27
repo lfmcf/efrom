@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 import moment from 'moment';
 import { Head } from '@inertiajs/inertia-react';
+import DocumentShow from '@/Components/DocumentShow';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -50,7 +51,7 @@ const Show = (props) => {
     };
     return(
         <>
-           <Head title="Registration Termination - Show" />
+           <Head title="Registration Termination Show" />
            <div className="row">
                <div className="col-md-12">
                     <Box
@@ -66,8 +67,9 @@ const Show = (props) => {
                         >
                             <Mtab label="Registration Identification" {...a11yProps(0)} />
                             <Mtab label="Registration Termination Details" {...a11yProps(1)} />
-                            <Mtab label="Status Details" {...a11yProps(2)} />
-                            <Mtab label="Documents" {...a11yProps(3)} />
+                            <Mtab label="Passive Details" {...a11yProps(2)} />
+                            <Mtab label="Status Details" {...a11yProps(3)} />
+                            <Mtab label="Documents" {...a11yProps(4)} />
                         </Mtabs>
                         <div value={value} index={0} className="muitab" style={{ display: value != 0 ? 'none' : '' }}>
                             <table className='showTable'>
@@ -105,13 +107,13 @@ const Show = (props) => {
                                         <td>{rt.local_tradename}</td>
                                     </tr>
                                     <tr>
-                                        <td>Application Stage</td>
+                                        <td>Submission type</td>
                                         <td>{rt.application_stage ? rt.application_stage.value : ''}</td>
                                     </tr>
-                                    <tr>
+                                    {/* <tr>
                                         <td>Product Type</td>
                                         <td>{rt.product_type ? rt.product_type.value : ''}</td>
-                                    </tr>
+                                    </tr> */}
                                 </tbody>
                             </table>
                         </div>
@@ -128,13 +130,17 @@ const Show = (props) => {
                                         <td>Description of the event</td>
                                         <td>{rt.description}</td>
                                     </tr>
-                                    <tr>
+                                    {/* <tr>
                                         <td>Registration Termination Type</td>
                                         <td>{rt.rttype ? rt.rttype.value : ''}</td>
-                                    </tr>
+                                    </tr> */}
                                     <tr>
                                         <td>Reason of the event</td>
                                         <td>{rt.reason ? rt.reason.value : ''}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Change Control or pre-assessment</td>
+                                        <td>{rt.control}</td>
                                     </tr>
                                     <tr>
                                         <td>Remarks</td>
@@ -144,6 +150,30 @@ const Show = (props) => {
                             </table>
                         </div>
                         <div value={value} index={2} className="muitab" style={{ display: value != 2 ? 'none' : '' }}>
+                            <table className='showTable'>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Reason for passive</td>
+                                        <td>{rt.reason_for_passive ? rt.reason_for_passive.value : ''}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Passive date</td>
+                                        <td>{rt.passive_date ? moment(rt.passive_date).format('YYYY-MM-DD') : ''}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Passive comment</td>
+                                        <td>{rt.passive_comment}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div value={value} index={3} className="muitab" style={{ display: value != 3 ? 'none' : '' }}>
                             {rt.statuses.map((element, index) => (
                                 <div key={index}>
                                     <h2 className='sous-heading-show'>Status - {index + 1}</h2>
@@ -168,18 +198,12 @@ const Show = (props) => {
                                                     <td>eCTD sequence</td>
                                                     <td>{element.ectd}</td>
                                                 </tr>
-                                                <tr>
-                                                    <td>Change Control or pre-assessment</td>
-                                                    <td>{element.control}</td>
-                                                </tr>
-                                                <tr>
+                                               
+                                                {/* <tr>
                                                     <td>CCDS/Core PIL ref n°</td>
                                                     <td>{element.cdds}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Remarks</td>
-                                                    <td>{element.remarks}</td>
-                                                </tr>
+                                                </tr> */}
+                                                
                                                 <tr>
                                                     <td>Effective internal implementation date</td>
                                                     <td>{element.implimentation_date ? moment(element.implimentation_date).format('YYYY-MM-DD') : ''}</td>
@@ -192,15 +216,20 @@ const Show = (props) => {
                                                     <td>Impacted of changes approved</td>
                                                     <td>{element.changes_approved ? element.changes_approved.value : ''}</td>
                                                 </tr>
-                                                
+                                                <tr>
+                                                    <td>Status note</td>
+                                                    <td>{element.remarks}</td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             ))}
                         </div>
-                        <div value={value} index={3} className="muitab" style={{ display: value != 3 ? 'none' : '' }}>
-                            {rt.doc.map((element, index) => (
+                       
+                        <div value={value} index={4} className="muitab" style={{ display: value != 4 ? 'none' : '' }}>
+                            <DocumentShow docs={rt.doc} />
+                            {/* {rt.doc.map((element, index) => (
                                 <div key={index}>
                                     <h2 className='sous-heading-show'>Document - {index + 1}</h2>
                                     <div>
@@ -236,7 +265,7 @@ const Show = (props) => {
                                         </table>
                                     </div>
                                 </div>
-                            ))}
+                            ))} */}
                         </div>
                     </Box>
                </div>

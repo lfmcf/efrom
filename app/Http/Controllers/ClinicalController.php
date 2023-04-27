@@ -463,7 +463,7 @@ class ClinicalController extends Controller
                 $sheet->setCellValue('A' . $n, $kd['date_type'] ? $kd['date_type']['value'] : '');
                 $sheet->setCellValue('B' . $n, date("d-m-Y", strtotime($kd['date'])));
                 $sheet->setCellValue('C' . $n, $kd['remarks']);
-                $n + 1;
+                $n += 1;
             }
             //$sheet->setCellValue('D2', $clinical->alternate_number_type ? $clinical->alternate_number_type['value'] : '');
             // $sheet->setCellValue('D2', $clinical->alternate_number);
@@ -575,8 +575,8 @@ class ClinicalController extends Controller
                 $sheet->setCellValue('C' . $st, date("d-m-Y", strtotime($stt['status_date'])));
                 $sheet->setCellValue('D' . $st, $stt['ectd_sequence']);
                 // $sheet->setCellValue('E' . $st, $stt['change_control_ref']);
-                $sheet->setCellValue('F' . $st, $stt['internal_submission_reference']);
-                $sheet->setCellValue('G' . $st, $stt['remarks']);
+                $sheet->setCellValue('E' . $st, $stt['internal_submission_reference']);
+                $sheet->setCellValue('F' . $st, $stt['remarks']);
                 $st++;
             }
 

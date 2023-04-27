@@ -1,5 +1,5 @@
 import React from "react";
-
+import moment from "moment";
 const DocumentShow = (props) => {
     const {docs} = props
     return(

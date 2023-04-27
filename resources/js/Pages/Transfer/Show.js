@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 import moment from 'moment';
 import { Head } from '@inertiajs/inertia-react';
+import DocumentShow from '@/Components/DocumentShow';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -50,7 +51,7 @@ const Show = (props) => {
     };
     return(
         <>
-           <Head title="Transfer - Show" />
+           <Head title="MA - Transfer Show" />
            <div className="row">
                <div className="col-md-12">
                     <Box
@@ -105,13 +106,13 @@ const Show = (props) => {
                                         <td>{transfer.local_tradename}</td>
                                     </tr>
                                     <tr>
-                                        <td>Application Stage</td>
+                                        <td>Submission type</td>
                                         <td>{transfer.application_stage ? transfer.application_stage.value : ''}</td>
                                     </tr>
-                                    <tr>
+                                    {/* <tr>
                                         <td>Product Type</td>
                                         <td>{transfer.product_type ? transfer.product_type.value : ''}</td>
-                                    </tr>
+                                    </tr> */}
                                 </tbody>
                             </table>
                         </div>
@@ -139,6 +140,10 @@ const Show = (props) => {
                                     <tr>
                                         <td>New MAH</td>
                                         <td>{transfer.new_mah ? transfer.new_mah.value : ''}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Change Control or pre-assessment</td>
+                                        <td>{transfer.control}</td>
                                     </tr>
                                     <tr>
                                         <td>Remarks</td>
@@ -172,18 +177,12 @@ const Show = (props) => {
                                                     <td>eCTD sequence</td>
                                                     <td>{element.ectd}</td>
                                                 </tr>
-                                                <tr>
-                                                    <td>Change Control or pre-assessment</td>
-                                                    <td>{element.control}</td>
-                                                </tr>
-                                                <tr>
+                                                
+                                                {/* <tr>
                                                     <td>CCDS/Core PIL ref n°</td>
                                                     <td>{element.cdds}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Remarks</td>
-                                                    <td>{element.remarks}</td>
-                                                </tr>
+                                                </tr> */}
+                                                
                                                 <tr>
                                                     <td>Effective internal implementation date</td>
                                                     <td>{element.implimentation_date ? moment(element.implimentation_date).format('DD-MMM-yy') : ''}</td>
@@ -196,7 +195,10 @@ const Show = (props) => {
                                                     <td>Impacted of changes approved</td>
                                                     <td>{element.changes_approved ? element.changes_approved.value : ''}</td>
                                                 </tr>
-                                                
+                                                <tr>
+                                                    <td>Status note</td>
+                                                    <td>{element.remarks}</td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -204,7 +206,8 @@ const Show = (props) => {
                             ))}
                         </div>
                         <div value={value} index={3} className="muitab" style={{ display: value != 3 ? 'none' : '' }}>
-                            {transfer.doc.map((element, index) => (
+                            <DocumentShow docs={transfer.doc} />
+                            {/* {transfer.doc.map((element, index) => (
                                 <div key={index}>
                                     <h2 className='sous-heading-show'>Document - {index + 1}</h2>
                                     <div>
@@ -240,7 +243,7 @@ const Show = (props) => {
                                         </table>
                                     </div>
                                 </div>
-                            ))}
+                            ))} */}
                         </div>
                     </Box>
                </div>

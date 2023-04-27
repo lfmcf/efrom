@@ -642,7 +642,7 @@ const Edit = (props) => {
     }, [errors]);
 
     React.useEffect(() => {
-        if(data.procedure_type && data.procedure_type.value == "Decentralized" || data.procedure_type && data.procedure_type.value == "Mutual Recognition" ) {
+        if(data.procedure_type && data.procedure_type.value == "European Procedure" ) {
             if(data.country.length !== 0) {
                 setStatusCountry(statusCountry => [{label: 'All', value: 'All'}, ...data.country])
             }else {
@@ -677,6 +677,7 @@ const Edit = (props) => {
 
     return (
         <>
+           <Head title="Clinical Registration Creation Edit" />
             <div className="row">
                 <div className="col-md-12">
                     <h3 className="page-title">registration creation - clinical</h3>
@@ -1749,7 +1750,7 @@ const Edit = (props) => {
                                                     :
                                                     ''}
                                                 <div className="inline_form">
-                                                    {data.procedure_type && data.procedure_type.value == 'Decentralized' || data.procedure_type && data.procedure_type.value == 'Mutual Recognition' ?
+                                                    {data.procedure_type && data.procedure_type.value == 'European Procedure' ?
                                                         <div className="form_group_inline">
                                                             <span className="form_group_label">Country</span>
                                                             <div className="form_group_field">

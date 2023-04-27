@@ -263,7 +263,7 @@ const Edit = (props) => {
 
     return (
         <>
-            <Head title="Renewal - Create" />
+            <Head title="Renewal - Edit" />
             <div className="row">
                 <div className="col-md-12">
                     <h3 className="page-title">Renewal</h3>

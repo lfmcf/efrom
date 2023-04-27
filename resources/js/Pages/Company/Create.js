@@ -257,7 +257,7 @@ const Create = (props) => {
                     <h3 className="page-title">MA - Company Registration</h3>
                 </div>
             </div>
-        <Head title="Create MA - Company Registration"/>
+        <Head title="MA - Company Registration Create"/>
         {alert ? <ActionAlerts message={alertContent} closeAlert={closeAlert} /> : <></> }
         <form className="form" onSubmit={handleSubmit} ref={formRef} id='eform'>
             <Tabs defaultActiveKey="first">

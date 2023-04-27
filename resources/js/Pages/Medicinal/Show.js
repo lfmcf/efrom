@@ -55,7 +55,7 @@ const Show = (props) => {
 
     return (
         <>
-            <Head title="MA - Show" />
+            <Head title="MA - Registration Creation Show" />
 
             <div className="row">
                 <div className="col-md-12">
@@ -466,7 +466,7 @@ const Show = (props) => {
                                 <tbody>
                                     <tr>
                                         <td>Indications</td>
-                                        <td>{rc.indication.value}</td>
+                                        <td>{rc.indication.map((ele,i) => <ul key={i}><li>{ele.value}</li></ul>)}</td>
                                     </tr>
                                     <tr>
                                         <td>Paediatric Use</td>

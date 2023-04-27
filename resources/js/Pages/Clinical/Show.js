@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 import moment from 'moment';
 import { Head } from '@inertiajs/inertia-react';
+import DocumentShow from '@/Components/DocumentShow';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -52,6 +53,7 @@ const Show = (props) => {
     };
     return (
         <>
+            <Head title="Clinical Registration Creation Show" />
             <div className="row">
                 <div className="col-md-12">
                     <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100%' }}>
@@ -92,9 +94,9 @@ const Show = (props) => {
                                     </tr>
                                     <tr>
                                         <td>Country(s)</td>
-                                        <td>{clinical.procedure_type.value === 'Decentralized' || clinical.procedure_type.value === 'Mutual Recognition' ? clinical.country.map((ele, i) => <ul key={i}><li>{ele.value}</li></ul>) : clinical.country.value}</td>
+                                        <td>{clinical.procedure_type.value === 'European Procedure' ? clinical.country.map((ele, i) => <ul key={i}><li>{ele.value}</li></ul>) : clinical.country.value}</td>
                                     </tr>
-                                    {clinical.procedure_type.value === 'Decentralized' || clinical.procedure_type.value === 'Mutual Recognition' ?
+                                    {clinical.procedure_type.value === 'European Procedure' ?
                                     <tr>
                                         <td>RMS</td>
                                         <td>{clinical.rms ? clinical.rms.value : ''}</td>
@@ -171,6 +173,10 @@ const Show = (props) => {
                                     <tr>
                                         <td>Registration Date</td>
                                         <td>{clinical.registration_date ? moment(clinical.registration_date).format('DD-MMM-yy') : ''}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Change Control Ref</td>
+                                        <td>{clinical.change_control_ref}</td>
                                     </tr>
                                     <tr>
                                         <td>Remarks</td>
@@ -273,7 +279,7 @@ const Show = (props) => {
                                     </div>
                                 </div>
                             ))}
-                            <table className='showTable'>
+                            {/* <table className='showTable'>
                                 <tbody>
                                     <tr>
                                         <td>Alternate Number Type</td>
@@ -288,7 +294,7 @@ const Show = (props) => {
                                         <td>{clinical.atcremarks}</td>
                                     </tr>
                                 </tbody>
-                            </table>
+                            </table> */}
                         </div>
                         <div value={value} index={6} className="muitab" style={{ display: value != 6 ? 'none' : '' }}>
                             <table className='showTable'>
@@ -451,12 +457,12 @@ const Show = (props) => {
                                 <tbody>
                                     <tr>
                                         <td>Indications</td>
-                                        <td>{clinical.indication.value}</td>
+                                        <td><ul>{clinical.indication.map((ele,i) => <li key={i}>{ele.value}</li>)}</ul></td>
                                     </tr>
-                                    <tr>
+                                    {/* <tr>
                                         <td>Paediatric Use</td>
                                         <td>{clinical.paediatric_use ? clinical.paediatric_use.value : ''}</td>
-                                    </tr>
+                                    </tr> */}
                                 
                                 </tbody>
                             </table>
@@ -513,16 +519,16 @@ const Show = (props) => {
                                                     <td>eCTD Sequence</td>
                                                     <td>{element.ectd_sequence}</td>
                                                 </tr>
-                                                <tr>
+                                                {/* <tr>
                                                     <td>Change Control Ref</td>
                                                     <td>{element.change_control_ref}</td>
-                                                </tr>
+                                                </tr> */}
                                                 <tr>
                                                     <td>Internal Submission Reference</td>
                                                     <td>{element.internal_submission_reference}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Remarks</td>
+                                                    <td>Status note</td>
                                                     <td>{element.remarks}</td>
                                                 </tr>
                                             </tbody>
@@ -532,7 +538,8 @@ const Show = (props) => {
                             ))}
                         </div>
                         <div index={12} className="muitab" style={{ display: value != 12 ? 'none' : '' }}>
-                            {clinical.doc.map((element, index) => (
+                            <DocumentShow docs={clinical.doc} />
+                            {/* {clinical.doc.map((element, index) => (
                                 <div key={index}>
                                     <h2 className='sous-heading-show'>Document - {index + 1}</h2>
                                     <div>
@@ -568,7 +575,7 @@ const Show = (props) => {
                                         </table>
                                     </div>
                                 </div>
-                            ))}
+                            ))} */}
                         </div>
                     </Box>
                 </div>

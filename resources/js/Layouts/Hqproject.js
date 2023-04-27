@@ -369,7 +369,7 @@ const Hqproject = (props) => {
 
     return (
         <>
-        <Head title="Create Variation" />
+        <Head title="MA - HQ Variation Create" />
         {alert ? <ActionAlerts message={alertContent} closeAlert={closeAlert} /> : <></> }
         <form className="form" onSubmit={handleSubmit} ref={formRef}>
             <Tabs defaultActiveKey="first">

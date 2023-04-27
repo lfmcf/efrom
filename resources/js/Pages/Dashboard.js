@@ -578,7 +578,7 @@ const Dashboard = (props) => {
                                 </div>
                                 <div className='dash-table-wrap'>
                                     <h5 className="mb-3 head-table" style={{ float: VariationData.length > 0 ? 'left' : '' }}>Variation</h5>
-                                    {VariationData.lenght > 0 ?
+                                    {VariationData.length > 0 ?
                                     <Table columns={Variationcolumns} data={VariationData} for="variation" />
                                     : 
                                     <div className='row' >
