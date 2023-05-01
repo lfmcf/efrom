@@ -556,6 +556,10 @@ const Edit = (props) => {
         setAlert(false);
     }
 
+    let handleNrDateChange = (name, date) => {
+        setData(name, date)
+    }
+
     return (
         <>
             <Head title="MA - Registration Creation Edit" />
