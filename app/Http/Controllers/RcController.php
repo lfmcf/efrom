@@ -323,6 +323,8 @@ class RcController extends Controller
         $rc->created_by = $request->created_by;
         $rc->type = $request->query('type');
 
+        dd($rc->type);
+        
         if($request->query('type') === 'submit') {
             $res = $this->generetExcel($rc);
             if($res === true){
