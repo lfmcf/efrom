@@ -59,7 +59,7 @@ function a11yProps(index) {
 const Edit = (props) => {
 
     const { rc } = props;
-    console.log(rc.formulations)
+   
     const { data, setData, post, processing, errors, clearErrors, reset } = useForm({
         id: rc._id,
         procedure_type: rc.procedure_type,
@@ -131,6 +131,7 @@ const Edit = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         let submitType = window.event.target.name;
+        console.log(submitType)
         const search = window.location.search
         const opname = new URLSearchParams(search).get('opr');
         if (opname === 'edit') {
