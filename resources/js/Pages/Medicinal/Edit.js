@@ -128,14 +128,12 @@ const Edit = (props) => {
         setValue(newValue);
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        let submitType = window.event.target.name;
-        console.log(submitType)
+    const handleSubmit = (name) => {
+       
         const search = window.location.search
         const opname = new URLSearchParams(search).get('opr');
         if (opname === 'edit') {
-            post(route('updatefinishproduct', { 'type': submitType }), {
+            post(route('updatefinishproduct', { 'type': name }), {
                 onError: (e) => {if(e.create){ 
                     setAlert(true);
                     setAlertContent(e.create)
@@ -147,7 +145,7 @@ const Edit = (props) => {
                 }
             });
         } else {
-            post(route('storefinishproduct', { 'type': submitType }), {
+            post(route('storefinishproduct', { 'type': name }), {
                 onError: (e) => {if(e.create){ 
                     setAlert(true);
                     setAlertContent(e.create)
@@ -245,7 +243,7 @@ const Edit = (props) => {
 
     const addIngredient = (i) => {
         let newArr = { ...data };
-        newArr.formulations[i].ingredient.push({ingredient: "", strength_type: "", numerator_lower_val: "", numerator_upper_val: "", numerator_unit: "", function: "", denominator_value: '', denominator_unit: ''})
+        newArr.formulations[i].ingredient.push({ingredient: "", strength_type: "", numerator_lower_val: "", numerator_upper_val: "", numerator_unit: "", function: "", denominator_value: "", denominator_unit: ""})
         setData(newArr);
     }
 
@@ -257,7 +255,7 @@ const Edit = (props) => {
 
     let addPackageValues = () => {
         let arr = { ...data };
-        arr.packagings.push({ packaging_type: "", packaging_name: "", description: "", launched: "", first_lunch_date: '', packaging_discontinued: "", discontinuation_date: '', remarks: '', packagelif: [{ package_shelf_life_type: "", shelf_life: "", shelf_life_unit: "", package_storage_condition: [], remarks: '' }] })
+        arr.packagings.push({ packaging_type: "", packaging_name: "", description: "", launched: "", first_lunch_date: '', packaging_discontinued: "", discontinuation_date: "", remarks: "", packagelif: [{ package_shelf_life_type: "", shelf_life: "", shelf_life_unit: "", package_storage_condition: [], remarks: "" }] })
         setData(arr);
     }
 
@@ -513,12 +511,13 @@ const Edit = (props) => {
         setSavemodal(prev => ({ ...prev, show: true, name: 'submit' }))
     }
 
-    const handleSaveModalConfirm = () => {
+    const handleSaveModalConfirm = (name) => {
         setSavemodal(prev => ({
             ...prev,
             show: false
         }))
-        formRef.current.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
+        handleSubmit(name);
+        //formRef.current.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
     }
 
     const handleDocumentSelectChange = (selectedOption, name, i) => {

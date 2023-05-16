@@ -455,10 +455,10 @@ const Create = (props) => {
         setShow(true)
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        let submitType = window.event.target.name;
-        post(route('storeclinical', { 'type': submitType }), {
+    const handleSubmit = (name) => {
+        // e.preventDefault();
+        // let submitType = window.event.target.name;
+        post(route('storeclinical', { 'type': name }), {
             onError: (e) => {if(e.create){ 
                 setAlert(true);
                 setAlertContent(e.create)
@@ -494,12 +494,13 @@ const Create = (props) => {
         }))
     }
 
-    const handleSaveModalConfirm = () => {
+    const handleSaveModalConfirm = (name) => {
         setSavemodal(prev => ({
             ...prev,
             show: false
         }))
-        formRef.current.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
+        handleSubmit(name)
+        // formRef.current.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
     }
 
     let handleReset = () => {
