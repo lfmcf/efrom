@@ -185,13 +185,13 @@ const EditNoHqproject = (props) => {
         setData(arr);
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        let submitType = window.event.target.name;
+    const handleSubmit = (name) => {
+        // e.preventDefault();
+        // let submitType = window.event.target.name;
         const search = window.location.search
         const opname = new URLSearchParams(search).get('opr');
         if (opname === 'edit') {
-            post(route("updatevariation", {'type': submitType}), {
+            post(route("updatevariation", {'type': name}), {
                 onError: (e) => {if(e.create){ 
                     setAlert(true);
                     setAlertContent(e.create)
@@ -203,7 +203,7 @@ const EditNoHqproject = (props) => {
                 }
             });
         }else {
-            post(route("storevariation", {'type': submitType}), {
+            post(route("storevariation", {'type': name}), {
                 onError: (e) => {if(e.create){ 
                     setAlert(true);
                     setAlertContent(e.create)
@@ -233,12 +233,13 @@ const EditNoHqproject = (props) => {
         setSavemodal(prev => ({ ...prev, show: true, name: 'submit' }))
     }
 
-    const handleSaveModalConfirm = () => {
+    const handleSaveModalConfirm = (name) => {
         setSavemodal(prev => ({
             ...prev,
             show: false
         }))
-        formRef.current.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
+        handleSubmit(name)
+        // formRef.current.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
     }
 
     React.useEffect(() => {
