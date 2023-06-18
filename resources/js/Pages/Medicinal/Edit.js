@@ -11,7 +11,7 @@ import SaveModal from '@/Components/SaveModal';
 import { key_dates_list, operations, packageCondistion, product_name, procedure_type, apf, atc, SlType, indications, status } from '@/Components/List';
 import PropTypes from 'prop-types';
 import BasicSpeedDial from '@/Components/SpeedDial';
-import { Tabs as Mtabs, Tab as Mtab, IconButton, Tooltip, Radio } from '@mui/material';
+import { Tabs as Mtabs, Tab as Mtab, IconButton, Tooltip, Radio, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
@@ -59,7 +59,7 @@ function a11yProps(index) {
 const Edit = (props) => {
 
     const { rc } = props;
-   
+
     const { data, setData, post, processing, errors, clearErrors, reset } = useForm({
         id: rc._id,
         procedure_type: rc.procedure_type,
@@ -100,7 +100,7 @@ const Edit = (props) => {
         commitment_remarks: rc.commitment_remarks,
         statuses: rc.statuses,
         next_renewals: rc.next_renewals,
-        nr_submission_deadline : rc.nr_submission_deadline,
+        nr_submission_deadline: rc.nr_submission_deadline,
         nr_date: rc.nr_date,
         doc: rc.doc,
         created_by: props.auth.user.id,
@@ -118,7 +118,7 @@ const Edit = (props) => {
     const countryRef = React.useRef();
     const formRef = React.useRef();
     const [value, setValue] = useState(0);
-    const [statusCountry, setStatusCountry] = useState([{label: 'All', value: 'All'}])
+    const [statusCountry, setStatusCountry] = useState([{ label: 'All', value: 'All' }])
     const firstTimeRender = React.useRef(true);
     const [alert, setAlert] = useState(false);
     const [alertContent, setAlertContent] = useState('');
@@ -129,31 +129,33 @@ const Edit = (props) => {
     };
 
     const handleSubmit = (name) => {
-       
+
         const search = window.location.search
         const opname = new URLSearchParams(search).get('opr');
         if (opname === 'edit') {
-            post(route('updatefinishproduct', { 'type': name }), {
-                onError: (e) => {if(e.create){ 
-                    setAlert(true);
-                    setAlertContent(e.create)
-                }
-                else { 
-                    setAlert(true); 
-                    setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
-                }
+            post(route('updatefinishproduct', { 'type': submitType }), {
+                onError: (e) => {
+                    if (e.create) {
+                        setAlert(true);
+                        setAlertContent(e.create)
+                    }
+                    else {
+                        setAlert(true);
+                        setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
+                    }
                 }
             });
         } else {
-            post(route('storefinishproduct', { 'type': name }), {
-                onError: (e) => {if(e.create){ 
-                    setAlert(true);
-                    setAlertContent(e.create)
-                }
-                else { 
-                    setAlert(true); 
-                    setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
-                }
+            post(route('storefinishproduct', { 'type': submitType }), {
+                onError: (e) => {
+                    if (e.create) {
+                        setAlert(true);
+                        setAlertContent(e.create)
+                    }
+                    else {
+                        setAlert(true);
+                        setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
+                    }
                 }
             });
         }
@@ -176,18 +178,18 @@ const Edit = (props) => {
     }
 
     React.useEffect(() => {
-        if(data.procedure_type && data.procedure_type.value == "Decentralized" || data.procedure_type && data.procedure_type.value == "Mutual Recognition" ) {
-            if(data.country.length !== 0) {
-                setStatusCountry(statusCountry => [{label: 'All', value: 'All'}, ...data.country])
-            }else {
-                setStatusCountry([{label: 'All', value: 'All'}])
+        if (data.procedure_type && data.procedure_type.value == "Decentralized" || data.procedure_type && data.procedure_type.value == "Mutual Recognition") {
+            if (data.country.length !== 0) {
+                setStatusCountry(statusCountry => [{ label: 'All', value: 'All' }, ...data.country])
+            } else {
+                setStatusCountry([{ label: 'All', value: 'All' }])
             }
         }
     }, [data.country]);
 
     React.useEffect(() => {
-        if(data.rms) {
-            if(statusCountry.filter(item => item.value == data.rms.value) == 0) {
+        if (data.rms) {
+            if (statusCountry.filter(item => item.value == data.rms.value) == 0) {
                 setStatusCountry(statusCountry => [...statusCountry, data.rms])
             }
         }
@@ -197,11 +199,11 @@ const Edit = (props) => {
         if (!firstTimeRender.current) {
             setData('country', [])
         }
-        
+
     }, [data.procedure_type]);
 
-    React.useEffect(() => { 
-        firstTimeRender.current = false 
+    React.useEffect(() => {
+        firstTimeRender.current = false
     }, [])
 
     let handleKeyDateSelectChange = (selectedOption, name, i) => {
@@ -231,7 +233,7 @@ const Edit = (props) => {
 
     const addFormulationValues = () => {
         let arr = { ...data };
-        arr.formulations.push({ingredient : [{ ingredient: "", strength_type: "", numerator_lower_val: "", numerator_upper_val: "", numerator_unit: "", function: "", denominator_value: '', denominator_unit: '' }]});
+        arr.formulations.push({ ingredient: [{ ingredient: "", strength_type: "", numerator_lower_val: "", numerator_upper_val: "", numerator_unit: "", function: "", denominator_value: '', denominator_unit: '' }] });
         setData(arr);
     }
 
@@ -243,11 +245,11 @@ const Edit = (props) => {
 
     const addIngredient = (i) => {
         let newArr = { ...data };
-        newArr.formulations[i].ingredient.push({ingredient: "", strength_type: "", numerator_lower_val: "", numerator_upper_val: "", numerator_unit: "", function: "", denominator_value: "", denominator_unit: ""})
+        newArr.formulations[i].ingredient.push({ ingredient: "", strength_type: "", numerator_lower_val: "", numerator_upper_val: "", numerator_unit: "", function: "", denominator_value: '', denominator_unit: '' })
         setData(newArr);
     }
 
-    const removeIngredient = (index, i ) => {
+    const removeIngredient = (index, i) => {
         let newArr = { ...data };
         newArr.formulations[index].ingredient.splice(i, 1);
         setData(newArr);
@@ -447,8 +449,8 @@ const Edit = (props) => {
 
     let porductOptions = props.products.map(function (product) {
         return {
-            value : product.name,
-            label : product.name,
+            value: product.name,
+            label: product.name,
         }
     })
 
@@ -568,13 +570,13 @@ const Edit = (props) => {
                     <h3 className="page-title">MA - registration creation</h3>
                 </div>
             </div>
-            {alert ? <ActionAlerts message={alertContent} closeAlert={closeAlert} /> : <></> }
+            {alert ? <ActionAlerts message={alertContent} closeAlert={closeAlert} /> : <></>}
             <div className="row">
                 <div className="col-md-12">
 
                     <form className="form" onSubmit={handleSubmit} ref={formRef} id="ccform" style={{ marginBottom: '10px' }}>
                         <Tabs defaultActiveKey="first">
-                            <Tab eventKey="first" title="New Registration" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0'}}>
+                            <Tab eventKey="first" title="New Registration" style={{ border: '1px solid #dee2e6', height: 'calc(100vh - 200px)', padding: '20px 0' }}>
                                 <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100%' }}>
                                     <Mtabs
                                         orientation="vertical"
@@ -586,7 +588,7 @@ const Edit = (props) => {
                                     >
                                         <Mtab label="General information" {...a11yProps(0)} style={{ color: errors.country || errors.procedure_type || errors.application_stage ? 'red' : '' }} />
                                         <Mtab label="Basic information" {...a11yProps(1)} style={{ color: errors.product_name || errors.local_tradename || errors.registration_holder ? 'red' : '' }} />
-                                        <Mtab label="Dosage Form / ATC" {...a11yProps(2)} style={{color: errors.authorized_pharmaceutical_form || errors.route_of_admin || errors.atc}} />
+                                        <Mtab label="Dosage Form / ATC" {...a11yProps(2)} style={{ color: errors.authorized_pharmaceutical_form || errors.route_of_admin || errors.atc }} />
                                         <Mtab label="Orphan Drug Details" {...a11yProps(3)} />
                                         <Mtab label="Under Intensive Monitoring Details" {...a11yProps(4)} />
                                         <Mtab label="Key Dates / Alternate Numbers" {...a11yProps(5)} />
@@ -617,7 +619,7 @@ const Edit = (props) => {
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label" style={{color : errors.country ? 'red' : ''}}>Country (*)</span>
+                                                <span className="form_group_label" style={{ color: errors.country ? 'red' : '' }}>Country (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={options_4}
                                                         name="country"
@@ -634,7 +636,7 @@ const Edit = (props) => {
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="form_group_inline" style={{display: data.procedure_type && data.procedure_type.value === 'Decentralized' || data.procedure_type && data.procedure_type.value === 'Mutual Recognition' ? '' : 'none'}}>
+                                            <div className="form_group_inline" style={{ display: data.procedure_type && data.procedure_type.value === 'Decentralized' || data.procedure_type && data.procedure_type.value === 'Mutual Recognition' ? '' : 'none' }}>
                                                 <span className="form_group_label">RMS</span>
                                                 <div className="form_group_field">
                                                     <Select options={options_4}
@@ -676,7 +678,7 @@ const Edit = (props) => {
                                                 </div>
                                             </div> */}
                                             <div className="form_group_inline" >
-                                                <span className="form_group_label" style={{color: errors.application_stage ? 'red' : ''}}>Submission Type (*)</span>
+                                                <span className="form_group_label" style={{ color: errors.application_stage ? 'red' : '' }}>Submission Type (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
                                                         { value: 'Marketing Authorisation', label: 'Marketing Authorisation' },
@@ -694,7 +696,12 @@ const Edit = (props) => {
                                                 </div>
                                             </div>
                                         </div>
-
+                                        <div className='npw'>
+                                            <div></div>
+                                            <div>
+                                                <Button type='button' size='small' variant='outlined' onClick={() => handleMChange('', 1)}>Next</Button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div index={1} className="muitab" style={{ display: value != 1 ? 'none' : '' }}>
                                         <div className='inline_form'>
@@ -705,7 +712,7 @@ const Edit = (props) => {
                                                 </div>
                                             </div> */}
                                             <div className="form_group_inline">
-                                                <span className="form_group_label" style={{color : errors.product_name ? 'red' : ''}}>Product (*)</span>
+                                                <span className="form_group_label" style={{ color: errors.product_name ? 'red' : '' }}>Product (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={porductOptions}
                                                         name="product_name"
@@ -726,14 +733,14 @@ const Edit = (props) => {
                                         <div className='inline_form'>
                                             <div className="form_group_inline">
                                                 <Tooltip arrow title="Section 1 of the SmPC or equivalent outside the European Union">
-                                                    <span className="form_group_label" style={{color : errors.local_tradename ? 'red' : ''}}>Local Tradename (*)</span>
+                                                    <span className="form_group_label" style={{ color: errors.local_tradename ? 'red' : '' }}>Local Tradename (*)</span>
                                                 </Tooltip>
                                                 <div className="form_group_field">
-                                                    <input type="text" name="local_tradename" onChange={handleChange} style={{ borderColor: errors.local_tradename ? 'red' : ''}} value={data.local_tradename} />
+                                                    <input type="text" name="local_tradename" onChange={handleChange} style={{ borderColor: errors.local_tradename ? 'red' : '' }} value={data.local_tradename} />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label" style={{color : errors.registration_holder ? 'red' : ''}}>Registration Holder (*)</span>
+                                                <span className="form_group_label" style={{ color: errors.registration_holder ? 'red' : '' }}>Registration Holder (*)</span>
                                                 <div className="form_group_field form_group_holder" >
                                                     <Select options={options}
                                                         name="registration_holder"
@@ -795,11 +802,19 @@ const Edit = (props) => {
                                                 </div>
                                             </div>
                                         </div>
+                                        <div className='npw'>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 0)} variant='outlined'>Previous</Button>
+                                            </div>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 2)} variant='outlined'>Next</Button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div index={2} className="muitab" style={{ display: value != 2 ? 'none' : '' }}>
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label" style={{color : errors.authorized_pharmaceutical_form ? 'red' : ''}}>Authorized Pharmaceutical Form (*)</span>
+                                                <span className="form_group_label" style={{ color: errors.authorized_pharmaceutical_form ? 'red' : '' }}>Authorized Pharmaceutical Form (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={apf}
                                                         name="authorized_pharmaceutical_form"
@@ -835,7 +850,7 @@ const Edit = (props) => {
                                         </div>
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label" style={{color : errors.route_of_admin ? 'red' : ''}} >Route Of Admin (*)</span>
+                                                <span className="form_group_label" style={{ color: errors.route_of_admin ? 'red' : '' }} >Route Of Admin (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
                                                         { value: 'Cutaneous use', label: 'Cutaneous use' },
@@ -858,7 +873,7 @@ const Edit = (props) => {
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label" style={{color : errors.atc ? 'red' : ''}}>ATC (*)</span>
+                                                <span className="form_group_label" style={{ color: errors.atc ? 'red' : '' }}>ATC (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={atc}
                                                         name="atc"
@@ -871,6 +886,14 @@ const Edit = (props) => {
                                                         value={data.atc}
                                                     />
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div className='npw'>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 1)} variant='outlined'>Previous</Button>
+                                            </div>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 3)} variant='outlined'>Next</Button>
                                             </div>
                                         </div>
                                     </div>
@@ -905,10 +928,18 @@ const Edit = (props) => {
                                                 </div>
                                             </div>
                                         </div>
+                                        <div className='npw'>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 2)} variant='outlined'>Previous</Button>
+                                            </div>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 4)} variant='outlined'>Next</Button>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div index={4} className="muitab" style={{ display: value != 4 ? 'none' : '' }}>
-                                        <div className="form_group_inline">
+                                        <div className="form_group_inline" style={{ marginBottom: '20px' }}>
                                             <span className="form_group_label">Under Intensive Monitoring</span>
                                             <div className="form_group_field">
                                                 <Select options={[{ value: 'Yes', label: 'Yes' }, { value: 'No', label: 'No' }]}
@@ -920,6 +951,14 @@ const Edit = (props) => {
                                                     isClearable
                                                     value={data.under_intensive_monitoring}
                                                 />
+                                            </div>
+                                        </div>
+                                        <div className='npw'>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 3)} variant='outlined'>Previous</Button>
+                                            </div>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 5)} variant='outlined'>Next</Button>
                                             </div>
                                         </div>
                                     </div>
@@ -950,7 +989,7 @@ const Edit = (props) => {
                                                             <div className="form_group_field">
                                                                 <Select options={key_dates_list}
                                                                     name="date_type"
-                                                                    onChange={(selectedOption, name) => handleKeyDateSelectChange(selectedOption, name,index)}
+                                                                    onChange={(selectedOption, name) => handleKeyDateSelectChange(selectedOption, name, index)}
                                                                     className="basic"
                                                                     classNamePrefix="basic"
                                                                     placeholder=''
@@ -1003,16 +1042,24 @@ const Edit = (props) => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="form_group_inline">
+                                        <div className="form_group_inline" style={{ marginBottom: '20px' }}>
                                             <span className="form_group_label">Remarks</span>
                                             <div className="form_group_field">
                                                 <input type="text" name="remarks" onChange={handleChange} value={data.remarks} />
                                             </div>
                                         </div>
+                                        <div className='npw'>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 4)} variant='outlined'>Previous</Button>
+                                            </div>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 6)} variant='outlined'>Next</Button>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div index={6} className="muitab" style={{ display: value != 6 ? 'none' : '' }}>
-                                        <div className="form_group_inline">
+                                        <div className="form_group_inline" style={{ marginBottom: '20px' }}>
                                             <span className="form_group_label">Local Agent Company</span>
                                             <div className="form_group_field">
                                                 <Select options={options}
@@ -1032,6 +1079,14 @@ const Edit = (props) => {
                                                 </IconButton>
                                             </div>
                                         </div>
+                                        <div className='npw'>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 5)} variant='outlined'>Previous</Button>
+                                            </div>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 7)} variant='outlined'>Next</Button>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div index={7} className="muitab" style={{ display: value != 7 ? 'none' : '' }}>
@@ -1041,8 +1096,8 @@ const Edit = (props) => {
                                             </button>
                                         </div>
                                         {data.formulations.map((element, index) => (
-                                            <fieldset key={index} style={{borderColor:'#0dcaf0'}}>
-                                                <legend style={{color: '#0dcaf0'}}>Formulation {index + 1}</legend>
+                                            <fieldset key={index} style={{ borderColor: '#0dcaf0' }}>
+                                                <legend style={{ color: '#0dcaf0' }}>Formulation {index + 1}</legend>
                                                 <div>
                                                     {index > 0 ?
                                                         <div style={{ display: 'flex', justifyContent: 'end' }}>
@@ -1051,7 +1106,7 @@ const Edit = (props) => {
                                                             </button>
                                                         </div>
                                                         :
-                                                    ''}
+                                                        ''}
                                                     <div style={{ display: 'flex', justifyContent: 'end' }}>
                                                         <button type="button" className="add_doc_form" data-toggle="tooltip" data-placement="top" title="Add Formulation" onClick={() => addIngredient(index)}>
                                                             <i className="bi bi-plus-lg"></i>Add Ingredient
@@ -1068,7 +1123,7 @@ const Edit = (props) => {
                                                                         </button>
                                                                     </div>
                                                                     :
-                                                                ''}
+                                                                    ''}
                                                                 <div className="inline_form" >
                                                                     <div className="form_group_inline">
                                                                         <span className="form_group_label">Ingredient</span>
@@ -1143,7 +1198,7 @@ const Edit = (props) => {
                                                                             </div>
                                                                         </div> : ''
                                                                     }
-                                                                    
+
                                                                     <div className="form_group_inline">
                                                                         <span className="form_group_label">Numerator Unit</span>
                                                                         <div className="form_group_field">
@@ -1180,7 +1235,7 @@ const Edit = (props) => {
                                                                     <div className="form_group_inline">
                                                                         <span className="form_group_label">Denominator Unit</span>
                                                                         <div className="form_group_field">
-                                                                        <Select options={[
+                                                                            <Select options={[
                                                                                 { value: '% (W/V)', label: '% (W/V)' },
                                                                                 { value: '% (W/W)', label: '% (W/W)' },
                                                                                 { value: 'µg', label: 'µg' },
@@ -1209,6 +1264,14 @@ const Edit = (props) => {
                                                 </div>
                                             </fieldset>
                                         ))}
+                                        <div className='npw'>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 6)} variant='outlined'>Previous</Button>
+                                            </div>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 8)} variant='outlined'>Next</Button>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div index={8} className="muitab" style={{ display: value != 8 ? 'none' : '' }}>
@@ -1232,14 +1295,14 @@ const Edit = (props) => {
                                                         ''}
                                                     <div className="inline_form">
                                                         <div className="form_group_inline">
-                                                            <span className="form_group_label" style={{color : errors['packagings.' + index + '.sellable_unit_determined_by'] ? 'red' : ''}}>Sellable Unit Determined By (*)</span>
+                                                            <span className="form_group_label" style={{ color: errors['packagings.' + index + '.sellable_unit_determined_by'] ? 'red' : '' }}>Sellable Unit Determined By (*)</span>
                                                             <div className="form_group_field">
                                                                 <Select options={[
-                                                                    {label: 'Product', value: 'Product'},
-                                                                    {label: 'Packaging', value: 'Packaging'}
+                                                                    { label: 'Product', value: 'Product' },
+                                                                    { label: 'Packaging', value: 'Packaging' }
                                                                 ]}
                                                                     name="sellable_unit_determined_by"
-                                                                    onChange={(selectedOption, name) => handlePackageSelectChange(selectedOption, name,index)}
+                                                                    onChange={(selectedOption, name) => handlePackageSelectChange(selectedOption, name, index)}
                                                                     className="basic"
                                                                     classNamePrefix="basic"
                                                                     placeholder=''
@@ -1251,25 +1314,25 @@ const Edit = (props) => {
                                                         </div>
 
                                                         <div className="form_group_inline">
-                                                            <span className="form_group_label" style={{color : errors['packagings.' + index + '.product_legal_status_of_supply'] ? 'red' : ''}}>Product Legal Status of Supply (*)</span>
+                                                            <span className="form_group_label" style={{ color: errors['packagings.' + index + '.product_legal_status_of_supply'] ? 'red' : '' }}>Product Legal Status of Supply (*)</span>
                                                             <div className="form_group_field">
                                                                 <Select options={[
-                                                                    {label: 'Medicinal product subject to medical prescription exempt for some presentations', value: 'Medicinal product subject to medical prescription exempt for some presentations'},
-                                                                    {label: 'Subject to veterinary prescription except for some pack sizes', value: 'Subject to veterinary prescription except for some pack sizes'},
-                                                                    {label: 'Subject to veterinary prescription', value: 'Subject to veterinary prescription'},
-                                                                    {label: 'Not subject to veterinary prescription', value: 'Not subject to veterinary prescription'},
-                                                                    {label: 'Legacy - as applicable', value: 'Legacy - as applicable'},
-                                                                    {label: 'Subject to medical prescription', value: 'Subject to medical prescription'},
-                                                                    {label: 'Not subject to medical prescription', value: 'Not subject to medical prescription'},
-                                                                    {label: 'On medical prescription for renewable or non-renewable delivery', value: 'On medical prescription for renewable or non-renewable delivery'},
-                                                                    {label: 'Subject to special and restricted medical prescription', value: 'Subject to special and restricted medical prescription'},
-                                                                    {label: 'Subject to special medical prescription', value: 'Subject to special medical prescription'},
-                                                                    {label: 'Subject to restricted medical prescription', value: 'Subject to restricted medical prescription'},
-                                                                    {label: 'On medical prescription for renewable delivery', value: 'On medical prescription for renewable delivery'},
-                                                                    {label: 'On medical prescription for non-renewable delivery', value: 'On medical prescription for non-renewable delivery'},
+                                                                    { label: 'Medicinal product subject to medical prescription exempt for some presentations', value: 'Medicinal product subject to medical prescription exempt for some presentations' },
+                                                                    { label: 'Subject to veterinary prescription except for some pack sizes', value: 'Subject to veterinary prescription except for some pack sizes' },
+                                                                    { label: 'Subject to veterinary prescription', value: 'Subject to veterinary prescription' },
+                                                                    { label: 'Not subject to veterinary prescription', value: 'Not subject to veterinary prescription' },
+                                                                    { label: 'Legacy - as applicable', value: 'Legacy - as applicable' },
+                                                                    { label: 'Subject to medical prescription', value: 'Subject to medical prescription' },
+                                                                    { label: 'Not subject to medical prescription', value: 'Not subject to medical prescription' },
+                                                                    { label: 'On medical prescription for renewable or non-renewable delivery', value: 'On medical prescription for renewable or non-renewable delivery' },
+                                                                    { label: 'Subject to special and restricted medical prescription', value: 'Subject to special and restricted medical prescription' },
+                                                                    { label: 'Subject to special medical prescription', value: 'Subject to special medical prescription' },
+                                                                    { label: 'Subject to restricted medical prescription', value: 'Subject to restricted medical prescription' },
+                                                                    { label: 'On medical prescription for renewable delivery', value: 'On medical prescription for renewable delivery' },
+                                                                    { label: 'On medical prescription for non-renewable delivery', value: 'On medical prescription for non-renewable delivery' },
                                                                 ]}
                                                                     name="product_legal_status_of_supply"
-                                                                    onChange={(selectedOption, name) => handlePackageSelectChange(selectedOption, name,index)}
+                                                                    onChange={(selectedOption, name) => handlePackageSelectChange(selectedOption, name, index)}
                                                                     className="basic"
                                                                     classNamePrefix="basic"
                                                                     placeholder=''
@@ -1281,11 +1344,11 @@ const Edit = (props) => {
                                                         </div>
 
                                                         <div className="form_group_inline">
-                                                            <span className="form_group_label" style={{color : errors['packagings.' + index + '.packaging_type'] ? 'red' : ''}}>Packaging Type (*)</span>
+                                                            <span className="form_group_label" style={{ color: errors['packagings.' + index + '.packaging_type'] ? 'red' : '' }}>Packaging Type (*)</span>
                                                             <div className="form_group_field">
                                                                 <Select options={options_2}
                                                                     name="packaging_type"
-                                                                    onChange={(selectedOption, name) => handlePackageSelectChange(selectedOption, name,index)}
+                                                                    onChange={(selectedOption, name) => handlePackageSelectChange(selectedOption, name, index)}
                                                                     className="basic"
                                                                     classNamePrefix="basic"
                                                                     placeholder=''
@@ -1295,7 +1358,7 @@ const Edit = (props) => {
                                                                 />
                                                             </div>
                                                         </div>
-                                                        
+
                                                     </div>
                                                     <div className="inline_form">
                                                         <div className="form_group_inline">
@@ -1304,20 +1367,20 @@ const Edit = (props) => {
                                                                 <input type="text" name="packaging_registration_number" onChange={(e) => handlePackagingsChange(index, e)} value={element.packaging_registration_number} />
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div className="form_group_inline">
-                                                            
+
                                                             <Tooltip arrow title='Concerned part of the Localtradenames of section 1 of SmPC, if not available, name in the Marketing Authorization document applicable to this packaging'>
                                                                 <span className="form_group_label" style={{ color: errors['packagings.' + index + '.packaging_name'] ? 'red' : '' }}>
                                                                     Packaging Name (*)
-                                                                </span> 
+                                                                </span>
                                                             </Tooltip>
-                                                            
+
                                                             <div className="form_group_field">
                                                                 <input type="text" name="packaging_name" onChange={(e) => handlePackagingsChange(index, e)} style={{ borderColor: errors['packagings.' + index + '.packaging_name'] ? 'red' : '' }} value={data.packagings[index].packaging_name} />
                                                             </div>
                                                         </div>
-                                                       
+
                                                         {/* <div className="form_group_inline">
                                                             <span className="form_group_label">Package Size (*)</span>
                                                             <div className="form_group_field">
@@ -1340,7 +1403,7 @@ const Edit = (props) => {
                                                             <div className="form_group_field">
                                                                 <Select options={[{ value: 'Yes', label: 'Yes' }, { value: 'No', label: 'No' }, { value: 'Not Applicable', label: 'Not Applicable' }]}
                                                                     name="launched"
-                                                                    onChange={(selectedOption, name) => handlePackageSelectChange(selectedOption, name,index)}
+                                                                    onChange={(selectedOption, name) => handlePackageSelectChange(selectedOption, name, index)}
                                                                     className="basic"
                                                                     classNamePrefix="basic"
                                                                     placeholder=''
@@ -1360,7 +1423,7 @@ const Edit = (props) => {
                                                             <div className="form_group_field">
                                                                 <Select options={[{ value: 'Yes', label: 'Yes' }, { value: 'No', label: 'No' }, { value: '', label: 'Not Applicable' }]}
                                                                     name="packaging_discontinued"
-                                                                    onChange={(selectedOption, name) => handlePackageSelectChange(selectedOption, name,index)}
+                                                                    onChange={(selectedOption, name) => handlePackageSelectChange(selectedOption, name, index)}
                                                                     className="basic"
                                                                     classNamePrefix="basic"
                                                                     placeholder=''
@@ -1453,9 +1516,9 @@ const Edit = (props) => {
                                                                         <div className="form_group_field">
                                                                             <Select options={packageCondistion}
                                                                                 onChange={(selectedOption, name) => handlePackagelifeSelectChange(selectedOption, name, index, i)}
-                                                                                isMulti 
+                                                                                isMulti
                                                                                 name="package_storage_condition"
-                                                                                className="basic" 
+                                                                                className="basic"
                                                                                 classNamePrefix="basic"
                                                                                 placeholder=''
                                                                                 value={data.packagings[index].packagelif[i].package_storage_condition}
@@ -1469,7 +1532,7 @@ const Edit = (props) => {
                                                                             <span className='form_group_label'>Shelf-life Remarks</span>
                                                                         </Tooltip>
                                                                         <div className="form_group_field">
-                                                                            <input type="text" name='remarks' onChange={(e) => handlePackagelifeChange(index, i, e)} value={data.packagings[index].packagelif[i].remarks}  />
+                                                                            <input type="text" name='remarks' onChange={(e) => handlePackagelifeChange(index, i, e)} value={data.packagings[index].packagelif[i].remarks} />
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1481,12 +1544,20 @@ const Edit = (props) => {
                                                 </div>
                                             </fieldset>
                                         ))}
+                                        <div className='npw'>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 7)} variant='outlined'>Previous</Button>
+                                            </div>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 9)} variant='outlined'>Next</Button>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div index={9} className="muitab" style={{ display: value != 9 ? 'none' : '' }}>
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label" style={{color : errors.indication ? 'red' : ''}}>Indications (*)</span>
+                                                <span className="form_group_label" style={{ color: errors.indication ? 'red' : '' }}>Indications (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={indications}
                                                         name="indication"
@@ -1500,7 +1571,7 @@ const Edit = (props) => {
                                                         value={data.indication}
                                                     />
                                                 </div>
-                                                
+
                                             </div>
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Paediatric Use</span>
@@ -1516,11 +1587,19 @@ const Edit = (props) => {
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="form_group_inline" style={{ display: data.paediatric_use  && data.paediatric_use.value == "Yes" ? "" : 'none' }}>
+                                            <div className="form_group_inline" style={{ display: data.paediatric_use && data.paediatric_use.value == "Yes" ? "" : 'none' }}>
                                                 <span className="form_group_label">Age</span>
                                                 <div className="form_group_field">
                                                     <input type="text" name='age' onChange={handleChange} value={data.age} />
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div className='npw'>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 8)} variant='outlined'>Previous</Button>
+                                            </div>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 10)} variant='outlined'>Next</Button>
                                             </div>
                                         </div>
                                     </div>
@@ -1549,7 +1628,7 @@ const Edit = (props) => {
                                                             <div className="form_group_field">
                                                                 <Select options={options}
                                                                     name="manufacturer"
-                                                                    onChange={(selectedOption, name) => handleManufacturerSelectChange(selectedOption, name,index)}
+                                                                    onChange={(selectedOption, name) => handleManufacturerSelectChange(selectedOption, name, index)}
                                                                     className="basic"
                                                                     classNamePrefix="basic"
                                                                     styles={selectStyles(errors.manufacturer)}
@@ -1564,7 +1643,7 @@ const Edit = (props) => {
                                                             <div className="form_group_field">
                                                                 <Select className="basic"
                                                                     name="operation_type"
-                                                                    onChange={(selectedOption, name) => handleManufacturerSelectChange(selectedOption, name,index)}
+                                                                    onChange={(selectedOption, name) => handleManufacturerSelectChange(selectedOption, name, index)}
                                                                     classNamePrefix="basic"
                                                                     options={operations}
                                                                     isMulti
@@ -1577,6 +1656,14 @@ const Edit = (props) => {
                                                 </div>
                                             </fieldset>
                                         ))}
+                                        <div className='npw'>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 9)} variant='outlined'>Previous</Button>
+                                            </div>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 11)} variant='outlined'>Next</Button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div index={11} className="muitab" style={{ display: value != 11 ? 'none' : '' }}>
                                         <div className="inline_form">
@@ -1593,7 +1680,14 @@ const Edit = (props) => {
                                                 </div>
                                             </div>
                                         </div>
-
+                                        <div className='npw'>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 10)} variant='outlined'>Previous</Button>
+                                            </div>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 12)} variant='outlined'>Next</Button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div index={12} className="muitab" style={{ display: value != 12 ? 'none' : '' }}>
                                         <div style={{ display: 'flex', justifyContent: 'end' }}>
@@ -1619,7 +1713,7 @@ const Edit = (props) => {
                                                             <div className="form_group_inline">
                                                                 <span className="form_group_label">Country</span>
                                                                 <div className="form_group_field">
-                                                                    <Select options={statusCountry}  
+                                                                    <Select options={statusCountry}
                                                                         className="basic"
                                                                         classNamePrefix="basic"
                                                                         name='country'
@@ -1631,7 +1725,7 @@ const Edit = (props) => {
                                                             </div>
                                                             : ''}
                                                         <div className="form_group_inline">
-                                                            <span className="form_group_label" style={{color : errors['statuses.' + index + '.status'] ? 'red' : ''}}>Status (*)</span>
+                                                            <span className="form_group_label" style={{ color: errors['statuses.' + index + '.status'] ? 'red' : '' }}>Status (*)</span>
                                                             <div className="form_group_field">
                                                                 <Select options={status}
                                                                     onChange={(selectedOption, name) => handleStatusSelectChange(selectedOption, name, index)}
@@ -1646,7 +1740,7 @@ const Edit = (props) => {
                                                             </div>
                                                         </div>
                                                         <div className="form_group_inline">
-                                                            <span className="form_group_label" style={{color : errors['statuses.' + index + '.status_date'] ? 'red' : ''}}>Status Date (*)</span>
+                                                            <span className="form_group_label" style={{ color: errors['statuses.' + index + '.status_date'] ? 'red' : '' }}>Status Date (*)</span>
                                                             <div className="form_group_field">
                                                                 <DatePicker name="status_date" selected={element.status_date ? new Date(element.status_date) : ''} onChange={(date) => handleDateChange(index, 'status_date', date)} value={element.status_date ? moment(element.status_date).format('DD-MMM-yy') : ''} />
                                                             </div>
@@ -1673,6 +1767,14 @@ const Edit = (props) => {
                                                 </div>
                                             </fieldset>
                                         ))}
+                                        <div className='npw'>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 11)} variant='outlined'>Previous</Button>
+                                            </div>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 13)} variant='outlined'>Next</Button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div index={13} className="muitab" style={{ display: value != 13 ? 'none' : '' }}>
                                         <div className="inline_form">
@@ -1687,7 +1789,7 @@ const Edit = (props) => {
                                                             name="row-radio-buttons-group"
                                                         >
                                                             <FormControlLabel checked={data.next_renewals ? true : false} value={"required"} control={<Radio onChange={() => setData('next_renewals', true)} />} label="Required" />
-                                                            <FormControlLabel checked={data.next_renewals ? false : true} value="notrequired" control={<Radio onChange={() => setData('next_renewals', false)}  />} label="Not Required" />
+                                                            <FormControlLabel checked={data.next_renewals ? false : true} value="notrequired" control={<Radio onChange={() => setData('next_renewals', false)} />} label="Not Required" />
                                                         </RadioGroup>
                                                     </FormControl>
                                                     {/* <input type="checkbox" name="next_renewals" /> */}
@@ -1698,22 +1800,30 @@ const Edit = (props) => {
                                                 </div>
                                             </div>
                                         </div>
-                                        {data.next_renewals ? 
-                                        <div className="inline_form">
-                                            <div className="form_group_inline">
-                                                <span className="form_group_label">Next Renewal Submission Deadline</span>
-                                                <div className="form_group_field">
-                                                    <DatePicker name='nr_submission_deadline' selected={data.nr_submission_deadline ? new Date(data.nr_submission_deadline) : ''} onChange={(date) => handleNrDateChange('nr_submission_deadline', date)} value={data.nr_submission_deadline ? moment(data.nr_submission_deadline).format('DD-MMM-yy') : ''} />
+                                        {data.next_renewals ?
+                                            <div className="inline_form">
+                                                <div className="form_group_inline">
+                                                    <span className="form_group_label">Next Renewal Submission Deadline</span>
+                                                    <div className="form_group_field">
+                                                        <DatePicker name='nr_submission_deadline' selected={data.nr_submission_deadline ? new Date(data.nr_submission_deadline) : ''} onChange={(date) => handleNrDateChange('nr_submission_deadline', date)} value={data.nr_submission_deadline ? moment(data.nr_submission_deadline).format('DD-MMM-yy') : ''} />
+                                                    </div>
+                                                </div>
+                                                <div className="form_group_inline">
+                                                    <span className="form_group_label">Next Renewal Date</span>
+                                                    <div className="form_group_field">
+                                                        <DatePicker name='nr_date' selected={data.nr_date ? new Date(data.nr_date) : ''} onChange={(date) => handleNrDateChange('nr_date', date)} value={data.nr_date ? moment(data.nr_date).format('DD-MMM-yy') : ''} />
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div className="form_group_inline">
-                                                <span className="form_group_label">Next Renewal Date</span>
-                                                <div className="form_group_field">
-                                                    <DatePicker name='nr_date' selected={data.nr_date ? new Date(data.nr_date) : ''} onChange={(date) => handleNrDateChange('nr_date', date)} value={data.nr_date ? moment(data.nr_date).format('DD-MMM-yy') : ''} />
-                                                </div>
+                                            : ''}
+                                        <div className='npw'>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 12)} variant='outlined'>Previous</Button>
                                             </div>
+                                            {/* <div>
+                                            <Button type='button' size='small' onClick={() => handleMChange('', 9)} variant='outlined'>Next</Button>
+                                        </div> */}
                                         </div>
-                                        : '' }
                                     </div>
                                 </Box>
                             </Tab>

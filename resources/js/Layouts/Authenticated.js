@@ -75,14 +75,18 @@ export default function Authenticated({ auth, header, children }) {
                     url: "transfer-create"
                 },
                 {
-                    name: "Others",
-                    children: [
-                        {
-                            name: "Baseline",
-                            url: 'baseline-create'
-                        }
-                    ]
+                    name: "Baseline",
+                    url: 'baseline-create'
                 }
+                // {
+                //     name: "Others",
+                //     children: [
+                //         {
+                //             name: "Baseline",
+                //             url: 'baseline-create'
+                //         }
+                //     ]
+                // }
             ]
         },
         {
@@ -125,7 +129,7 @@ export default function Authenticated({ auth, header, children }) {
             url: "",
         }
     ]
-    
+
     return (
         <div>
 
@@ -152,8 +156,8 @@ export default function Authenticated({ auth, header, children }) {
                                     <Link className="topbar_link" href="#" as="a">
                                         <p className="topbar_link_title" style={{ color: 'black' }}>My Profile</p>
                                     </Link>
-                                    <Link className="topbar_link" href={route('logout')} method="post" as="button">
-                                        <p className="topbar_link_title">Log Out</p>
+                                    <Link className="topbar_link" href={route('logout')} method="post" as="button" style={{ backgroundColor: 'transparent', color: 'black' }}>
+                                        <p className="topbar_link_title">Log out</p>
                                     </Link>
                                 </div>
 
@@ -197,12 +201,18 @@ export default function Authenticated({ auth, header, children }) {
                             </div>
                         </div>
                         <div>
-                            <button className="sidebar_link topbar_link" onClick={() => setDropdownnav((previousState) => !previousState)}>
+                            <Link className={`topbar_link ${route().current('contact') ? `sidebar_link_active` : ''}`} href={route('contact')} onClick={() => SetwichMenu('')}>
+                                <li className="sidebar_link" >
+                                    <span className="sidebar_link_icon lnr lnr-history"></span>
+                                    <p className="sidebar_link_title">Contact</p>
+                                </li>
+                            </Link>
+                            {/* <button className="sidebar_link topbar_link" onClick={() => setDropdownnav((previousState) => !previousState)}>
                                 <span className="sidebar_link_icon lnr lnr-history"></span>
                                 <p className="sidebar_link_title">Contact</p>
-                                <span style={{ transform: dropdownnav ? 'rotate(90deg)' : 'rotate(0deg)' }} className="sidebar_category_icon lnr lnr-chevron-right"></span>
+                                 <span style={{ transform: dropdownnav ? 'rotate(90deg)' : 'rotate(0deg)' }} className="sidebar_category_icon lnr lnr-chevron-right"></span> 
                             </button>
-                            <div style={{ display: dropdownnav ? 'block' : 'none' }}>
+                             <div style={{ display: dropdownnav ? 'block' : 'none' }}>
                                 <ul className="sidebar_submenu">
                                     <Link href="#">
                                         <li className="sidebar_link topbar_link">
@@ -211,7 +221,7 @@ export default function Authenticated({ auth, header, children }) {
                                     </Link>
 
                                 </ul>
-                            </div>
+                            </div>  */}
                         </div>
                     </ul>
                 </div>

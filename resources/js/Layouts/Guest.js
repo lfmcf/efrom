@@ -16,20 +16,18 @@ export default function Guest({ children }) {
         //     </div>
         // </div>
         <div className="main">
-                
-                 <div className="main_wrapper" style={{ display: 'flex' }}>
-				    
-                    <div className="main_card">
-                        <div className="main_head">
-                            {/* <h3 className="login_title">Welcome to</h3>
+            <div className="main_wrapper" style={{ display: 'flex' }}>
+                <div className="main_card">
+                    <div className="main_head" style={{ background: 'rgb(30,30,30)', borderRadius: '5px' }}>
+                        {/* <h3 className="login_title">Welcome to</h3>
                             <h4 className="subhead">Start your business easily</h4> */}
-                            <img src="../slogo.png" alt="logo" className='logo' />
-                        </div>
-                        {children}
+                        <img src="../logo.png" alt="logo" className='logo' />
                     </div>
-                </div> 
-            
+                    {children}
+                </div>
+            </div>
+
         </div>
-        
+
     );
 }

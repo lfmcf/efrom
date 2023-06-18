@@ -8,7 +8,7 @@ import Select from 'react-select';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import BasicSpeedDial from '@/Components/SpeedDial';
-import { Tabs as Mtabs, Tab as Mtab, IconButton } from '@mui/material';
+import { Tabs as Mtabs, Tab as Mtab, IconButton, Button } from '@mui/material';
 import Box from '@mui/material/Box';
 import SaveModal from '@/Components/SaveModal';
 import { Typography } from "@mui/material";
@@ -27,8 +27,8 @@ function a11yProps(index) {
 }
 
 const Create = (props) => {
-    const {baseline} = props
-    
+    const { baseline } = props
+
     const { data, setData, post, processing, errors, clearErrors, reset } = useForm({
         id: baseline._id,
         product: baseline.product,
@@ -74,8 +74,8 @@ const Create = (props) => {
 
     let porductOptions = props.products.map(function (product) {
         return {
-            value : product.name,
-            label : product.name,
+            value: product.name,
+            label: product.name,
         }
     })
 
@@ -180,32 +180,34 @@ const Create = (props) => {
         // let submitType = window.event.target.name;
         const search = window.location.search
         const opname = new URLSearchParams(search).get('opr');
-        if(opname === 'edit') {
-            post(route("updatebaseline", { 'type': name }), {
-                onError: (e) => {if(e.create){ 
-                    setAlert(true);
-                    setAlertContent(e.create)
-                }
-                else { 
-                    setAlert(true); 
-                    setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
-                }
+        if (opname === 'edit') {
+            post(route("updatebaseline", { 'type': submitType }), {
+                onError: (e) => {
+                    if (e.create) {
+                        setAlert(true);
+                        setAlertContent(e.create)
+                    }
+                    else {
+                        setAlert(true);
+                        setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
+                    }
                 }
             });
         } else {
-            post(route("storebaseline", { 'type': name }), {
-                onError: (e) => {if(e.create){ 
-                    setAlert(true);
-                    setAlertContent(e.create)
-                }
-                else { 
-                    setAlert(true); 
-                    setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
-                }
+            post(route("storebaseline", { 'type': submitType }), {
+                onError: (e) => {
+                    if (e.create) {
+                        setAlert(true);
+                        setAlertContent(e.create)
+                    }
+                    else {
+                        setAlert(true);
+                        setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
+                    }
                 }
             });
         }
-        
+
     }
 
     const showsavemodel = () => {
@@ -244,7 +246,7 @@ const Create = (props) => {
     }
 
     let handleStatusSelectChange = (i, e, name) => {
-       
+
         if (!e) {
             e = {
                 value: ''
@@ -298,7 +300,7 @@ const Create = (props) => {
                     <h3 className="page-title">Baseline</h3>
                 </div>
             </div>
-            {alert ? <ActionAlerts message={alertContent} closeAlert={closeAlert} /> : <></> }
+            {alert ? <ActionAlerts message={alertContent} closeAlert={closeAlert} /> : <></>}
             <div className="row">
                 <div className="col-md-12">
 
@@ -316,9 +318,9 @@ const Create = (props) => {
                                         aria-label="Vertical tabs example"
                                         sx={{ borderRight: 1, borderColor: 'divider' }}
                                     >
-                                        <Mtab label="Registration Identification" {...a11yProps(0)} style={{ color: errors.product || errors.procedure_type || errors.country ? "red": '' }} />
+                                        <Mtab label="Registration Identification" {...a11yProps(0)} style={{ color: errors.product || errors.procedure_type || errors.country ? "red" : '' }} />
                                         <Mtab label="Baseline Details" {...a11yProps(1)} style={{ color: errors.baseline_title ? 'red' : '' }} />
-                                        <Mtab label="Status Details" {...a11yProps(2)} style={{color: statuserror ? 'red' : ''}} />
+                                        <Mtab label="Status Details" {...a11yProps(2)} style={{ color: statuserror ? 'red' : '' }} />
                                     </Mtabs>
                                     <div value={value} index={0} className="muitab" style={{ display: value != 0 ? 'none' : '' }}>
                                         <div className="inline_form">
@@ -329,7 +331,7 @@ const Create = (props) => {
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label" style={{color: errors.product ? 'red' : ''}}>Product (*)</span>
+                                                <span className="form_group_label" style={{ color: errors.product ? 'red' : '' }}>Product (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={porductOptions}
                                                         name="product"
@@ -346,10 +348,10 @@ const Create = (props) => {
                                                     </IconButton>
                                                 </div>
                                             </div>
-                                            </div>
-                                            <div className="inline_form">
+                                        </div>
+                                        <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label" style={{color: errors.procedure_type ? 'red' : ''}}>Procedure Type (*)</span>
+                                                <span className="form_group_label" style={{ color: errors.procedure_type ? 'red' : '' }}>Procedure Type (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={procedure_type}
                                                         name="procedure_type"
@@ -364,7 +366,7 @@ const Create = (props) => {
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label" style={{color : errors.country ? 'red' : ''}}>Country (*)</span>
+                                                <span className="form_group_label" style={{ color: errors.country ? 'red' : '' }}>Country (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={contries}
                                                         name="registration_holder"
@@ -443,13 +445,19 @@ const Create = (props) => {
                                                 </div>
                                             </div> */}
                                         </div>
+                                        <div className='npw'>
+                                            <div></div>
+                                            <div>
+                                                <Button type='button' size='small' variant='outlined' onClick={() => handleMChange('', 1)}>Next</Button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div value={value} index={1} className="muitab" style={{ display: value != 1 ? 'none' : '' }}>
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label" style={{color: errors.baseline_title ? 'red' : ''}}>Baseline Title (*)</span>
+                                                <span className="form_group_label" style={{ color: errors.baseline_title ? 'red' : '' }}>Baseline Title (*)</span>
                                                 <div className="form_group_field">
-                                                    <input type="" name="baseline_title" defaultValue={data.baseline_title} onChange={handleChange} style={{borderColor: errors.baseline_title ? 'red' : ''}} />
+                                                    <input type="" name="baseline_title" defaultValue={data.baseline_title} onChange={handleChange} style={{ borderColor: errors.baseline_title ? 'red' : '' }} />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
@@ -502,132 +510,145 @@ const Create = (props) => {
                                                 </div>
                                             </div>
                                         </div>
+                                        <div className='npw'>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 0)} variant='outlined'>Previous</Button>
+                                            </div>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 2)} variant='outlined'>Next</Button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div value={value} index={2} className="muitab" style={{ display: value != 2 ? 'none' : '' }}>
-                                        
-                                            <div style={{ display: 'flex', justifyContent: 'end' }}>
-                                                <button type="button" className="add_doc_form" onClick={addStatusFields}>
-                                                    <i className="bi bi-plus-lg"></i> Add Status
-                                                </button>
-                                            </div>
-                                            
+
+                                        <div style={{ display: 'flex', justifyContent: 'end' }}>
+                                            <button type="button" className="add_doc_form" onClick={addStatusFields}>
+                                                <i className="bi bi-plus-lg"></i> Add Status
+                                            </button>
+                                        </div>
+
                                         {data.statuses.map((element, index) => (
                                             <fieldset key={index}>
                                                 <legend>Status {index + 1}</legend>
-                                            <div >
-                                                {index > 0 ?
-                                                    <div style={{ display: 'flex', justifyContent: 'end' }}>
-                                                        <button type="button" style={{ width: '14px', height: '14px', background: 'transparent', padding: '0', margin: '0 0 20px 0' }} onClick={() => removeStatusFields(index)}>
-                                                            <svg className="mdi-icon" style={{ verticalAlign: 'middle' }} width="14" height="14" fill="#000" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path></svg>
-                                                        </button>
-                                                    </div>
-                                                    : ''
-                                                }
-                                                <div className="inline_form">
-                                                    {data.procedure_type == 'Decentralized' || data.procedure_type == 'Mutual Recognition' ?
+                                                <div >
+                                                    {index > 0 ?
+                                                        <div style={{ display: 'flex', justifyContent: 'end' }}>
+                                                            <button type="button" style={{ width: '14px', height: '14px', background: 'transparent', padding: '0', margin: '0 0 20px 0' }} onClick={() => removeStatusFields(index)}>
+                                                                <svg className="mdi-icon" style={{ verticalAlign: 'middle' }} width="14" height="14" fill="#000" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path></svg>
+                                                            </button>
+                                                        </div>
+                                                        : ''
+                                                    }
+                                                    <div className="inline_form">
+                                                        {data.procedure_type == 'Decentralized' || data.procedure_type == 'Mutual Recognition' ?
+                                                            <div className="form_group_inline">
+                                                                <span className="form_group_label">Country</span>
+                                                                <div className="form_group_field">
+                                                                    <select defaultValue="" name='country' onChange={(e) => handleStatusesChange(index, e)}>
+                                                                        <option value=""></option>
+                                                                        <option value="All">All</option>
+                                                                        {data.country.map(c => (
+                                                                            <option key={c}>{c}</option>
+                                                                        ))}
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            : ''}
                                                         <div className="form_group_inline">
-                                                            <span className="form_group_label">Country</span>
+                                                            <span className="form_group_label" style={{ color: errors['statuses.' + index + '.status'] ? 'red' : '' }}>Status (*)</span>
                                                             <div className="form_group_field">
-                                                                <select defaultValue="" name='country' onChange={(e) => handleStatusesChange(index, e)}>
-                                                                    <option value=""></option>
-                                                                    <option value="All">All</option>
-                                                                    {data.country.map(c => (
-                                                                        <option key={c}>{c}</option>
-                                                                    ))}
-                                                                </select>
+                                                                <Select options={status}
+                                                                    onChange={(e) => handleStatusSelectChange(index, e, 'status')}
+                                                                    name="status"
+                                                                    className="basic"
+                                                                    classNamePrefix="basic"
+                                                                    styles={selectStyles(errors['statuses.' + index + '.status'])}
+                                                                    placeholder=''
+                                                                    isClearable
+                                                                    defaultValue={element.status}
+                                                                />
                                                             </div>
                                                         </div>
-                                                        : ''}
-                                                    <div className="form_group_inline">
-                                                        <span className="form_group_label" style={{color : errors['statuses.' + index + '.status'] ? 'red' : ''}}>Status (*)</span>
-                                                        <div className="form_group_field">
-                                                            <Select options={status}
-                                                                onChange={(e) => handleStatusSelectChange(index, e, 'status')}
-                                                                name="status"
-                                                                className="basic"
-                                                                classNamePrefix="basic"
-                                                                styles={selectStyles(errors['statuses.' + index + '.status'])}
-                                                                placeholder=''
-                                                                isClearable
-                                                                defaultValue={element.status}
-                                                            />
+                                                        <div className="form_group_inline">
+                                                            <span className="form_group_label" style={{ color: errors['statuses.' + index + '.status_date'] ? 'red' : '' }}>Status Date (*)</span>
+                                                            <div className="form_group_field">
+                                                                <DatePicker name="status_date"
+                                                                    selected={element.status_date ? new Date(element.status_date) : new Date()}
+                                                                    onChange={(date) => handleDateChange(index, 'status_date', date)}
+                                                                    value={element.status_date ? moment(element.status_date).format('DD-MMM-yy') : ''}
+                                                                    style={{ borderColor: errors['statuses.' + index + '.status_date'] ? 'red' : '' }} />
+                                                            </div>
+
+                                                        </div>
+                                                        <div className="form_group_inline">
+                                                            <span className="form_group_label">eCTD sequence</span>
+                                                            <div className="form_group_field">
+                                                                <input type="text" name="ectd" defaultValue={element.ectd} onChange={e => handleStatusChanged(index, e)} />
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div className="form_group_inline">
-                                                        <span className="form_group_label" style={{color : errors['statuses.' + index + '.status_date'] ? 'red' : ''}}>Status Date (*)</span>
-                                                        <div className="form_group_field">
-                                                            <DatePicker name="status_date" 
-                                                                selected={element.status_date ? new Date(element.status_date) : new Date()} 
-                                                                onChange={(date) => handleDateChange(index, 'status_date', date)} 
-                                                                value={element.status_date ? moment(element.status_date).format('DD-MMM-yy') : ''}
-                                                                style={{ borderColor: errors['statuses.' + index + '.status_date'] ? 'red' : '' }} />
+                                                    <div className="inline_form">
+                                                        <div className="form_group_inline">
+                                                            <span className="form_group_label">Effective internal implementation date</span>
+                                                            <div className="form_group_field">
+                                                                <DatePicker name="implimentation_date"
+                                                                    selected={element.implimentation_date ? new Date(element.implimentation_date) : new Date()}
+                                                                    onChange={(date) => handleDateChange(index, 'implimentation_date', date)}
+                                                                    value={element.implimentation_date ? moment(element.implimentation_date).format('DD-MMM-yy') : ''}
+                                                                />
+                                                            </div>
                                                         </div>
-                                                        
-                                                    </div>
-                                                    <div className="form_group_inline">
-                                                        <span className="form_group_label">eCTD sequence</span>
-                                                        <div className="form_group_field">
-                                                            <input type="text" name="ectd" defaultValue={element.ectd} onChange={e => handleStatusChanged(index, e)} />
+                                                        <div className="form_group_inline">
+                                                            <span className="form_group_label">Implementation Deadline</span>
+                                                            <div className="form_group_field">
+                                                                <DatePicker name="deadline_for_answer"
+                                                                    selected={element.deadline_for_answer ? new Date(element.deadline_for_answer) : new Date()}
+                                                                    onChange={(date) => handleDateChange(index, 'deadline_for_answer', date)}
+                                                                    value={element.deadline_for_answer ? moment(element.deadline_for_answer).format('DD-MMM-yy') : ''}
+                                                                />
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div className="inline_form">
-                                                    <div className="form_group_inline">
-                                                        <span className="form_group_label">Effective internal implementation date</span>
-                                                        <div className="form_group_field">
-                                                            <DatePicker name="implimentation_date" 
-                                                                selected={element.implimentation_date ? new Date(element.implimentation_date) : new Date()} 
-                                                                onChange={(date) => handleDateChange(index, 'implimentation_date', date)}
-                                                                value={element.implimentation_date ? moment(element.implimentation_date).format('DD-MMM-yy') : ''}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="form_group_inline">
-                                                        <span className="form_group_label">Implementation Deadline</span>
-                                                        <div className="form_group_field">
-                                                            <DatePicker name="deadline_for_answer" 
-                                                                selected={element.deadline_for_answer ? new Date(element.deadline_for_answer) : new Date()} 
-                                                                onChange={(date) => handleDateChange(index, 'deadline_for_answer', date)}
-                                                                value={element.deadline_for_answer ? moment(element.deadline_for_answer).format('DD-MMM-yy') : ''}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="form_group_inline">
-                                                        <span className="form_group_label">Impacted of changes approved</span>
-                                                        <div className="form_group_field">
-                                                            <Select options={[
+                                                        <div className="form_group_inline">
+                                                            <span className="form_group_label">Impacted of changes approved</span>
+                                                            <div className="form_group_field">
+                                                                <Select options={[
                                                                     { label: 'Yes', value: 'Yes' },
                                                                     { label: 'No', value: 'No' }
                                                                 ]}
-                                                                name="changes_approved"
-                                                                onChange={(e) => handleStatusSelectChange(index, e, 'changes_approved')}
-                                                                className="basic"
-                                                                classNamePrefix="basic"
-                                                                placeholder=''
-                                                                isClearable
-                                                                defaultValue={element.changes_approved}
-                                                            />
+                                                                    name="changes_approved"
+                                                                    onChange={(e) => handleStatusSelectChange(index, e, 'changes_approved')}
+                                                                    className="basic"
+                                                                    classNamePrefix="basic"
+                                                                    placeholder=''
+                                                                    isClearable
+                                                                    defaultValue={element.changes_approved}
+                                                                />
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div className="inline_form">
-                                                    
-                                                    {/* <div className="form_group_inline">
+                                                    <div className="inline_form">
+
+                                                        {/* <div className="form_group_inline">
                                                         <span className="form_group_label">CCDS/Core PIL ref n°</span>
                                                         <div className="form_group_field">
                                                             <input type="text" name="cdds" defaultValue={element.cdds} onChange={e => handleStatusChanged(index, e)} />
                                                         </div>
                                                     </div> */}
-                                                    <div className="form_group_inline">
-                                                        <span className="form_group_label">Status note</span>
-                                                        <div className="form_group_field">
-                                                            <input type="text" name="remarks" defaultValue={element.remarks} onChange={e => handleStatusChanged(index, e)} />
+                                                        <div className="form_group_inline">
+                                                            <span className="form_group_label">Status note</span>
+                                                            <div className="form_group_field">
+                                                                <input type="text" name="remarks" defaultValue={element.remarks} onChange={e => handleStatusChanged(index, e)} />
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
                                             </fieldset>
                                         ))}
+                                        <div className='npw'>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 1)} variant='outlined'>Previous</Button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </Box>
 

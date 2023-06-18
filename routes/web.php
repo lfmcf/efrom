@@ -16,6 +16,7 @@ use App\Http\Controllers\CregistrationTerminationController;
 use App\Http\Controllers\AmendmentsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ClinicalController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\MaCompanyController;
 
@@ -42,7 +43,7 @@ use App\Http\Controllers\MaCompanyController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::get('/', function() {
+    Route::get('/', function () {
         return redirect()->route('dashboard');
     });
 
@@ -63,7 +64,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/storehqproject', [VariationController::class, 'storehq'])->name('storehqproject');
     Route::post('/updatevariation', [VariationController::class, 'update'])->name('updatevariation');
     Route::post('/updatehqvariation', [VariationController::class, 'updatehq'])->name('updatehqvariation');
-    
+
     Route::get('/renewal/create', [RenouvellementController::class, 'create'])->name('renewal-create');
     Route::get('/renewal/{id}/edit', [RenouvellementController::class, 'edit'])->name('renewal-edit');
     Route::get('/renewal/{id}/show', [RenouvellementController::class, 'show'])->name('renewal-show');
@@ -87,7 +88,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/registrationtermination/{id}/show', [RegistrationTerminationController::class, 'show'])->name('registrationtermination-show');
     Route::post('/store_registration_termination', [RegistrationTerminationController::class, 'store'])->name('store_registration_termination');
     Route::post('/update_registration_termination', [RegistrationTerminationController::class, 'update'])->name('update_registration_termination');
-    
+
     Route::get('/clinical/create', [ClinicalController::class, 'create'])->name('clinical-create');
     Route::get('/clinical/{id}/edit', [ClinicalController::class, 'edit'])->name('clinical-edit');
     Route::get('/clinical/{id}/show', [ClinicalController::class, 'show'])->name('clinical-show');
@@ -107,13 +108,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/addcompany', [CompanyController::class, 'store'])->name('addcompany');
     Route::post('/formsByDate', [DashboardController::class, 'getformsnumber'])->name('formsByDate');
-    
+
     Route::get('/macompany', [MaCompanyController::class, 'create'])->name('macompany');
     Route::post('/addmacompany', [MaCompanyController::class, 'store'])->name('storemacompany');
-    
+
     Route::post('/createproduct', [ProductController::class, 'store'])->name('createproduct');
-    
-    
+
+    Route::get('contact', [ContactController::class, 'create'])->name('contact');
+    Route::post('storecontact', [ContactController::class, 'store'])->name('storecontact');
 });
 
 // Route::get('/dashboard', function () {
@@ -131,4 +133,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Route::get('verify/resend', [TwoFactorController::class,'resend'])->name('verify.resend');
 // Route::resource('verify', TwoFactorController::class)->only(['index', 'store']);
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
