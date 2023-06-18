@@ -171,10 +171,9 @@ const Create = (props) => {
         setData(arr);
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        let submitType = window.event.target.name;
-        post(route("storeamendment", { 'type': submitType }), {
+    const handleSubmit = (name) => {
+
+        post(route("storeamendment", { 'type': name }), {
             onError: (e) => {
                 if (e.create) {
                     setAlert(true);

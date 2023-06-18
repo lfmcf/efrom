@@ -30,7 +30,7 @@ class RcController extends Controller
         $substanceActive = substanceActive::all();
         $packagingItemTypes = packagingItemType::all();
         $countries = Countries::orderBy('country_name')->get('country_name');
-        
+
         return Inertia::render('Clinical/Index', [
             'companies' => $compnies,
             'substanceActive' => $substanceActive,
@@ -67,8 +67,8 @@ class RcController extends Controller
      */
     public function store(Request $request)
     {
-       
-        if($request->query('type') === 'submit') {
+
+        if ($request->query('type') === 'submit') {
             $validator = $request->validate(
                 [
                     'country' => 'required',
@@ -90,7 +90,7 @@ class RcController extends Controller
                 ],
                 // [
                 //     'packagings.*.packaging_name.required' => 'A package name is required',
-                    
+
                 //     'packagings.*.description.required' => 'A package description is required',
                 //     'statuses.*.status.required' => 'A status is required',
                 //     'statuses.*.status_date.required' => 'A status date is required',
@@ -99,9 +99,9 @@ class RcController extends Controller
         }
 
         $docs = $request->doc;
-        
-        if(!empty($docs)) {
-            $arr = array_map(function($doc) {
+
+        if (!empty($docs)) {
+            $arr = array_map(function ($doc) {
                 if ($doc['document'] && gettype($doc['document']) != 'string') {
                     $uploadedFile = $doc['document'];
                     $filename = time() . $uploadedFile->getClientOriginalName();
@@ -112,13 +112,13 @@ class RcController extends Controller
                         $uploadedFile,
                         $filename
                     );
-                    $doc['document'] = asset('storage/'.$filename);
+                    $doc['document'] = asset('storage/' . $filename);
                 }
                 return $doc;
             }, $docs);
             $docs = $arr;
         }
-        
+
         $rc = new Rc;
 
         $rc->procedure_type = $request->procedure_type;
@@ -163,18 +163,17 @@ class RcController extends Controller
         $rc->created_by = $request->created_by;
         $rc->type = $request->query('type');
 
-        if($request->query('type') === 'submit') {
+        if ($request->query('type') === 'submit') {
             $res = $this->generetExcel($rc);
-            if($res === true){
+            if ($res === true) {
                 $rc->save();
                 return redirect('dashboard')->with('message', 'Your form has been successfully submitted to the Data Entry Team');
-            }else {
+            } else {
                 return redirect()->back()->withErrors([
                     'create' => 'ups, there was an error please try later'
                 ]);
             }
-            
-        }else {
+        } else {
             $rc->save();
             return redirect('dashboard')->with('message', 'Your form has been successfully saved');
         }
@@ -204,7 +203,7 @@ class RcController extends Controller
     public function edit($id)
     {
         $rc = Rc::findOrFail($id);
-        
+
         $compnies = Company::orderBy('name')->get();
         $substanceActive = substanceActive::all();
         $packagingItemTypes = packagingItemType::all();
@@ -229,8 +228,8 @@ class RcController extends Controller
      */
     public function update(Request $request, Rc $rc)
     {
-        
-        if($request->query('type') === 'submit') {
+
+        if ($request->query('type') === 'submit') {
             $validator = $request->validate(
                 [
                     'country' => 'required',
@@ -250,7 +249,7 @@ class RcController extends Controller
                 ],
                 // [
                 //     'packagings.*.packaging_name.required' => 'A package name is required',
-                    
+
                 //     'packagings.*.description.required' => 'A package description is required',
                 //     'statuses.*.status.required' => 'A status is required',
                 //     'statuses.*.status_date.required' => 'A status date is required',
@@ -259,9 +258,9 @@ class RcController extends Controller
         }
 
         $docs = $request->doc;
-        
-        if(!empty($docs)) {
-            $arr = array_map(function($doc) {
+
+        if (!empty($docs)) {
+            $arr = array_map(function ($doc) {
                 if ($doc['document'] && gettype($doc['document']) != 'string') {
                     $uploadedFile = $doc['document'];
                     $filename = time() . $uploadedFile->getClientOriginalName();
@@ -272,15 +271,15 @@ class RcController extends Controller
                         $uploadedFile,
                         $filename
                     );
-                    $doc['document'] = asset('storage/'.$filename);
+                    $doc['document'] = asset('storage/' . $filename);
                 }
                 return $doc;
             }, $docs);
             $docs = $arr;
         }
-        
+
         $rc = Rc::findOrFail($request->id);
-        
+
         $rc->procedure_type = $request->procedure_type;
         $rc->country = $request->country;
         $rc->rms = $request->rms;
@@ -322,19 +321,18 @@ class RcController extends Controller
         $rc->doc = $docs;
         $rc->created_by = $request->created_by;
         $rc->type = $request->query('type');
-        
-        if($request->query('type') === 'submit') {
+
+        if ($request->query('type') === 'submit') {
             $res = $this->generetExcel($rc);
-            if($res === true){
+            if ($res === true) {
                 $rc->save();
                 return redirect('dashboard')->with('message', 'Your form has been successfully submitted to the Data Entry Team');
-            }else {
+            } else {
                 return redirect()->back()->withErrors([
                     'create' => 'ups, there was an error please try later'
                 ]);
             }
-            
-        }else {
+        } else {
             $rc->save();
             return redirect('dashboard')->with('message', 'Your form has been successfully saved');
         }
@@ -348,7 +346,6 @@ class RcController extends Controller
      */
     public function destroy(Rc $rc)
     {
-       
     }
 
     public function messages()
@@ -753,7 +750,7 @@ class RcController extends Controller
         } catch (Throwable $e) {
 
             report($e);
-            dd($e);
+
             return $e;
         }
     }

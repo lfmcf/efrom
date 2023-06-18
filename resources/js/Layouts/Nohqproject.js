@@ -181,11 +181,10 @@ const Nohqproject = (props) => {
         setData(arr);
     }
 
-<<<<<<< HEAD
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        let submitType = window.event.target.name;
-        post(route("storevariation", { 'type': submitType }), {
+    const handleSubmit = (name) => {
+        // e.preventDefault();
+        // let submitType = window.event.target.name;
+        post(route("storevariation", { 'type': name }), {
             onError: (e) => {
                 if (e.create) {
                     setAlert(true);
@@ -195,20 +194,6 @@ const Nohqproject = (props) => {
                     setAlert(true);
                     setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
                 }
-=======
-    const handleSubmit = (name) => {
-        // e.preventDefault();
-        // let submitType = window.event.target.name;
-        post(route("storevariation", {'type': name}), {
-            onError: (e) => {if(e.create){ 
-                setAlert(true);
-                setAlertContent(e.create)
-            }
-            else { 
-                setAlert(true); 
-                setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
-            }
->>>>>>> 94752c1615a7c21eaac5276a0b38778fe8498132
             }
         });
     }

@@ -207,10 +207,10 @@ const Hqproject = (props) => {
         setData(newArr);
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        let submitType = window.event.target.name;
-        post(route("storehqproject", { 'type': submitType }), {
+    const handleSubmit = (name) => {
+        // e.preventDefault();
+        // let submitType = window.event.target.name;
+        post(route("storehqproject", { 'type': name }), {
             onError: (e) => {
                 if (e.create) {
                     setAlert(true);

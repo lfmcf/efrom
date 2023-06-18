@@ -133,10 +133,10 @@ const Create = (props) => {
         setValue(newValue);
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        let submitType = window.event.target.name;
-        post(route('storefinishproduct', { 'type': submitType }), {
+    const handleSubmit = (name) => {
+        // e.preventDefault();
+        // let submitType = window.event.target.name;
+        post(route('storefinishproduct', { 'type': name }), {
             onError: (e) => {
                 if (e.create) {
                     setAlert(true);

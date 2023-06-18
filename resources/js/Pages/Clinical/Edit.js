@@ -455,7 +455,7 @@ const Edit = (props) => {
         const search = window.location.search
         const opname = new URLSearchParams(search).get('opr');
         if (opname === 'edit') {
-            post(route('updateclinical', { 'type': submitType }), {
+            post(route('updateclinical', { 'type': name }), {
                 onError: (e) => {
                     if (e.create) {
                         setAlert(true);
@@ -468,7 +468,7 @@ const Edit = (props) => {
                 }
             });
         } else {
-            post(route('storeclinical', { 'type': submitType }), {
+            post(route('storeclinical', { 'type': name }), {
                 onError: (e) => {
                     if (e.create) {
                         setAlert(true);
