@@ -51,7 +51,7 @@ const SaveModal = ({show, handleClose, handleSubmited, name}) => {
                 </DialogContent> */}
                 <DialogActions>
                     <Button onClick={handleClose}>No</Button>
-                    <Button name={name} onClick={handleSubmited}>Yes</Button>
+                    <Button name={name} type={name} onClick={() => handleSubmited(name)}>Yes</Button>
                 </DialogActions>
             </Dialog>
         </div>

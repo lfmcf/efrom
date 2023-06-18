@@ -453,12 +453,14 @@ const Create = (props) => {
         setSavemodal(prev => ({ ...prev, show: true, name: 'submit' }))
     }
 
-    const handleSaveModalConfirm = () => {
+    const handleSaveModalConfirm = (name) => {
+
         setSavemodal(prev => ({
             ...prev,
             show: false
         }))
-        formRef.current.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
+        handleSubmit(name);
+        //formRef.current.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true, detail: name }))
     }
 
     const handleDocumentSelectChange = (selectedOption, name, i) => {

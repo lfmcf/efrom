@@ -67,7 +67,7 @@ class RcController extends Controller
      */
     public function store(Request $request)
     {
-        
+       
         if($request->query('type') === 'submit') {
             $validator = $request->validate(
                 [
@@ -229,7 +229,7 @@ class RcController extends Controller
      */
     public function update(Request $request, Rc $rc)
     {
-       
+        
         if($request->query('type') === 'submit') {
             $validator = $request->validate(
                 [
@@ -280,7 +280,7 @@ class RcController extends Controller
         }
         
         $rc = Rc::findOrFail($request->id);
-
+        
         $rc->procedure_type = $request->procedure_type;
         $rc->country = $request->country;
         $rc->rms = $request->rms;
@@ -322,7 +322,7 @@ class RcController extends Controller
         $rc->doc = $docs;
         $rc->created_by = $request->created_by;
         $rc->type = $request->query('type');
-
+        
         if($request->query('type') === 'submit') {
             $res = $this->generetExcel($rc);
             if($res === true){

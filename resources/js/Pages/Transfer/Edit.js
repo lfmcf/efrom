@@ -138,9 +138,9 @@ const Edit = (props) => {
         setData(arr);
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        let submitType = window.event.target.name;
+    const handleSubmit = (name) => {
+        // e.preventDefault();
+        // let submitType = window.event.target.name;
         const search = window.location.search
         const opname = new URLSearchParams(search).get('opr');
         if (opname === 'edit') {
@@ -194,12 +194,13 @@ const Edit = (props) => {
         }))
     }
 
-    const handleSaveModalConfirm = () => {
+    const handleSaveModalConfirm = (name) => {
         setSavemodal(prev => ({
             ...prev,
             show: false
         }))
-        formRef.current.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
+        handleSubmit(name)
+        // formRef.current.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
     }
 
     let removeDocumentsFields = (i) => {

@@ -181,6 +181,7 @@ const Nohqproject = (props) => {
         setData(arr);
     }
 
+<<<<<<< HEAD
     const handleSubmit = (e) => {
         e.preventDefault();
         let submitType = window.event.target.name;
@@ -194,6 +195,20 @@ const Nohqproject = (props) => {
                     setAlert(true);
                     setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
                 }
+=======
+    const handleSubmit = (name) => {
+        // e.preventDefault();
+        // let submitType = window.event.target.name;
+        post(route("storevariation", {'type': name}), {
+            onError: (e) => {if(e.create){ 
+                setAlert(true);
+                setAlertContent(e.create)
+            }
+            else { 
+                setAlert(true); 
+                setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
+            }
+>>>>>>> 94752c1615a7c21eaac5276a0b38778fe8498132
             }
         });
     }
@@ -213,12 +228,13 @@ const Nohqproject = (props) => {
         setSavemodal(prev => ({ ...prev, show: true, name: 'submit' }))
     }
 
-    const handleSaveModalConfirm = () => {
+    const handleSaveModalConfirm = (name) => {
         setSavemodal(prev => ({
             ...prev,
             show: false
         }))
-        formRef.current.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
+        handleSubmit(name)
+        //formRef.current.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
     }
 
     React.useEffect(() => {

@@ -128,9 +128,8 @@ const Edit = (props) => {
         setValue(newValue);
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        let submitType = window.event.target.name;
+    const handleSubmit = (name) => {
+
         const search = window.location.search
         const opname = new URLSearchParams(search).get('opr');
         if (opname === 'edit') {
@@ -258,7 +257,7 @@ const Edit = (props) => {
 
     let addPackageValues = () => {
         let arr = { ...data };
-        arr.packagings.push({ packaging_type: "", packaging_name: "", description: "", launched: "", first_lunch_date: '', packaging_discontinued: "", discontinuation_date: '', remarks: '', packagelif: [{ package_shelf_life_type: "", shelf_life: "", shelf_life_unit: "", package_storage_condition: [], remarks: '' }] })
+        arr.packagings.push({ packaging_type: "", packaging_name: "", description: "", launched: "", first_lunch_date: '', packaging_discontinued: "", discontinuation_date: "", remarks: "", packagelif: [{ package_shelf_life_type: "", shelf_life: "", shelf_life_unit: "", package_storage_condition: [], remarks: "" }] })
         setData(arr);
     }
 
@@ -514,12 +513,13 @@ const Edit = (props) => {
         setSavemodal(prev => ({ ...prev, show: true, name: 'submit' }))
     }
 
-    const handleSaveModalConfirm = () => {
+    const handleSaveModalConfirm = (name) => {
         setSavemodal(prev => ({
             ...prev,
             show: false
         }))
-        formRef.current.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
+        handleSubmit(name);
+        //formRef.current.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
     }
 
     const handleDocumentSelectChange = (selectedOption, name, i) => {
@@ -556,6 +556,10 @@ const Edit = (props) => {
 
     const closeAlert = () => {
         setAlert(false);
+    }
+
+    let handleNrDateChange = (name, date) => {
+        setData(name, date)
     }
 
     return (

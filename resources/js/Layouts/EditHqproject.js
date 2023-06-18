@@ -203,13 +203,13 @@ const EditHqproject = (props) => {
         setData(newArr);
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        let submitType = window.event.target.name;
+    const handleSubmit = (name) => {
+        // e.preventDefault();
+        // let submitType = window.event.target.name;
         const search = window.location.search
         const opname = new URLSearchParams(search).get('opr');
         if (opname === 'edit') {
-            post(route("updatehqvariation", { 'type': submitType }), {
+            post(route("updatehqvariation", { 'type': name }), {
                 onError: (e) => {
                     if (e.create) {
                         setAlert(true);
@@ -223,6 +223,17 @@ const EditHqproject = (props) => {
             });
         } else {
             post(route("storehqproject", { 'type': submitType }), {
+                onError: (e) => {
+                    if (e.create) {
+                        setAlert(true);
+                        setAlertContent(e.create)
+                    }
+                    else {
+                        setAlert(true);
+                        setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
+                    }
+                }else {
+                    post(route("storehqproject", { 'type': name }), {
                 onError: (e) => {
                     if (e.create) {
                         setAlert(true);
@@ -260,12 +271,13 @@ const EditHqproject = (props) => {
         }))
     }
 
-    const handleSaveModalConfirm = () => {
+    const handleSaveModalConfirm = (name) => {
         setSavemodal(prev => ({
             ...prev,
             show: false
         }))
-        formRef.current.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
+        handleSubmit(name)
+        //formRef.current.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
     }
 
     React.useEffect(() => {
