@@ -11,7 +11,7 @@ import BasicSpeedDial from '@/Components/SpeedDial';
 import { Tabs as Mtabs, Tab as Mtab, IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
 import SaveModal from '@/Components/SaveModal';
-import { Typography } from '@mui/material';
+import { Typography, Button } from '@mui/material';
 import { product_name, procedure_type, status } from '@/Components/List';
 import { Head } from '@inertiajs/inertia-react';
 import ModalP from '@/Components/Modalp';
@@ -28,8 +28,8 @@ function a11yProps(index) {
 
 
 const Edit = (props) => {
-    const {amendment } = props;
-    
+    const { amendment } = props;
+
     const { data, setData, post, processing, errors, clearErrors, reset } = useForm({
         id: amendment._id,
         product: amendment.product,
@@ -58,7 +58,7 @@ const Edit = (props) => {
     // const [packagehaserror, setPackagehaserror] = useState(false);
     const [statuserror, setStatusError] = useState(false);
     const formRef = React.useRef();
-    const [statusCountry, setStatusCountry] = useState([{label: 'All', value: 'All'}])
+    const [statusCountry, setStatusCountry] = useState([{ label: 'All', value: 'All' }])
     const firstTimeRender = React.useRef(true);
     const [alert, setAlert] = useState(false);
     const [alertContent, setAlertContent] = useState('');
@@ -74,8 +74,8 @@ const Edit = (props) => {
 
     let porductOptions = props.products.map(function (product) {
         return {
-            value : product.name,
-            label : product.name,
+            value: product.name,
+            label: product.name,
         }
     })
 
@@ -102,7 +102,7 @@ const Edit = (props) => {
 
     let addFormFields = () => {
         let arr = { ...data };
-        arr.doc.push({ document_type: '', document_title: '', language: '', version_date: '',cdds: '', dremarks: '', document: '' });
+        arr.doc.push({ document_type: '', document_title: '', language: '', version_date: '', cdds: '', dremarks: '', document: '' });
         setData(arr);
     }
 
@@ -118,7 +118,7 @@ const Edit = (props) => {
 
     let addStatusFields = () => {
         let newArr = { ...data };
-        newArr.statuses.push({ country: '', status: '', status_date: '', ectd: '', cdds: '', remarks: '', implimentation_date: '', deadline_for_answer: ''});
+        newArr.statuses.push({ country: '', status: '', status_date: '', ectd: '', cdds: '', remarks: '', implimentation_date: '', deadline_for_answer: '' });
         setData(newArr);
     }
 
@@ -148,26 +148,28 @@ const Edit = (props) => {
         const opname = new URLSearchParams(search).get('opr');
         if (opname === 'edit') {
             post(route("updateamendment", { 'type': submitType }), {
-                onError: (e) => {if(e.create){ 
-                    setAlert(true);
-                    setAlertContent(e.create)
-                }
-                else { 
-                    setAlert(true); 
-                    setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
-                }
+                onError: (e) => {
+                    if (e.create) {
+                        setAlert(true);
+                        setAlertContent(e.create)
+                    }
+                    else {
+                        setAlert(true);
+                        setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
+                    }
                 }
             });
-        }else {
+        } else {
             post(route("storeamendment", { 'type': submitType }), {
-                onError: (e) => {if(e.create){ 
-                    setAlert(true);
-                    setAlertContent(e.create)
-                }
-                else { 
-                    setAlert(true); 
-                    setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
-                }
+                onError: (e) => {
+                    if (e.create) {
+                        setAlert(true);
+                        setAlertContent(e.create)
+                    }
+                    else {
+                        setAlert(true);
+                        setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
+                    }
                 }
             });
         }
@@ -197,7 +199,7 @@ const Edit = (props) => {
     }
 
     let handleReset = () => {
-        
+
         reset()
     }
 
@@ -208,7 +210,7 @@ const Edit = (props) => {
     }
 
     React.useEffect(() => {
-       
+
         let s = data.statuses.length
         for (let j = 0; j <= s; j++) {
             if (errors['statuses.' + j + '.status'] || errors['statuses.' + j + '.status_date']) {
@@ -241,18 +243,18 @@ const Edit = (props) => {
     }
 
     React.useEffect(() => {
-        if(data.procedure_type && data.procedure_type.value == "European Procedure" ) {
-            if(data.country.length !== 0) {
-                setStatusCountry(statusCountry => [{label: 'All', value: 'All'}, ...data.country])
-            }else {
-                setStatusCountry([{label: 'All', value: 'All'}])
+        if (data.procedure_type && data.procedure_type.value == "European Procedure") {
+            if (data.country.length !== 0) {
+                setStatusCountry(statusCountry => [{ label: 'All', value: 'All' }, ...data.country])
+            } else {
+                setStatusCountry([{ label: 'All', value: 'All' }])
             }
         }
     }, [data.country]);
 
     React.useEffect(() => {
-        if(data.rms) {
-            if(statusCountry.filter(item => item.value == data.rms.value) == 0) {
+        if (data.rms) {
+            if (statusCountry.filter(item => item.value == data.rms.value) == 0) {
                 setStatusCountry(statusCountry => [...statusCountry, data.rms])
             }
         }
@@ -262,11 +264,11 @@ const Edit = (props) => {
         if (!firstTimeRender.current) {
             setData('country', [])
         }
-        
+
     }, [data.procedure_type]);
 
-    React.useEffect(() => { 
-        firstTimeRender.current = false 
+    React.useEffect(() => {
+        firstTimeRender.current = false
     }, []);
 
     const closeAlert = () => {
@@ -281,7 +283,7 @@ const Edit = (props) => {
                     <h3 className="page-title">Amendment</h3>
                 </div>
             </div>
-            {alert ? <ActionAlerts message={alertContent} closeAlert={closeAlert} /> : <></> }
+            {alert ? <ActionAlerts message={alertContent} closeAlert={closeAlert} /> : <></>}
             <div className="row">
                 <div className="col-md-12">
 
@@ -299,14 +301,14 @@ const Edit = (props) => {
                                         aria-label="Vertical tabs example"
                                         sx={{ borderRight: 1, borderColor: 'divider' }}
                                     >
-                                        <Mtab label="Registration Identification" {...a11yProps(0)} style={{ color: errors.product || errors.procedure_type || errors.country ? "red": '' }} />
+                                        <Mtab label="Registration Identification" {...a11yProps(0)} style={{ color: errors.product || errors.procedure_type || errors.country ? "red" : '' }} />
                                         <Mtab label="Amendment Details" {...a11yProps(1)} style={{ color: errors.amendment_title ? 'red' : '' }} />
                                         <Mtab label="Status Details" {...a11yProps(2)} style={{ color: statuserror ? 'red' : '' }} />
                                     </Mtabs>
                                     <div value={value} index={0} className="muitab" style={{ display: value != 0 ? 'none' : '' }}>
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label" style={{color: errors.product ? 'red' : ''}}>Product (*)</span>
+                                                <span className="form_group_label" style={{ color: errors.product ? 'red' : '' }}>Product (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={porductOptions}
                                                         name="product"
@@ -324,11 +326,11 @@ const Edit = (props) => {
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label" style={{color: errors.procedure_type ? 'red' : ''}}>Procedure Type (*)</span>
+                                                <span className="form_group_label" style={{ color: errors.procedure_type ? 'red' : '' }}>Procedure Type (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={[
-                                                        {value: "National Procedure", label: "National Procedure"},
-                                                        {value: "European Procedure", label: "European Procedure"},
+                                                        { value: "National Procedure", label: "National Procedure" },
+                                                        { value: "European Procedure", label: "European Procedure" },
                                                     ]}
                                                         name="procedure_type"
                                                         onChange={handleSelectChange}
@@ -342,7 +344,7 @@ const Edit = (props) => {
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
-                                                <span className="form_group_label" style={{color: errors.country ? 'red' : ''}}>Country (*)</span>
+                                                <span className="form_group_label" style={{ color: errors.country ? 'red' : '' }}>Country (*)</span>
                                                 <div className="form_group_field">
                                                     <Select options={contries}
                                                         name="country"
@@ -358,7 +360,7 @@ const Edit = (props) => {
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="form_group_inline" style={{display: data.procedure_type && data.procedure_type.value === 'European Procedure' ? '' : 'none'}}>
+                                            <div className="form_group_inline" style={{ display: data.procedure_type && data.procedure_type.value === 'European Procedure' ? '' : 'none' }}>
                                                 <span className="form_group_label">RMS</span>
                                                 <div className="form_group_field">
                                                     <Select options={contries}
@@ -412,13 +414,19 @@ const Edit = (props) => {
                                                 <textarea type="text" name="aremarks" onChange={handleChange} value={data.aremarks} />
                                             </div>
                                         </div>
+                                        <div className='npw'>
+
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 1)} variant='outlined'>Next</Button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div value={value} index={1} className="muitab" style={{ display: value != 1 ? 'none' : '' }}>
                                         <div className="inline_form">
                                             <div className="form_group_inline">
-                                                <span className="form_group_label" style={{color: errors.amendment_title ? 'red' : ''}}>Amendment Title (*)</span>
+                                                <span className="form_group_label" style={{ color: errors.amendment_title ? 'red' : '' }}>Amendment Title (*)</span>
                                                 <div className="form_group_field">
-                                                    <input type="text" name="amendment_title" onChange={handleChange} style={{borderColor: errors.amendment_title ? 'red' : ''}} value={data.amendment_title} />
+                                                    <input type="text" name="amendment_title" onChange={handleChange} style={{ borderColor: errors.amendment_title ? 'red' : '' }} value={data.amendment_title} />
                                                 </div>
                                             </div>
                                             <div className="form_group_inline">
@@ -463,6 +471,14 @@ const Edit = (props) => {
                                                 <div className="form_group_field">
                                                     <input type="text" name="remarks" onChange={handleChange} value={data.remarks} />
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div className='npw'>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 0)} variant='outlined'>Previous</Button>
+                                            </div>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 2)} variant='outlined'>Next</Button>
                                             </div>
                                         </div>
                                     </div>
@@ -512,7 +528,7 @@ const Edit = (props) => {
                                                         </div>
                                                         : ''}
                                                     <div className="form_group_inline">
-                                                        <span className="form_group_label" style={{color: errors['statuses.' + index + '.status'] ? 'red' : ''}}>Status (*)</span>
+                                                        <span className="form_group_label" style={{ color: errors['statuses.' + index + '.status'] ? 'red' : '' }}>Status (*)</span>
                                                         <div className="form_group_field">
                                                             <Select options={status}
                                                                 name='status'
@@ -525,18 +541,18 @@ const Edit = (props) => {
                                                                 value={element.status}
                                                             />
                                                         </div>
-                                                        
+
                                                     </div>
                                                     <div className="form_group_inline">
-                                                        <span className="form_group_label" style={{color: errors['statuses.' + index + '.status_date'] ? 'red' : ''}}>Status Date (*)</span>
+                                                        <span className="form_group_label" style={{ color: errors['statuses.' + index + '.status_date'] ? 'red' : '' }}>Status Date (*)</span>
                                                         <div className="form_group_field">
-                                                            <DatePicker name="status_date" 
+                                                            <DatePicker name="status_date"
                                                                 selected={element.status_date ? new Date(element.status_date) : ''}
                                                                 onChange={(date) => handleDateChange(index, 'status_date', date)}
                                                                 value={element.status_date ? moment(element.status_date).format('DD-MMM-yy') : ''}
                                                             />
                                                         </div>
-                                                        
+
                                                     </div>
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label">eCTD sequence</span>
@@ -546,21 +562,21 @@ const Edit = (props) => {
                                                     </div>
                                                 </div>
                                                 <div className="inline_form">
-                                                    
+
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label">CCDS/Core PIL ref n°</span>
                                                         <div className="form_group_field">
                                                             <input type="text" name="cdds" onChange={e => handleStatusChanged(index, e)} value={element.cdds} />
                                                         </div>
                                                     </div>
-                                                   
+
                                                 </div>
                                                 <div className="inline_form">
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label">Effective internal implementation date</span>
                                                         <div className="form_group_field">
-                                                            <DatePicker name="implimentation_date" 
-                                                                selected={element.implimentation_date ? new Date(element.implimentation_date) : ''} 
+                                                            <DatePicker name="implimentation_date"
+                                                                selected={element.implimentation_date ? new Date(element.implimentation_date) : ''}
                                                                 onChange={(date) => handleDateChange(index, 'implimentation_date', date)}
                                                                 value={element.implimentation_date ? moment(element.implimentation_date).format('DD-MMM-yy') : ''}
                                                             />
@@ -569,8 +585,8 @@ const Edit = (props) => {
                                                     <div className="form_group_inline">
                                                         <span className="form_group_label">Implementation Deadline</span>
                                                         <div className="form_group_field">
-                                                            <DatePicker name="deadline_for_answer" 
-                                                                selected={element.deadline_for_answer ? new Date(element.deadline_for_answer) : ''} 
+                                                            <DatePicker name="deadline_for_answer"
+                                                                selected={element.deadline_for_answer ? new Date(element.deadline_for_answer) : ''}
                                                                 onChange={(date) => handleDateChange(index, 'deadline_for_answer', date)}
                                                                 value={element.deadline_for_answer ? moment(element.deadline_for_answer).format('DD-MMM-yy') : ''}
                                                             />
@@ -604,6 +620,12 @@ const Edit = (props) => {
                                                 </div>
                                             </fieldset>
                                         ))}
+                                        <div className='npw'>
+                                            <div>
+                                                <Button type='button' size='small' onClick={() => handleMChange('', 1)} variant='outlined'>Previous</Button>
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </Box>
 
@@ -613,8 +635,8 @@ const Edit = (props) => {
                             </Tab>
                         </Tabs>
                         <ModalP show={showMP} handleClose={handleCloseMP} />
-                        <BasicSpeedDial processing={processing} showsavemodel={showsavemodel} showdraftmodel={showdraftmodel} reset={handleReset}  />
-                        <SaveModal show={showsavemodal.show} handleClose={handleSaveModalClose} handleSubmited={handleSaveModalConfirm} name={showsavemodal.name}  />
+                        <BasicSpeedDial processing={processing} showsavemodel={showsavemodel} showdraftmodel={showdraftmodel} reset={handleReset} />
+                        <SaveModal show={showsavemodal.show} handleClose={handleSaveModalClose} handleSubmited={handleSaveModalConfirm} name={showsavemodal.name} />
                     </form>
                 </div>
 
