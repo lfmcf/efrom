@@ -222,18 +222,7 @@ const EditHqproject = (props) => {
                 }
             });
         } else {
-            post(route("storehqproject", { 'type': submitType }), {
-                onError: (e) => {
-                    if (e.create) {
-                        setAlert(true);
-                        setAlertContent(e.create)
-                    }
-                    else {
-                        setAlert(true);
-                        setAlertContent('The eForm cannot be submitted due to field in Red not properly populated');
-                    }
-                }else {
-                    post(route("storehqproject", { 'type': name }), {
+            post(route("storehqproject", { 'type': name }), {
                 onError: (e) => {
                     if (e.create) {
                         setAlert(true);

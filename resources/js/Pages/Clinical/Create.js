@@ -455,10 +455,10 @@ const Create = (props) => {
         setShow(true)
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        let submitType = window.event.target.name;
-        post(route('storeclinical', { 'type': submitType }), {
+    const handleSubmit = (name) => {
+        // e.preventDefault();
+        // let submitType = window.event.target.name;
+        post(route('storeclinical', { 'type': name }), {
             onError: (e) => {
                 if (e.create) {
                     setAlert(true);

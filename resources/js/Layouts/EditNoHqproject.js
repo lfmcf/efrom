@@ -191,7 +191,7 @@ const EditNoHqproject = (props) => {
         const search = window.location.search
         const opname = new URLSearchParams(search).get('opr');
         if (opname === 'edit') {
-            post(route("updatevariation", { 'type': submitType }), {
+            post(route("updatevariation", { 'type': name }), {
                 onError: (e) => {
                     if (e.create) {
                         setAlert(true);
@@ -204,7 +204,7 @@ const EditNoHqproject = (props) => {
                 }
             });
         } else {
-            post(route("storevariation", { 'type': submitType }), {
+            post(route("storevariation", { 'type': name }), {
                 onError: (e) => {
                     if (e.create) {
                         setAlert(true);
