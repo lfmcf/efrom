@@ -774,7 +774,7 @@ const Dashboard = (props) => {
                     <Grid item xs={3}>
                         <div className='dashboard_rec' style={{ backgroundColor: '#77DD77' }}>
                             <Typography variant="h6" gutterBottom color={'white'}>
-                                56
+                                {props.totalForms}
                             </Typography>
                             <Typography variant="caption" gutterBottom>
                                 Forms
@@ -784,7 +784,7 @@ const Dashboard = (props) => {
                     <Grid item xs={3}>
                         <div className='dashboard_rec' style={{ backgroundColor: 'rgb(76, 179, 230)' }}>
                             <Typography variant="h6" gutterBottom color={'white'}>
-                                20
+                                {props.totalSubmittedForms}
                             </Typography>
                             <Typography variant="caption" gutterBottom>
                                 Submitted forms
@@ -794,7 +794,7 @@ const Dashboard = (props) => {
                     <Grid item xs={3}>
                         <div className='dashboard_rec' style={{ backgroundColor: 'rgb(180, 92, 221)' }}>
                             <Typography variant="h6" gutterBottom color={'white'}>
-                                10
+                                {props.totalSavedForms}
                             </Typography>
                             <Typography variant="caption" gutterBottom>
                                 Saved forms
@@ -846,9 +846,9 @@ const Dashboard = (props) => {
                     <Grid item xs={6}>
                         <Paper className='dashpaper'>
                             <h5 className='mb-1 head-table' style={{ fontSize: '15px' }}></h5>
-                            <Chart height={300} data={[{ type: 'MA atuhrorisation', value: 11 }, { type: 'Clinical', value: 9 }, { type: 'Device', value: 5 }]} padding={[40, 0]}>
+                            <Chart height={300} data={[{ type: 'MA atuhrorisation', value: props.MAau }, { type: 'Clinical', value: props.MAcli }, { type: 'Device', value: 0 }]} padding={[40, 0]}>
                                 <Coord type='theta' startAngle={Math.PI} endAngle={Math.PI * (3 / 2)} />
-                                <Tooltip />
+                                <Tooltip title='value' />
                                 <Legend />
                                 <Geom type='intervalStack' position='value' color='type'>
                                     <Label content="type" />

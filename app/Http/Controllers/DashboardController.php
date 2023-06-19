@@ -44,14 +44,52 @@ class DashboardController extends Controller
                 );
             });
 
+            $rcSavedCount = Rc::raw(function ($collection) {
+                return $collection->aggregate(
+                    [
+                        ['$match' => ['type' => 'draft']],
+                    ]
+                );
+            });
+
+            $cvarhq = Variation::raw(function ($collection) {
+                return $collection->aggregate(
+                    [
+                        array(
+                            '$match' => array(
+                                '$and' => array(
+                                    array('type' => 'submit'),
+                                    array('isHq' => true)
+                                )
+                            )
+                        ),
+                    ]
+                );
+            });
+
             $cvar = Variation::raw(function ($collection) {
                 return $collection->aggregate(
                     [
-                        ['$match' => ['type' => 'submit']],
+                        array(
+                            '$match' => array(
+                                '$and' => array(
+                                    array('type' => 'submit'),
+                                    array('isHq' => false)
+                                )
+                            )
+                        ),
                         [
                             '$group' =>
                             ['_id' => '$procedure_type.value', 'count' => ['$sum' => 1]]
-                        ]
+                        ],
+                    ]
+                );
+            });
+
+            $VarSavedCount = Variation::raw(function ($collection) {
+                return $collection->aggregate(
+                    [
+                        ['$match' => ['type' => 'draft']],
                     ]
                 );
             });
@@ -68,6 +106,14 @@ class DashboardController extends Controller
                 );
             });
 
+            $RenSavedCount = Renouvellement::raw(function ($collection) {
+                return $collection->aggregate(
+                    [
+                        ['$match' => ['type' => 'draft']],
+                    ]
+                );
+            });
+
             $ctran = Transfer::raw(function ($collection) {
                 return $collection->aggregate(
                     [
@@ -76,6 +122,14 @@ class DashboardController extends Controller
                             '$group' =>
                             ['_id' => '$procedure_type.value', 'count' => ['$sum' => 1]]
                         ]
+                    ]
+                );
+            });
+
+            $TranSavedCount = Transfer::raw(function ($collection) {
+                return $collection->aggregate(
+                    [
+                        ['$match' => ['type' => 'draft']],
                     ]
                 );
             });
@@ -92,6 +146,14 @@ class DashboardController extends Controller
                 );
             });
 
+            $BaseSavedCount = Baseline::raw(function ($collection) {
+                return $collection->aggregate(
+                    [
+                        ['$match' => ['type' => 'draft']],
+                    ]
+                );
+            });
+
             $crt = RegistrationTermination::raw(function ($collection) {
                 return $collection->aggregate(
                     [
@@ -100,6 +162,14 @@ class DashboardController extends Controller
                             '$group' =>
                             ['_id' => '$procedure_type.value', 'count' => ['$sum' => 1]]
                         ]
+                    ]
+                );
+            });
+
+            $rtSavedCount = RegistrationTermination::raw(function ($collection) {
+                return $collection->aggregate(
+                    [
+                        ['$match' => ['type' => 'draft']],
                     ]
                 );
             });
@@ -116,6 +186,14 @@ class DashboardController extends Controller
                 );
             });
 
+            $clinicalSavedCount = Clinical::raw(function ($collection) {
+                return $collection->aggregate(
+                    [
+                        ['$match' => ['type' => 'draft']],
+                    ]
+                );
+            });
+
             $camen = Amendments::raw(function ($collection) {
                 return $collection->aggregate(
                     [
@@ -124,6 +202,14 @@ class DashboardController extends Controller
                             '$group' =>
                             ['_id' => '$procedure_type.value', 'count' => ['$sum' => 1]]
                         ]
+                    ]
+                );
+            });
+
+            $amenSavedCount = Amendments::raw(function ($collection) {
+                return $collection->aggregate(
+                    [
+                        ['$match' => ['type' => 'draft']],
                     ]
                 );
             });
@@ -139,6 +225,19 @@ class DashboardController extends Controller
                     ]
                 );
             });
+
+            $crtSavedCount = Amendments::raw(function ($collection) {
+                return $collection->aggregate(
+                    [
+                        ['$match' => ['type' => 'draft']],
+                    ]
+                );
+            });
+
+            $savedFormsCount = count($crtSavedCount) + count($amenSavedCount) + count($clinicalSavedCount) + count($rtSavedCount)
+                + count($BaseSavedCount) + count($TranSavedCount) + count($RenSavedCount) + count($VarSavedCount) + count($rcSavedCount);
+
+
 
             $cntN = 0;
             $cntC = 0;
@@ -171,6 +270,28 @@ class DashboardController extends Controller
                 $macount = $c->count + $macount;
             }
 
+
+            foreach ($cvarhq as $c) {
+                foreach ($c->identification as $pt) {
+
+                    switch ($pt->procedure_type['value']) {
+                        case 'National':
+                            $cntN += 1;
+                            break;
+                        case 'Centralized':
+                            $cntC += 1;
+                            break;
+                        case 'Decentralized':
+                            $cntD += 1;
+                            break;
+                        case 'Mutual Recognition':
+                            $cntM += 1;
+                            break;
+                    }
+                    $varcount += 1;
+                }
+            }
+
             foreach ($cvar as $c) {
                 switch ($c->_id) {
                     case 'National':
@@ -188,6 +309,8 @@ class DashboardController extends Controller
                 }
                 $varcount = $c->count + $varcount;
             }
+
+            // dd($cntN);
 
             foreach ($cren as $c) {
                 switch ($c->_id) {
@@ -266,10 +389,16 @@ class DashboardController extends Controller
                     case 'National':
                         $cntN = $c->count + $cntN;
                         break;
+                    case 'National Procedure':
+                        $cntN = $c->count + $cntN;
+                        break;
                     case 'Centralized':
                         $cntC = $c->count + $cntC;
                         break;
                     case 'Decentralized':
+                        $cntD = $c->count + $cntD;
+                        break;
+                    case 'European Procedure':
                         $cntD = $c->count + $cntD;
                         break;
                     case 'Mutual Recognition':
@@ -288,6 +417,9 @@ class DashboardController extends Controller
                         $cntC = $c->count + $cntC;
                         break;
                     case 'Decentralized':
+                        $cntD = $c->count + $cntD;
+                        break;
+                    case 'European Procedure':
                         $cntD = $c->count + $cntD;
                         break;
                     case 'Mutual Recognition':
@@ -314,7 +446,18 @@ class DashboardController extends Controller
                 }
                 $crtcount = $c->count + $crtcount;
             }
+
+            $submitedFormsCount = $macount + $varcount + $rencount + $trancount + $basecount + $rtcount + $clinicalcount
+                + $amencount + $crtcount;
+
+            $totalforms = $submitedFormsCount + $savedFormsCount;
+            $MAaut = $macount + $varcount + $rencount + $trancount + $basecount + $rtcount;
+            $MACli = $clinicalcount + $amencount + $crtcount;
+
             return Inertia::render('Dashboard', [
+                'totalForms' => $totalforms,
+                'totalSavedForms' => $savedFormsCount,
+                'totalSubmittedForms' => $submitedFormsCount,
                 'rc' => $rc,
                 'variation' => $variation,
                 'renewal' => $renewal,
@@ -336,6 +479,8 @@ class DashboardController extends Controller
                 'clinicalcount' => $clinicalcount,
                 'amencount' => $amencount,
                 'crtcount' => $crtcount,
+                'MAau' => $MAaut,
+                'MAcli' => $MACli
             ]);
         } else {
             return Inertia::render('DashboardKpi', [
@@ -351,7 +496,8 @@ class DashboardController extends Controller
         }
     }
 
-    public function getformsnumber(Request $request) {
+    public function getformsnumber(Request $request)
+    {
         $from = Carbon::createFromDate($request->from);
         $to = Carbon::createFromDate($request->to);
         $formType = $request->formType;
@@ -365,12 +511,11 @@ class DashboardController extends Controller
             $ntransfer = DB::connection('mongodb')->table('transfer')->whereBetween('created_at', [$from, $to])->groupBy('created_at')->count();
             $nvar = DB::connection('mongodb')->table('variation')->whereBetween('created_at', [$from, $to])->groupBy('created_at')->count();
             $nb = $nrc + $namendment + $ncrc + $nrt + $nrenewal + $ntransfer + $nvar;
-        }else if ($formType == "Medicinal product") {
+        } else if ($formType == "Medicinal product") {
             $nb = DB::connection('mongodb')->table('rc_finished')->whereBetween('created_at', [$from, $to])->groupBy('created_at')->count();
         }
-        
-        return response()->json($nb,200);
 
+        return response()->json($nb, 200);
     }
     // public function dashboard_kpi()
     // {
