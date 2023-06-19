@@ -7,6 +7,7 @@ use App\Models\Contact;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class ContactController extends Controller
 {
@@ -38,13 +39,35 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
+
+        $validator = $request->validate(
+            [
+                'nom' => 'required',
+                'email' => 'required',
+                'message' => 'required'
+            ]
+        );
+        $link = '';
+        $filename = '';
+        if ($request->file('doc')) {
+            $uploadedFile = $request->file('doc');
+            $filename = time() . $uploadedFile->getClientOriginalName();
+            $path = Storage::putFileAs(
+                'public',
+                $uploadedFile,
+                $filename
+            );
+            $link = asset('storage/' . $filename);;
+        }
+
         $contact = new Contact();
         $contact->nom = $request->nom;
         $contact->email = $request->email;
+        $contact->file = $link;
         $contact->message = $request->message;
-        // $contact->save();
-
-        Mail::to(getenv('MAIL_TO'))->send(new ContactMail($request->nom, $request->email, $request->message));
+        $contact->save();
+        Mail::to(getenv('MAIL_TO'))->send(new ContactMail($request->nom, $request->email, $link, $request->message));
+        return redirect('dashboard')->with('message', 'Your message has been successfully submitted to the Data Entry Team');
     }
 
     /**

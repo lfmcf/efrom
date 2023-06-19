@@ -8,11 +8,17 @@ const Create = (props) => {
     const { data, setData, post, processing, errors, clearErrors, reset } = useForm({
         nom: '',
         email: '',
+        doc: '',
         message: '',
     })
 
     const handleChange = (e) => {
         setData(e.target.name, e.target.value)
+        clearErrors(e.target.name)
+    }
+
+    const handlefileChange = (e) => {
+        setData(e.target.name, e.target.files[0])
     }
 
     const handleSubmit = (e) => {
@@ -36,27 +42,27 @@ const Create = (props) => {
                     <form onSubmit={handleSubmit}>
                         <div className="contact_form">
                             <div className="form_group_inline" >
-                                <span className="form_group_label">Name</span>
+                                <span className="form_group_label" style={{ color: errors.nom ? 'red' : '' }}>Name</span>
                                 <div className="form_group_field">
-                                    <input type="text" name="nom" onChange={handleChange} />
+                                    <input type="text" name="nom" onChange={handleChange} style={{ borderColor: errors.nom ? 'red' : '' }} />
                                 </div>
                             </div>
                             <div className="form_group_inline">
-                                <span className="form_group_label">Email</span>
+                                <span className="form_group_label" style={{ color: errors.email ? 'red' : '' }}>Email</span>
                                 <div className="form_group_field">
-                                    <input type="text" name="email" onChange={handleChange} />
+                                    <input type="text" name="email" onChange={handleChange} style={{ borderColor: errors.email ? 'red' : '' }} />
                                 </div>
                             </div>
                             <div className="form_group_inline">
-                                <span className="form_group_label">File</span>
+                                <span className="form_group_label" >File</span>
                                 <div className="form_group_field">
-                                    <input type="file" name="file" onChange={handleChange} />
+                                    <input type="file" name="doc" onChange={handlefileChange} />
                                 </div>
                             </div>
                             <div className="form_group_inline">
-                                <span className="form_group_label">Message</span>
+                                <span className="form_group_label" style={{ color: errors.message ? 'red' : '' }}>Message</span>
                                 <div className="form_group_field" style={{ padding: '5px 20px 0 0' }}>
-                                    <textarea name="message" onChange={handleChange} />
+                                    <textarea name="message" onChange={handleChange} style={{ borderColor: errors.message ? 'red' : '' }} />
                                 </div>
                             </div>
                         </div>
