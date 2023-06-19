@@ -591,23 +591,23 @@ const Dashboard = (props) => {
         }
     ]
 
+    let arr = [
+        { form: 'MA Registration Creation', number: props.macount },
+        { form: 'Variation', number: props.varcount },
+        { form: 'Renewal', number: props.rencount },
+        { form: 'Transfer', number: props.trancount },
+        { form: 'Baseline', number: props.basecount },
+        { form: 'Registration Termination', number: props.rtcount },
+        { form: 'Clinical Registration Creation', number: props.clinicalcount },
+        { form: 'Amendment', number: props.amencount },
+        { form: 'Clinical Registration Termination', number: props.crtcount },
+    ];
+
 
 
     React.useEffect(() => {
         flash.message ? setOpen(true) : setOpen(false)
-        let arr = [
-            { form: 'MA Registration Creation', number: props.macount },
-            { form: 'Variation', number: props.varcount },
-            { form: 'Renewal', number: props.rencount },
-            { form: 'Transfer', number: props.trancount },
-            { form: 'Baseline', number: props.basecount },
-            { form: 'Registration Termination', number: props.rtcount },
-            { form: 'Clinical Registration Creation', number: props.clinicalcount },
-            { form: 'Amendment', number: props.amencount },
-            { form: 'Clinical Registration Termination', number: props.crtcount },
-        ];
-        setData(arr)
-    }, [view]);
+    }, []);
 
     const handleviewchenge = (e) => {
         if (e.target.checked) {
@@ -826,7 +826,7 @@ const Dashboard = (props) => {
                                 <Tooltip />
                                 <Geom type='interval' position='form*number' />
                             </Chart> */}
-                            <Chart className='mt-3' height={300} data={data} scale={cols} forceFit>
+                            <Chart className='mt-3' height={300} data={arr} scale={cols} forceFit>
                                 <Coord type="theta" />
 
                                 <Tooltip showTitle={false} />
