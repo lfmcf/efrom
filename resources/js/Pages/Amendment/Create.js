@@ -208,7 +208,6 @@ const Create = (props) => {
             show: false
         }))
         handleSubmit(name);
-        //formRef.current.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
     }
 
     let handleReset = () => {

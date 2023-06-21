@@ -859,7 +859,7 @@ const Dashboard = (props) => {
                     <Grid item xs={6}>
                         <Paper className='dashpaper' >
                             <h5 className='mb-1 head-table' style={{ fontSize: '15px' }}>Forms by year</h5>
-                            <Chart height={400} data={[{ year: '2022', value: 20 }, { year: '2023', value: 30 }, { year: '2024', value: 35 }]} scale={cols} forceFit>
+                            <Chart height={400} data={[{ year: '2022', value: 0 }, { year: '2023', value: 0 }, { year: '2024', value: 0 }]} scale={cols} forceFit>
                                 <Axis name='year' title={{
                                     position: 'end',
                                     offset: 15,
