@@ -14,7 +14,7 @@ import Box from '@mui/material/Box';
 import SaveModal from '@/Components/SaveModal';
 import { Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { key_dates_list, operations, packageCondistion, product_name, procedure_type, apf, atc, SlType, indications, status } from '@/Components/List';
+import { key_dates_list, operations, packageCondistion, product_name, procedure_type, apf, atc, SlType, indications, status, route_admin, adpf } from '@/Components/List';
 import { Head } from '@inertiajs/inertia-react';
 import moment from 'moment';
 import ModalP from '@/Components/Modalp';
@@ -1055,12 +1055,7 @@ const Edit = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Administrable pharmaceutical form</span>
                                                 <div className="form_group_field">
-                                                    <Select options={[
-                                                        { value: 'Same as authorised pharmaceutical form', label: 'Same as authorised pharmaceutical form' },
-                                                        { value: 'Eye drops', label: 'Eye drops' },
-                                                        { value: 'Nebuliserer solution', label: 'Nebuliserer solution' },
-                                                        { value: 'Solution for injection', label: 'Solution for injection' }
-                                                    ]}
+                                                    <Select options={adpf}
                                                         name="administrable_pharmaceutical_form"
                                                         onChange={handleSelectChange}
                                                         className="basic"
@@ -1076,14 +1071,7 @@ const Edit = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label" style={{ color: errors.route_of_admin ? 'red' : '' }}>Route Of Admin (*)</span>
                                                 <div className="form_group_field">
-                                                    <Select options={[
-                                                        { value: 'Cutaneous use', label: 'Cutaneous use' },
-                                                        { value: 'Intrademal use', label: 'Intrademal use' },
-                                                        { value: 'Nasal use', label: 'Nasal use' },
-                                                        { value: 'Ocular use', label: 'Ocular use' },
-                                                        { value: 'Subcutaneous use', label: 'Subcutaneous use' },
-                                                        { value: 'Sublingual use', label: 'Sublingual use' },
-                                                    ]}
+                                                    <Select options={route_admin}
                                                         name="route_of_admin"
                                                         onChange={handleSelectChange}
                                                         className="basic"

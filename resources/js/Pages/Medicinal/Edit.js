@@ -8,7 +8,7 @@ import ModalS from '@/Components/Modal';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import SaveModal from '@/Components/SaveModal';
-import { key_dates_list, operations, packageCondistion, product_name, procedure_type, apf, atc, SlType, indications, status } from '@/Components/List';
+import { key_dates_list, operations, packageCondistion, product_name, procedure_type, apf, atc, SlType, indications, status, route_admin, adpf } from '@/Components/List';
 import PropTypes from 'prop-types';
 import BasicSpeedDial from '@/Components/SpeedDial';
 import { Tabs as Mtabs, Tab as Mtab, IconButton, Tooltip, Radio, Button } from '@mui/material';
@@ -831,12 +831,7 @@ const Edit = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label">Administrable pharmaceutical Form</span>
                                                 <div className="form_group_field">
-                                                    <Select options={[
-                                                        { value: 'Same as authorised pharmaceutical form', label: 'Same as authorised pharmaceutical form' },
-                                                        { value: 'Eye drops', label: 'Eye drops' },
-                                                        { value: 'Nebuliserer solution', label: 'Nebuliserer solution' },
-                                                        { value: 'Solution for injection', label: 'Solution for injection' }
-                                                    ]}
+                                                    <Select options={adpf}
                                                         name="administrable_pharmaceutical_form"
                                                         onChange={handleSelectChange}
                                                         className="basic"
@@ -852,15 +847,7 @@ const Edit = (props) => {
                                             <div className="form_group_inline">
                                                 <span className="form_group_label" style={{ color: errors.route_of_admin ? 'red' : '' }} >Route Of Admin (*)</span>
                                                 <div className="form_group_field">
-                                                    <Select options={[
-                                                        { value: 'Cutaneous use', label: 'Cutaneous use' },
-                                                        { value: 'Intrademal use', label: 'Intrademal use' },
-                                                        { value: 'Eye drops', label: 'Eye drops' },
-                                                        { value: 'Nasal use', label: 'Nasal use' },
-                                                        { value: 'Ocular use', label: 'Ocular use' },
-                                                        { value: 'Subcutaneous use', label: 'Subcutaneous use' },
-                                                        { value: 'Sublingual use', label: 'Sublingual use' },
-                                                    ]}
+                                                    <Select options={route_admin}
                                                         isMulti
                                                         name="route_of_admin"
                                                         onChange={handleSelectChange}
