@@ -27,6 +27,7 @@ class RcController extends Controller
     public function index()
     {
         $compnies = Company::orderBy('name')->get();
+
         $substanceActive = substanceActive::all();
         $packagingItemTypes = packagingItemType::all();
         $countries = Countries::orderBy('country_name')->get('country_name');
@@ -46,6 +47,7 @@ class RcController extends Controller
     public function create()
     {
         $compnies = Company::orderBy('name')->get();
+
         $substanceActive = substanceActive::all();
         $packagingItemTypes = packagingItemType::all();
         $countries = Countries::orderBy('country_name')->get('country_name');
